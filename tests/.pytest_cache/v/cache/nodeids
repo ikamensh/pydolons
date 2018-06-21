@@ -1,0 +1,4 @@
+[
+  "test_battlefield.py::test_valid_placement",
+  "test_battlefield.py::test_invalid_placement"
+]
