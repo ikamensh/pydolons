@@ -1,7 +1,7 @@
 from battlefield.Battlefield import Battlefield, Coordinates
 from game_objects.battlefield_objects.Unit.Unit import Unit
-from game_objects.battlefield_objects.Unit.base_types.demo_hero import demohero_basetype
-from game_objects.battlefield_objects.Unit.base_types.pirate import pirate_basetype
+from content.base_types.demo_hero import demohero_basetype
+from content.base_types.pirate import pirate_basetype
 
 def test_valid_placement():
     bf = Battlefield(8,8)

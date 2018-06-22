@@ -1,4 +1,4 @@
-from mechanics.abstract.event.event_targeting.EventTargeting import EventTargeting
+from mechanics.flexi_targeting.event.event_targeting.EventTargeting import EventTargeting
 from game_objects.battlefield_objects.Unit.Unit import Unit
 from battlefield.Battlefield import Coordinates
 from DreamGame import DreamGame

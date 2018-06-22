@@ -1,8 +1,8 @@
 from game_objects.battlefield_objects.Unit.Unit import Unit
-from game_objects.battlefield_objects.Unit.base_types.pirate import pirate_basetype
+from content.base_types.pirate import pirate_basetype
 from battlefield.Battlefield import Battlefield, Coordinates
-from mechanics.abstract.active.actives.melee_attack import attack_unit_active, attack_cell_active
-from mechanics.abstract.active.user_targeting.UserTargeting import UserTargeting
+from content.actives.melee_attack import attack_unit_active, attack_cell_active
+from mechanics.flexi_targeting.active.user_targeting.UserTargeting import UserTargeting
 from DreamGame import DreamGame
 
 #TODO program and test that actives are unique. Use factory.
