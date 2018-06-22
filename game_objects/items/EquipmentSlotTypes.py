@@ -1,6 +1,6 @@
-from custom_classes.AutoNameEnum import AutoNameEnum, auto
+from enum import Enum,auto
 
-class EquipmentSlotTypes(AutoNameEnum):
+class EquipmentSlotTypes(Enum):
     BODY_ARMOR = auto()
     WEAPON = auto()
     HELMET = auto()
