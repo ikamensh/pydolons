@@ -7,7 +7,7 @@ class Battlefield:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.units = {}
+        self.units_at = {}
         self.unit_locations = {}
 
     @staticmethod
@@ -23,9 +23,9 @@ class Battlefield:
 
         assert 0 <= p.x < self.w
         assert 0 <= p.y < self.h
-        assert p not in self.units
+        assert p not in self.units_at
 
-        self.units[p] = unit
+        self.units_at[p] = unit
         self.unit_locations[unit] = p
 
     def place_many(self, units_and_their_locations):
@@ -36,7 +36,7 @@ class Battlefield:
     def remove(self, unit):
         assert unit in self.unit_locations
         p = self.unit_locations[unit]
-        del self.units[p]
+        del self.units_at[p]
         del self.unit_locations[unit]
 
     def move(self, unit, new_p):

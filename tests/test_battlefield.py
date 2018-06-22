@@ -12,9 +12,9 @@ def test_valid_placement():
     units_locations.append((Unit(demohero_basetype), Coordinates(1,1)))
     bf.place_many(units_locations)
 
-    assert len(bf.units) == 4
+    assert len(bf.units_at) == 4
     for pirate in pirate_band:
-        assert pirate in bf.units.values()
+        assert pirate in bf.units_at.values()
         assert pirate in bf.unit_locations
 
 

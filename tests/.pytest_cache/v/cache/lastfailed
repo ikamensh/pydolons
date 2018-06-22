@@ -1,1 +1,4 @@
-{}
+{
+  "test_actions.py::test_go_and_hit": true,
+  "test_actions.py::test_move": true
+}
