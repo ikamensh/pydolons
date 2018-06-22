@@ -1,13 +1,28 @@
 from battlefield.Battlefield import Battlefield, Coordinates
 
-class Game:
-    def __init__(self, dungeon, hero):
+class DreamGame:
+    the_game = None
 
-        self.battlefield = Battlefield(dungeon.h, dungeon.w)
-        self.battlefield.place_many(dungeon.units_locations)
-        self.battlefield.place(hero, dungeon.hero_entrance)
+    def __init__(self, bf):
+        self.battlefield = bf
+        DreamGame.the_game = self
 
-        self.the_hero = hero
+    @staticmethod
+    def start_dungeon(dungeon, hero):
+
+        DreamGame(Battlefield(dungeon.h, dungeon.w))
+        DreamGame.the_game.battlefield.place_many(dungeon.units_locations)
+        DreamGame.the_game.battlefield.place(hero, dungeon.hero_entrance)
+        DreamGame.the_game.the_hero = hero
+
+
+    @staticmethod
+    def custom_init(bf):
+        DreamGame(bf)
+
+    @staticmethod
+    def get_unit_at(coord):
+        return DreamGame.the_game.battlefield.units_at[coord]
 
     def print_all_units(self):
         for unit, xy in self.battlefield.unit_locations.items():
@@ -36,8 +51,6 @@ class Game:
         assert unit in self.battlefield.unit_locations
         return self.battlefield.unit_locations[unit]
 
-    def get_unit_at(self,coords):
-        return self.battlefield.units_at[coords]
 
     def __repr__(self):
         return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))

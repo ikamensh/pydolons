@@ -1,6 +1,7 @@
 [
   "test_actions.py::test_move",
   "test_actions.py::test_go_and_hit",
+  "test_active.py::test_attack_unit",
   "test_battlefield.py::test_valid_placement",
   "test_battlefield.py::test_invalid_placement"
 ]

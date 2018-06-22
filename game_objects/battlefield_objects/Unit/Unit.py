@@ -9,8 +9,19 @@ class Unit:
         self.agi = baseType.agi
         self.int = baseType.int
         self.type_name = baseType.type_name
+        self.actives = baseType.actives
         self.reset()
-        
+
+
+    def give_active(self, active):
+        self.actives.add(active)
+        active.assign_to_unit(self)
+
+    #TODO create target method that prompts the game to get right kind of targeting from the user
+    def activate(self, active, user_targeting):
+        assert active in self.actives
+        active.activate(user_targeting)
+
     def reset(self):
         self.health = self.str * Unit.HP_PER_STR
         self.mana = self.int * Unit.MANA_PER_INT

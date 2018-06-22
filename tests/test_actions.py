@@ -1,5 +1,6 @@
-from tests.resources.dungeons import demo_dungeon
-from Game import Game
+#TODO from tests.resources.dungeons import demo_dungeon
+from dungeon.dungeons.demo_dungeon import demo_dungeon
+from DreamGame import DreamGame
 from game_objects.battlefield_objects.Unit.base_types.demo_hero import demohero_basetype
 from game_objects.battlefield_objects.Unit.Unit import Unit
 from battlefield.Battlefield import Coordinates
@@ -8,7 +9,8 @@ from battlefield.Battlefield import Coordinates
 
 def test_move():
     hero = Unit(demohero_basetype)
-    game = Game(demo_dungeon, hero)
+    DreamGame.start_dungeon(demo_dungeon, hero)
+    game = DreamGame.the_game
 
     initial_location = game.get_location(hero)
 
@@ -25,7 +27,8 @@ def test_go_and_hit():
     :return:
     """
     hero = Unit(demohero_basetype)
-    game = Game(demo_dungeon, hero)
+    DreamGame.start_dungeon(demo_dungeon, hero)
+    game = DreamGame.the_game
 
     pirate_location = Coordinates(4,4)
     the_enemy_pirate = game.get_unit_at(pirate_location)
