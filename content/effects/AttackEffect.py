@@ -1,4 +1,4 @@
-from mechanics.battle.attack import Attack
+from mechanics import Attack
 
 class AttackEffect:
     @staticmethod
