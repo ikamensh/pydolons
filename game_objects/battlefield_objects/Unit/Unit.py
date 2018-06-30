@@ -1,3 +1,7 @@
+from mechanics.damage import Damage
+from mechanics.damage import Resistances, Armor
+from game_objects.items import Inventory
+
 class Unit:
     HP_PER_STR = 25
     STAMINA_PER_STR = 5
@@ -10,6 +14,12 @@ class Unit:
         self.int = baseType.int
         self.type_name = baseType.type_name
         self.actives = baseType.actives
+        self.unarmed_damage_type = baseType.unarmed_damage_type
+        self.resists = Resistances(baseType.resists)
+        self.armor = Armor(baseType.armor_base, baseType.armor_dict)
+        self.inventory = Inventory(baseType.inventory_capacity)
+        self.equipment = baseType.equipment_cls()
+
         self.reset()
 
 
@@ -28,7 +38,7 @@ class Unit:
         self.stamina = self.str * Unit.STAMINA_PER_STR
 
     def get_unarmed_damage(self):
-        return self.str * Unit.UNARMED_DAMAGE_PER_STR
+        return Damage(amount=self.str * Unit.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
 
     def get_melee_damage(self):
         return self.get_unarmed_damage()
@@ -46,12 +56,12 @@ class Unit:
         self.mana -= cost.mana_cost
         self.stamina -= cost.stamina_cost
 
-    def recieve_damage(self, damage):
+    def lose_health(self, dmg_amount):
         """
-        :param damage: amount of incoming damage
+        :param dmg_amount: amount of incoming damage
         :return: True if unit dies, False otherwise
         """
-        self.health -= damage
+        self.health -= dmg_amount
         if self.health <= 0:
             return True
         else:

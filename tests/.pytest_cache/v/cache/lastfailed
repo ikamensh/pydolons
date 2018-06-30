@@ -1,1 +1,4 @@
-{}
+{
+  "test_items.py::test_equip[BodyArmor]": true,
+  "test_items.py::test_equip[Weapon]": true
+}

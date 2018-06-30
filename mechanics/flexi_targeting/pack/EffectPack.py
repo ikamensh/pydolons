@@ -1,4 +1,4 @@
-from mechanics import PackTargeting
+from mechanics.flexi_targeting import PackTargeting
 from game_objects.battlefield_objects.Unit.Unit import Unit
 from battlefield.Battlefield import Coordinates
 from DreamGame import DreamGame

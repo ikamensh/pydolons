@@ -16,7 +16,8 @@ class DamageTypes(Enum):
 
     MIND = auto()
 
-    physical = {SLASH, CRUSH, PIERCE}
-    elements = {FIRE, FROST, LIGHTNING, ACID}
-    exotic = {SONIC, LIGHT}
+class DamageTypeGroups:
+    physical = {DamageTypes.SLASH, DamageTypes.CRUSH, DamageTypes.PIERCE}
+    elemental = {DamageTypes.FIRE, DamageTypes.FROST, DamageTypes.LIGHTNING, DamageTypes.ACID}
+    exotic = {DamageTypes.SONIC, DamageTypes.LIGHT}
 

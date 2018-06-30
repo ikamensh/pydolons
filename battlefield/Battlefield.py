@@ -14,6 +14,11 @@ class Battlefield:
     def distance(p1, p2):
         return hypot(p1.x - p2.x, p1.y - p2.y)
 
+    def get_units_dists_to(self, p):
+        unit_dist_tuples = [ (u, Battlefield.distance(p, self.unit_locations[u]))
+                             for u in self.unit_locations]
+        return sorted(unit_dist_tuples, key=lambda x:x[1])
+
     def distance_unit_to_point(self, unit, p):
         assert unit in self.unit_locations
         unit_pos = self.unit_locations[unit]

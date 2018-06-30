@@ -1,6 +1,6 @@
-from mechanics import Active
-from mechanics import Cost
-from mechanics import UserTargetingType
+from mechanics.flexi_targeting import Active
+from mechanics.flexi_targeting import Cost
+from mechanics.flexi_targeting import UserTargetingType
 from content.packs.SingleAttackPack import attack_unit_event, attack_cell_event
 
 std_attack_cost = Cost(1, 0)

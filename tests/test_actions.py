@@ -1,17 +1,8 @@
-#TODO from tests.resources.dungeons import demo_dungeon
-from content.dungeons.demo_dungeon import demo_dungeon
-from DreamGame import DreamGame
-from content.base_types.demo_hero import demohero_basetype
-from game_objects.battlefield_objects.Unit.Unit import Unit
 from battlefield.Battlefield import Coordinates
 
 
 
-def test_move():
-    hero = Unit(demohero_basetype)
-    DreamGame.start_dungeon(demo_dungeon, hero)
-    game = DreamGame.the_game
-
+def test_move(game, hero):
     initial_location = game.get_location(hero)
 
     target_location = Coordinates(1,2)
@@ -19,17 +10,12 @@ def test_move():
     assert initial_location != game.get_location(hero)
     assert target_location == game.get_location(hero)
 
-def test_go_and_hit():
+def test_go_and_hit(game, hero):
     """
     Hero goes to the pirate and kicks pirate.
     He kicks him until pirate has hp.
     Pirate dies, hero can and does step on the tile where pirate stood.
-    :return:
     """
-    hero = Unit(demohero_basetype)
-    DreamGame.start_dungeon(demo_dungeon, hero)
-    game = DreamGame.the_game
-
     pirate_location = Coordinates(4,4)
     the_enemy_pirate = game.get_unit_at(pirate_location)
 

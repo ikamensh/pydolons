@@ -1,7 +1,7 @@
 from dungeon.Dungeon import Dungeon
 from game_objects.battlefield_objects.Unit.Unit import Unit
 
-from game_objects.battlefield_objects.Unit.base_types.pirate import pirate_basetype
+from content.base_types.pirate import pirate_basetype
 from battlefield.Battlefield import Coordinates
 
 pirate_band = [Unit(pirate_basetype) for i in range(3)]

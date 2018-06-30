@@ -1,4 +1,6 @@
 from battlefield.Battlefield import Battlefield, Coordinates
+from mechanics.damage import deal_damage
+from mechanics.combat import Attack
 
 class DreamGame:
     the_game = None
@@ -14,6 +16,7 @@ class DreamGame:
         DreamGame.the_game.battlefield.place_many(dungeon.units_locations)
         DreamGame.the_game.battlefield.place(hero, dungeon.hero_entrance)
         DreamGame.the_game.the_hero = hero
+        return DreamGame.the_game
 
 
     @staticmethod
@@ -23,6 +26,10 @@ class DreamGame:
     @staticmethod
     def get_unit_at(coord):
         return DreamGame.the_game.battlefield.units_at[coord]
+
+    @staticmethod
+    def get_units_distances_from(p):
+        return DreamGame.the_game.battlefield.get_units_sorted_by_proximity_to()
 
     def print_all_units(self):
         for unit, xy in self.battlefield.unit_locations.items():
@@ -41,15 +48,16 @@ class DreamGame:
             self.battlefield.move(unit, p)
         return True
 
+
     def attack(self, attacker, target):
-        damage = attacker.get_unarmed_damage()
-        target_died = target.recieve_damage(damage)
+        target_died = Attack.attack(attacker, target)
         if target_died:
             self.battlefield.remove(target)
 
-    def get_location(self, unit):
-        assert unit in self.battlefield.unit_locations
-        return self.battlefield.unit_locations[unit]
+    @staticmethod
+    def get_location(unit):
+        assert unit in DreamGame.the_game.battlefield.unit_locations
+        return DreamGame.the_game.battlefield.unit_locations[unit]
 
 
     def __repr__(self):

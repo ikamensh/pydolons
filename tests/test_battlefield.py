@@ -1,15 +1,13 @@
 from battlefield.Battlefield import Battlefield, Coordinates
 from game_objects.battlefield_objects.Unit.Unit import Unit
-from content.base_types.demo_hero import demohero_basetype
-from content.base_types.pirate import pirate_basetype
 
-def test_valid_placement():
+def test_valid_placement(pirate_basetype, hero):
     bf = Battlefield(8,8)
     pirate_band = [Unit(pirate_basetype) for i in range(3)]
     locations = [Coordinates(4,4), Coordinates(4,5), Coordinates(5,4)]
 
     units_locations = [(pirate_band[i], locations[i]) for i in range(3)]
-    units_locations.append((Unit(demohero_basetype), Coordinates(1,1)))
+    units_locations.append((hero, Coordinates(1,1)))
     bf.place_many(units_locations)
 
     assert len(bf.units_at) == 4
@@ -18,13 +16,13 @@ def test_valid_placement():
         assert pirate in bf.unit_locations
 
 
-def test_invalid_placement():
+def test_invalid_placement(pirate_basetype, hero):
     bf = Battlefield(8, 8)
     pirate_band = [Unit(pirate_basetype) for i in range(3)]
     locations = [Coordinates(4, 4), Coordinates(4, 5), Coordinates(4, 5)]
 
     units_locations = [(pirate_band[i], locations[i]) for i in range(3)]
-    units_locations.append((Unit(demohero_basetype), Coordinates(1, 1)))
+    units_locations.append((hero, Coordinates(1, 1)))
     try:
         bf.place_many(units_locations)
         assert False

@@ -1,16 +1,19 @@
 from mechanics.damage.DamageTypes import DamageTypes
-from utils.numeric import clamp
 
-class Armor:
+class Armor(dict):
     MIN_ARMOR = 0
 
-    def __init__(self, armors_dict={}):
-        self.armor_values = {}
+    def __init__(self, base_value = 0, armor_dict=None):
+        super().__init__()
         for dtype in DamageTypes:
-            if dtype in armors_dict:
-                self.armor_values[dtype] = max(armors_dict[dtype],
-                                               Armor.MIN_ARMOR)
-            else:
-                self.armor_values[dtype] = 0
+            self[dtype] = base_value
+        if armor_dict:
+            self.update(armor_dict)
 
 
+    def __setitem__(self, key, value):
+        assert isinstance(key, DamageTypes)
+        if value < Armor.MIN_ARMOR:
+            super().__setitem__(key, Armor.MIN_ARMOR)
+        else:
+            super().__setitem__(key, value)

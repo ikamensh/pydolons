@@ -1,1 +1,1 @@
-from mechanics import Attack
+from mechanics.combat.Attack import Attack
