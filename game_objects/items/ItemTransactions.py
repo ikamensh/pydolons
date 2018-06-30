@@ -1,6 +1,5 @@
-from game_objects.items import Item
+from game_objects.items import Item, Slot
 from GameLog import gamelog
-
 
 class ItemTransactions:
 
@@ -8,33 +7,35 @@ class ItemTransactions:
         self.owner = unit
         self.equipment = unit.equipment
         self.inventory = unit.inventory
-        self.manipulated_item = None
+        self.manipulation_slot = Slot("Manipulated item")
 
-    def pickup(self, items):
-        if isinstance(items, Item):
-            single_item = items
-            return self.inventory.add(single_item)
+    def pickup(self, container):
+        if isinstance(container, Slot):
+            slot = container
+            return self.inventory.add_from(slot)
+        else:
+            for slot in container:
+                if not self.inventory.add_from(slot):
+                    return False
+            return True
 
-    def interact_with_equipment(self, slot):
-        self.manipulated_item, self.inventory[slot] = self.inventory[slot], self.manipulated_item
 
-    def interact_with_inventory(self, slot):
-        self.manipulated_item, self.inventory[slot] = self.inventory[slot], self.manipulated_item
+    def take_from(self, slot):
+        self.manipulation_slot.swap_item(slot)
 
     def equip(self, slot):
-        self.inventory[slot] = self.equipment.equip(self.inventory[slot])
+        assert slot in self.inventory.all
+        self.equipment.equip(slot)
 
-    def drop_item(self, item):
-        gamelog("{} dropped {}.".format(self.owner, item))
+    def drop_item(self, slot):
+        gamelog("{} dropped {}.".format(self.owner, slot.take_content()))
 
     def stop_manipulation(self):
-        if self.manipulated_item:
-            if self.pickup(self.manipulated_item):
+        if self.manipulation_slot:
+            if self.pickup(self.manipulation_slot):
                 pass
             else:
-                self.drop_item(self.manipulated_item)
-            self.manipulated_item = None
-
+                self.drop_item(self.manipulation_slot)
 
     def __enter__(self):
         return self

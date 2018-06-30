@@ -1,8 +1,7 @@
 import pytest
 from dungeon.Dungeon import Dungeon
-from game_objects.battlefield_objects.Unit.Unit import Unit
+from game_objects.battlefield_objects import Unit, BaseType
 from battlefield.Battlefield import Coordinates
-from game_objects.battlefield_objects.Unit.BaseType import BaseType
 from DreamGame import DreamGame
 
 @pytest.fixture(name="pirate_basetype")
