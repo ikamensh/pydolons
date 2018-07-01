@@ -12,7 +12,7 @@ def pirate_basetype_func():
 
 @pytest.fixture(name="demohero_basetype")
 def demohero_basetype_func():
-    demohero_basetype = BaseType(15, 15, 15, "Demo Hero")
+    demohero_basetype = BaseType(20, 15, 15, "Demo Hero")
     yield  demohero_basetype
 
 
@@ -30,6 +30,10 @@ def demo_dungeon(pirate_basetype):
 @pytest.fixture()
 def hero(demohero_basetype):
     yield Unit(demohero_basetype)
+
+@pytest.fixture()
+def pirate(pirate_basetype):
+    yield Unit(pirate_basetype)
 
 @pytest.fixture(name="game")
 def game_demo_dung(demo_dungeon, hero):

@@ -8,6 +8,7 @@ class BaseType:
         self.str = str
         self.agi = agi
         self.int = int
+
         self.type_name = type_name
         self.actives = actives
         self.unarmed_damage_type = unarmed_damage_type
