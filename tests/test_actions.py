@@ -1,11 +1,10 @@
-from battlefield.Battlefield import Coordinates
-
+from battlefield.Battlefield import cell
 
 
 def test_move(game, hero):
     initial_location = game.get_location(hero)
 
-    target_location = Coordinates(1,2)
+    target_location = cell(1, 2)
     game.order_move(hero, target_location)
     assert initial_location != game.get_location(hero)
     assert target_location == game.get_location(hero)
@@ -16,10 +15,10 @@ def test_go_and_hit(game, hero):
     He kicks him until pirate has hp.
     Pirate dies, hero can and does step on the tile where pirate stood.
     """
-    pirate_location = Coordinates(4,4)
+    pirate_location = cell(4, 4)
     the_enemy_pirate = game.get_unit_at(pirate_location)
 
-    path = [Coordinates(c[0], c[1]) for c in [(1,2),(2,2),(2,3),(3,3),(3,4)]]
+    path = [cell(c[0], c[1]) for c in [(1, 2), (2, 2), (2, 3), (3, 3), (3, 4)]]
 
     for step in path:
         step_done = game.order_move(hero,step)

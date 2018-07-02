@@ -1,5 +1,5 @@
 from game_objects.battlefield_objects.Unit.Unit import Unit
-from battlefield.Battlefield import Battlefield, Coordinates
+from battlefield.Battlefield import Battlefield, cell
 from content.actives.melee_attack import attack_cell_active, attack_unit_active
 from mechanics.flexi_targeting import UserTargeting
 from DreamGame import DreamGame
@@ -12,8 +12,8 @@ def test_attack_cell(pirate_basetype):
     unit1 = Unit(pirate_basetype)
     unit2 = Unit(pirate_basetype)
 
-    loc1 = Coordinates(1,1)
-    loc2 = Coordinates(1,2)
+    loc1 = cell(1, 1)
+    loc2 = cell(1, 2)
     bf.place(unit1, loc1)
     bf.place(unit2, loc2)
 
@@ -31,8 +31,8 @@ def test_attack_unit(pirate_basetype):
     unit1 = Unit(pirate_basetype)
     unit2 = Unit(pirate_basetype)
 
-    loc1 = Coordinates(1,1)
-    loc2 = Coordinates(1,2)
+    loc1 = cell(1, 1)
+    loc2 = cell(1, 2)
     bf.place(unit1, loc1)
     bf.place(unit2, loc2)
 

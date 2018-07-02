@@ -1,7 +1,7 @@
 from math import hypot
 from collections import namedtuple
 
-Coordinates = namedtuple("Coordinates", "x y")
+cell = namedtuple("Coordinates", "x y")
 
 class Battlefield:
     def __init__(self, w, h):
@@ -14,15 +14,37 @@ class Battlefield:
     def distance(p1, p2):
         return hypot(p1.x - p2.x, p1.y - p2.y)
 
-    def get_units_dists_to(self, p):
+    def get_units_dists_to(self, p, units_subset = None):
         unit_dist_tuples = [ (u, Battlefield.distance(p, self.unit_locations[u]))
-                             for u in self.unit_locations]
+                             for u in units_subset or self.unit_locations]
         return sorted(unit_dist_tuples, key=lambda x:x[1])
 
     def distance_unit_to_point(self, unit, p):
         assert unit in self.unit_locations
         unit_pos = self.unit_locations[unit]
         return Battlefield.distance(unit_pos, p)
+
+    def get_neighbouring_cells(self, cell, distance=1):
+        x = cell.x
+        y = cell.y
+
+        neighbours = []
+        steps = list(range(-distance, distance+1))
+        for dx in steps:
+            for dy in steps:
+                if 0 <= x+dx < self.w and 0 <= y+dy < self.h:
+                    new_cell = cell(x+dx, y+dy)
+                    if Battlefield.distance(cell, new_cell) <= distance:
+                        neighbours.append(new_cell)
+
+        return neighbours
+
+    def get_nearest_to(self, candidates, target):
+        pairs = [(cell, self.distance(c, target)) for c in candidates]
+        return min(pairs, key=lambda x:x[1])
+
+
+
 
     def place(self, unit, p):
 
@@ -33,8 +55,8 @@ class Battlefield:
         self.units_at[p] = unit
         self.unit_locations[unit] = p
 
-    def place_many(self, units_and_their_locations):
-        for char, p in units_and_their_locations:
+    def place_many(self, unit_locations):
+        for char, p in unit_locations.items():
             self.place(char, p)
 
 

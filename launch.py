@@ -6,4 +6,4 @@ from game_objects.battlefield_objects.Unit.Unit import Unit
 game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
 print(game)
 game.print_all_units()
-game.loop()
+game.loop(player_berserk=True)

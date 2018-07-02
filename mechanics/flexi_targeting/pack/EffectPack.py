@@ -1,6 +1,6 @@
 from mechanics.flexi_targeting import PackTargeting
 from game_objects.battlefield_objects.Unit.Unit import Unit
-from battlefield.Battlefield import Coordinates
+from battlefield.Battlefield import cell
 from DreamGame import DreamGame
 
 class EffectPack:
@@ -16,7 +16,7 @@ class EffectPack:
                 effect.apply(source, target_unit)
 
         elif self.event_targeting == PackTargeting.UNIT_ON_TARGET_CELL:
-            assert isinstance(user_targeting.target, Coordinates)
+            assert isinstance(user_targeting.target, cell)
             target_unit = DreamGame.get_unit_at(user_targeting.target)
             for effect in self.effects:
                 effect.apply(source, target_unit)
