@@ -15,8 +15,8 @@ class BruteAI:
         target_units = [unit for unit, fraction in self.fractions.items() if fraction is target_fraction]
 
         if target_units:
-            distances = self.battlefield.get_units_dists_to(start_location)
-            target = distances[0]
+            distances = self.battlefield.get_units_dists_to(start_location, units_subset=target_units)
+            target, _ = distances[0]
             target_location = self.battlefield.unit_locations[target]
             possible_steps = self.battlefield.get_neighbouring_cells(start_location)
             return self.battlefield.get_nearest_to(candidates=possible_steps, target=target_location)

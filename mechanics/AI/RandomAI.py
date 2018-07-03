@@ -1,5 +1,5 @@
 from mechanics.fractions import Fractions
-from battlefield.Battlefield import cell
+from battlefield.Battlefield import Cell
 from utils.numeric import clamp
 import random
 
@@ -17,5 +17,5 @@ class RandomAI:
 
         x_new = clamp(location.x + random.choice(step), 0, self.battlefield.w)
         y_new = clamp(location.y + random.choice(step), 0, self.battlefield.h)
-        return cell(x_new, y_new)
+        return Cell(x_new, y_new)
 

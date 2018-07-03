@@ -1,4 +1,9 @@
 {
+  "abilities/test_abilities.py::test_str_helps[Attributes.AGI]": true,
+  "abilities/test_abilities.py::test_str_helps[Attributes.INT]": true,
+  "abilities/test_abilities.py::test_str_helps[Attributes.MANA]": true,
+  "test_actions.py::test_go_and_hit": true,
+  "test_actions.py::test_move": true,
   "test_items.py::test_equip[BodyArmor]": true,
   "test_items.py::test_equip[Weapon]": true
 }

@@ -1,7 +1,7 @@
 import pytest
 from dungeon.Dungeon import Dungeon
 from game_objects.battlefield_objects import Unit, BaseType
-from battlefield.Battlefield import cell
+from battlefield.Battlefield import Cell, Battlefield
 from DreamGame import DreamGame
 
 @pytest.fixture(name="pirate_basetype")
@@ -20,9 +20,9 @@ def demohero_basetype_func():
 @pytest.fixture()
 def demo_dungeon(pirate_basetype):
     pirate_band = [Unit(pirate_basetype) for _ in range(3)]
-    locations = [cell(4, 4), cell(4, 5), cell(5, 4)]
+    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
     units_locations = [(pirate_band[i], locations[i]) for i in range(3)]
-    demo_dungeon = Dungeon(units_locations, 8, 8, hero_entrance=cell(1, 1))
+    demo_dungeon = Dungeon(units_locations, 8, 8, hero_entrance=Cell(1, 1))
 
     yield  demo_dungeon
 
@@ -35,7 +35,27 @@ def hero(demohero_basetype):
 def pirate(pirate_basetype):
     yield Unit(pirate_basetype)
 
-@pytest.fixture(name="game")
-def game_demo_dung(demo_dungeon, hero):
+@pytest.fixture()
+def game(demo_dungeon, hero):
     DreamGame.start_dungeon(demo_dungeon, hero)
     yield DreamGame.the_game
+
+@pytest.fixture()
+def pirate_band(pirate_basetype):
+    _pirate_band = [Unit(pirate_basetype) for i in range(3)]
+    yield _pirate_band
+
+@pytest.fixture()
+def battlefield(pirate_band, hero):
+    bf = Battlefield(8, 8)
+    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
+
+    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
+    units_locations[hero] = Cell(1, 1)
+    bf.place_many(units_locations)
+    yield bf
+
+@pytest.fixture()
+def pirate_band(pirate_basetype):
+    _pirate_band = [Unit(pirate_basetype) for i in range(3)]
+    yield _pirate_band

@@ -1,4 +1,4 @@
-from battlefield.Battlefield import Battlefield, cell
+from battlefield.Battlefield import Battlefield, Cell
 from mechanics.combat import Attack
 from mechanics.turns import SequentialTM
 from mechanics.fractions import Fractions
@@ -26,11 +26,10 @@ class DreamGame:
     @staticmethod
     def start_dungeon(dungeon, hero):
 
-        unit_locations = dungeon.units_locations
+        unit_locations = dungeon.unit_locations
         unit_locations[hero] = dungeon.hero_entrance
 
         game = DreamGame(Battlefield(dungeon.h, dungeon.w), unit_locations)
-        game.battlefield.place_many(unit_locations)
         game.the_hero = hero
         game.fractions.update({unit:Fractions.ENEMY for unit in dungeon.unit_locations})
         game.fractions[hero] = Fractions.PLAYER
@@ -90,7 +89,7 @@ class DreamGame:
                     orders = input("Tell me where to go!")
                     x, y = [int(coord) for coord in orders.split()]
                     print(x,y)
-                    target_cell = cell(x,y)
+                    target_cell = Cell(x, y)
 
             elif self.fractions[active_unit] is Fractions.ENEMY:
                 target_cell = self.brute_ai.decide_step(active_unit)
