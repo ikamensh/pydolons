@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from utils.named_enums import AutoName, auto
 
-class DamageTypes(Enum):
+class DamageTypes(AutoName):
     SLASH = auto()
     CRUSH = auto()
     PIERCE = auto()
@@ -13,7 +13,6 @@ class DamageTypes(Enum):
     # design: succeptable entities have strong vulnerability. damage of below types comes in small amounts.
     SONIC = auto()
     LIGHT = auto()
-
     MIND = auto()
 
 class DamageTypeGroups:
@@ -21,3 +20,5 @@ class DamageTypeGroups:
     elemental = {DamageTypes.FIRE, DamageTypes.FROST, DamageTypes.LIGHTNING, DamageTypes.ACID}
     exotic = {DamageTypes.SONIC, DamageTypes.LIGHT}
 
+if __name__ == "__main__":
+    print(list(DamageTypes))

@@ -21,5 +21,5 @@ class GameLog:
         elif self.target == LogTargets.FILE:
             raise NotImplemented
 
-gamelog = GameLog(LogTargets.SILENT)
+gamelog = GameLog(LogTargets.PRINT)
 

@@ -1,38 +1,25 @@
 import pytest
 
 from mechanics.buffs import Ability
-from mechanics.attributes import Attribute, Attributes
+from mechanics.attributes import Attribute, Attributes, get_attrib_by_enum
 
 @pytest.fixture(params=Attributes)
 def attrib(request):
     yield request.param
 
 @pytest.fixture()
-def inner_power():
-    bonus = Attribute(2, 10, 0)
-    inner_power = Ability({Attributes.STR: bonus})
+def inner_power(attrib):
+    bonus = Attribute(2, 100, 0)
+    inner_power = Ability({attrib: bonus})
     yield inner_power
 
 @pytest.fixture()
-def bonus_str():
+def bonus_str(attrib):
     bonus = Attribute(0, 0, 3)
-    bonus_str = Ability({Attributes.STR: bonus})
+    bonus_str = Ability({attrib: bonus})
     yield bonus_str
 
-def get_attrib_by_enum(unit, attrib):
-    if attrib is Attributes.STR:
-        return unit.str
-    if attrib is Attributes.AGI:
-        return unit.agi
-    if attrib is Attributes.INT:
-        return unit.int
 
-    if attrib is Attributes.HEALTH:
-        return unit.health
-    if attrib is Attributes.STAMINA:
-        return unit.stamina
-    if attrib is Attributes.MANA:
-        return unit.mana
 
 def test_str_helps(hero, inner_power, attrib):
     attrib_before = get_attrib_by_enum(hero, attrib)

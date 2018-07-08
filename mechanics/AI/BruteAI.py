@@ -19,7 +19,8 @@ class BruteAI:
             target, _ = distances[0]
             target_location = self.battlefield.unit_locations[target]
             possible_steps = self.battlefield.get_neighbouring_cells(start_location)
-            return self.battlefield.get_nearest_to(candidates=possible_steps, target=target_location)
+            cell, _ = self.battlefield.get_nearest_cell(candidates=possible_steps, target=target_location)
+            return cell
 
         else:
             return self.random_ai.decide_step(active_unit)

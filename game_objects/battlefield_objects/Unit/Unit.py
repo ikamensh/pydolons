@@ -10,19 +10,21 @@ class Unit:
     MANA_PER_INT = 15
     UNARMED_DAMAGE_PER_STR = 5
     
-    def __init__(self, baseType):
-        self.str_base = Attribute(baseType.str, 100, 0)
-        self.agi_base = Attribute(baseType.agi, 100, 0)
-        self.int_base = Attribute(baseType.int, 100, 0)
+    def __init__(self, base_type):
+        self.str_base = Attribute(base_type.str, 100, 0)
+        self.agi_base = Attribute(base_type.agi, 100, 0)
+        self.int_base = Attribute(base_type.int, 100, 0)
 
-        self.type_name = baseType.type_name
-        self.actives = baseType.actives
-        self.unarmed_damage_type = baseType.unarmed_damage_type
-        self.resists = Resistances(baseType.resists)
-        self.armor = Armor(baseType.armor_base, baseType.armor_dict)
-        self.inventory = Inventory(baseType.inventory_capacity)
-        self.equipment = baseType.equipment_cls()
+        self.type_name = base_type.type_name
+        self.actives = base_type.actives
+        self.unarmed_damage_type = base_type.unarmed_damage_type
+        self.resists = Resistances(base_type.resists)
+        self.armor = Armor(base_type.armor_base, base_type.armor_dict)
+        self.inventory = Inventory(base_type.inventory_capacity)
+        self.equipment = base_type.equipment_cls()
         self.abilities = []
+
+        self.icon = base_type.icon
 
         self.reset()
 
@@ -117,6 +119,8 @@ class Unit:
         :param dmg_amount: amount of incoming damage
         :return: True if unit dies, False otherwise
         """
+        assert dmg_amount >= 0
+
         self.health -= dmg_amount
         if self.health <= 0:
             return True

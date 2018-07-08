@@ -1,7 +1,7 @@
 from math import hypot
 from collections import namedtuple
 
-Cell = namedtuple("Coordinates", "x y")
+Cell = namedtuple("Cell", "x y")
 
 class Battlefield:
     def __init__(self, w, h):
@@ -24,25 +24,35 @@ class Battlefield:
         unit_pos = self.unit_locations[unit]
         return Battlefield.distance(unit_pos, p)
 
+    def get_unit_at(self, cell):
+        if cell in self.units_at:
+            return self.units_at[cell]
+        else:
+            return None
+
     def get_neighbouring_cells(self, cell, distance=1):
+        neighbours = self.get_cells_within_dist(cell, distance)
+        neighbours.remove(cell)
+        return neighbours
+
+    def get_cells_within_dist(self, cell, distance):
         x = cell.x
         y = cell.y
 
         neighbours = []
-        steps = list(range(-distance, distance+1))
+        steps = list(range(-int(distance), int(distance) + 1))
         for dx in steps:
             for dy in steps:
-                if 0 <= x+dx < self.w and 0 <= y+dy < self.h:
-                    new_cell = Cell(x+dx, y+dy)
+                if 0 <= x + dx < self.w and 0 <= y + dy < self.h:
+                    new_cell = Cell(x + dx, y + dy)
                     if Battlefield.distance(cell, new_cell) <= distance:
                         neighbours.append(new_cell)
 
         return neighbours
 
-    def get_nearest_to(self, candidates, target):
-        pairs = [(Cell, self.distance(c, target)) for c in candidates]
+    def get_nearest_cell(self, candidates, target):
+        pairs = [(c, self.distance(c, target)) for c in candidates]
         return min(pairs, key=lambda x:x[1])
-
 
 
 

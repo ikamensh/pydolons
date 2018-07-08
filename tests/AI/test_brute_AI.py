@@ -18,4 +18,4 @@ def test_is_deterministic(game):
 
         cell = randomAI.decide_step(unit)
         proposed_cells.add(cell)
-    assert 1 < len(proposed_cells) < 10
+    assert len(proposed_cells) == 1

@@ -4,7 +4,7 @@ from game_objects.items import Equipment, Inventory
 class BaseType:
     def __init__(self, str, agi, int, type_name, unarmed_damage_type=DamageTypes.CRUSH, resists=None,
                  armor_dict=None, armor_base=0, equipment=Equipment, inventory_capacity = 20,
-                 actives=set()):
+                 actives=set(), icon="default.png"):
         self.str = str
         self.agi = agi
         self.int = int
@@ -17,3 +17,4 @@ class BaseType:
         self.equipment_cls = equipment
         self.inventory_capacity = inventory_capacity
         self.armor_base = armor_base
+        self.icon = icon

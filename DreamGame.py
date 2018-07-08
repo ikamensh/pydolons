@@ -2,7 +2,7 @@ from battlefield.Battlefield import Battlefield, Cell
 from mechanics.combat import Attack
 from mechanics.turns import SequentialTM
 from mechanics.fractions import Fractions
-from mechanics.AI import BruteAI, RandomAI
+from mechanics.AI import AstarAI, RandomAI
 
 class DreamGame:
     the_game = None
@@ -11,15 +11,14 @@ class DreamGame:
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
-        self.brute_ai = BruteAI(bf, self.fractions)
+        self.brute_ai = AstarAI(bf, self.fractions)
         self.random_ai = RandomAI(bf)
+        self.turns_manager = None
         DreamGame.the_game = self
 
         if unit_locations:
             bf.place_many(unit_locations)
-            self.turns_manager = SequentialTM(unit_locations.keys())
-        else:
-            self.turns_manager = SequentialTM()
+
 
 
 
@@ -31,8 +30,14 @@ class DreamGame:
 
         game = DreamGame(Battlefield(dungeon.h, dungeon.w), unit_locations)
         game.the_hero = hero
-        game.fractions.update({unit:Fractions.ENEMY for unit in dungeon.unit_locations})
+        game.fractions.update({unit: Fractions.OBSTACLES for unit in dungeon.unit_locations
+                               if "Wall" in unit.type_name})
+        game.fractions.update({unit:Fractions.ENEMY for unit in dungeon.unit_locations if unit not in game.fractions})
         game.fractions[hero] = Fractions.PLAYER
+
+        units_who_make_turns = [unit for unit in unit_locations.keys()
+                                if game.fractions[unit] is not Fractions.OBSTACLES]
+        game.turns_manager = SequentialTM(units_who_make_turns)
 
         return game
 
@@ -67,7 +72,9 @@ class DreamGame:
     def attack(self, attacker, target):
         target_died = Attack.attack(attacker, target)
         if target_died:
+            del self.fractions[target]
             self.battlefield.remove(target)
+            self.turns_manager.remove_unit(target)
 
     @staticmethod
     def get_location(unit):
@@ -79,10 +86,12 @@ class DreamGame:
         return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
 
     def loop(self, player_berserk=False):
+        count_hero_turns = 0
         while True:
             active_unit = self.turns_manager.get_next()
             target_cell = None
             if self.fractions[active_unit] is Fractions.PLAYER:
+                count_hero_turns += 1
                 if player_berserk:
                     target_cell=self.brute_ai.decide_step(active_unit, target_fraction=Fractions.ENEMY)
                 else:
@@ -97,8 +106,22 @@ class DreamGame:
                 target_cell = self.random_ai.decide_step(active_unit)
 
             self.order_move(active_unit, target_cell)
-            self.print_all_units()
+            game_over = self.game_over()
+            if game_over:
+                print(game_over)
+                return count_hero_turns
+            # self.print_all_units()
 
+    def game_over(self):
+        own_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.PLAYER]
+        enemy_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.ENEMY]
+
+        if len(own_units) == 0:
+            return "DEFEAT"
+        elif len(enemy_units) == 0:
+            return "VICTORY"
+        else:
+            return None
 
     def print_all_units(self):
         for unit, xy in self.battlefield.unit_locations.items():
