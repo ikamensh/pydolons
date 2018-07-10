@@ -2,9 +2,14 @@ class EffectPack:
     def __init__(self, targeted_effects):
         self.targeted_effects = targeted_effects
 
-    def resolve(self, source, user_targeting):
+    def resolve(self, source, targeting_info):
+        """
+        :param source: the unit who is author of the effects
+        :param targeting_info: either an event (Triggers) or user_targeting (Actives)
+        :return: 
+        """
         for effect, targeting_factory in self.targeted_effects:
-            targets = targeting_factory(user_targeting)
+            targets = targeting_factory(targeting_info)
 
             if targets:
                 try:

@@ -1,4 +1,4 @@
-from content.packs.Fireball50 import fireball_pack
+from content.active_packs.Fireball50 import fireball_pack
 from mechanics.flexi_targeting.active.UserTargeting import CellTargeting
 from battlefield.Battlefield import Cell
 
