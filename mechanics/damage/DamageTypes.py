@@ -1,6 +1,6 @@
-from utils.named_enums import AutoName, auto
+from utils.named_enums import NameEnum, auto
 
-class DamageTypes(AutoName):
+class DamageTypes(NameEnum):
     SLASH = auto()
     CRUSH = auto()
     PIERCE = auto()

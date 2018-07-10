@@ -1,5 +1,6 @@
 from math import hypot
 from collections import namedtuple
+from mechanics.events.Event import MovementCompletedEvent
 
 Cell = namedtuple("Cell", "x y")
 
@@ -76,9 +77,11 @@ class Battlefield:
         del self.units_at[p]
         del self.unit_locations[unit]
 
-    def move(self, unit, new_p):
+    def move(self, unit, new_position):
+        old_position = self.unit_locations[unit]
         self.remove(unit)
-        self.place(unit, new_p)
+        self.place(unit, new_position)
+        MovementCompletedEvent(unit, old_position, new_position)
 
 
 

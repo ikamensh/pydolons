@@ -1,5 +1,6 @@
-from mechanics.flexi_targeting import EffectPack, PackTargeting
-from content.effects.AttackEffect import AttackEffect
+from mechanics.flexi_targeting import EffectPack
+from content.effects.SingleAttack import AttackEffect
+from content.targeting_factory.targeting_factory import cell_to_unit, same_unit_as_targeted
 
-attack_unit_event = EffectPack([AttackEffect], PackTargeting.TARGET_UNIT)
-attack_cell_event = EffectPack([AttackEffect], PackTargeting.UNIT_ON_TARGET_CELL)
+attack_unit_pack = EffectPack([(AttackEffect, same_unit_as_targeted)])
+attack_cell_pack = EffectPack([(AttackEffect, cell_to_unit)])

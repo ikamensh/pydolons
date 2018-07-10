@@ -1,7 +1,7 @@
 from game_objects.battlefield_objects.Unit.Unit import Unit
 from battlefield.Battlefield import Battlefield, Cell
 from content.actives.melee_attack import attack_cell_active, attack_unit_active
-from mechanics.flexi_targeting import UserTargeting
+from mechanics.flexi_targeting import SingleUnitTargeting, CellTargeting
 from DreamGame import DreamGame
 
 #TODO program and test that actives are unique. Use factory.
@@ -20,7 +20,7 @@ def test_attack_cell(pirate_basetype):
     hp_before = unit2.health
 
     unit1.give_active(attack_cell_active)
-    target_cell = UserTargeting(loc2)
+    target_cell = CellTargeting(loc2)
     unit1.activate(attack_cell_active, target_cell)
 
     assert unit2.health < hp_before
@@ -39,7 +39,7 @@ def test_attack_unit(pirate_basetype):
     hp_before = unit2.health
 
     unit1.give_active(attack_unit_active)
-    target_unit = UserTargeting(unit2)
+    target_unit = SingleUnitTargeting(unit2)
     unit1.activate(attack_unit_active, target_unit)
 
     assert unit2.health < hp_before

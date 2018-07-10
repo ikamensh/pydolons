@@ -1,22 +1,16 @@
-from mechanics.flexi_targeting import PackTargeting
-from game_objects.battlefield_objects.Unit.Unit import Unit
-from battlefield.Battlefield import Cell
-from DreamGame import DreamGame
-
 class EffectPack:
-    def __init__(self, effects, event_targeting):
-        self.effects = effects
-        self.event_targeting = event_targeting
+    def __init__(self, targeted_effects):
+        self.targeted_effects = targeted_effects
 
     def resolve(self, source, user_targeting):
-        if self.event_targeting == PackTargeting.TARGET_UNIT:
-            assert isinstance(user_targeting.target, Unit)
-            target_unit = user_targeting.target
-            for effect in self.effects:
-                effect.apply(source, target_unit)
+        for effect, targeting_factory in self.targeted_effects:
+            targets = targeting_factory(user_targeting)
 
-        elif self.event_targeting == PackTargeting.UNIT_ON_TARGET_CELL:
-            assert isinstance(user_targeting.target, Cell)
-            target_unit = DreamGame.get_unit_at(user_targeting.target)
-            for effect in self.effects:
-                effect.apply(source, target_unit)
+            if targets:
+                try:
+                    for target in targets:
+                        effect.apply(source, target)
+                except TypeError:
+                    effect.apply(source, targets)
+
+

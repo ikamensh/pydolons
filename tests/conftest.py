@@ -1,8 +1,9 @@
 import pytest
-from dungeon.Dungeon import Dungeon
-from game_objects.battlefield_objects import Unit, BaseType
-from battlefield.Battlefield import Cell, Battlefield
+
 from DreamGame import DreamGame
+from battlefield.Battlefield import Cell, Battlefield
+from game_objects.battlefield_objects import Unit, BaseType
+from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
 
 

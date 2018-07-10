@@ -3,6 +3,8 @@ from mechanics.combat import Attack
 from mechanics.turns import SequentialTM
 from mechanics.fractions import Fractions
 from mechanics.AI import AstarAI, RandomAI
+from mechanics.events.Event import UnitDiedEvent, MovementCompletedEvent
+
 
 class DreamGame:
     the_game = None
@@ -54,7 +56,7 @@ class DreamGame:
 
     @staticmethod
     def get_units_distances_from(p):
-        return DreamGame.the_game.battlefield.get_units_sorted_by_proximity_to()
+        return DreamGame.the_game.battlefield.get_units_dists_to(p)
 
     def order_move(self, unit, p):
         # units can only go to adjecent locations
@@ -66,15 +68,21 @@ class DreamGame:
             self.attack(unit, target)
         else:
             self.battlefield.move(unit, p)
+
         return True
+
+    def unit_died(self, unit, *, killer = None):
+        del self.fractions[unit]
+        self.battlefield.remove(unit)
+        self.turns_manager.remove_unit(unit)
+        UnitDiedEvent(unit, killer)
 
 
     def attack(self, attacker, target):
         target_died = Attack.attack(attacker, target)
         if target_died:
-            del self.fractions[target]
-            self.battlefield.remove(target)
-            self.turns_manager.remove_unit(target)
+            self.unit_died(target, killer= attacker)
+
 
     @staticmethod
     def get_location(unit):

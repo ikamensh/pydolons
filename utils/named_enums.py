@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-class AutoName(Enum):
+class NameEnum(Enum):
     def _generate_next_value_(name, start, count, last_values):
        return name
 
@@ -13,7 +13,7 @@ class AutoName(Enum):
 
 
 if __name__ == "__main__":
-    class Ordinal(AutoName):
+    class Ordinal(NameEnum):
         NORTH = auto()
         South = auto()
         East = auto()
