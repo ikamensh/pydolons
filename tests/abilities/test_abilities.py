@@ -1,9 +1,9 @@
 import pytest
 
 from mechanics.buffs import Ability
-from mechanics.attributes import Attribute, Attributes, get_attrib_by_enum
+from mechanics.attributes import Attribute, BonusAttributes, get_attrib_by_enum
 
-@pytest.fixture(params=Attributes)
+@pytest.fixture(params=BonusAttributes)
 def attrib(request):
     yield request.param
 

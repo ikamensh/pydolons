@@ -9,13 +9,13 @@ from mechanics.damage import DamageTypeGroups
 
 @pytest.fixture()
 def pirate_basetype():
-    _pirate_basetype = BaseType(10, 10, 5, "Pirate")
+    _pirate_basetype = BaseType({}, "Pirate")
     yield  _pirate_basetype
 
 
 @pytest.fixture()
 def demohero_basetype():
-    _demohero_basetype = BaseType(20, 15, 15, "Demo Hero")
+    _demohero_basetype = BaseType({'str':45, 'agi': 15,'prc': 15}, "Demo Hero")
     yield  _demohero_basetype
 
 @pytest.fixture()
@@ -23,7 +23,7 @@ def steel_wall_type():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall_type = BaseType(100, 0, 0, "Wall of steel!", resists=resists, armor_base=500, icon="wall.png")
+    _steel_wall_type = BaseType({}, "Wall of steel!", resists=resists, armor_base=500, icon="wall.png")
     return _steel_wall_type
 
 

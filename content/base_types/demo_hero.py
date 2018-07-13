@@ -1,3 +1,3 @@
 from game_objects.battlefield_objects.Unit.BaseType import BaseType
 
-demohero_basetype = BaseType(45, 15, 15, "Demo Hero", icon="hero.png")
+demohero_basetype = BaseType({'str':45, 'agi': 15,'prc': 15}, "Demo Hero", icon="hero.png")

@@ -1,8 +1,8 @@
 from mechanics.buffs import Ability
-from mechanics.attributes import Attribute, Attributes
+from mechanics.attributes import Attribute, BonusAttributes
 
 bonus = Attribute(2, 10, 0)
-inner_power = Ability({Attributes.STR: bonus})
+inner_power = Ability({BonusAttributes.STR: bonus})
 
 bonus = Attribute(0, 0, 3)
-great_streingth = Ability({Attributes.STR: bonus})
+great_streingth = Ability({BonusAttributes.STR: bonus})

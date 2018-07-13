@@ -6,20 +6,22 @@ class Event:
         EventsPlatform.process_event(self)
 
 class DamageDealtEvent(Event):
-    def __init__(self, source, target, amount, type):
+    def __init__(self, source, target, impact_factor, amount, type):
         self.source = source
         self.target = target
         self.amount = amount
         self.type = type
+        self.impact_factor = impact_factor
         super().__init__()
 
     def __repr__(self):
+
         if self.amount == 0:
-            "{} laughs at the attempts to damage it with {}".format(self.target, self.type)
+            return repr(self.impact_factor)+"! {} laughs at the attempts to damage it with {}".format(self.target, self.type)
         if self.source:
-            return "{} recieves {} {} damage from {}.".format(self.target, self.amount, self.type, self.source)
+            return repr(self.impact_factor)+"! {} recieves {} {} damage from {}.".format(self.target, self.amount, self.type, self.source)
         else:
-            return "{} recieves {} {} damage.".format(self.target, self.amount, self.type)
+            return repr(self.impact_factor)+"! {} recieves {} {} damage.".format(self.target, self.amount, self.type)
 
 class MovementCompletedEvent(Event):
     def __init__(self, unit, cell_from, cell_to):

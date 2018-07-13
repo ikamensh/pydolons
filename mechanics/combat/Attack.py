@@ -1,5 +1,7 @@
 from mechanics.damage import deal_damage
 from mechanics.events.Event import AttackStartedEvent
+from mechanics.PrecisionEvasion.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
+from game_objects.battlefield_objects.Unit.Unit import Unit
 
 class Attack:
     #Once weapons are implemented: get damage by weapon, pass weapon to attack event.
@@ -16,7 +18,11 @@ class Attack:
 
 
     @staticmethod
-    def __attack(source, target, damage):
+    def __attack(source : Unit, target : Unit, damage):
         AttackStartedEvent(source, target)
-        return deal_damage(damage, target, source=source)
+        impact = ImpactCalculator.roll_impact(source.unarmed_chances, source.melee_precision, target.melee_evasion)
+        if impact is not ImpactFactor.MISS:
+            return deal_damage(damage, target, source=source, impact_factor = impact)
+        else:
+            print("MISS")
 

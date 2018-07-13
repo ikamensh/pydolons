@@ -1,7 +1,9 @@
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
-from mechanics.attributes import Attribute, Attributes
+from mechanics.attributes import Attribute, BonusAttributes
 from game_objects.items import Inventory
+from game_objects.battlefield_objects.Unit.BaseType import BaseType
+from game_objects.battlefield_objects.Unit.CharAttributes import CharAttributes
 
 
 class Unit:
@@ -10,14 +12,19 @@ class Unit:
     MANA_PER_INT = 15
     UNARMED_DAMAGE_PER_STR = 5
     
-    def __init__(self, base_type):
-        self.str_base = Attribute(base_type.str, 100, 0)
-        self.agi_base = Attribute(base_type.agi, 100, 0)
-        self.int_base = Attribute(base_type.int, 100, 0)
+    def __init__(self, base_type: BaseType):
+        self.str_base = Attribute(base_type.attributes[CharAttributes.STREINGTH], 100, 0)
+        self.end_base = Attribute(base_type.attributes[CharAttributes.ENDURANCE], 100, 0)
+        self.prc_base = Attribute(base_type.attributes[CharAttributes.PERCEPTION], 100, 0)
+        self.agi_base = Attribute(base_type.attributes[CharAttributes.AGILITY], 100, 0)
+        self.int_base = Attribute(base_type.attributes[CharAttributes.INTELLIGENCE], 100, 0)
+        self.cha_base = Attribute(base_type.attributes[CharAttributes.CHARISMA], 100, 0)
+
 
         self.type_name = base_type.type_name
         self.actives = base_type.actives
         self.unarmed_damage_type = base_type.unarmed_damage_type
+        self.unarmed_chances = base_type.unarmed_chances
         self.resists = Resistances(base_type.resists)
         self.armor = Armor(base_type.armor_base, base_type.armor_dict)
         self.inventory = Inventory(base_type.inventory_capacity)
@@ -40,27 +47,47 @@ class Unit:
 
     @property
     def str(self):
-        return self.sum_with_abilities(self.str_base, Attributes.STR)
+        return self.sum_with_abilities(self.str_base, BonusAttributes.STR)
 
     @property
     def agi(self):
-        return self.sum_with_abilities(self.agi_base, Attributes.AGI)
+        return self.sum_with_abilities(self.agi_base, BonusAttributes.AGI)
 
     @property
     def int(self):
-        return self.sum_with_abilities(self.int_base, Attributes.INT)
+        return self.sum_with_abilities(self.int_base, BonusAttributes.INT)
+
+    @property
+    def end(self):
+        return self.sum_with_abilities(self.int_base, BonusAttributes.END)
+
+    @property
+    def prc(self):
+        return self.sum_with_abilities(self.int_base, BonusAttributes.PRC)
+
+    @property
+    def cha(self):
+        return self.sum_with_abilities(self.int_base, BonusAttributes.CHA)
 
     @property
     def health_max(self):
-        return self.sum_with_abilities(Attribute(self.str * Unit.HP_PER_STR, 100, 0), Attributes.HEALTH)
+        return self.sum_with_abilities(Attribute(self.str * Unit.HP_PER_STR, 100, 0), BonusAttributes.HEALTH)
 
     @property
     def mana_max(self):
-        return self.sum_with_abilities(Attribute(self.int * Unit.MANA_PER_INT, 100, 0), Attributes.MANA)
+        return self.sum_with_abilities(Attribute(self.int * Unit.MANA_PER_INT, 100, 0), BonusAttributes.MANA)
 
     @property
     def stamina_max(self):
-        return self.sum_with_abilities(Attribute(self.str * Unit.STAMINA_PER_STR, 100, 0), Attributes.STAMINA)
+        return self.sum_with_abilities(Attribute(self.str * Unit.STAMINA_PER_STR, 100, 0), BonusAttributes.STAMINA)
+
+    @property
+    def melee_precision(self):
+        return self.str + self.agi
+
+    @property
+    def melee_evasion(self):
+        return self.prc + self.agi
 
     def reset(self):
         self.health = self.health_max
