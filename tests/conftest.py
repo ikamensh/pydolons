@@ -60,13 +60,13 @@ def pirate(pirate_basetype):
 
 @pytest.fixture()
 def game(demo_dungeon, hero):
-    DreamGame.start_dungeon(demo_dungeon, hero)
-    yield DreamGame.the_game
+    _game = DreamGame.start_dungeon(demo_dungeon, hero)
+    yield _game
 
 @pytest.fixture()
 def walls_game(walls_dungeon, hero):
-    DreamGame.start_dungeon(walls_dungeon, hero)
-    yield DreamGame.the_game
+    _game = DreamGame.start_dungeon(walls_dungeon, hero)
+    yield _game
 
 @pytest.fixture()
 def pirate_band(pirate_basetype):

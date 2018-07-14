@@ -5,7 +5,7 @@ def test_damage_to_attackers(game, hero, pirate_band):
     trig = damage_to_attackers(hero, hero)
     for pirate in pirate_band:
         Attack.attack(pirate, hero)
-        assert pirate.health < pirate.health_max
+        assert pirate.health < pirate.max_health
 
     trig.deactivate()
 

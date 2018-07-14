@@ -1,4 +1,4 @@
-from mechanics.PrecisionEvasion.ChanceCalculator import ChanceCalculator
+from mechanics.chances.ChanceCalculator import ChanceCalculator
 
 
 import pytest

@@ -1,7 +1,7 @@
 from mechanics.fractions import Fractions
 from mechanics.AI import RandomAI
 from astar import AStar
-from mechanics.damage import calculate_damage
+from mechanics.damage import Damage
 
 class StarPathSearch(AStar):
     really_big_number = 1e50
@@ -18,7 +18,7 @@ class StarPathSearch(AStar):
         assert self.unit is not None
         if n2 in self.battlefield.units_at:
             obstacle = self.battlefield.units_at[n2]
-            damage_per_turn = calculate_damage(self.unit.get_melee_damage(), obstacle)
+            damage_per_turn = Damage.calculate_damage(self.unit.get_melee_damage(), obstacle)
             if damage_per_turn == 0:
                 return StarPathSearch.really_big_number
             n_turns = obstacle.health / damage_per_turn

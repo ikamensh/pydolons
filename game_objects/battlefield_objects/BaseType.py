@@ -1,7 +1,8 @@
+from game_objects.battlefield_objects.CharAttributes import CharAttributes, abbrevs
+from game_objects.items import Equipment
+from mechanics.chances.CritHitGrazeMiss import ImpactChances
 from mechanics.damage import DamageTypes
-from game_objects.items import Equipment, Inventory
-from mechanics.PrecisionEvasion.CritHitGrazeMiss import ImpactChances
-from game_objects.battlefield_objects.Unit.CharAttributes import CharAttributes, abbrevs
+
 
 class BaseType:
     default_unarmed_chances = ImpactChances(crit=0.05, hit=0.5, graze=0.5)

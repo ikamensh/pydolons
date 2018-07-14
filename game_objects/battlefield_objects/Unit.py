@@ -1,9 +1,11 @@
+from game_objects.battlefield_objects.CharAttributes import CharAttributes
+
+
+from game_objects.battlefield_objects.BaseType import BaseType
+from game_objects.items import Inventory
+from mechanics.attributes import Attribute, BonusAttributes
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
-from mechanics.attributes import Attribute, BonusAttributes
-from game_objects.items import Inventory
-from game_objects.battlefield_objects.Unit.BaseType import BaseType
-from game_objects.battlefield_objects.Unit.CharAttributes import CharAttributes
 
 
 class Unit:
@@ -30,6 +32,7 @@ class Unit:
         self.inventory = Inventory(base_type.inventory_capacity)
         self.equipment = base_type.equipment_cls()
         self.abilities = []
+        self.alive = True
 
         self.icon = base_type.icon
 
@@ -70,15 +73,15 @@ class Unit:
         return self.sum_with_abilities(self.int_base, BonusAttributes.CHA)
 
     @property
-    def health_max(self):
+    def max_health(self):
         return self.sum_with_abilities(Attribute(self.str * Unit.HP_PER_STR, 100, 0), BonusAttributes.HEALTH)
 
     @property
-    def mana_max(self):
+    def max_mana(self):
         return self.sum_with_abilities(Attribute(self.int * Unit.MANA_PER_INT, 100, 0), BonusAttributes.MANA)
 
     @property
-    def stamina_max(self):
+    def max_stamina(self):
         return self.sum_with_abilities(Attribute(self.str * Unit.STAMINA_PER_STR, 100, 0), BonusAttributes.STAMINA)
 
     @property
@@ -90,25 +93,25 @@ class Unit:
         return self.prc + self.agi
 
     def reset(self):
-        self.health = self.health_max
+        self.health = self.max_health
         self.health_max_old = self.health
 
-        self.mana = self.mana_max
+        self.mana = self.max_mana
         self.mana_max_old = self.mana
 
-        self.stamina = self.stamina_max
+        self.stamina = self.max_stamina
         self.stamina_max_old = self.stamina
 
     def rescale(self):
 
-        self.health = self.health * (self.health_max / self.health_max_old)
-        self.health_max_old = self.health_max
+        self.health = self.health * (self.max_health / self.health_max_old)
+        self.health_max_old = self.max_health
 
-        self.mana = self.mana * (self.mana_max / self.mana_max_old)
-        self.mana_max_old = self.mana_max
+        self.mana = self.mana * (self.max_mana / self.mana_max_old)
+        self.mana_max_old = self.max_mana
 
-        self.stamina = self.stamina * (self.stamina_max / self.stamina_max_old)
-        self.stamina_max_old = self.stamina_max
+        self.stamina = self.stamina * (self.max_stamina / self.stamina_max_old)
+        self.stamina_max_old = self.max_stamina
 
 
     def give_active(self, active):
@@ -144,15 +147,15 @@ class Unit:
     def lose_health(self, dmg_amount):
         """
         :param dmg_amount: amount of incoming damage
-        :return: True if unit dies, False otherwise
+        :return: True if unit lost all HP, False otherwise
         """
         assert dmg_amount >= 0
-
         self.health -= dmg_amount
         if self.health <= 0:
             return True
         else:
             return False
+
 
     def __repr__(self):
         return "{} with {} HP".format(self.type_name, self.health)

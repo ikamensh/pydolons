@@ -1,5 +1,5 @@
 from utils.named_enums import NameEnum, auto
-from mechanics.PrecisionEvasion.ChanceCalculator import ChanceCalculator
+from mechanics.chances.ChanceCalculator import ChanceCalculator
 import random
 from collections import namedtuple
 
@@ -11,18 +11,6 @@ class ImpactFactor(NameEnum):
     HIT = auto()
     GRAZE = auto()
     MISS = auto()
-
-protection_coef = {
-    ImpactFactor.CRIT:0.7,
-    ImpactFactor.HIT:1.0,
-    ImpactFactor.GRAZE:1.4
-}
-
-effect_coef = {
-    ImpactFactor.CRIT:1.5,
-    ImpactFactor.HIT: 1,
-    ImpactFactor.GRAZE: 0.66
-}
 
 
 # Optimizable - do not calculate chance before needed.

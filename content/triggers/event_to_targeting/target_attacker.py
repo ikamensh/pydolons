@@ -1,5 +1,5 @@
-from mechanics.events.Event import AttackStartedEvent
+from mechanics.combat.AttackEvent import AttackEvent
 
 def target_attacker(event):
-    assert isinstance(event,AttackStartedEvent)
+    assert isinstance(event, AttackEvent)
     return event.source

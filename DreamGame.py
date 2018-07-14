@@ -3,11 +3,11 @@ from mechanics.combat import Attack
 from mechanics.turns import SequentialTM
 from mechanics.fractions import Fractions
 from mechanics.AI import AstarAI, RandomAI
-from mechanics.events.Event import UnitDiedEvent, MovementCompletedEvent
+from battlefield.MovementEvent import MovementEvent
+import my_globals
 
 
 class DreamGame:
-    the_game = None
 
     def __init__(self, bf, unit_locations = None):
         self.battlefield = bf
@@ -16,11 +16,10 @@ class DreamGame:
         self.brute_ai = AstarAI(bf, self.fractions)
         self.random_ai = RandomAI(bf)
         self.turns_manager = None
-        DreamGame.the_game = self
+        my_globals.the_game = self
 
         if unit_locations:
             bf.place_many(unit_locations)
-
 
 
 
@@ -51,47 +50,42 @@ class DreamGame:
 
     @staticmethod
     def get_unit_at(coord):
-        return DreamGame.the_game.battlefield.units_at[coord]
+        return my_globals.the_game.battlefield.units_at[coord]
 
 
     @staticmethod
     def get_units_distances_from(p):
-        return DreamGame.the_game.battlefield.get_units_dists_to(p)
+        return my_globals.the_game.battlefield.get_units_dists_to(p)
 
-    def order_move(self, unit, p):
+    def order_move(self, unit, target_cell):
         # units can only go to adjecent locations
-        if not self.battlefield.distance_unit_to_point(unit, p) <= 1:
+        if not self.battlefield.distance_unit_to_point(unit, target_cell) <= 1:
             return False
 
-        if p in self.battlefield.units_at:
-            target = self.battlefield.units_at[p]
+        if target_cell in self.battlefield.units_at:
+            target = self.battlefield.units_at[target_cell]
             self.attack(unit, target)
         else:
-            self.battlefield.move(unit, p)
+            MovementEvent(self.battlefield, unit, target_cell)
 
         return True
 
-    def unit_died(self, unit, *, killer = None):
-        del self.fractions[unit]
-        self.battlefield.remove(unit)
-        self.turns_manager.remove_unit(unit)
-        UnitDiedEvent(unit, killer)
-
+    # def unit_died(self, unit, *, killer = None):
+    #     UnitDiedEvent(unit, killer, self)
 
     def attack(self, attacker, target):
-        target_died = Attack.attack(attacker, target)
-        if target_died:
-            self.unit_died(target, killer= attacker)
-
+        Attack.attack(attacker, target)
 
     @staticmethod
     def get_location(unit):
-        assert unit in DreamGame.the_game.battlefield.unit_locations
-        return DreamGame.the_game.battlefield.unit_locations[unit]
+        assert unit in my_globals.the_game.battlefield.unit_locations
+        return my_globals.the_game.battlefield.unit_locations[unit]
 
-
-    def __repr__(self):
-        return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
+    def unit_died(self, unit):
+        del self.fractions[unit]
+        self.battlefield.remove(unit)
+        self.turns_manager.remove_unit(unit)
+        unit.alive = False
 
     def loop(self, player_berserk=False):
         count_hero_turns = 0
@@ -135,3 +129,9 @@ class DreamGame:
         for unit, xy in self.battlefield.unit_locations.items():
             x, y = xy
             print("There is a {} at ({},{})".format(unit, x, y))
+
+    def __repr__(self):
+        return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
+
+
+

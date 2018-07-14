@@ -1,8 +1,9 @@
-from game_objects.battlefield_objects.Unit.Unit import Unit
+from DreamGame import DreamGame
 from battlefield.Battlefield import Battlefield, Cell
 from content.actives.melee_attack import attack_cell_active, attack_unit_active
+from game_objects.battlefield_objects.Unit import Unit
 from mechanics.flexi_targeting import SingleUnitTargeting, CellTargeting
-from DreamGame import DreamGame
+
 
 #TODO program and test that actives are unique. Use factory.
 
@@ -25,9 +26,10 @@ def test_attack_cell(pirate_basetype):
 
     assert unit2.health < hp_before
 
-def test_attack_unit(pirate_basetype):
+def test_attack_unit(pirate_basetype, monkeypatch):
     bf = Battlefield(3,3)
-    DreamGame(bf)
+    game = DreamGame(bf)
+    monkeypatch.setattr(game, 'unit_died', lambda x: None)
     unit1 = Unit(pirate_basetype)
     unit2 = Unit(pirate_basetype)
 
@@ -40,7 +42,8 @@ def test_attack_unit(pirate_basetype):
 
     unit1.give_active(attack_unit_active)
     target_unit = SingleUnitTargeting(unit2)
-    unit1.activate(attack_unit_active, target_unit)
+    for i in range(100):
+        unit1.activate(attack_unit_active, target_unit)
 
     assert unit2.health < hp_before
 

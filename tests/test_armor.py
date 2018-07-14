@@ -1,4 +1,4 @@
-from mechanics.damage import Armor, DamageTypes, deal_damage, Damage
+from mechanics.damage import Armor, DamageTypes, Damage, DamageEvent
 import pytest
 
 
@@ -11,7 +11,7 @@ def test_armor_reduces_damage(hero):
 
     hp_before_dmg = hero.health
     dmg = Damage(5, DamageTypes.FIRE)
-    deal_damage(dmg, hero)
+    DamageEvent(dmg, hero)
 
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
@@ -20,7 +20,7 @@ def test_armor_reduces_damage(hero):
     armor = Armor(3)
     hero.armor = armor
 
-    deal_damage(dmg, hero)
+    DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
 
     assert dealt_no_armor > dealt_armor
@@ -37,7 +37,7 @@ def test_types_matter(hero, dmg):
     armor = Armor(3, {DamageTypes.FIRE: 4000})
     hero.armor = armor
 
-    deal_damage(dmg, hero)
+    DamageEvent(dmg, hero)
 
     if dmg.type == DamageTypes.FIRE:
         assert hp_before_dmg == hero.health

@@ -1,5 +1,5 @@
 class ChanceCalculator:
-    advantage_to_double = 100
+    advantage_to_double = 25
 
     @staticmethod
     def chance(base_prob, precision, evasion):
@@ -21,3 +21,12 @@ class ChanceCalculator:
 
         assert 0 <= new_chance <= 1
         return new_chance
+
+
+
+if __name__ == "__main__":
+
+    for base_chance in [0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]:
+        for attack in [0, 10, 33, 100, 333]:
+            for defense in [0, 10, 33, 100, 333]:
+                print(base_chance, attack, defense, ChanceCalculator.chance(base_chance, attack, defense))
