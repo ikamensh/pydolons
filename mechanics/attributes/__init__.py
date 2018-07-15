@@ -1,2 +1,0 @@
-from mechanics.attributes.Attribute import Attribute
-from mechanics.attributes.BonusAttributes import BonusAttributes, get_attrib_by_enum

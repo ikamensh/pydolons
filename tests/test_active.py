@@ -7,7 +7,7 @@ from mechanics.flexi_targeting import SingleUnitTargeting, CellTargeting
 
 #TODO program and test that actives are unique. Use factory.
 
-def test_attack_cell(pirate_basetype):
+def test_attack_cell(pirate_basetype, no_chances):
     bf = Battlefield(3,3)
     DreamGame(bf)
     unit1 = Unit(pirate_basetype)
@@ -26,10 +26,10 @@ def test_attack_cell(pirate_basetype):
 
     assert unit2.health < hp_before
 
-def test_attack_unit(pirate_basetype, monkeypatch):
+def test_attack_unit(pirate_basetype, no_chances):
     bf = Battlefield(3,3)
     game = DreamGame(bf)
-    monkeypatch.setattr(game, 'unit_died', lambda x: None)
+    # monkeypatch.setattr(game, 'unit_died', lambda x: None)
     unit1 = Unit(pirate_basetype)
     unit2 = Unit(pirate_basetype)
 
@@ -42,8 +42,7 @@ def test_attack_unit(pirate_basetype, monkeypatch):
 
     unit1.give_active(attack_unit_active)
     target_unit = SingleUnitTargeting(unit2)
-    for i in range(100):
-        unit1.activate(attack_unit_active, target_unit)
+    unit1.activate(attack_unit_active, target_unit)
 
     assert unit2.health < hp_before
 

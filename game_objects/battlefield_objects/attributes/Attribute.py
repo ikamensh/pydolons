@@ -17,3 +17,5 @@ class Attribute:
         """
         multiplier = max(10, self.multiplier)
         return int(self.base * multiplier / 100 + self.bonus)
+
+

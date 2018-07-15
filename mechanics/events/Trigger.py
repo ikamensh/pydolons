@@ -9,13 +9,10 @@ class Trigger:
         assert isinstance(conditions, dict)
         self.target_event_cls = target_event_cls
         self.conditions = conditions
-        assert (effect_trigger_pack is None) == (source is None)
         self.effect_pack = effect_trigger_pack
         self.source = source
-        if event_callbacks:
-            assert is_interrupt
         self.is_interrupt = is_interrupt
-        self.modify_event = event_callbacks
+        self.event_callbacks = event_callbacks
         self.activate()
 
     def activate(self):
@@ -36,8 +33,8 @@ class Trigger:
         if self.check_conditions(event):
             if self.effect_pack:
                 self.effect_pack.resolve(self.source, event)
-            if self.modify_event:
-                for modifier in self.modify_event:
+            if self.event_callbacks:
+                for modifier in self.event_callbacks:
                     modifier(self, event)
 
     def deactivate(self):

@@ -1,4 +1,4 @@
-from mechanics.attributes import Attribute
+from game_objects.battlefield_objects.attributes import Attribute
 
 def test_summation():
     attrib1 = Attribute(100, 100, 100)

@@ -20,8 +20,7 @@ class Attack:
 
     @staticmethod
     def __attack(source : Unit, target : Unit, damage):
-        event = AttackEvent(source, target, damage)
-        return event.result
+        AttackEvent(source, target, damage)
 
 
 

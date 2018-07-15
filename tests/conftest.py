@@ -5,6 +5,11 @@ from battlefield.Battlefield import Cell, Battlefield
 from game_objects.battlefield_objects import Unit, BaseType
 from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
+from mechanics.chances import ChanceCalculator
+
+@pytest.fixture()
+def no_chances(monkeypatch):
+    monkeypatch.setattr(ChanceCalculator, "chance", lambda x,y,z: 1)
 
 
 @pytest.fixture()

@@ -28,7 +28,6 @@ def test_go_and_hit(game, hero):
     hp_before = the_enemy_pirate.health
     game.order_move(hero, pirate_location)
     assert location_before == game.get_location(hero)
-    assert the_enemy_pirate.health < hp_before
 
     while the_enemy_pirate.health > 0:
         game.order_move(hero, pirate_location)

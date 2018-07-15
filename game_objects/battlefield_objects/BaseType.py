@@ -1,11 +1,11 @@
-from game_objects.battlefield_objects.CharAttributes import CharAttributes, abbrevs
+from game_objects.battlefield_objects.attributes.BonusAttributes import AttributesEnum, abbrev_to_enum
 from game_objects.items import Equipment
 from mechanics.chances.CritHitGrazeMiss import ImpactChances
 from mechanics.damage import DamageTypes
 
 
 class BaseType:
-    default_unarmed_chances = ImpactChances(crit=0.05, hit=0.5, graze=0.5)
+    default_unarmed_chances = ImpactChances(crit=0.05, hit=0.5, graze=0.6)
 
     def __init__(self, attributes, type_name, unarmed_damage_type=DamageTypes.CRUSH, resists=None,
                  armor_dict=None, armor_base=0, equipment=Equipment, inventory_capacity = 20,
@@ -14,9 +14,9 @@ class BaseType:
         self.attributes = {}
         for attr in list(attributes.keys()):
             if isinstance(attr, str):
-                enum_attr = abbrevs[attr]
+                enum_attr = abbrev_to_enum[attr]
                 self.attributes[enum_attr] = attributes[attr]
-        for attr in CharAttributes:
+        for attr in AttributesEnum:
             if attr not in self.attributes:
                 self.attributes[attr] = 10
 

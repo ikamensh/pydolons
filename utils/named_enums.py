@@ -15,7 +15,7 @@ class NameEnum(Enum):
 if __name__ == "__main__":
     class Ordinal(NameEnum):
         NORTH = auto()
-        South = auto()
+        SouthWest = auto()
         East = auto()
         West = auto()
 

@@ -1,9 +1,10 @@
 import pytest
 
+from game_objects.battlefield_objects.attributes import Attribute, AttributesEnum, get_attrib_by_enum
 from mechanics.buffs import Ability
-from mechanics.attributes import Attribute, BonusAttributes, get_attrib_by_enum
 
-@pytest.fixture(params=BonusAttributes)
+
+@pytest.fixture(params=AttributesEnum)
 def attrib(request):
     yield request.param
 
@@ -22,6 +23,7 @@ def bonus_str(attrib):
 
 
 def test_str_helps(hero, inner_power, attrib):
+
     attrib_before = get_attrib_by_enum(hero, attrib)
 
     hero.abilities.append(inner_power)

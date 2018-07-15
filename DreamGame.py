@@ -70,8 +70,6 @@ class DreamGame:
 
         return True
 
-    # def unit_died(self, unit, *, killer = None):
-    #     UnitDiedEvent(unit, killer, self)
 
     def attack(self, attacker, target):
         Attack.attack(attacker, target)

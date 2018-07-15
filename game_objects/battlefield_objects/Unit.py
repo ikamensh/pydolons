@@ -1,9 +1,7 @@
-from game_objects.battlefield_objects.CharAttributes import CharAttributes
-
-
 from game_objects.battlefield_objects.BaseType import BaseType
+from game_objects.battlefield_objects.attributes import AttributesEnum
+from game_objects.battlefield_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
 from game_objects.items import Inventory
-from mechanics.attributes import Attribute, BonusAttributes
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 
@@ -13,14 +11,29 @@ class Unit:
     STAMINA_PER_STR = 5
     MANA_PER_INT = 15
     UNARMED_DAMAGE_PER_STR = 5
+
+    str = AttributeWithBonuses("str_base", AttributesEnum.STREINGTH)
+    end = AttributeWithBonuses("end_base", AttributesEnum.ENDURANCE)
+    prc = AttributeWithBonuses("prc_base", AttributesEnum.PERCEPTION)
+    agi = AttributeWithBonuses("agi_base", AttributesEnum.AGILITY)
+    int = AttributeWithBonuses("int_base", AttributesEnum.INTELLIGENCE)
+    cha = AttributeWithBonuses("cha_base", AttributesEnum.CHARISMA)
+
+    max_health = AttributeWithBonuses("max_health_base", AttributesEnum.HEALTH)
+    max_mana = AttributeWithBonuses("max_mana_base", AttributesEnum.MANA)
+    max_stamina = AttributeWithBonuses("max_stamina_base", AttributesEnum.STAMINA)
+
+    health = DynamicParameter("max_health")
+    mana = DynamicParameter("max_mana")
+    stamina = DynamicParameter("max_stamina")
     
     def __init__(self, base_type: BaseType):
-        self.str_base = Attribute(base_type.attributes[CharAttributes.STREINGTH], 100, 0)
-        self.end_base = Attribute(base_type.attributes[CharAttributes.ENDURANCE], 100, 0)
-        self.prc_base = Attribute(base_type.attributes[CharAttributes.PERCEPTION], 100, 0)
-        self.agi_base = Attribute(base_type.attributes[CharAttributes.AGILITY], 100, 0)
-        self.int_base = Attribute(base_type.attributes[CharAttributes.INTELLIGENCE], 100, 0)
-        self.cha_base = Attribute(base_type.attributes[CharAttributes.CHARISMA], 100, 0)
+        self.str_base = Attribute(base_type.attributes[AttributesEnum.STREINGTH], 100, 0)
+        self.end_base = Attribute(base_type.attributes[AttributesEnum.ENDURANCE], 100, 0)
+        self.prc_base = Attribute(base_type.attributes[AttributesEnum.PERCEPTION], 100, 0)
+        self.agi_base = Attribute(base_type.attributes[AttributesEnum.AGILITY], 100, 0)
+        self.int_base = Attribute(base_type.attributes[AttributesEnum.INTELLIGENCE], 100, 0)
+        self.cha_base = Attribute(base_type.attributes[AttributesEnum.CHARISMA], 100, 0)
 
 
         self.type_name = base_type.type_name
@@ -36,53 +49,17 @@ class Unit:
 
         self.icon = base_type.icon
 
-        self.reset()
-
-
-
-    def sum_with_abilities(self, base, attrib_enum):
-        attr = base
-        for ability in self.abilities:
-            bonus = ability[attrib_enum]
-            if bonus:
-                attr += bonus
-        return attr.value()
+    @property
+    def max_health_base(self):
+        return Attribute(self.str * Unit.HP_PER_STR, 100, 0)
 
     @property
-    def str(self):
-        return self.sum_with_abilities(self.str_base, BonusAttributes.STR)
+    def max_mana_base(self):
+        return Attribute(self.int * Unit.MANA_PER_INT, 100, 0)
 
     @property
-    def agi(self):
-        return self.sum_with_abilities(self.agi_base, BonusAttributes.AGI)
-
-    @property
-    def int(self):
-        return self.sum_with_abilities(self.int_base, BonusAttributes.INT)
-
-    @property
-    def end(self):
-        return self.sum_with_abilities(self.int_base, BonusAttributes.END)
-
-    @property
-    def prc(self):
-        return self.sum_with_abilities(self.int_base, BonusAttributes.PRC)
-
-    @property
-    def cha(self):
-        return self.sum_with_abilities(self.int_base, BonusAttributes.CHA)
-
-    @property
-    def max_health(self):
-        return self.sum_with_abilities(Attribute(self.str * Unit.HP_PER_STR, 100, 0), BonusAttributes.HEALTH)
-
-    @property
-    def max_mana(self):
-        return self.sum_with_abilities(Attribute(self.int * Unit.MANA_PER_INT, 100, 0), BonusAttributes.MANA)
-
-    @property
-    def max_stamina(self):
-        return self.sum_with_abilities(Attribute(self.str * Unit.STAMINA_PER_STR, 100, 0), BonusAttributes.STAMINA)
+    def max_stamina_base(self):
+        return Attribute(self.str * Unit.STAMINA_PER_STR, 100, 0)
 
     @property
     def melee_precision(self):
@@ -93,25 +70,10 @@ class Unit:
         return self.prc + self.agi
 
     def reset(self):
-        self.health = self.max_health
-        self.health_max_old = self.health
-
-        self.mana = self.max_mana
-        self.mana_max_old = self.mana
-
-        self.stamina = self.max_stamina
-        self.stamina_max_old = self.stamina
-
-    def rescale(self):
-
-        self.health = self.health * (self.max_health / self.health_max_old)
-        self.health_max_old = self.max_health
-
-        self.mana = self.mana * (self.max_mana / self.mana_max_old)
-        self.mana_max_old = self.max_mana
-
-        self.stamina = self.stamina * (self.max_stamina / self.stamina_max_old)
-        self.stamina_max_old = self.max_stamina
+        """
+        Give unit maximum values for all dynamic attributes
+        """
+        DynamicParameter.reset(self)
 
 
     def give_active(self, active):
@@ -122,7 +84,6 @@ class Unit:
     def activate(self, active, user_targeting):
         assert active in self.actives
         active.activate(user_targeting)
-
 
 
     def get_unarmed_damage(self):
@@ -158,4 +119,4 @@ class Unit:
 
 
     def __repr__(self):
-        return "{} with {} HP".format(self.type_name, self.health)
+        return f"{self.type_name} with {self.health} HP"
