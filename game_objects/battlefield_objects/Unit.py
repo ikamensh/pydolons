@@ -1,7 +1,7 @@
 from game_objects.battlefield_objects.BaseType import BaseType
 from game_objects.battlefield_objects.attributes import AttributesEnum
 from game_objects.battlefield_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.items import Inventory
+from game_objects.items import Inventory, Equipment
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 
@@ -41,13 +41,21 @@ class Unit:
         self.unarmed_damage_type = base_type.unarmed_damage_type
         self.unarmed_chances = base_type.unarmed_chances
         self.resists = Resistances(base_type.resists)
-        self.armor = Armor(base_type.armor_base, base_type.armor_dict)
+        self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
         self.inventory = Inventory(base_type.inventory_capacity)
-        self.equipment = base_type.equipment_cls()
+        self.equipment :Equipment = base_type.equipment_cls()
         self.abilities = []
         self.alive = True
 
         self.icon = base_type.icon
+
+    @property
+    def armor(self):
+        body_armor = self.equipment["body"]
+        if body_armor:
+            return body_armor.armor + self.natural_armor
+        else:
+            return self.natural_armor
 
     @property
     def max_health_base(self):
@@ -90,7 +98,11 @@ class Unit:
         return Damage(amount=self.str * Unit.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
 
     def get_melee_damage(self):
-        return self.get_unarmed_damage()
+        weapon = self.equipment["hands"]
+        if weapon:
+            return weapon.damage
+        else:
+            return self.get_unarmed_damage()
 
     def can_pay(self, cost):
         result = True

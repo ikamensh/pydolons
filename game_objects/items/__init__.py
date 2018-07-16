@@ -1,8 +1,27 @@
+from game_objects.items.materials.MaterialTypes import MaterialTypes
+from game_objects.items.blueprints.types.WeaponTypes import WeaponTypes
+from game_objects.items.blueprints.types.ArmorTypes import ArmorTypes
 from game_objects.items.Item import Item
-from game_objects.items.Slot import StandardSlots, Slot, SlotTypes
+
+from game_objects.items.on_unit.Slot import Slot, SlotTypes, StandardSlots
 from game_objects.items.ItemTypes import ItemTypes
-from game_objects.items.weapon.Weapon import Weapon
-from game_objects.items.armor.BodyArmor import BodyArmor
-from game_objects.items.Equipment import Equipment
-from game_objects.items.Inventory import Inventory
-from game_objects.items.ItemTransactions import ItemTransactions
+from game_objects.items.types.BodyArmor import BodyArmor
+
+from game_objects.items.on_unit.Inventory import Inventory
+from game_objects.items.on_unit.Equipment import Equipment
+from game_objects.items.on_unit.ItemTransactions import ItemTransactions
+
+from game_objects.items.types.Weapon import Weapon
+from game_objects.items.blueprints.Blueprint import Blueprint
+from game_objects.items.blueprints.QualityLevels import QualityLevels
+from game_objects.items.blueprints.types.WeaponBlueprint import WeaponBlueprint
+from game_objects.items.blueprints.types.ArmorBlueprint import ArmorBlueprint
+from game_objects.items.materials.Materials import Material
+
+
+
+
+
+
+
+

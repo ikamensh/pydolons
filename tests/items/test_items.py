@@ -1,14 +1,6 @@
-from game_objects.items import ItemTransactions, BodyArmor, Weapon, Slot
-from mechanics.damage import DamageTypes
+from game_objects.items import ItemTransactions, Slot
 import pytest
 
-weapon = Weapon("test axe1", 5, DamageTypes.SLASH, 5)
-armor = BodyArmor("da armor", 3, 3)
-
-@pytest.fixture(params=[weapon, armor])
-def diff_item(request):
-    item = request.param
-    yield item
 
 def test_equip_random_slot(hero, diff_item):
     slot = Slot("test slot")

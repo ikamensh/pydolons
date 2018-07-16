@@ -9,9 +9,9 @@ class SlotTypes(Enum):
     RING = auto()
 
 class Slot:
-    def __init__(self, name, type = None):
+    def __init__(self, name, item_type = None):
         self.name = name
-        self.type = type
+        self.item_type = item_type
         self._content = None
 
     @property
@@ -22,8 +22,8 @@ class Slot:
     def content(self, item):
         if item:
             assert isinstance(item, Item)
-            if self.type:
-                assert item.type.slot == self.type
+            if self.item_type:
+                assert item.item_type.slot == self.item_type
         if self.content:
             raise Exception("Remove existing item first.")
 

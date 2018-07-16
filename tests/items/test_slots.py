@@ -1,12 +1,11 @@
-from game_objects.items import Weapon, SlotTypes, Slot, Item
-from mechanics.damage import DamageTypes
+from game_objects.items import  SlotTypes, Slot
 import pytest
+import copy
 
-def test_slot():
+def test_slot(weapon):
     slot = Slot("test slot", SlotTypes.WEAPON)
-    weapon1 = Weapon("test axe1", 5, DamageTypes.SLASH, 5)
-    weapon2 = Weapon("test axe2", 5, DamageTypes.SLASH, 5)
-    slot.content = weapon1
+    weapon2 = copy.copy(weapon)
+    slot.content = weapon
     with pytest.raises(Exception):
         slot.content = weapon2
 
@@ -14,13 +13,13 @@ def test_slot():
     slot.content = weapon2
     assert slot.content == weapon2
 
-def test_swap():
+def test_swap(weapon):
     slot1 = Slot("test slot")
-    item1 = Item("quack", 3)
+    item1 = weapon
     slot1.content = item1
 
     slot2 = Slot("test slot2")
-    item2 = Item("bryak", 3)
+    item2 = copy.copy(item1)
     slot2.content = item2
 
     slot1.swap_item(slot2)

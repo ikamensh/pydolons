@@ -1,11 +1,13 @@
 from game_objects.items import StandardSlots, SlotTypes
+
+
 class Equipment:
     def __init__(self):
         self.contents = StandardSlots.get_standard_slots()
         self.map = {slot.name : slot for slot in self.contents}
         self.slots_per_type = {st:[] for st in SlotTypes}
         for slot in self.contents:
-            type = slot.type
+            type = slot.item_type
             self.slots_per_type[type].append(slot)
 
     def remove_item(self, slot):
@@ -25,7 +27,7 @@ class Equipment:
         """
 
         item = slot_from.content
-        slot_type = item.type.slot
+        slot_type = item.item_type.slot
         if slot_type is None:
             return False
 

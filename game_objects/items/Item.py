@@ -1,7 +1,9 @@
 class Item:
-    def __init__(self, name, durability):
-        assert isinstance(durability, int)
+    def __init__(self, name, item_type, *, blueprint, quality, material, durability):
         assert isinstance(name, str)
-        self.durability = durability
+        self.item_type = item_type
         self.name = name
-        self.type = None
+        self.blueprint = blueprint
+        self.quality = quality
+        self.material = material
+        self.durability  =durability
