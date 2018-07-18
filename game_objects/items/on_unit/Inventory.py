@@ -6,9 +6,10 @@ class Inventory:
     def slot_name_at(i):
         return "inventory_{0:00d}".format(i)
 
-    def __init__(self, max_capacity):
+    def __init__(self, max_capacity, owner):
         self.all = [Slot(Inventory.slot_name_at(i)) for i in range(max_capacity)]
         self.max_capacity = max_capacity
+        self.owner = owner
 
     def __setitem__(self, slot_num, item):
         slot = self.all[slot_num]
@@ -48,7 +49,7 @@ class Inventory:
     def drop(self, slot_num):
         slot = self.all[slot_num]
         if slot.content:
-            slot.take_content()
+            slot.pop_item()
 
 
 

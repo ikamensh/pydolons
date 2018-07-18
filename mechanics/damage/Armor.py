@@ -1,6 +1,7 @@
 from mechanics.damage.DamageTypes import DamageTypes
+from collections import UserDict
 
-class Armor(dict):
+class Armor(UserDict):
     MIN_ARMOR = 0
 
     def __init__(self, base_value = 0, armor_dict=None):
@@ -22,4 +23,13 @@ class Armor(dict):
         result = {}
         for damage_type in self.keys():
             result[damage_type] = self[damage_type] + other[damage_type]
-        return result
+        return Armor(armor_dict=result)
+
+    def __mul__(self, other):
+        assert other < 1e20 # is a number
+
+        result = {}
+        for damage_type in self.keys():
+            result[damage_type] = self[damage_type] * other
+        return Armor(armor_dict=result)
+

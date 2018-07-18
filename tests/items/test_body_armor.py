@@ -1,7 +1,7 @@
 from mechanics.damage import DamageTypes
 
 
-def test_weapon_gives_damage(hero, armor):
+def test_body_armor_gives_armor(hero, armor):
     armor_before = hero.armor
 
     hero.equipment["body"] = armor

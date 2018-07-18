@@ -17,6 +17,8 @@ class Damage:
         self.amount = amount
         self.type = type
 
+    # def __mul__(self, other):
+
     @staticmethod
     def calculate_damage(damage, target, impact_factor=ImpactFactor.HIT):
         dmg_type = damage.type
@@ -30,21 +32,22 @@ class Damage:
 
         return damage_final, \
                Damage.calculate_armor_dur_damage(damage_final, armor, target.max_health), \
-               Damage.calculate_weapon_dur_damage(damage.amount, damage_final)
+               Damage.calculate_weapon_dur_damage(damage.amount, damage_final, impact_factor)
 
     @staticmethod
     def calculate_armor_dur_damage(final_damage, armor_amount, target_hp):
         if final_damage == 0:
             return 0
-        return int(final_damage / (armor_amount + target_hp/final_damage))
+        return int(5 * final_damage / (armor_amount + target_hp/final_damage))
 
     @staticmethod
-    def calculate_weapon_dur_damage(damage_initial, damage_final):
+    def calculate_weapon_dur_damage(damage_initial, damage_final, impact_factor):
         assert damage_initial > 0
         assert damage_final >= 0
-        reduction = damage_final - damage_initial
-        if reduction > 0:
-            return int(10 * (reduction / damage_initial))
+        reduction = damage_initial * Damage.effect_coef[impact_factor] - damage_final
+        reduction_over_threshold = reduction - 0.33 * damage_initial
+        if reduction_over_threshold > 0:
+            return int(5 * (reduction_over_threshold / damage_initial))
         else:
             return 0
 

@@ -1,17 +1,19 @@
-from game_objects.items import StandardSlots, SlotTypes
+from game_objects.items import StandardSlots, ItemTypes
 
 
 class Equipment:
-    def __init__(self):
-        self.contents = StandardSlots.get_standard_slots()
+    def __init__(self, owner):
+        self.contents = StandardSlots.get_standard_slots(owner)
         self.map = {slot.name : slot for slot in self.contents}
-        self.slots_per_type = {st:[] for st in SlotTypes}
+        self.slots_per_type = {st:[] for st in ItemTypes}
         for slot in self.contents:
             type = slot.item_type
             self.slots_per_type[type].append(slot)
 
+        self.owner = owner
+
     def remove_item(self, slot):
-        return slot.take_content()
+        return slot.pop_item()
 
     def __setitem__(self, slot_name, item):
         self.map[slot_name].content = item
@@ -27,7 +29,7 @@ class Equipment:
         """
 
         item = slot_from.content
-        slot_type = item.item_type.slot
+        slot_type = item.item_type
         if slot_type is None:
             return False
 

@@ -28,7 +28,7 @@ class ItemTransactions:
         self.equipment.equip(slot)
 
     def drop_item(self, slot):
-        gamelog("{} dropped {}.".format(self.owner, slot.take_content()))
+        gamelog("{} dropped {}.".format(self.owner, slot.pop_item()))
 
     def stop_manipulation(self):
         if self.manipulation_slot:

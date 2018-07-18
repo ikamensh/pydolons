@@ -1,15 +1,15 @@
-from game_objects.items import  SlotTypes, Slot
+from game_objects.items import  ItemTypes, Slot
 import pytest
 import copy
 
 def test_slot(weapon):
-    slot = Slot("test slot", SlotTypes.WEAPON)
+    slot = Slot("test slot", ItemTypes.WEAPON)
     weapon2 = copy.copy(weapon)
     slot.content = weapon
     with pytest.raises(Exception):
         slot.content = weapon2
 
-    slot.take_content()
+    slot.pop_item()
     slot.content = weapon2
     assert slot.content == weapon2
 

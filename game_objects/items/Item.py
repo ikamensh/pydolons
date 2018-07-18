@@ -1,12 +1,12 @@
-# TODO implement smarter durability getter and setter - item breaks!
-# TODO implement armor and damage scaling with durability for weapon and armor
+from game_objects.items import ItemTypes
 
 class Item:
-    def __init__(self, name, item_type, *, blueprint, quality, material, durability):
+    def __init__(self, name, item_type):
         assert isinstance(name, str)
+        assert isinstance(item_type, ItemTypes)
         self.item_type = item_type
         self.name = name
-        self.blueprint = blueprint
-        self.quality = quality
-        self.material = material
-        self.durability  =durability
+        self.owner = None
+        self.slot = None
+
+

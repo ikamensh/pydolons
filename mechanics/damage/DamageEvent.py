@@ -1,6 +1,5 @@
 from mechanics.events.EventsPlatform import EventsChannels
 from mechanics.events.Event import Event
-from mechanics.events import UnitDiedEvent
 from mechanics.damage import Damage
 from mechanics.chances import ImpactFactor
 
@@ -38,10 +37,7 @@ class DamageEvent(Event):
         if self.weapon and self.weapon.durability:
             self.weapon.durability -= weapon_dur_dmg
 
-
-        unit_0_hp = self.target.lose_health(self.amount)
-        if unit_0_hp:
-            UnitDiedEvent(self.target, self.source)
+        self.target.lose_health(self.amount, self.source)
 
 
 

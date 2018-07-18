@@ -1,3 +1,4 @@
+from utils.numeric import clamp
 from weakref import WeakKeyDictionary
 class DynamicParameter:
 
@@ -13,14 +14,18 @@ class DynamicParameter:
             del DynamicParameter.initialized[unit]
 
 
-    def __init__(self, max_name):
+    def __init__(self, max_name, on_zero_callbacks = None):
         cls = self.__class__
         prefix = cls.__name__
         self.max_name = max_name
         self.storage_name = f"{prefix}_{max_name}".replace("max", "")
         self.max_values = WeakKeyDictionary()
+        self.on_zero_callbacks = on_zero_callbacks or []
 
     def __get__(self, unit, _):
+        max_value = getattr(unit, self.max_name)
+        if max_value is None:
+            return None
         if unit not in DynamicParameter.initialized:
             self._reset(unit)
             DynamicParameter.initialized[unit] = set()
@@ -32,8 +37,15 @@ class DynamicParameter:
             self._rescale(unit)
         return getattr(unit, self.storage_name)
 
-    def __set__(self, instance, value):
-        setattr(instance, self.storage_name, value)
+    def __set__(self, unit, value):
+        max_value = getattr(unit, self.max_name)
+        if max_value is None:
+            return
+        new_value = int(clamp(value, 0, max_value))
+        if new_value == 0:
+            for callback in self.on_zero_callbacks:
+                callback(unit)
+        setattr(unit, self.storage_name, new_value)
 
     def _reset(self, unit):
         max_value = getattr(unit, self.max_name)

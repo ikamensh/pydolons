@@ -1,4 +1,4 @@
-from game_objects.battlefield_objects.BaseType import BaseType
+from game_objects.battlefield_objects.Unit.BaseType import BaseType
 from mechanics.damage import DamageTypeGroups
 
 

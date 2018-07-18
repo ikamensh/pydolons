@@ -1,10 +1,10 @@
-from game_objects.battlefield_objects.BaseType import BaseType
-from game_objects.battlefield_objects.attributes import AttributesEnum
+from game_objects.battlefield_objects.Unit.BaseType import BaseType
 from game_objects.battlefield_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
+from game_objects.battlefield_objects.attributes import AttributesEnum
 from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
-
+from mechanics.events import UnitDiedEvent
 
 
 
@@ -44,8 +44,8 @@ class Unit:
         self.unarmed_chances = base_type.unarmed_chances
         self.resists = Resistances(base_type.resists)
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
-        self.inventory = Inventory(base_type.inventory_capacity)
-        self.equipment :Equipment = base_type.equipment_cls()
+        self.inventory = Inventory(base_type.inventory_capacity, self)
+        self.equipment :Equipment = base_type.equipment_cls(self)
         self.abilities = []
         self.alive = True
 
@@ -122,7 +122,7 @@ class Unit:
         self.stamina -= cost.stamina_cost
 
     #todo replace with getter and setter... interesting.
-    def lose_health(self, dmg_amount):
+    def lose_health(self, dmg_amount, source):
         """
         :param dmg_amount: amount of incoming damage
         :return: True if unit lost all HP, False otherwise
@@ -130,6 +130,7 @@ class Unit:
         assert dmg_amount >= 0
         self.health -= dmg_amount
         if self.health <= 0:
+            UnitDiedEvent(self, source)
             return True
         else:
             return False

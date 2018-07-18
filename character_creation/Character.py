@@ -1,5 +1,8 @@
-from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
 import copy
+
+from game_objects.battlefield_objects import BaseType, Unit
+from game_objects.battlefield_objects.Unit import CharAttributes
+
 
 class Character:
     def __init__(self, base_type : BaseType):

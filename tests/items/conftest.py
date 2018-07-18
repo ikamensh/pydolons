@@ -24,19 +24,23 @@ def legendary():
 
 @pytest.fixture()
 def my_sword_blueprint():
-    return WeaponBlueprint("sword", item_type=WeaponTypes.SWORD, material_type=MaterialTypes.METAL, rarity=1)
+    return WeaponBlueprint("sword", target_item_type=WeaponTypes.SWORD, material_type=MaterialTypes.METAL, rarity=1)
 
 @pytest.fixture()
 def my_cuirass_blueprint():
-    return ArmorBlueprint("cuirass", item_type=ArmorTypes.CUIRASS, rarity=1)
+    return ArmorBlueprint("cuirass", target_item_type=ArmorTypes.CUIRASS, rarity=1)
 
 @pytest.fixture()
 def weapon():
-    return Weapon("test axe1", Damage(5, DamageTypes.SLASH), 5, None, None, None)
+    return Weapon("test axe1", Damage(50, DamageTypes.SLASH), 50)
+
+@pytest.fixture()
+def real_weapon(my_sword_blueprint, bronze, usual):
+    return Weapon("test axe1", Damage(50, DamageTypes.SLASH), 50, blueprint=my_sword_blueprint, material=bronze, quality=usual)
 
 @pytest.fixture()
 def armor():
-    return BodyArmor("da armor", Armor(3), 3, None, None, None)
+    return BodyArmor("da armor", Armor(30), 50)
 
 @pytest.fixture(params=[weapon, armor])
 def diff_item(request):

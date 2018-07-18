@@ -1,7 +1,7 @@
 from DreamGame import DreamGame
 from battlefield.Battlefield import Battlefield, Cell
 from content.actives.melee_attack import attack_cell_active, attack_unit_active
-from game_objects.battlefield_objects.Unit import Unit
+from game_objects.battlefield_objects import Unit
 from mechanics.flexi_targeting import SingleUnitTargeting, CellTargeting
 
 

@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture()
 def full_inventory(weapon):
-    inv = Inventory(3)
+    inv = Inventory(3, None)
 
     for i in range(3):
         item = weapon
@@ -12,7 +12,7 @@ def full_inventory(weapon):
     yield inv
 
 def test_len(weapon):
-    inv = Inventory(10)
+    inv = Inventory(10, None)
     assert len(inv) == 0
 
     item = weapon
@@ -21,7 +21,7 @@ def test_len(weapon):
 
 
 def test_limited_size(weapon):
-    inv = Inventory(3)
+    inv = Inventory(3, None)
 
     for i in range(3):
         item = weapon

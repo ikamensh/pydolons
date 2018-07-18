@@ -5,6 +5,7 @@ class EventsChannels(NameEnum):
     AttackChannel = auto()
     UnitDiedChannel = auto()
     MovementChannel = auto()
+    ItemDestroyedChannel = auto()
 
 from GameLog import gamelog
 
