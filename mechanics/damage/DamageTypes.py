@@ -12,13 +12,11 @@ class DamageTypes(NameEnum):
 
     # design: succeptable entities have strong vulnerability. damage of below types comes in small amounts.
     SONIC = auto()
-    LIGHT = auto()
-    MIND = auto()
 
 class DamageTypeGroups:
     physical = {DamageTypes.SLASH, DamageTypes.CRUSH, DamageTypes.PIERCE}
     elemental = {DamageTypes.FIRE, DamageTypes.FROST, DamageTypes.LIGHTNING, DamageTypes.ACID}
-    exotic = {DamageTypes.SONIC, DamageTypes.LIGHT}
+    exotic = {DamageTypes.SONIC}
 
 if __name__ == "__main__":
     print(list(DamageTypes))

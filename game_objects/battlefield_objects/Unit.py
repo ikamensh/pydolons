@@ -1,9 +1,11 @@
 from game_objects.battlefield_objects.BaseType import BaseType
 from game_objects.battlefield_objects.attributes import AttributesEnum
 from game_objects.battlefield_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.items import Inventory, Equipment
+from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
+
+
 
 
 class Unit:
@@ -94,15 +96,17 @@ class Unit:
         active.activate(user_targeting)
 
 
-    def get_unarmed_damage(self):
-        return Damage(amount=self.str * Unit.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
+    def get_unarmed_weapon(self):
+        dmg = Damage(amount=self.str * Unit.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
+        return Weapon(name="Fists", damage=dmg)
 
-    def get_melee_damage(self):
+
+    def get_melee_weapon(self):
         weapon = self.equipment["hands"]
         if weapon:
-            return weapon.damage
+            return weapon
         else:
-            return self.get_unarmed_damage()
+            return self.get_unarmed_weapon()
 
     def can_pay(self, cost):
         result = True
@@ -117,6 +121,7 @@ class Unit:
         self.mana -= cost.mana_cost
         self.stamina -= cost.stamina_cost
 
+    #todo replace with getter and setter... interesting.
     def lose_health(self, dmg_amount):
         """
         :param dmg_amount: amount of incoming damage

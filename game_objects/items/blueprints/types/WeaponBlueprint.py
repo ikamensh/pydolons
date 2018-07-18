@@ -7,14 +7,12 @@ class WeaponBlueprint(Blueprint):
     damage_per_rarity = 50
     durability_per_rarity = 35
 
-    def __init__(self, name, *, item_type, material_type, rarity, damage=None, durability=None):
+    def __init__(self, name, *, item_type, material_type, rarity, damage=None, durability=None, material_count = 3):
         assert item_type in damage_type_from_weapon_type
         assert material_type in MaterialTypes
-        super().__init__(name, item_type, rarity)
+        super().__init__(name, item_type, rarity, durability, material_type=material_type, material_count=material_count)
         self.damage = damage or Damage(rarity * WeaponBlueprint.damage_per_rarity,
                                        type=damage_type_from_weapon_type[item_type])
-        self.durability = durability or rarity * WeaponBlueprint.durability_per_rarity
-        self.material_type = material_type
 
     def to_item(self, material, quality):
         assert material.material_type is self.material_type

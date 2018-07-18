@@ -16,9 +16,8 @@ def test_armor_reduces_damage(hero):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-
     armor = Armor(3)
-    hero.armor = armor
+    hero.natural_armor = armor
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -35,7 +34,7 @@ def test_types_matter(hero, dmg):
     hp_before_dmg = hero.health
 
     armor = Armor(3, {DamageTypes.FIRE: 4000})
-    hero.armor = armor
+    hero.natural_armor = armor
 
     DamageEvent(dmg, hero)
 

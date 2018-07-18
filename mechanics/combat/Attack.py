@@ -9,18 +9,14 @@ class Attack:
 
     @staticmethod
     def attack(source, target):
-        damage = source.get_melee_damage()
-        return Attack.__attack(source, target, damage)
+        weapon = source.get_melee_weapon()
+        return Attack.__attack(source, target, weapon)
 
-    # @staticmethod
-    # def unarmed_attack(source, target):
-    #     damage = source.get_unarmed_damage()
-    #     return Attack.__attack(source,target,damage)
 
 
     @staticmethod
-    def __attack(source : Unit, target : Unit, damage):
-        AttackEvent(source, target, damage)
+    def __attack(source : Unit, target : Unit, weapon):
+        AttackEvent(source, target, weapon)
 
 
 
