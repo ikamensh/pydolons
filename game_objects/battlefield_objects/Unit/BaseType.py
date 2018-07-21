@@ -1,4 +1,4 @@
-from game_objects.battlefield_objects.attributes.BonusAttributes import AttributesEnum, abbrev_to_enum
+from game_objects.battlefield_objects.attributes.AttributesEnum import AttributesEnum, abbrev_to_enum
 from game_objects.items import Equipment
 from mechanics.chances.CritHitGrazeMiss import ImpactChances
 from mechanics.damage import DamageTypes

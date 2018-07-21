@@ -1,5 +1,7 @@
-from utils.numeric import clamp
+from my_utils.utils import clamp
 from weakref import WeakKeyDictionary
+
+
 class DynamicParameter:
 
     initialized = WeakKeyDictionary()
@@ -41,11 +43,11 @@ class DynamicParameter:
         max_value = getattr(unit, self.max_name)
         if max_value is None:
             return
-        new_value = int(clamp(value, 0, max_value))
+        new_value = clamp(value, 0, max_value)
+        setattr(unit, self.storage_name, new_value)
         if new_value == 0:
             for callback in self.on_zero_callbacks:
                 callback(unit)
-        setattr(unit, self.storage_name, new_value)
 
     def _reset(self, unit):
         max_value = getattr(unit, self.max_name)

@@ -16,6 +16,7 @@ class Attack:
 
     @staticmethod
     def __attack(source : Unit, target : Unit, weapon):
+
         AttackEvent(source, target, weapon)
 
 

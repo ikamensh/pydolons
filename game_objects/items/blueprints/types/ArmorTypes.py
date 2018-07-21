@@ -1,4 +1,4 @@
-from utils.named_enums import auto, NameEnum
+from my_utils.named_enums import auto, NameEnum
 from game_objects.items import MaterialTypes
 
 class ArmorTypes(NameEnum):

@@ -1,0 +1,20 @@
+from mechanics.events.Event import Event
+from mechanics.events.EventsPlatform import EventsChannels
+import my_globals
+
+class BuffDetachedEvent(Event):
+    channel = EventsChannels.BuffDetachedChannel
+
+    def __init__(self, buff):
+        self.buff = buff
+        super().__init__()
+
+    def check_conditions(self):
+        return True
+
+    def resolve(self):
+        self.buff.attached_to.buffs.remove(self.buff)
+        my_globals.the_game.turns_manager.remove_buff(self.buff)
+
+    def __repr__(self):
+        return f"{self.buff} has detached."

@@ -5,12 +5,12 @@ from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics.events import UnitDiedEvent
-
+from my_utils.utils import flatten
 
 
 class Unit:
     HP_PER_STR = 25
-    STAMINA_PER_STR = 5
+    STAMINA_PER_END = 10
     MANA_PER_INT = 15
     UNARMED_DAMAGE_PER_STR = 5
 
@@ -24,10 +24,13 @@ class Unit:
     max_health = AttributeWithBonuses("max_health_base", AttributesEnum.HEALTH)
     max_mana = AttributeWithBonuses("max_mana_base", AttributesEnum.MANA)
     max_stamina = AttributeWithBonuses("max_stamina_base", AttributesEnum.STAMINA)
+    _initiative = AttributeWithBonuses("initiative_base", AttributesEnum.INITIATIVE)
+
 
     health = DynamicParameter("max_health")
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
+
     
     def __init__(self, base_type: BaseType):
         self.str_base = Attribute(base_type.attributes[AttributesEnum.STREINGTH], 100, 0)
@@ -36,7 +39,8 @@ class Unit:
         self.agi_base = Attribute(base_type.attributes[AttributesEnum.AGILITY], 100, 0)
         self.int_base = Attribute(base_type.attributes[AttributesEnum.INTELLIGENCE], 100, 0)
         self.cha_base = Attribute(base_type.attributes[AttributesEnum.CHARISMA], 100, 0)
-
+        self.readiness = 0
+        self.disabled = False
 
         self.type_name = base_type.type_name
         self.actives = base_type.actives
@@ -47,9 +51,20 @@ class Unit:
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.equipment :Equipment = base_type.equipment_cls(self)
         self.abilities = []
+        self.buffs = []
+
         self.alive = True
 
         self.icon = base_type.icon
+
+
+    @property
+    def bonuses(self):
+        bonus_lists = [ability.bonuses for ability in self.abilities if ability.bonuses]
+        bonus_lists += [buff.bonuses for buff in self.buffs if buff.bonuses]
+        bonuses = list( flatten(bonus_lists))
+
+        return bonuses
 
     @property
     def armor(self):
@@ -69,7 +84,19 @@ class Unit:
 
     @property
     def max_stamina_base(self):
-        return Attribute(self.str * Unit.STAMINA_PER_STR, 100, 0)
+        return Attribute(self.end * Unit.STAMINA_PER_END, 100, 0)
+
+    @property
+    def initiative_base(self):
+        return Attribute(10 * ((0.4 + self.agi / 14) ** (3 / 5)) * ((self.stamina / 100) ** (1 / 3)), 100, 0)
+
+    @property
+    def initiative(self):
+        if self.disabled:
+            return 0
+        else:
+            return self._initiative
+
 
     @property
     def melee_precision(self):
@@ -78,6 +105,8 @@ class Unit:
     @property
     def melee_evasion(self):
         return self.prc + self.agi
+
+
 
     def reset(self):
         """

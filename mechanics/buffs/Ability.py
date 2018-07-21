@@ -1,6 +1,17 @@
-class Ability:
-    def __init__(self, attributes_dict):
-        self.attributes_dict = attributes_dict
+import copy
 
-    def __getitem__(self, item):
-        return self.attributes_dict.get(item, None)
+class Ability:
+    def __init__(self, bonuses = None):
+        self.bonuses = bonuses
+        self.bound_to = None
+
+    def apply_to(self, unit):
+        cpy = copy.deepcopy(self)
+        unit.abilities.append(cpy)
+        cpy.bound_to = unit
+
+    def deactivate(self):
+        self.bound_to.abilities.remove(self)
+        self.bound_to = None
+
+

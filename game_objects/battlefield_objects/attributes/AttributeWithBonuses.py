@@ -8,14 +8,14 @@ class AttributeWithBonuses:
         self.storage_name = f"{prefix}_{name_base}".replace("base","")
 
     def __get__(self, instance, owner):
-        return self.sum_with_abilities(instance)
+        return self.sum_with_bonuses(instance)
 
-    def sum_with_abilities(self, instance):
+    def sum_with_bonuses(self, instance):
         attr = getattr(instance, self.base_name)
-        for ability in instance.abilities:
-            bonus = ability[self.attrib_enum]
-            if bonus:
-                attr += bonus
+        for bonus in instance.bonuses:
+            matching_bonus = bonus[self.attrib_enum]
+            if matching_bonus:
+                attr += matching_bonus
         return attr.value()
 
 

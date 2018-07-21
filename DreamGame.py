@@ -1,6 +1,6 @@
 from battlefield.Battlefield import Battlefield, Cell
 from mechanics.combat import Attack
-from mechanics.turns import SequentialTM
+from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
 from mechanics.AI import AstarAI, RandomAI
 from battlefield.MovementEvent import MovementEvent
@@ -38,7 +38,7 @@ class DreamGame:
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
                                 if game.fractions[unit] is not Fractions.OBSTACLES]
-        game.turns_manager = SequentialTM(units_who_make_turns)
+        game.turns_manager = AtbTurnsManager(units_who_make_turns)
 
         return game
 
