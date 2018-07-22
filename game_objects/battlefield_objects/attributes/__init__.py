@@ -1,3 +1,4 @@
+from game_objects.battlefield_objects.attributes.Bonus import Bonus
 from game_objects.battlefield_objects.attributes.AttributesEnum import AttributesEnum, get_attrib_by_enum
 from game_objects.battlefield_objects.attributes.Attribute import Attribute
 from game_objects.battlefield_objects.attributes.AttributeWithBonuses import AttributeWithBonuses

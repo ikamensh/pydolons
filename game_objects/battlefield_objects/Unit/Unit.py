@@ -139,16 +139,16 @@ class Unit:
 
     def can_pay(self, cost):
         result = True
-        if cost.mana_cost > self.mana:
+        if cost.mana > self.mana:
             result = False
-        if cost.stamina_cost > self.stamina:
+        if cost.stamina > self.stamina:
             result = False
 
         return result
 
     def pay(self, cost):
-        self.mana -= cost.mana_cost
-        self.stamina -= cost.stamina_cost
+        self.mana -= cost.mana
+        self.stamina -= cost.stamina
 
     #todo replace with getter and setter... interesting.
     def lose_health(self, dmg_amount, source):

@@ -1,7 +1,7 @@
 import pytest
 
-from game_objects.battlefield_objects.attributes import Attribute, AttributesEnum, get_attrib_by_enum
-from mechanics.buffs import Bonus, Ability
+from game_objects.battlefield_objects.attributes import Bonus, Attribute, AttributesEnum, get_attrib_by_enum
+from mechanics.buffs import Ability
 
 
 @pytest.fixture(params=AttributesEnum)
