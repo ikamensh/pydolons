@@ -8,7 +8,7 @@ from mechanics.events import UnitDiedEvent
 from my_utils.utils import flatten
 
 from character_creation.Masteries import Masteries, MasteriesEnum
-
+from functools import lru_cache
 
 class Unit:
     HP_PER_STR = 25
@@ -33,7 +33,7 @@ class Unit:
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
-    
+
     def __init__(self, base_type: BaseType, masteries = None):
         self.str_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.STREINGTH])
         self.end_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.ENDURANCE])
@@ -99,7 +99,11 @@ class Unit:
 
     @property
     def initiative_base(self):
-        return Attribute(10 * ((0.4 + self.agi / 14) ** (3 / 5)) * ((self.stamina / 100) ** (1 / 3)), 100, 0)
+        return self.__initiative_formula(self.agi, self.stamina)
+
+    @lru_cache(maxsize=16)
+    def __initiative_formula(self, agi, stamina):
+        return Attribute(10 * ((0.4 + agi / 14) ** (3 / 5)) * ((stamina / 100) ** (1 / 3)), 100, 0)
 
     @property
     def initiative(self):

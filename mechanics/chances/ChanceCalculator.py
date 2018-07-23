@@ -1,7 +1,10 @@
+from functools import lru_cache
+
 class ChanceCalculator:
     advantage_to_double = 25
 
     @staticmethod
+    @lru_cache()
     def chance(base_prob, precision, evasion):
         assert 0 <= base_prob <= 1
         if base_prob == 0 or base_prob == 1:
