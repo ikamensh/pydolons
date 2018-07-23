@@ -4,7 +4,7 @@ from my_utils.utils import flatten
 from game_objects.battlefield_objects import Unit
 from mechanics.buffs import Buff
 
-import random
+from my_globals import my_random as random
 
 epsilon = 1e-6
 class AtbTurnsManager(TurnsManager):

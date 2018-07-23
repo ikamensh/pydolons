@@ -1,4 +1,4 @@
-from mechanics.events.Interrupt import PermanentInterrupt, CounteredInterrupt
+from mechanics.events import PermanentInterrupt, CounteredInterrupt
 from mechanics.events import UnitDiedEvent
 from mechanics.damage import DamageEvent
 

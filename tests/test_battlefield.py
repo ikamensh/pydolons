@@ -20,14 +20,14 @@ def test_valid_placement(battlefield):
 
 def test_distance_unit_to_point(battlefield):
     hero = battlefield.get_unit_at(Cell(1,1))
-    assert battlefield.distance_unit_to_point(hero, Cell(1,4)) == 3
+    assert battlefield.distance(hero, Cell(1,4)) == 3
 
     pirate = battlefield.get_unit_at(Cell(4,4))
-    d1 = battlefield.distance_unit_to_point(pirate, Cell(1, 4))
-    d2 =  battlefield.distance_unit_to_point(pirate, Cell(4, 1))
+    d1 = battlefield.distance(pirate, Cell(1, 4))
+    d2 =  battlefield.distance(pirate, Cell(4, 1))
     assert d1 == d2
 
-    assert battlefield.distance_unit_to_point(pirate, Cell(4,4)) == 0
+    assert battlefield.distance(pirate, Cell(4,4)) == 0
 
 
 def test_neighbouring_cells(battlefield):

@@ -1,5 +1,5 @@
 import inspect
-from mechanics.events.EventsPlatform import EventsPlatform
+from mechanics.events import EventsPlatform
 
 class Trigger:
     def __init__(self, target_event_cls, conditions, source = None,

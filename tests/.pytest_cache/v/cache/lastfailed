@@ -5,6 +5,7 @@
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.INT]": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.PRC]": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.STR]": true,
+  "spells/test_spell_active.py::test_attack_cell": true,
   "test_items.py::test_equip[BodyArmor]": true,
   "test_items.py::test_equip[Weapon]": true
 }

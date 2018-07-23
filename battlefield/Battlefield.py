@@ -1,7 +1,7 @@
 from math import hypot
-from collections import namedtuple
-
-Cell = namedtuple("Cell", "x y")
+from battlefield.Facing import Facing
+from battlefield.Cell import Cell
+from battlefield.Vision import Vision
 
 class Battlefield:
     def __init__(self, w, h):
@@ -9,20 +9,27 @@ class Battlefield:
         self.h = h
         self.units_at = {}
         self.unit_locations = {}
+        self.unit_facings = {}
+
+    def x_sees_y(self, x, y):
+        cells_x_sees = Vision.std_seen_cells(x, self)
+        return self.unit_locations[y] in cells_x_sees
 
     @staticmethod
-    def distance(p1, p2):
+    def _distance(p1, p2):
         return hypot(p1.x - p2.x, p1.y - p2.y)
 
+    def distance(self, one, another):
+        if not isinstance(one, Cell):
+            one = self.unit_locations[one]
+        if not isinstance(another, Cell):
+            another = self.unit_locations[another]
+        return self._distance(one, another)
+
     def get_units_dists_to(self, p, units_subset = None):
-        unit_dist_tuples = [ (u, Battlefield.distance(p, self.unit_locations[u]))
+        unit_dist_tuples = [ (u, self.distance(p, u))
                              for u in units_subset or self.unit_locations]
         return sorted(unit_dist_tuples, key=lambda x:x[1])
-
-    def distance_unit_to_point(self, unit, p):
-        assert unit in self.unit_locations
-        unit_pos = self.unit_locations[unit]
-        return Battlefield.distance(unit_pos, p)
 
     def get_unit_at(self, cell):
         if cell in self.units_at:
@@ -45,7 +52,7 @@ class Battlefield:
             for dy in steps:
                 if 0 <= x + dx < self.w and 0 <= y + dy < self.h:
                     new_cell = Cell(x + dx, y + dy)
-                    if Battlefield.distance(cell, new_cell) <= distance:
+                    if self._distance(cell, new_cell) <= distance:
                         neighbours.append(new_cell)
 
         return neighbours
@@ -56,7 +63,7 @@ class Battlefield:
 
 
 
-    def place(self, unit, p):
+    def place(self, unit, p, facing=None):
 
         assert 0 <= p.x < self.w
         assert 0 <= p.y < self.h
@@ -64,6 +71,7 @@ class Battlefield:
 
         self.units_at[p] = unit
         self.unit_locations[unit] = p
+        self.unit_facings[unit] = facing or Facing.NORTH
 
     def place_many(self, unit_locations):
         for char, p in unit_locations.items():
@@ -77,7 +85,6 @@ class Battlefield:
         del self.unit_locations[unit]
 
     def move(self, unit, new_position):
-        old_position = self.unit_locations[unit]
         self.remove(unit)
         self.place(unit, new_position)
 

@@ -1,5 +1,5 @@
-from mechanics.events.Event import Event
-from mechanics.events.EventsPlatform import EventsChannels
+from mechanics.events import Event
+from mechanics.events import EventsChannels
 import my_globals
 
 class BuffAppliedEvent(Event):

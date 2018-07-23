@@ -4,6 +4,7 @@ from mechanics.actives import Costs
 from my_utils.utils import flatten
 from game_objects.items import Item, ItemTypes
 
+
 class SpellConcept(Item):
     complexity = AttributeWithBonuses("complexity_base", SpellAttributes.COMPLEXITY)
 
@@ -18,13 +19,15 @@ class SpellConcept(Item):
     distance = AttributeWithBonuses("distance_base", SpellAttributes.DISTANCE)
     radius = AttributeWithBonuses("radius_base", SpellAttributes.RADIUS)
 
-    def __init__(self, name, school, targeting_cls, complexity, costs,
+    def __init__(self, name, school, targeting_cls,
+                 complexity, costs,
                  amount, duration, precision_factor, distance, radius,
-                 resolve_callback):
+                 resolve_callback, targeting_cond=None):
 
         super().__init__(name, ItemTypes.SPELL_CONCEPT)
         self.school = school
         self.targeting_cls = targeting_cls
+        self.targeting_cond = targeting_cond
         self.complexity_base = Attribute.attribute_or_none(complexity)
 
         self.mana_cost_base = Attribute.attribute_or_none(costs.mana)
@@ -47,6 +50,8 @@ class SpellConcept(Item):
             return []
         else:
             return flatten([rune.bonuses for rune in self.runes])
+
+
 
     def to_spell(self, runes):
         self.runes = runes

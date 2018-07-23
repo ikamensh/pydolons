@@ -1,5 +1,5 @@
 from mechanics.events import Event, BuffDetachedEvent
-from mechanics.events.EventsPlatform import EventsChannels
+from mechanics.events import EventsChannels
 
 
 class BuffDispelledEvent(Event):

@@ -1,4 +1,4 @@
-from mechanics.events.EventsPlatform import EventsPlatform
+from mechanics.events import EventsPlatform
 from abc import abstractmethod
 
 

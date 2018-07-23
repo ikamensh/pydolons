@@ -73,6 +73,10 @@ class Unit:
         return bonuses
 
     @property
+    def sight_range(self):
+        return 1 + (self.prc/4) ** (2/3)
+
+    @property
     def armor(self):
         body_armor = self.equipment["body"]
         if body_armor:

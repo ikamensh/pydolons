@@ -8,9 +8,6 @@ from game_objects.attributes import Bonus, Attribute
 import pytest
 
 
-
-
-
 @pytest.fixture()
 def double_damage_rune():
     __double_damage_bonus = Bonus({SpellAttributes.AMOUNT: Attribute(0, 100, 0)})

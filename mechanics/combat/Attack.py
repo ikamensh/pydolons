@@ -1,10 +1,10 @@
 from game_objects.battlefield_objects import Unit
-
 from mechanics.combat.AttackEvent import AttackEvent
 
 
+
+
 class Attack:
-    #Once weapons are implemented: get damage by weapon, pass weapon to attack event.
 
     @staticmethod
     def attack(source, target):

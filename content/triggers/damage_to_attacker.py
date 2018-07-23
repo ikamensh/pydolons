@@ -1,4 +1,4 @@
-from mechanics.events.Trigger import Trigger
+from mechanics.events import Trigger
 from mechanics.combat.AttackEvent import AttackEvent
 from mechanics.damage import DamageEvent
 

@@ -1,5 +1,5 @@
-from mechanics.flexi_targeting.event.Event import Event
-from mechanics.flexi_targeting.event.event_targeting.EventTargeting import EventTargeting
+from mechanics.actives.event.Event import Event
+from mechanics.actives.event.event_targeting.EventTargeting import EventTargeting
 
 from DreamGame import DreamGame
 

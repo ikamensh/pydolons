@@ -6,9 +6,15 @@ class Attribute:
 
     def __add__(self, other):
 
-        new_base = self.base + other.base
-        new_multiplier = self.multiplier + other.multiplier
-        new_bonus = self.bonus + other.bonus
+        if isinstance(other, Attribute):
+            new_base = self.base + other.base
+            new_multiplier = self.multiplier + other.multiplier
+            new_bonus = self.bonus + other.bonus
+        else:
+            new_base = self.base
+            new_multiplier = self.multiplier
+            new_bonus = self.bonus + other
+
         return Attribute(new_base, new_multiplier, new_bonus)
 
     def value(self):

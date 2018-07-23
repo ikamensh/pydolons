@@ -1,5 +1,5 @@
-from mechanics.events.EventsPlatform import EventsChannels
-from mechanics.events.Event import Event
+from mechanics.events import EventsChannels
+from mechanics.events.src.Event import Event
 
 class HealingEvent(Event):
     channel = EventsChannels.HealingChannel

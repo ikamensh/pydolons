@@ -59,7 +59,7 @@ class DreamGame:
 
     def order_move(self, unit, target_cell):
         # units can only go to adjecent locations
-        if not self.battlefield.distance_unit_to_point(unit, target_cell) <= 1:
+        if not self.battlefield.distance(unit, target_cell) <= 1:
             return False
 
         if target_cell in self.battlefield.units_at:
