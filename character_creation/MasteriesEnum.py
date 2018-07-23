@@ -9,7 +9,7 @@ class MasteriesEnum(NameEnum):
     CLUB = auto()
     HAMMER = auto()
     EXOTIC = auto()
-    SHIELD = auto()
+    UNARMED = auto()
     DUAL = auto()
     TWO_HANDED = auto()
 
@@ -23,7 +23,9 @@ class MasteriesEnum(NameEnum):
     ASTRAL = auto()
     MIND = auto()
 
-    RANGED = auto()
+    SHIELD = auto()
+    BOW = auto()
+    SHOOT = auto()
     THROW = auto()
     STEALTH = auto()
     SEARCH = auto()
@@ -37,21 +39,21 @@ class MasteriesEnum(NameEnum):
 class MasteriesGroups:
 
     m = MasteriesEnum
-    sporty = [m.ATHLETICS, m.TWO_HANDED, m.DUAL, m.SHIELD]
+    sporty = [m.ATHLETICS, m.TWO_HANDED, m.DUAL, m.SHIELD, m.UNARMED]
     chop_chop_chop = [m.AXE, m.HAMMER, m.TWO_HANDED, m.SWORD]
     stabby = [m.DAGGER, m.SPEAR, m.EXOTIC]
-    bashy = [m.CLUB, m.HAMMER, m.SHIELD]
+    bashy = [m.CLUB, m.HAMMER, m.SHIELD, m.UNARMED]
     assasin = [m.DAGGER, m.DUAL, m.ACROBATICS, m.STEALTH, m.SEARCH]
-    sniping = [m.RANGED, m.THROW, m.LIGHT, m.SPEAR, m.SEARCH]
+    sniping = [m.BOW, m.SHOOT, m.THROW, m.LIGHT, m.SPEAR, m.SEARCH]
     spicky = [m.SPEAR, m.LIGHTNING, m.LIGHT]
-    loud = [m.SONIC, m.HAMMER, m.TWO_HANDED, m.EARTH]
-    explosive = [m.FIRE, m.EARTH, m.SONIC, m.AXE]
+    loud = [m.SONIC, m.HAMMER, m.TWO_HANDED, m.EARTH, m.UNARMED]
+    explosive = [m.FIRE, m.EARTH, m.SONIC, m.AXE, m.SHOOT]
     cold = [m.ARMORY, m.SWORD, m.DAGGER, m.FROST]
     arcane = [m.MIND, m.ASTRAL, m.LORE, m.MONSTROLOGY, m.ALCHEMY]
-    chemical = [m.ACID, m.ALCHEMY, m.EARTH, m.MONSTROLOGY]
+    chemical = [m.ACID, m.ALCHEMY, m.EARTH, m.MONSTROLOGY, m.SHOOT]
     defensive = [m.SHIELD, m.ARMORY, m.EARTH]
-    all_battle = [m.CLUB, m.SWORD, m.AXE, m.ARMORY, m.DAGGER, m.SPEAR,
-                  m.RANGED, m.EXOTIC, m.HAMMER, m.SHIELD, m.DUAL, m.TWO_HANDED]
+    all_battle = [m.CLUB, m.SWORD, m.AXE, m.ARMORY, m.DAGGER, m.SPEAR, m.UNARMED,
+                  m.BOW, m.EXOTIC, m.HAMMER, m.SHIELD, m.DUAL, m.TWO_HANDED, m.SHOOT]
 
     all_magic = [m.FROST, m.FIRE, m.LIGHT, m.LIGHTNING, m.EARTH,
                  m.ACID, m.SONIC, m.ASTRAL, m.MIND]

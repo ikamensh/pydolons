@@ -5,6 +5,10 @@ class Masteries:
     def __init__(self):
         self.exp_spent = {m:0 for m in MasteriesEnum}
 
+    @property
+    def total_exp_spent(self):
+        return sum(self.exp_spent.values())
+
     @staticmethod
     @lru_cache(maxsize=512)
     def increment_cost(current_level):
@@ -33,19 +37,19 @@ class Masteries:
     def values(self):
         return { m: Masteries.achieved_level(exp) for m, exp in self.exp_spent.items()}
 
-    @staticmethod
-    def requirements(m, level):
-        reqs = {}
-        for mastery in MasteriesEnum:
-            coupling = MasteriesGroups.coupling(mastery, m)
-            if mastery is not m and coupling > 0:
-                reqs[mastery] = int(level * coupling)
-
-        return reqs
+    # @staticmethod
+    # def requirements(m, level):
+    #     reqs = {}
+    #     for mastery in MasteriesEnum:
+    #         coupling = MasteriesGroups.coupling(mastery, m)
+    #         if mastery is not m and coupling > 0:
+    #             reqs[mastery] = int(level * coupling)
+    #
+    #     return reqs
 
     def calculate_cost(self, mastery_up):
 
-        direct_cost = self.increment_cost(self.values[mastery_up] + 1)
+        direct_cost = self.cumulative_cost(self.values[mastery_up] + 1) - self.exp_spent[mastery_up]
         indirect_costs = {}
         for mastery in MasteriesEnum:
             coupling = MasteriesGroups.coupling(mastery, mastery_up)
