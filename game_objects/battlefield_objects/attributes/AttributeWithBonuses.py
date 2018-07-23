@@ -5,7 +5,12 @@ class AttributeWithBonuses:
         self.attrib_enum = bonus_enum
 
     def __get__(self, instance, owner):
-        return self.sum_with_bonuses(instance)
+        attr = getattr(instance, self.base_name)
+        if attr is None:
+            return None
+        else:
+            return self.sum_with_bonuses(instance)
+
 
     def sum_with_bonuses(self, instance):
         attr = getattr(instance, self.base_name)

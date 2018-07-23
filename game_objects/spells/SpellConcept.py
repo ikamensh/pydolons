@@ -1,5 +1,5 @@
 from game_objects.spells import SpellAttributes, Spell
-from game_objects.battlefield_objects.attributes import AttributeWithBonuses
+from game_objects.battlefield_objects.attributes import AttributeWithBonuses, Attribute
 from mechanics.actives import Costs
 from my_utils.utils import flatten
 
@@ -17,25 +17,25 @@ class SpellConcept:
     distance = AttributeWithBonuses("distance_base", SpellAttributes.DISTANCE)
     radius = AttributeWithBonuses("radius_base", SpellAttributes.RADIUS)
 
-    def __init__(self, name, school, complexity, costs,
+    def __init__(self, name, school, targeting_cls, complexity, costs,
                  amount, duration, precision_factor, distance, radius,
                  resolve_callback):
 
         self.name = name
         self.school = school
-        self.complexity_base = complexity
+        self.targeting_cls = targeting_cls
+        self.complexity_base = Attribute.attribute_or_none(complexity)
 
-        self.mana_cost_base = costs.mana
-        self.stamina_cost_base = costs.stamina
-        self.health_cost_base = costs.health
-        self.readiness_cost_base = costs.readiness
+        self.mana_cost_base = Attribute.attribute_or_none(costs.mana)
+        self.stamina_cost_base = Attribute.attribute_or_none(costs.stamina)
+        self.health_cost_base = Attribute.attribute_or_none(costs.health)
+        self.readiness_cost_base = Attribute.attribute_or_none(costs.readiness)
 
-
-        self.amount_base = amount
-        self.duration_base = duration
-        self.precision_factor_base = precision_factor
-        self.distance_base = distance
-        self.radius_base = radius
+        self.amount_base = Attribute.attribute_or_none(amount)
+        self.duration_base = Attribute.attribute_or_none(duration)
+        self.precision_factor_base = Attribute.attribute_or_none(precision_factor)
+        self.distance_base = Attribute.attribute_or_none(distance)
+        self.radius_base = Attribute.attribute_or_none(radius)
 
         self.resolve_callback = resolve_callback
         self.runes = None

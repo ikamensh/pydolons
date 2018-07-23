@@ -1,11 +1,11 @@
-from mechanics.flexi_targeting import Active, CellTargeting, SingleUnitTargeting
-from mechanics.flexi_targeting import Cost
+from mechanics.actives import Active, CellTargeting, SingleUnitTargeting
+from mechanics.actives import Costs
 from mechanics.combat import Attack
 
 import my_globals
 
 
-std_attack_cost = Cost(1, 0)
+std_attack_cost = Costs(1, 0)
 
 def attack_direct_callback(active  :Active, targeting  :SingleUnitTargeting):
     Attack.attack(source=active.owner, target=targeting.unit)

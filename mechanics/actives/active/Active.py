@@ -4,6 +4,7 @@ class Active:
         self.cost = cost
         self.callbacks = callbacks
         self.owner = None
+        self.spell = None
 
     def assign_to_unit(self, owner):
         self.owner = owner
@@ -25,3 +26,9 @@ class Active:
         self.owner.pay(self.cost)
         for callback in self.callbacks:
             callback(self, targeting)
+
+    @staticmethod
+    def from_spell(spell):
+        new_active = Active(spell.targeting_cls, spell.costs, [spell.resolve_callback])
+        new_active.spell = spell
+        return new_active
