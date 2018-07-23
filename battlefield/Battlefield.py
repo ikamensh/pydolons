@@ -7,12 +7,13 @@ class Battlefield:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.units_at = {}
-        self.unit_locations = {}
-        self.unit_facings = {}
+        self.units_at = {}              #cell -> unit
+        self.unit_locations = {}        #unit -> cell
+        self.unit_facings = {}          #unit -> direction
+        self.vision = Vision(self)
 
     def x_sees_y(self, x, y):
-        cells_x_sees = Vision.std_seen_cells(x, self)
+        cells_x_sees = self.vision.std_seen_cells(x)
         return self.unit_locations[y] in cells_x_sees
 
     @staticmethod

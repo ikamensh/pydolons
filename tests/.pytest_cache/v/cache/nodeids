@@ -101,5 +101,12 @@
   "turns/test_atb.py::test_disabled",
   "turns/test_buffs_expire.py::test_buff_applies",
   "turns/test_buffs_expire.py::test_buff_expires",
-  "turns/test_buffs_expire.py::test_buffs_do_not_stop_units"
+  "turns/test_buffs_expire.py::test_buffs_do_not_stop_units",
+  "visibility/test_blind_backstab.py::test_backstab",
+  "visibility/test_blocks.py::test_blocks",
+  "visibility/test_blocks.py::test_symmetry",
+  "visibility/test_blocks.py::test_visibility",
+  "visibility/test_visibility.py::test_visibility",
+  "visibility/test_visibility.py::test_borders",
+  "visibility/test_visibility.py::test_direction"
 ]
