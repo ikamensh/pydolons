@@ -5,8 +5,9 @@ from battlefield.Cell import Cell
 def test_visibility(game, hero):
 
     bf = game.battlefield
-
-    bf.move(hero, Cell(1,1))
+    bf.unit_locations = {}
+    bf.units_at = {}
+    bf.place(hero, Cell(1,1))
     assert bf.unit_facings[hero] is Facing.NORTH
 
     vision = Vision(bf)
@@ -18,8 +19,11 @@ def test_visibility(game, hero):
     assert Cell(0,7) not in cells_seen
 
     assert Cell(1,1) in cells_seen
-    assert Cell(1,int(1+hero.sight_range)) in cells_seen
-    assert Cell(1+int(hero.sight_range),1) not in cells_seen
+    cell = Cell(1,int(1+hero.sight_range))
+    print(cells_seen)
+    assert cell in cells_seen
+    cell = Cell(1+int(hero.sight_range),1)
+    assert cell not in cells_seen
 
 
 def test_borders(game, hero):

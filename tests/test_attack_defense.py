@@ -1,9 +1,6 @@
 from mechanics.chances.ChanceCalculator import ChanceCalculator
 
-
 import pytest
-
-
 
 @pytest.mark.parametrize("attack, defense", [
     (0, 0),

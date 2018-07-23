@@ -15,7 +15,7 @@ class DreamGame:
         self.fractions = {}
         self.brute_ai = AstarAI(bf, self.fractions)
         self.random_ai = RandomAI(bf)
-        self.turns_manager = None
+        self.turns_manager = AtbTurnsManager()
         my_globals.the_game = self
 
         if unit_locations:
@@ -31,59 +31,32 @@ class DreamGame:
 
         game = DreamGame(Battlefield(dungeon.h, dungeon.w), unit_locations)
         game.the_hero = hero
-        game.fractions.update({unit: Fractions.OBSTACLES for unit in dungeon.unit_locations
-                               if "Wall" in unit.type_name})
-        game.fractions.update({unit:Fractions.ENEMY for unit in dungeon.unit_locations if unit not in game.fractions})
+
+        game.fractions.update({unit:Fractions.ENEMY for unit in dungeon.unit_locations if not unit.is_obstacle})
         game.fractions[hero] = Fractions.PLAYER
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
-                                if game.fractions[unit] is not Fractions.OBSTACLES]
+                                if not unit.is_obstacle]
         game.turns_manager = AtbTurnsManager(units_who_make_turns)
 
         return game
 
-
-    @staticmethod
-    def custom_init(bf):
-        DreamGame(bf)
-
-
-    @staticmethod
-    def get_unit_at(coord):
-        return my_globals.the_game.battlefield.units_at[coord]
-
-
-    @staticmethod
-    def get_units_distances_from(p):
-        return my_globals.the_game.battlefield.get_units_dists_to(p)
-
-    def order_move(self, unit, target_cell):
-        # units can only go to adjecent locations
-        if not self.battlefield.distance(unit, target_cell) <= 1:
-            return False
-
-        if target_cell in self.battlefield.units_at:
-            target = self.battlefield.units_at[target_cell]
-            self.attack(unit, target)
-        else:
-            MovementEvent(self.battlefield, unit, target_cell)
-
-        return True
-
-
-    def attack(self, attacker, target):
-        Attack.attack(attacker, target)
-
-    @staticmethod
-    def get_location(unit):
-        assert unit in my_globals.the_game.battlefield.unit_locations
-        return my_globals.the_game.battlefield.unit_locations[unit]
+    def add_unit(self, unit, cell,  fraction):
+        self.fractions[unit] = fraction
+        self.battlefield.place(unit, cell)
+        self.turns_manager.add_unit(unit)
 
     def unit_died(self, unit):
         del self.fractions[unit]
         self.battlefield.remove(unit)
         self.turns_manager.remove_unit(unit)
         unit.alive = False
+
+    def obstacle_destroyed(self, obstacle):
+        self.battlefield.remove(obstacle)
+
+    def add_obstacle(self, obstacle, cell):
+        self.battlefield.place(obstacle, cell)
 
     def loop(self, player_berserk=False):
         count_hero_turns = 0
@@ -123,13 +96,43 @@ class DreamGame:
         else:
             return None
 
+    def __repr__(self):
+        return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
+
+    def order_move(self, unit, target_cell):
+        # TODO refactor with actives and their conditions?
+        # units can only go to adjecent locations
+        if not self.battlefield.distance(unit, target_cell) <= 1:
+            return False
+
+        if target_cell in self.battlefield.units_at:
+            target = self.battlefield.units_at[target_cell]
+            self.attack(unit, target)
+        else:
+            MovementEvent(self.battlefield, unit, target_cell)
+
+        return True
+
+
+    @staticmethod
+    def get_location(unit):
+        assert unit in my_globals.the_game.battlefield.unit_locations
+        return my_globals.the_game.battlefield.unit_locations[unit]
+
     def print_all_units(self):
         for unit, xy in self.battlefield.unit_locations.items():
             x, y = xy
             print("There is a {} at ({},{})".format(unit, x, y))
 
-    def __repr__(self):
-        return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
+    @staticmethod
+    def attack(attacker, target):
+        Attack.attack(attacker, target)
 
+    @staticmethod
+    def get_unit_at(coord):
+        return my_globals.the_game.battlefield.units_at[coord]
 
+    @staticmethod
+    def get_units_distances_from(p):
+        return my_globals.the_game.battlefield.get_units_dists_to(p)
 

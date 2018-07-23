@@ -2,6 +2,7 @@ from math import hypot
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
+from game_objects.battlefield_objects import Obstacle, Unit
 
 class Battlefield:
     def __init__(self, w, h):
@@ -13,12 +14,15 @@ class Battlefield:
         self.vision = Vision(self)
 
     def x_sees_y(self, x, y):
+        if x.is_obstacle:
+            return False
+
         cells_x_sees = self.vision.std_seen_cells(x)
         return self.unit_locations[y] in cells_x_sees
 
     @staticmethod
     def _distance(p1, p2):
-        return hypot(p1.x - p2.x, p1.y - p2.y)
+        return Vision._distance(p1, p2)
 
     def distance(self, one, another):
         if not isinstance(one, Cell):
@@ -72,7 +76,8 @@ class Battlefield:
 
         self.units_at[p] = unit
         self.unit_locations[unit] = p
-        self.unit_facings[unit] = facing or Facing.NORTH
+        if isinstance(unit, Unit):
+            self.unit_facings[unit] = facing or Facing.NORTH
 
     def place_many(self, unit_locations):
         for char, p in unit_locations.items():

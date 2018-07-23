@@ -59,6 +59,7 @@ class Unit:
         self.buffs = []
 
         self.alive = True
+        self.is_obstacle = False
         self.last_damaged_by = None
 
         self.icon = base_type.icon
@@ -118,8 +119,6 @@ class Unit:
     def melee_evasion(self):
         return self.prc*2 + self.agi*3
 
-
-
     def reset(self):
         """
         Give unit maximum values for all dynamic attributes
@@ -170,8 +169,6 @@ class Unit:
         assert dmg_amount >= 0
         self.last_damaged_by = source
         self.health -= dmg_amount
-
-
 
     def __repr__(self):
         return f"{self.type_name} with {self.health} HP"

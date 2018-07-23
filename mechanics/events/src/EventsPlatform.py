@@ -10,6 +10,7 @@ class EventsChannels(NameEnum):
     ActiveChannel = auto()
 
     UnitDiedChannel = auto()
+    ObstacleDestroyedChannel = auto()
     ItemDestroyedChannel = auto()
 
     BuffAppliedChannel = auto()

@@ -80,6 +80,9 @@
   "items/test_slots.py::test_slot",
   "items/test_slots.py::test_swap",
   "items/test_weapon.py::test_weapon_gives_damage",
+  "obstacles/test_can_be_destroyed.py::test_can_take_damage",
+  "obstacles/test_can_be_destroyed.py::test_can_be_destroyed",
+  "obstacles/test_can_be_destroyed.py::test_can_be_attacked",
   "spells/test_concept.py::test_concept_to_spell",
   "spells/test_spell_active.py::test_lightning_depends_on_mastery",
   "spells/test_spell_active.py::test_lightning_depends_on_int",
@@ -108,5 +111,7 @@
   "visibility/test_blocks.py::test_visibility",
   "visibility/test_visibility.py::test_visibility",
   "visibility/test_visibility.py::test_borders",
-  "visibility/test_visibility.py::test_direction"
+  "visibility/test_visibility.py::test_direction",
+  "visibility/test_walls_diag_block.py::test_units_no_diag_block",
+  "visibility/test_walls_diag_block.py::test_walls_diag_block"
 ]

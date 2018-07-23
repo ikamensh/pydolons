@@ -29,9 +29,11 @@ class DamageEvent(Event):
 
     def resolve(self):
         _ , armor_dur_dmg, weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target, self.impact_factor)
-        body_armor = self.target.equipment["body"]
-        if body_armor and body_armor.durability:
-            body_armor.durability -= armor_dur_dmg
+
+        if not self.target.is_obstacle:
+            body_armor = self.target.equipment["body"]
+            if body_armor and body_armor.durability:
+                body_armor.durability -= armor_dur_dmg
 
         if self.weapon and self.weapon.durability:
             self.weapon.durability -= weapon_dur_dmg

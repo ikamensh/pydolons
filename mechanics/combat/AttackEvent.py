@@ -12,7 +12,7 @@ class AttackEvent(Event):
         self.source = source
         self.target = target
         self.weapon = weapon or source.get_melee_weapon()
-        self.is_backstab = not my_globals.the_game.battlefield.x_sees_y(target, source)
+        self.is_backstab = not target.is_obstacle and not my_globals.the_game.battlefield.x_sees_y(target, source)
         self.is_blind = not my_globals.the_game.battlefield.x_sees_y(source, target)
         source.readiness -= 0.5
         super().__init__()

@@ -5,6 +5,7 @@ from mechanics.events.src.Interrupt import CounteredInterrupt, PermanentInterrup
 
 
 from mechanics.events.UnitDiedEvent import UnitDiedEvent
+from mechanics.events.ObstacleDestroyedEvent import ObstacleDestroyedEvent
 from mechanics.events.ItemDestroyedEvent import ItemDestroyedEvent
 
 
