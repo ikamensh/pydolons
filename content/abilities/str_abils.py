@@ -1,4 +1,4 @@
-from game_objects.battlefield_objects.attributes import Attribute, AttributesEnum
+from game_objects.attributes import Attribute, AttributesEnum
 from mechanics.buffs import Bonus, Ability
 
 attrib = Attribute(2, 10, 0)

@@ -2,6 +2,7 @@ from my_utils.named_enums import auto, NameEnum
 
 class EventsChannels(NameEnum):
     DamageChannel = auto()
+    HealingChannel = auto()
     AttackChannel = auto()
     UnitDiedChannel = auto()
     MovementChannel = auto()

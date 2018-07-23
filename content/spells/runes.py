@@ -1,4 +1,5 @@
-from game_objects.spells import Rune, SpellAttributes, Bonus, Attribute
+from game_objects.spells import Rune, SpellAttributes
+from game_objects.attributes import Bonus, Attribute
 
 
 __double_damage_bonus = Bonus({SpellAttributes.AMOUNT: Attribute(0,100,0)})

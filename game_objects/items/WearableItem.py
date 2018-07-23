@@ -1,5 +1,5 @@
 from game_objects.items import Item
-from game_objects.battlefield_objects.attributes import DynamicParameter
+from game_objects.attributes import DynamicParameter
 from mechanics.events import ItemDestroyedEvent
 
 class WearableItem(Item):

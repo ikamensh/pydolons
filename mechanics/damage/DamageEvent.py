@@ -16,7 +16,6 @@ class DamageEvent(Event):
         else:
             self.damage = damage
         self.impact_factor = impact_factor
-        self.result = False
         super().__init__()
 
 

@@ -3,10 +3,12 @@ from game_objects.items import WearableItem, ItemTypes
 import copy
 
 class Weapon(WearableItem):
-    def __init__(self, name, damage, max_durability=None, *,  blueprint=None, material=None, quality=None):
+    def __init__(self, name, damage, max_durability=None, *,mastery=None, blueprint=None, material=None,
+                                                                                                quality=None):
         super().__init__(name, item_type=ItemTypes.WEAPON, blueprint=blueprint, quality=quality, material=material, max_durability=max_durability)
         assert isinstance(damage, Damage)
         self._damage = damage
+        self.mastery = mastery
 
     @property
     def damage(self):

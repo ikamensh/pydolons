@@ -10,4 +10,8 @@ class ItemTypes(NameEnum):
     MATERIAL = auto()
     BLUEPRINT = auto()
 
+    RUNE = auto()
+    SPELL_CONCEPT = auto()
+    SPELL = auto()
+
 

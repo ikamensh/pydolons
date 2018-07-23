@@ -23,6 +23,10 @@ class MasteriesEnum(NameEnum):
     ASTRAL = auto()
     MIND = auto()
 
+    HOLY = auto()
+    DARK = auto()
+    NATURE = auto()
+
     SHIELD = auto()
     BOW = auto()
     SHOOT = auto()
@@ -56,7 +60,7 @@ class MasteriesGroups:
                   m.BOW, m.EXOTIC, m.HAMMER, m.SHIELD, m.DUAL, m.TWO_HANDED, m.SHOOT]
 
     all_magic = [m.FROST, m.FIRE, m.LIGHT, m.LIGHTNING, m.EARTH,
-                 m.ACID, m.SONIC, m.ASTRAL, m.MIND]
+                 m.ACID, m.SONIC, m.ASTRAL, m.MIND, m.HOLY, m.DARK, m.NATURE]
 
     all_misc = [m.THROW, m.STEALTH, m.SEARCH, m.MONSTROLOGY, m.ACROBATICS, m.ATHLETICS,
                 m.LORE, m.ALCHEMY]

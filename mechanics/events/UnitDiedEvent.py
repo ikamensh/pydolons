@@ -5,9 +5,9 @@ import my_globals
 class UnitDiedEvent(Event):
     channel = EventsChannels.UnitDiedChannel
 
-    def __init__(self, unit, killer):
+    def __init__(self, unit):
         self.unit = unit
-        self.killer = killer
+        self.killer = unit.last_damaged_by
         super().__init__()
 
     def check_conditions(self):

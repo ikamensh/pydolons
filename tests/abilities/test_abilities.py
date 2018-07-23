@@ -1,10 +1,11 @@
 import pytest
 
-from game_objects.battlefield_objects.attributes import Bonus, Attribute, AttributesEnum, get_attrib_by_enum
+from game_objects.attributes import Bonus, Attribute
+from game_objects.battlefield_objects import CharAttributes, get_attrib_by_enum
 from mechanics.buffs import Ability
 
 
-@pytest.fixture(params=AttributesEnum)
+@pytest.fixture(params=CharAttributes)
 def attrib(request):
     yield request.param
 
@@ -19,7 +20,7 @@ def inner_power(attrib):
 @pytest.fixture()
 def bonus_str():
     bonus = Attribute(0, 0, 50)
-    bonus_hp = Bonus({AttributesEnum.HEALTH: bonus})
+    bonus_hp = Bonus({CharAttributes.HEALTH: bonus})
     abil_hp = Ability([bonus_hp])
 
     yield abil_hp
@@ -48,7 +49,7 @@ def test_rescale(hero, bonus_str):
 def test_multiplier(hero, pirate):
 
     bonus = Attribute(0, 50, 0)
-    bonus_hp = Bonus({AttributesEnum.HEALTH: bonus})
+    bonus_hp = Bonus({CharAttributes.HEALTH: bonus})
     abil_hp = Ability([bonus_hp])
 
     hp_before = hero.health
@@ -64,7 +65,7 @@ def test_multiplier(hero, pirate):
 def test_bonus(hero, pirate):
 
     bonus = Attribute(0, 0, 50)
-    bonus_hp = Bonus({AttributesEnum.HEALTH: bonus})
+    bonus_hp = Bonus({CharAttributes.HEALTH: bonus})
     abil_hp = Ability([bonus_hp])
 
     hp_before = hero.health

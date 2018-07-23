@@ -1,12 +1,12 @@
+from game_objects.items import Item, ItemTypes
 
 
-class Spell:
+class Spell(Item):
     def __init__(self, runes, concept,
                  complexity, costs,
                  amount, duration, precision_factor, distance, radius,
                  resolve_callback):
-
-        self.name = concept.name
+        super().__init__(concept.name, ItemTypes.SPELL)
         self.targeting_cls = concept.targeting_cls
         self.school = concept.school
 

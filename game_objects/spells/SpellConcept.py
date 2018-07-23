@@ -1,9 +1,10 @@
 from game_objects.spells import SpellAttributes, Spell
-from game_objects.battlefield_objects.attributes import AttributeWithBonuses, Attribute
+from game_objects.attributes import AttributeWithBonuses, Attribute
 from mechanics.actives import Costs
 from my_utils.utils import flatten
+from game_objects.items import Item, ItemTypes
 
-class SpellConcept:
+class SpellConcept(Item):
     complexity = AttributeWithBonuses("complexity_base", SpellAttributes.COMPLEXITY)
 
     mana_cost = AttributeWithBonuses("mana_cost_base", SpellAttributes.MANA_COST)
@@ -21,7 +22,7 @@ class SpellConcept:
                  amount, duration, precision_factor, distance, radius,
                  resolve_callback):
 
-        self.name = name
+        super().__init__(name, ItemTypes.SPELL_CONCEPT)
         self.school = school
         self.targeting_cls = targeting_cls
         self.complexity_base = Attribute.attribute_or_none(complexity)

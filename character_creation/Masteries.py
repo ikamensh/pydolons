@@ -2,8 +2,9 @@ from character_creation.MasteriesEnum import MasteriesEnum, MasteriesGroups
 from functools import lru_cache
 
 class Masteries:
-    def __init__(self):
-        self.exp_spent = {m:0 for m in MasteriesEnum}
+    def __init__(self, exp=0):
+        exp_per_mastery = int(exp / len(MasteriesEnum))
+        self.exp_spent = {m:exp_per_mastery for m in MasteriesEnum}
 
     @property
     def total_exp_spent(self):
@@ -12,7 +13,7 @@ class Masteries:
     @staticmethod
     @lru_cache(maxsize=512)
     def increment_cost(current_level):
-        if current_level == 0:
+        if current_level <= 0:
             return 4
         else:
             if current_level <= 100:
@@ -64,6 +65,12 @@ class Masteries:
         self.exp_spent[mastery_up] += direct_cost
         for m in indirect_costs:
             self.exp_spent[m] += indirect_costs[m]
+
+
+    def __getitem__(self, item):
+        exp = self.exp_spent[item]
+        lvl = self.achieved_level(exp)
+        return lvl
 
 
 

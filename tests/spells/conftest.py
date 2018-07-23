@@ -3,7 +3,8 @@ from content.spells import runes
 from game_objects.spells import  SpellConcept
 from character_creation.MasteriesEnum import MasteriesEnum
 from mechanics.actives import SingleUnitTargeting, Costs, Active
-from game_objects.spells import Rune, SpellAttributes, Bonus, Attribute
+from game_objects.spells import Rune, SpellAttributes
+from game_objects.attributes import Bonus, Attribute
 import pytest
 
 
@@ -22,7 +23,7 @@ def double_damage_rune():
 def lightning_bolt_callback():
     def _lightning_bolt_callback(active, single_unit_targeting):
         source = active.owner
-        target = single_unit_targeting.target
+        target = single_unit_targeting.unit
 
         spell = active.spell
         n_damage = spell.amount
@@ -38,7 +39,7 @@ def lightning_concept(lightning_bolt_callback):
                        school=MasteriesEnum.LIGHTNING,
                        targeting_cls=SingleUnitTargeting,
                        complexity=30,
-                       costs=Costs(4, 40, 0, readiness_cost=1),
+                       costs=Costs(4, 40, 0, readiness=1),
                        amount=60, duration=None, precision_factor=1,
                        distance=5, radius=None,
                        resolve_callback=lightning_bolt_callback)

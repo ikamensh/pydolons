@@ -1,5 +1,5 @@
 from mechanics.buffs.Ability import Ability
-from game_objects.battlefield_objects.attributes import DynamicParameter
+from game_objects.attributes import DynamicParameter
 from mechanics.events import BuffExpiredEvent
 import copy
 

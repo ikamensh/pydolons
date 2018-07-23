@@ -1,5 +1,4 @@
-from game_objects.battlefield_objects.Unit import Unit
-
+from game_objects.battlefield_objects import Unit
 
 from mechanics.combat.AttackEvent import AttackEvent
 

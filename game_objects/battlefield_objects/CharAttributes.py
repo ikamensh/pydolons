@@ -1,6 +1,6 @@
 from my_utils.named_enums import NameEnum, auto
 
-class AttributesEnum(NameEnum):
+class CharAttributes(NameEnum):
     STREINGTH = auto()
     ENDURANCE = auto()
     AGILITY = auto()
@@ -13,10 +13,10 @@ class AttributesEnum(NameEnum):
     STAMINA = auto()
     INITIATIVE = auto()
 
-abbrev_to_enum = {'str':AttributesEnum.STREINGTH, 'end':AttributesEnum.ENDURANCE, 'agi':AttributesEnum.AGILITY,
-           'prc':AttributesEnum.PERCEPTION, 'int':AttributesEnum.INTELLIGENCE, 'cha':AttributesEnum.CHARISMA,
-           'health':AttributesEnum.HEALTH, 'stamina': AttributesEnum.STAMINA, 'mana':AttributesEnum.MANA,
-                  'initiative':AttributesEnum.INITIATIVE}
+abbrev_to_enum = {'str':CharAttributes.STREINGTH, 'end':CharAttributes.ENDURANCE, 'agi':CharAttributes.AGILITY,
+           'prc':CharAttributes.PERCEPTION, 'int':CharAttributes.INTELLIGENCE, 'cha':CharAttributes.CHARISMA,
+           'health':CharAttributes.HEALTH, 'stamina': CharAttributes.STAMINA, 'mana':CharAttributes.MANA,
+                  'initiative':CharAttributes.INITIATIVE}
 
 enum_to_abbrev = {v: k for k, v in abbrev_to_enum.items()}
 

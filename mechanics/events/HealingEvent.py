@@ -1,0 +1,21 @@
+from mechanics.events.EventsPlatform import EventsChannels
+from mechanics.events.Event import Event
+
+class HealingEvent(Event):
+    channel = EventsChannels.HealingChannel
+
+    def __init__(self, healing_amount, target, *, source=None):
+        self.source = source
+        self.target = target
+        self.healing_amount = healing_amount
+        super().__init__()
+
+    def check_conditions(self):
+        return self.target.alive and self.healing_amount > 0
+
+    def resolve(self):
+        self.target.health += self.healing_amount
+
+    def __repr__(self):
+        return f"{self.target} is healed for {self.healing_amount}" \
+               + f"by {self.source}" if self.source else ""
