@@ -1,4 +1,4 @@
-from utils.named_enums import NameEnum, auto
+from my_utils.named_enums import NameEnum, auto
 
 class ItemTypes(NameEnum):
     BODY_ARMOR = auto()

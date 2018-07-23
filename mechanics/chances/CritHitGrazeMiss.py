@@ -1,4 +1,4 @@
-from utils.named_enums import NameEnum, auto
+from my_utils.named_enums import NameEnum, auto
 from mechanics.chances.ChanceCalculator import ChanceCalculator
 import random
 from collections import namedtuple

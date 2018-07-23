@@ -1,4 +1,4 @@
-from utils.named_enums import auto, NameEnum
+from my_utils.named_enums import auto, NameEnum
 
 class EventsChannels(NameEnum):
     DamageChannel = auto()
@@ -6,6 +6,13 @@ class EventsChannels(NameEnum):
     UnitDiedChannel = auto()
     MovementChannel = auto()
     ItemDestroyedChannel = auto()
+
+    BuffAppliedChannel = auto()
+    BuffDetachedChannel = auto()
+    BuffDispelledChannel = auto()
+    BuffExpiredChannel = auto()
+
+
 
 from GameLog import gamelog
 

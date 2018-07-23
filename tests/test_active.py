@@ -2,7 +2,7 @@ from DreamGame import DreamGame
 from battlefield.Battlefield import Battlefield, Cell
 from content.actives.melee_attack import attack_cell_active, attack_unit_active
 from game_objects.battlefield_objects import Unit
-from mechanics.flexi_targeting import SingleUnitTargeting, CellTargeting
+from mechanics.actives import SingleUnitTargeting, CellTargeting
 
 
 #TODO program and test that actives are unique. Use factory.

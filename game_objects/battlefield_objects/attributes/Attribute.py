@@ -5,6 +5,7 @@ class Attribute:
         self.bonus = bonus
 
     def __add__(self, other):
+
         new_base = self.base + other.base
         new_multiplier = self.multiplier + other.multiplier
         new_bonus = self.bonus + other.bonus
@@ -17,5 +18,12 @@ class Attribute:
         """
         multiplier = max(10, self.multiplier)
         return int(self.base * multiplier / 100 + self.bonus)
+
+    @staticmethod
+    def attribute_or_none(base):
+        if base is None:
+            return None
+        else:
+            return Attribute(base, 100, 0)
 
 

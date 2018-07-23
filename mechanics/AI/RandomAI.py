@@ -1,6 +1,6 @@
 from mechanics.fractions import Fractions
 from battlefield.Battlefield import Cell
-from utils.numeric import clamp
+from my_utils.utils import clamp
 import random
 
 class RandomAI:
