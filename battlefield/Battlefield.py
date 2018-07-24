@@ -1,8 +1,7 @@
-from math import hypot
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
-from game_objects.battlefield_objects import Obstacle, Unit
+from game_objects.battlefield_objects import Unit
 
 class Battlefield:
     def __init__(self, w, h):
@@ -93,6 +92,12 @@ class Battlefield:
     def move(self, unit, new_position):
         self.remove(unit)
         self.place(unit, new_position)
+
+    def angle_to(self, unit, target_cell):
+        facing = self.unit_facings[unit]
+        location = self.unit_locations[unit]
+        vector_to_target = target_cell.complex - location.complex
+        return Cell.angle_between(facing, vector_to_target)
 
 
 

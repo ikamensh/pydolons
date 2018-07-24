@@ -5,9 +5,13 @@ from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics.events import UnitDiedEvent
+from mechanics.actives import ActiveTags
+from content.actives.std_movements import std_movements
+from content.actives.std_melee_attack import std_attacks
 from my_utils.utils import flatten
-
 from character_creation.Masteries import Masteries, MasteriesEnum
+
+import copy
 from functools import lru_cache
 
 class Unit:
@@ -63,6 +67,13 @@ class Unit:
         self.last_damaged_by = None
 
         self.icon = base_type.icon
+
+        for active in std_attacks:
+            self.give_active(active)
+
+        for active in std_movements:
+            self.give_active(active)
+
 
 
     @property
@@ -131,13 +142,22 @@ class Unit:
 
 
     def give_active(self, active):
-        self.actives.add(active)
-        active.assign_to_unit(self)
+        cpy = copy.deepcopy(active)
+        self.actives.add(cpy)
+        cpy.owner = self
 
     #TODO create target method that prompts the game to get right kind of targeting from the user
     def activate(self, active, user_targeting):
         assert active in self.actives
         active.activate(user_targeting)
+
+    @property
+    def movement_actives(self):
+        return [active for active in self.actives if ActiveTags.MOVEMENT in active.tags]
+
+    @property
+    def attack_actives(self):
+        return [active for active in self.actives if ActiveTags.ATTACK in active.tags]
 
 
     def get_unarmed_weapon(self):

@@ -1,5 +1,5 @@
 from battlefield.Battlefield import Cell
-
+import pytest
 
 def test_move(game, hero):
     initial_location = game.get_location(hero)
@@ -9,6 +9,7 @@ def test_move(game, hero):
     assert initial_location != game.get_location(hero)
     assert target_location == game.get_location(hero)
 
+@pytest.mark.skip(reason="currently not supported")
 def test_go_and_hit(game, hero):
     """
     Hero goes to the pirate and kicks pirate.

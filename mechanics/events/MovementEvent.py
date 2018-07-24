@@ -9,14 +9,12 @@ class MovementEvent(Event):
         self.unit = unit
         self.cell_from = battlefield.unit_locations[unit]
         self.cell_to = cell_to
-        self.unit.readiness -= 0.5
         super().__init__()
 
     def check_conditions(self):
         return self.battlefield.get_unit_at(self.cell_to) is None
 
     def resolve(self):
-        self.unit.readiness -= 0.5
         self.battlefield.move(self.unit, self.cell_to)
 
     def __repr__(self):

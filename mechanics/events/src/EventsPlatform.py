@@ -5,6 +5,7 @@ class EventsChannels(NameEnum):
     HealingChannel = auto()
 
     MovementChannel = auto()
+    TurnChannel = auto()
     AttackChannel = auto()
 
     ActiveChannel = auto()

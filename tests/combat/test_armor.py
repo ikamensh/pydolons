@@ -1,4 +1,5 @@
-from mechanics.damage import Armor, DamageTypes, Damage, DamageEvent
+from mechanics.damage import Armor, DamageTypes, Damage
+from mechanics.events import DamageEvent
 import pytest
 
 

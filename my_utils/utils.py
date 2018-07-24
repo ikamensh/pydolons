@@ -16,3 +16,8 @@ def flatten(l):
             yield from flatten(el)
         else:
             yield el
+
+class MicroMock(object):
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+

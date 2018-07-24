@@ -1,8 +1,9 @@
-from mechanics.damage import DamageEvent, Damage, DamageTypes
+from mechanics.damage import Damage, DamageTypes
+from mechanics.events import DamageEvent
 from content.spells import runes
 from game_objects.spells import  SpellConcept
 from character_creation.MasteriesEnum import MasteriesEnum
-from mechanics.actives import SingleUnitTargeting, Costs, Active
+from mechanics.actives import SingleUnitTargeting, Cost, Active
 from game_objects.spells import Rune, SpellAttributes
 from game_objects.attributes import Bonus, Attribute
 import pytest
@@ -33,13 +34,13 @@ def lightning_bolt_callback():
 @pytest.fixture()
 def lightning_concept(lightning_bolt_callback):
     concept = SpellConcept(name="lightning bolt",
-                       school=MasteriesEnum.LIGHTNING,
-                       targeting_cls=SingleUnitTargeting,
-                       complexity=30,
-                       costs=Costs(4, 40, 0, readiness=1),
-                       amount=60, duration=None, precision_factor=1,
-                       distance=5, radius=None,
-                       resolve_callback=lightning_bolt_callback)
+                           school=MasteriesEnum.LIGHTNING,
+                           targeting_cls=SingleUnitTargeting,
+                           complexity=30,
+                           cost=Cost(4, 40, 0, readiness=1),
+                           amount=60, duration=None, precision_factor=1,
+                           distance=5, radius=None,
+                           resolve_callback=lightning_bolt_callback)
     return concept
 
 @pytest.fixture()

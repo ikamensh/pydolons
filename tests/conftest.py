@@ -64,8 +64,11 @@ def pirate(pirate_basetype):
     yield Unit(pirate_basetype)
 
 @pytest.fixture()
-def game(demo_dungeon, hero):
-    _game = DreamGame.start_dungeon(demo_dungeon, hero)
+def game(battlefield):
+    _game = DreamGame(battlefield)
+    _game.fractions.update({unit: "QUACK" for unit in battlefield.unit_locations if not unit.is_obstacle})
+    for unit in battlefield.unit_locations:
+        _game.turns_manager.add_unit(unit)
     yield _game
 
 @pytest.fixture()

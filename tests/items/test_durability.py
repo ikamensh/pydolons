@@ -1,4 +1,4 @@
-from mechanics.damage import DamageEvent
+from mechanics.events import DamageEvent
 import pytest
 
 

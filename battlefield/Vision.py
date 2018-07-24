@@ -1,4 +1,3 @@
-from battlefield.Facing import FacingUtil
 from battlefield.Cell import Cell
 from math import hypot
 import numpy as np
@@ -53,12 +52,12 @@ class Vision:
     def std_vision_field(sight_range, facing, cell_from, bf):
         w = bf.h
         h = bf.h
-        c_facing = FacingUtil.to_complex[facing]
+
         v1 = (sight_range * 2 / 3) * 1j
         v2 = sight_range
 
-        c1 = c_facing * v1 + FacingUtil.coord_to_complex(cell_from)
-        c2 = c_facing * (v2 - v1) + FacingUtil.coord_to_complex(cell_from)
+        c1 = facing * v1 + cell_from.complex
+        c2 = facing * (v2 - v1) + cell_from.complex
 
         xmin, xmax = min(c1.real, c2.real), max(c1.real, c2.real)
         ymin, ymax = min(c1.imag, c2.imag), max(c1.imag, c2.imag)
@@ -70,7 +69,7 @@ class Vision:
         ymax = min(h - 1, ymax)
 
         visible_cells = set()
-        if c_facing.real:
+        if facing.real:
             metric = Vision.dist_eliptic_y
         else:
             metric = Vision.dist_eliptic_x

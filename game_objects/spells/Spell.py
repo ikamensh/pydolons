@@ -13,7 +13,7 @@ def proximity_condition_cell(active, cell_targeting):
 
 class Spell(Item):
     def __init__(self, runes, concept,
-                 complexity, costs,
+                 complexity, cost,
                  amount, duration, precision_factor, distance, radius,
                  resolve_callback):
         super().__init__(concept.name, ItemTypes.SPELL)
@@ -25,7 +25,7 @@ class Spell(Item):
         self.runes = runes
         self.concept = concept
         self.complexity = complexity
-        self.costs = costs
+        self.cost = cost
         self.amount = amount
         self.duration = duration
         self.precision_factor = precision_factor

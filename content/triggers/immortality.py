@@ -1,6 +1,6 @@
 from mechanics.events import PermanentInterrupt, CounteredInterrupt
 from mechanics.events import UnitDiedEvent
-from mechanics.damage import DamageEvent
+from mechanics.events import DamageEvent
 
 def immortality(unit):
     trig = PermanentInterrupt(UnitDiedEvent, conditions={"unit":unit})

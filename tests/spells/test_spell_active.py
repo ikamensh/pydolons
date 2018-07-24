@@ -20,7 +20,7 @@ def test_lightning_depends_on_mastery(game, pirate_band, hero, lightning_active)
 
     assert mana_before == hero.mana
     assert stamina_before == hero.stamina
-    assert readiness_before > hero.readiness
+    assert readiness_before == hero.readiness
 
     assert pirate.health == hp_before
 
@@ -52,7 +52,7 @@ def test_lightning_depends_on_int(hero, game, pirate_band, lightning_active):
 
     assert mana_before == hero.mana
     assert stamina_before == hero.stamina
-    assert readiness_before > hero.readiness
+    assert readiness_before == hero.readiness
 
     assert pirate.health == hp_before
 

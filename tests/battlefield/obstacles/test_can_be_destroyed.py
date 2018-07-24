@@ -1,6 +1,7 @@
 from game_objects.battlefield_objects import Obstacle
 from battlefield.Cell import Cell
-from mechanics.damage import DamageTypes, Damage, DamageEvent
+from mechanics.damage import DamageTypes, Damage
+from mechanics.events import DamageEvent
 from mechanics.combat.Attack import Attack
 import pytest
 

@@ -1,15 +1,15 @@
 from battlefield.Battlefield import Battlefield, Cell
-from mechanics.combat import Attack
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
 from mechanics.AI import AstarAI, RandomAI
-from battlefield.MovementEvent import MovementEvent
+from mechanics.actives import CellTargeting, SingleUnitTargeting
+import copy
 import my_globals
 
 
 class DreamGame:
 
-    def __init__(self, bf, unit_locations = None):
+    def __init__(self, bf):
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
@@ -18,21 +18,19 @@ class DreamGame:
         self.turns_manager = AtbTurnsManager()
         my_globals.the_game = self
 
-        if unit_locations:
-            bf.place_many(unit_locations)
-
-
-
     @staticmethod
     def start_dungeon(dungeon, hero):
 
         unit_locations = dungeon.unit_locations
+        unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
-
-        game = DreamGame(Battlefield(dungeon.h, dungeon.w), unit_locations)
+        bf = Battlefield(dungeon.h, dungeon.w)
+        game = DreamGame(bf)
+        if unit_locations:
+            bf.place_many(unit_locations)
         game.the_hero = hero
 
-        game.fractions.update({unit:Fractions.ENEMY for unit in dungeon.unit_locations if not unit.is_obstacle})
+        game.fractions.update({unit:Fractions.ENEMY for unit in unit_locations if not unit.is_obstacle})
         game.fractions[hero] = Fractions.PLAYER
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
@@ -99,19 +97,62 @@ class DreamGame:
     def __repr__(self):
         return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
 
-    def order_move(self, unit, target_cell):
-        # TODO refactor with actives and their conditions?
-        # units can only go to adjecent locations
-        if not self.battlefield.distance(unit, target_cell) <= 1:
-            return False
+    @staticmethod
+    def order_move(unit, target_cell, AI_assist=False):
 
-        if target_cell in self.battlefield.units_at:
-            target = self.battlefield.units_at[target_cell]
-            self.attack(unit, target)
-        else:
-            MovementEvent(self.battlefield, unit, target_cell)
+        actives = unit.movement_actives
+        if len(actives) == 0:
+            return False, "The unit has no movement actives."
 
-        return True
+        tgt = CellTargeting(cell=target_cell)
+        valid_actives = [a for a in actives if a.targeting_cond(tgt)]
+
+        if len(valid_actives) == 0:
+            # if AI_assist:
+            #TODO instead of moving, turn towards the desired cell
+
+
+            return False, "None of the user movement actives can reach the target cell."
+
+        chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
+        chosen_active.activate(tgt)
+
+        return True, chosen_active
+
+    @staticmethod
+    def order_attack(unit, target):
+        actives = unit.attack_actives
+        if len(actives) == 0:
+            return False, "The unit has no attack actives."
+
+        tgt = SingleUnitTargeting(unit=target)
+        valid_actives = [a for a in actives if a.targeting_cond(tgt)]
+
+        if len(valid_actives) == 0:
+            return False, "None of the user attack actives can reach the target."
+
+        chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
+        chosen_active.activate(tgt)
+
+        return True, chosen_active
+
+    @staticmethod
+    def cost_heuristic(unit, factors = None):
+        _factors = factors or {}
+
+        def _(active):
+            cost = active.cost
+            hp_relative_cost = cost.health / unit.health * _factors.get("hp", 1)
+            mana_relative_cost = cost.mana / unit.mana * _factors.get("hp", 0.5)
+            stamina_relative_cost = cost.stamina / unit.stamina * _factors.get("hp", 0.5)
+            readiness_cost = cost.readiness * _factors.get("rdy", 0.1)
+
+            return sum( (hp_relative_cost, mana_relative_cost, stamina_relative_cost, readiness_cost) )
+
+        return _
+
+
+
 
 
     @staticmethod
@@ -120,13 +161,9 @@ class DreamGame:
         return my_globals.the_game.battlefield.unit_locations[unit]
 
     def print_all_units(self):
-        for unit, xy in self.battlefield.unit_locations.items():
-            x, y = xy
+        for unit, cell in self.battlefield.unit_locations.items():
+            x, y = cell.x, cell.y
             print("There is a {} at ({},{})".format(unit, x, y))
-
-    @staticmethod
-    def attack(attacker, target):
-        Attack.attack(attacker, target)
 
     @staticmethod
     def get_unit_at(coord):

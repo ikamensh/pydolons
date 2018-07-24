@@ -13,6 +13,12 @@ from mechanics.events.BuffAppliedEvent import BuffAppliedEvent
 from mechanics.events.BuffDetachedEvent import BuffDetachedEvent
 from mechanics.events.BuffDispelledEvent import BuffDispelledEvent
 from mechanics.events.BuffExpiredEvent import BuffExpiredEvent
+
 from mechanics.events.HealingEvent import HealingEvent
 from mechanics.events.ActiveEvent import ActiveEvent
+from mechanics.events.DamageEvent import DamageEvent
+
+from mechanics.events.MovementEvent import MovementEvent
+from mechanics.events.TurnEvent import TurnEvent
+
 

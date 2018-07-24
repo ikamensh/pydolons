@@ -1,5 +1,5 @@
 from mechanics.events import CounteredInterrupt
-from mechanics.damage import DamageEvent
+from mechanics.events import DamageEvent
 from mechanics.chances import ImpactFactor
 
 
