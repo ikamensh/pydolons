@@ -4,7 +4,7 @@ from my_utils.utils import flatten
 from game_objects.battlefield_objects import Unit
 from mechanics.buffs import Buff
 
-from my_globals import my_random as random
+from my_context import my_random as random
 
 epsilon = 1e-6
 class AtbTurnsManager(TurnsManager):
@@ -28,7 +28,7 @@ class AtbTurnsManager(TurnsManager):
                 m.duration -= time
 
         self.time += time
-        gamelog(f"{time} seconds passes. its {self.time} now")
+        gamelog(f"{time:.3f} seconds passes. its {self.time:.3f} now")
 
     @staticmethod
     def time_until_turn(managee):

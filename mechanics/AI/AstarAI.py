@@ -34,14 +34,16 @@ class StarPathSearch(AStar):
 
 
 class AstarAI:
-    def __init__(self, battlefield, fractions):
-        self.battlefield = battlefield
-        self.fractions = fractions
-        self.random_ai = RandomAI(battlefield)
-        self.astar = StarPathSearch(battlefield)
+    def __init__(self, game):
+        self.game = game
+        self.battlefield = game.battlefield
+        self.fractions = game.fractions
+        self.random_ai = RandomAI(game)
+        self.astar = StarPathSearch(game)
 
     def decide_step(self, active_unit, target_fraction=Fractions.PLAYER):
-        assert active_unit in self.battlefield.unit_locations
+        # assert active_unit in self.battlefield.unit_locations
+        assert active_unit in self.battlefield
 
         start_location = self.battlefield.unit_locations[active_unit]
 

@@ -1,15 +1,9 @@
 from game_objects.items import Item, ItemTypes
-
-from mechanics.actives import CellTargeting, SingleUnitTargeting
-import my_globals
+import my_context
 
 
-def proximity_condition_unit(active, unit_targeting):
-        return my_globals.the_game.battlefield.distance(active.owner, unit_targeting.unit) <= active.spell.distance
-
-def proximity_condition_cell(active, cell_targeting):
-        return my_globals.the_game.battlefield.distance(active.owner, cell_targeting.cell) <= active.spell.distance
-
+def proximity_condition(active, target):
+        return my_context.the_game.battlefield.distance(active.owner, target) <= active.spell.distance
 
 class Spell(Item):
     def __init__(self, runes, concept,
@@ -34,10 +28,8 @@ class Spell(Item):
         self.resolve_callback = resolve_callback
 
     def default_cond(self):
-        if self.targeting_cls is SingleUnitTargeting:
-            return proximity_condition_unit
-        elif self.targeting_cls is CellTargeting:
-            return proximity_condition_cell
+        if self.targeting_cls:
+            return proximity_condition
         else:
             return lambda a, t: True
 

@@ -1,6 +1,6 @@
 from mechanics.events import Event
 from mechanics.events import EventsChannels
-import my_globals
+import my_context
 
 class BuffAppliedEvent(Event):
     channel = EventsChannels.BuffAppliedChannel
@@ -16,7 +16,7 @@ class BuffAppliedEvent(Event):
     def resolve(self):
         self.buff.attached_to = self.unit
         self.unit.buffs.append(self.buff)
-        my_globals.the_game.turns_manager.add_buff(self.buff)
+        my_context.the_game.turns_manager.add_buff(self.buff)
 
     def __repr__(self):
         return f"{self.buff} is applied on {self.unit}"

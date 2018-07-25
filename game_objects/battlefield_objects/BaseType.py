@@ -11,7 +11,7 @@ class BaseType:
 
     def __init__(self, attributes, type_name, unarmed_damage_type=DamageTypes.CRUSH, resists=None,
                  armor_dict=None, armor_base=0, equipment=Equipment, inventory_capacity = 20,
-                 actives=set(), icon="default.png", unarmed_chances = default_unarmed_chances, xp = None):
+                 actives=None, icon="default.png", unarmed_chances = default_unarmed_chances, xp = None):
 
         self.attributes = {}
         for attr in list(attributes.keys()):
@@ -21,9 +21,11 @@ class BaseType:
         for attr in CharAttributes:
             if attr not in self.attributes:
                 self.attributes[attr] = 10
+            elif self.attributes[attr] <= 0:
+                self.attributes[attr] = 1
 
         self.type_name = type_name
-        self.actives = actives
+        self.actives = actives or set()
         self.unarmed_damage_type = unarmed_damage_type
         self.resists = resists or {}
         self.armor_dict = armor_dict or {}

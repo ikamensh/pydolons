@@ -1,12 +1,11 @@
-from game_objects.battlefield_objects.BaseType import BaseType
+from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.battlefield_objects import CharAttributes
 from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics.events import UnitDiedEvent
 from mechanics.actives import ActiveTags
-from content.actives.std_movements import std_movements
+from content.actives.std_movements import std_movements, turn_ccw, turn_cw
 from content.actives.std_melee_attack import std_attacks
 from my_utils.utils import flatten
 from character_creation.Masteries import Masteries, MasteriesEnum
@@ -14,7 +13,7 @@ from character_creation.Masteries import Masteries, MasteriesEnum
 import copy
 from functools import lru_cache
 
-class Unit:
+class Unit(BattlefieldObject):
     HP_PER_STR = 25
     STAMINA_PER_END = 10
     MANA_PER_INT = 10
@@ -37,8 +36,12 @@ class Unit:
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
+    last_uid = 0
 
     def __init__(self, base_type: BaseType, masteries = None):
+        Unit.last_uid += 1
+        self.uid = Unit.last_uid
+
         self.str_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.STREINGTH])
         self.end_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.ENDURANCE])
         self.prc_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.PERCEPTION])
@@ -50,7 +53,7 @@ class Unit:
         self.masteries = masteries or Masteries(base_type.xp)
 
         self.type_name = base_type.type_name
-        self.actives = base_type.actives
+        self.actives = set(base_type.actives)
 
         self.unarmed_damage_type = base_type.unarmed_damage_type
         self.unarmed_chances = base_type.unarmed_chances
@@ -68,11 +71,19 @@ class Unit:
 
         self.icon = base_type.icon
 
+        self.turn_ccw_active = self.give_active(turn_ccw)
+        self.turn_ccw = lambda : self.activate(self.turn_ccw_active)
+
+        self.turn_cw_active = self.give_active(turn_cw)
+        self.turn_cw = lambda : self.activate(self.turn_cw_active)
+
         for active in std_attacks:
             self.give_active(active)
 
         for active in std_movements:
             self.give_active(active)
+
+
 
 
 
@@ -145,9 +156,11 @@ class Unit:
         cpy = copy.deepcopy(active)
         self.actives.add(cpy)
         cpy.owner = self
+        cpy.uid = int(self.uid * 1e7 + cpy.uid)
+        return cpy
 
     #TODO create target method that prompts the game to get right kind of targeting from the user
-    def activate(self, active, user_targeting):
+    def activate(self, active, user_targeting = None):
         assert active in self.actives
         active.activate(user_targeting)
 
@@ -194,5 +207,12 @@ class Unit:
         self.last_damaged_by = source
         self.health -= dmg_amount
 
+    @property
+    def utility(self):
+        hp_factor = 1 + self.health
+        other_factors = (1+ self.mana + self.stamina + self.readiness/3) * len(self.actives) / 10
+        magnitude = sum([self.str, self.end, self.agi, self.prc, self.int, self.cha]) ** 2
+        return magnitude * hp_factor * other_factors
+
     def __repr__(self):
-        return f"{self.type_name} with {self.health} HP"
+        return f"{self.type_name} with {self.health} HP and {int(self.utility)} utility"

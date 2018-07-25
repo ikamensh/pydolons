@@ -69,6 +69,7 @@ def game(battlefield):
     _game.fractions.update({unit: "QUACK" for unit in battlefield.unit_locations if not unit.is_obstacle})
     for unit in battlefield.unit_locations:
         _game.turns_manager.add_unit(unit)
+    _game.set_to_context()
     yield _game
 
 @pytest.fixture()

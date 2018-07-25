@@ -40,5 +40,3 @@ print( get_size(sims) )
 print( get_size(game) )
 
 print(my_context.the_game is game)
-
-

@@ -1,9 +1,10 @@
+from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.damage import Resistances, Armor
 from game_objects.attributes import DynamicParameter
 from mechanics.events import ObstacleDestroyedEvent
 import copy
 
-class Obstacle:
+class Obstacle(BattlefieldObject):
 
     health = DynamicParameter("max_health", [ObstacleDestroyedEvent])
 

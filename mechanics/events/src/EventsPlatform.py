@@ -25,15 +25,15 @@ from GameLog import gamelog
 
 class EventsPlatform:
 
-    interrupts = { ch: set() for ch in EventsChannels }
-    triggers = { ch: set() for ch in EventsChannels }
+    def __init__(self):
+        self.interrupts = { ch: set() for ch in EventsChannels }
+        self.triggers = { ch: set() for ch in EventsChannels }
 
-    @staticmethod
-    def process_event(event):
+    def process_event(self, event):
 
         channel = event.channel
-        interrupts = EventsPlatform.interrupts[channel]
-        triggers = EventsPlatform.triggers[channel]
+        interrupts = self.interrupts[channel]
+        triggers = self.triggers[channel]
 
         for interrupt in list(interrupts):
             assert isinstance(event, interrupt.target_event_cls)

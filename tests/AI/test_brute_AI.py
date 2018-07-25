@@ -1,21 +1,25 @@
 from mechanics.AI import BruteAI
-from battlefield.Battlefield import Cell
+from mechanics.actives import Active
 
-def test_returns_cell(game):
 
-    randomAI = BruteAI(game.battlefield, game.fractions)
+def test_returns_actions(game):
+
+    ai = BruteAI(game)
     unit = list(game.battlefield.unit_locations.keys())[0]
 
-    cell = randomAI.decide_step(unit)
-    assert isinstance(cell, Cell)
+    action, target = ai.decide_step(unit)
+    assert isinstance(action, Active)
 
 
 def test_is_deterministic(game):
-    proposed_cells = set()
-    for i in range(100):
-        randomAI = BruteAI(game.battlefield, game.fractions)
+
+    actions = set()
+
+    for i in range(3):
+        ai = BruteAI(game)
         unit = list(game.battlefield.unit_locations.keys())[0]
 
-        cell = randomAI.decide_step(unit)
-        proposed_cells.add(cell)
-    assert len(proposed_cells) == 1
+        action, target = ai.decide_step(unit, epsilon=0)
+        actions.add(action)
+
+    assert 1 == len(actions)

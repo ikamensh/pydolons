@@ -1,17 +1,15 @@
-from battlefield.Battlefield import Cell, Battlefield
-import pytest
+from battlefield.Battlefield import Cell
 
 
-@pytest.fixture()
-def battlefield(pirate_band, hero):
-    bf = Battlefield(8, 8)
-    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
 
-    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
-    units_locations[hero] = Cell(1, 1)
-    bf.place_many(units_locations)
-    yield bf
+def test_units_block_movement(game, hero):
+    location_before = Cell(3, 4)
+    game.battlefield.move(hero, location_before)
 
+    assert game.battlefield.units_at[Cell(4, 4)] is not None  # expecting a pirate from conftest
+
+    game.order_move(hero, Cell(4, 4))
+    assert location_before == game.get_location(hero)
 
 def test_valid_placement(battlefield):
     assert len(battlefield.unit_locations) == 4
@@ -67,7 +65,6 @@ def test_cells_within_dist(battlefield):
 
 
 
-
 def test_distance_calc(battlefield):
     p1 = Cell(1,1)
     p2 = Cell(1,2)
@@ -83,8 +80,6 @@ def test_distance_calc(battlefield):
     p2 = Cell(2, 2)
 
     assert 1 < battlefield.distance(p1, p2) < 2
-
-
 
 
 

@@ -1,20 +1,36 @@
-from battlefield.Battlefield import Cell
-from my_utils.utils import clamp
 import random
+import my_context
 
+#TODO consider using the context game.
 class RandomAI:
-    def __init__(self, battlefield):
-        self.battlefield = battlefield
+    def __init__(self, game):
+        self.game = game
+        self.battlefield = self.game.battlefield
 
 
     def decide_step(self, active_unit):
+
         assert active_unit in self.battlefield.unit_locations
 
-        location = self.battlefield.unit_locations[active_unit]
+        actives = active_unit.actives
 
-        step = [-1, 0, 1]
+        targets = {}
+        for a in actives:
+            if a.owner_can_afford_activation():
+                tgts = self.game.get_possible_targets(a)
+                if tgts:
+                    targets[a] = tgts
 
-        x_new = clamp(location.x + random.choice(step), 0, self.battlefield.w)
-        y_new = clamp(location.y + random.choice(step), 0, self.battlefield.h)
-        return Cell(x_new, y_new)
+        actives_with_valid_targets = set(targets.keys())
+        actives_without_targeting = {a for a in actives if a.targeting_cls is None}
+
+        active = random.choice( list(actives_with_valid_targets | actives_without_targeting) )
+        if active in actives_without_targeting:
+            return active, None
+        else:
+            target = random.choice(targets[active])
+            return active, target
+
+
+
 

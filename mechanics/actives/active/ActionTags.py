@@ -1,7 +1,8 @@
-from my_utils.named_enums import NameEnum, auto
+from my_utils.named_enums import Enum, auto
 
 class ActiveTags:
-    MOVEMENT = auto(),
-    ATTACK = auto(),
-    MAGIC = auto(),
-    TURNING = auto()
+    MOVEMENT = "movement",
+    ATTACK = "attack",
+    MAGIC = "magic",
+    TURNING = "turning"
+

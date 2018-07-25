@@ -1,5 +1,5 @@
 from battlefield.Battlefield import Cell
-from content.base_types import pirate_basetype, mud_golem_basetype, mud_wall_type
+from content.base_types import pirate_basetype, mud_golem_basetype, mud_wall
 from game_objects.battlefield_objects import Unit
 from game_objects.dungeon.Dungeon import Dungeon
 
@@ -10,10 +10,10 @@ unit_locations = {pirate_band[i]: locations[i] for i in range(3)}
 
 wall_x = 8
 for wall_y in range(0,9):
-    unit_locations[Unit(mud_wall_type)] = Cell(wall_x, wall_y)
+    unit_locations[mud_wall.clone()] = Cell(wall_x, wall_y)
 
 unit_locations[Unit(mud_golem_basetype)] = Cell(11, 0)
 
 
-demo_dungeon = Dungeon(unit_locations, 12, 12, hero_entrance=Cell(3, 4))
+walls_dungeon = Dungeon(unit_locations, 12, 12, hero_entrance=Cell(3, 4))
 

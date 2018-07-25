@@ -67,7 +67,8 @@ class Battlefield:
 
 
 
-    def place(self, unit, p, facing=None):
+    def place(self, unit, _p, facing=None):
+        p = Cell.maybe_complex(_p)
 
         assert 0 <= p.x < self.w
         assert 0 <= p.y < self.h
@@ -93,11 +94,25 @@ class Battlefield:
         self.remove(unit)
         self.place(unit, new_position)
 
-    def angle_to(self, unit, target_cell):
+    def angle_to(self, unit, target):
+        target_cell = target if isinstance(target, Cell) else self.unit_locations[target]
         facing = self.unit_facings[unit]
         location = self.unit_locations[unit]
         vector_to_target = target_cell.complex - location.complex
         return Cell.angle_between(facing, vector_to_target)
+
+    @property
+    def all_cells(self):
+        result = set()
+        for i in range(self.w):
+            for j in range(self.h):
+                result.add(Cell(i,j))
+        return result
+
+    def __iter__(self):
+        for unit in self.unit_locations:
+            if not unit.is_obstacle:
+                yield unit
 
 
 

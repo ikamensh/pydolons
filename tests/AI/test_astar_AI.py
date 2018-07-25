@@ -2,6 +2,7 @@ from mechanics.AI import AstarAI
 from battlefield.Battlefield import Cell
 import pytest
 
+@pytest.mark.skip(reason="currently not supported")
 def test_returns_cell(game):
 
     ai = AstarAI(game.battlefield, game.fractions)
@@ -10,7 +11,7 @@ def test_returns_cell(game):
     cell = ai.decide_step(unit)
     assert isinstance(cell, Cell)
 
-
+@pytest.mark.skip(reason="currently not supported")
 def test_is_deterministic(game):
     proposed_cells = set()
     for i in range(10):

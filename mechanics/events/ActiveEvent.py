@@ -1,6 +1,6 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
-import my_globals
+import my_context
 
 class ActiveEvent(Event):
     channel = EventsChannels.ActiveChannel

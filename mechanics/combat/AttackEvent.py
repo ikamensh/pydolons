@@ -3,7 +3,7 @@ from mechanics.events import EventsChannels, DamageEvent
 from mechanics.chances.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
 from GameLog import gamelog
 
-import my_globals
+import my_context
 
 
 class AttackEvent(Event):
@@ -12,8 +12,8 @@ class AttackEvent(Event):
         self.source = source
         self.target = target
         self.weapon = weapon or source.get_melee_weapon()
-        self.is_backstab = not target.is_obstacle and not my_globals.the_game.battlefield.x_sees_y(target, source)
-        self.is_blind = not my_globals.the_game.battlefield.x_sees_y(source, target)
+        self.is_backstab = not target.is_obstacle and not my_context.the_game.battlefield.x_sees_y(target, source)
+        self.is_blind = not my_context.the_game.battlefield.x_sees_y(source, target)
         super().__init__()
 
     def check_conditions(self):

@@ -1,27 +1,51 @@
 from mechanics.fractions import Fractions
 from mechanics.AI import RandomAI
+import random
 
 class BruteAI:
-    def __init__(self, battlefield, fractions):
-        self.battlefield = battlefield
-        self.fractions = fractions
-        self.random_ai = RandomAI(battlefield)
+    def __init__(self, game):
+        self.game = game
+        self.random_ai = RandomAI(game)
 
-    def decide_step(self, active_unit, target_fraction=Fractions.PLAYER):
-        assert active_unit in self.battlefield.unit_locations
+    def decide_step(self, active_unit, epsilon = 0.1):
 
-        start_location = self.battlefield.unit_locations[active_unit]
-
-        target_units = [unit for unit, fraction in self.fractions.items() if fraction is target_fraction]
-
-        if target_units:
-            distances = self.battlefield.get_units_dists_to(start_location, units_subset=target_units)
-            target, _ = distances[0]
-            target_location = self.battlefield.unit_locations[target]
-            possible_steps = self.battlefield.get_neighbouring_cells(start_location)
-            cell, _ = self.battlefield.get_nearest_cell(candidates=possible_steps, target=target_location)
-            return cell
-
-        else:
+        if random.random() < epsilon:
             return self.random_ai.decide_step(active_unit)
+
+        fraction = self.game.fractions[active_unit]
+
+
+        actives = active_unit.actives
+
+        targets = {}
+        for a in actives:
+            if a.owner_can_afford_activation():
+                tgts = self.game.get_possible_targets(a)
+                if tgts:
+                    targets[a] = tgts
+
+        actives_with_valid_targets = set(targets.keys())
+        actives_without_targeting = {a for a in actives if a.targeting_cls is None}
+
+        choices = {}
+
+        for active in actives_without_targeting:
+            util = self.game.delta_util(active, None)
+            choices[util] = (active, None)
+
+        for active in actives_with_valid_targets:
+            for target in targets[active]:
+                choices[self.game.delta_util(active, target)] = (active, target)
+
+        best_delta = max(choices.keys())
+
+        return choices[best_delta]
+
+
+
+
+
+
+
+
 

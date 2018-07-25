@@ -1,6 +1,6 @@
 from my_utils.named_enums import NameEnum, auto
 from mechanics.chances.ChanceCalculator import ChanceCalculator
-from my_globals import my_random as random
+from my_context import my_random as random
 from collections import namedtuple
 
 ImpactChances = namedtuple("ImpactChances", "crit hit graze")

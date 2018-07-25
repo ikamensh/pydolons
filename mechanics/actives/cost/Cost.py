@@ -16,4 +16,4 @@ class Cost:
         return self.__mul__(1 / other)
 
     def __repr__(self):
-        return f"Cost of {self.readiness} rdy, {self.stamina} sta, {self.mana} mp,  {self.health} hp"
+        return f"{self.readiness} rdy, {self.stamina} sta, {self.mana} mp,  {self.health} hp"

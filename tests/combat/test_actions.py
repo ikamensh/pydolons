@@ -9,7 +9,40 @@ def test_move(game, hero):
     assert initial_location != game.get_location(hero)
     assert target_location == game.get_location(hero)
 
-@pytest.mark.skip(reason="currently not supported")
+def test_facing_no_problem(game, hero):
+    initial_location = game.get_location(hero)
+
+    game.battlefield.unit_facings[hero] = 0-1j
+
+    target_location = Cell(1, 2)
+    for _ in range(10):
+        game.order_move(hero, target_location)
+
+    assert initial_location != game.get_location(hero)
+    assert target_location == game.get_location(hero)
+
+
+def test_can_make_multiple_steps(game, hero):
+    initial_location = game.get_location(hero)
+
+    game.battlefield.unit_facings[hero] = 0-1j
+
+    target_location = Cell(0, 6)
+    for _ in range(20):
+        game.order_move(hero, target_location)
+
+    assert initial_location != game.get_location(hero)
+    assert target_location == game.get_location(hero)
+
+def test_can_use_diag_step(game, hero):
+    initial_location = game.get_location(hero)
+
+    target_location = Cell(2, 2)
+    game.order_move(hero, target_location)
+
+    assert initial_location != game.get_location(hero)
+    assert target_location == game.get_location(hero)
+
 def test_go_and_hit(game, hero):
     """
     Hero goes to the pirate and kicks pirate.
@@ -25,13 +58,11 @@ def test_go_and_hit(game, hero):
         step_done = game.order_move(hero,step)
         assert step_done
 
-    location_before = game.get_location(hero)
-    hp_before = the_enemy_pirate.health
-    game.order_move(hero, pirate_location)
-    assert location_before == game.get_location(hero)
-
     while the_enemy_pirate.health > 0:
-        game.order_move(hero, pirate_location)
+        result = game.order_attack(hero, pirate_location)
+        assert result[0]
 
     game.order_move(hero, pirate_location)
     assert pirate_location == game.get_location(hero)
+
+

@@ -1,10 +1,10 @@
-from mechanics.damage import DamageEvent, Damage, DamageTypes
-from mechanics.events import HealingEvent
+from mechanics.damage import Damage, DamageTypes
+from mechanics.events import HealingEvent, DamageEvent
 
 
-def lightning_bolt_callback(active, single_unit_targeting):
+def lightning_bolt_callback(active, unit):
     source = active.owner
-    target = single_unit_targeting.unit
+    target = unit
 
     spell = active.spell
     n_damage = spell.amount
@@ -12,9 +12,9 @@ def lightning_bolt_callback(active, single_unit_targeting):
 
     DamageEvent(dmg, target=target, source=source)
 
-def healing_callback(active, single_unit_targeting):
+def healing_callback(active, unit):
     source = active.owner
-    target = single_unit_targeting.unit
+    target = unit
 
     spell = active.spell
     HealingEvent(spell.amount, target, source=source)
