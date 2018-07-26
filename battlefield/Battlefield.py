@@ -103,6 +103,8 @@ class Battlefield:
         facing = self.unit_facings[unit]
         location = self.unit_locations[unit]
         vector_to_target = target_cell.complex - location.complex
+        if vector_to_target == 0j:
+            return 9000, None
         return Cell.angle_between(facing, vector_to_target)
 
     @property

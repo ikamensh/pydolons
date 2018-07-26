@@ -1,5 +1,5 @@
 from mechanics.AI import BruteAI
-from mechanics.actives import Active
+from mechanics.actives import Active, ActiveTags
 from game_objects.battlefield_objects import Unit
 
 
@@ -52,17 +52,98 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
 
 
 def test_no_suicide(game):
-    game_over = False
-    # while not game_over:
     for i in range(50):
 
         active_unit = game.turns_manager.get_next()
-        fraction = game.fractions[active_unit]
-        # utility_before = game.utility(fraction)
         active, target = game.brute_ai.decide_step(active_unit)
         if isinstance(target, Unit):
-            assert game.fractions[target] is not game.fractions[active_unit]
+            if game.fractions[target] is game.fractions[active_unit]:
+                assert False
         active_unit.activate(active, target)
-        # utility_after = game.utility(fraction)
-        # print(utility_after - utility_before)
-        game_over = game.game_over()
+
+
+def test_no_friendly_fire(game, hero, pirate):
+    for unit in game.battlefield.unit_locations:
+        ai = BruteAI(game)
+        action, target = ai.decide_step(unit, epsilon=0)
+        choices = game.get_all_choices(unit)
+        actives = [c[0] for c in choices]
+        attack_actives = [a for a in actives if ActiveTags.ATTACK in a.tags]
+        if len(attack_actives)>0:
+            assert action not in attack_actives
+
+def test_hits_take_prio(game, hero, pirate):
+    for unit in game.battlefield.unit_locations:
+        bf = game.battlefield
+        bf.move(hero, 5+5j)
+        bf.unit_facings[hero] = -1j
+        ai = BruteAI(game)
+        action, target = ai.decide_step(unit, epsilon=0)
+        choices = game.get_all_choices(unit)
+        actives = [c[0] for c in choices]
+        attack_actives = [a for a in actives if ActiveTags.ATTACK in a.tags]
+        if len(attack_actives)>0:
+            assert action in attack_actives
+
+def test_own_turn_first(minigame, hero, pirate):
+
+    bf = minigame.battlefield
+    bf.unit_facings[hero] = 1j
+    bf.unit_facings[pirate] = 1 + 0j
+
+    ai = BruteAI(minigame)
+    active, target = ai.decide_step(pirate, epsilon=0)
+
+    assert active is pirate.turn_cw_active
+
+
+def test_moves_closer(minigame, hero, pirate):
+    bf = minigame.battlefield
+    bf.unit_facings[hero] = 1j
+    bf.unit_facings[pirate] = -1j
+
+    distance_before = bf.distance(hero,pirate)
+
+    ai = BruteAI(minigame)
+    active, target = ai.decide_step(pirate, epsilon=0)
+    pirate.activate(active, target)
+
+    distance_after = bf.distance(hero,pirate)
+
+    assert distance_after < distance_before
+
+def test_moves_closer_too(minigame, hero, pirate):
+    bf = minigame.battlefield
+    bf.unit_facings[hero] = 1j
+    bf.unit_facings[pirate] = -1j
+
+    distance_before = bf.distance(hero,pirate)
+
+    ai = BruteAI(minigame)
+    active, target = ai.decide_step(hero, epsilon=0)
+    hero.activate(active, target)
+
+    distance_after = bf.distance(hero,pirate)
+
+    assert distance_after < distance_before
+
+def chooses_rewarding_action(take_drugs, minigame, hero):
+
+    hero.give_active(take_drugs)
+    ai = BruteAI(minigame)
+
+    action, target = ai.decide_step(hero, epsilon=0)
+
+    assert int(action.uid / 1e7) == take_drugs.uid
+
+
+def avoids_punishing_action(take_punishment, minigame, hero):
+    hero.give_active(take_punishment)
+    ai = BruteAI(minigame)
+
+    action, target = ai.decide_step(hero, epsilon=0)
+
+    assert int(action.uid / 1e7) != take_punishment.uid
+
+
+

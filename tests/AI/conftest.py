@@ -70,5 +70,40 @@ def enabler(imba_ability):
     return _enabler
 
 
+@pytest.fixture()
+def take_drugs(minigame):
+
+    minigame.utility = lambda : 0
+
+    def drugs_callback(a, unit):
+        minigame.utility = lambda : 1e3
+
+
+    _imba_ability = Active(BattlefieldObject,
+                                [],
+                                Cost(readiness=0.1),
+                                [drugs_callback],
+                                [ActiveTags.ATTACK],
+                           "imba")
+
+    return _imba_ability
+
+
+@pytest.fixture()
+def take_punishment(minigame):
+    minigame.utility = lambda: 0
+
+    def drugs_callback(a, unit):
+        minigame.utility = lambda: -1e3
+
+    _imba_ability = Active(BattlefieldObject,
+                           [],
+                           Cost(readiness=0.1),
+                           [drugs_callback],
+                           [ActiveTags.ATTACK],
+                           "imba")
+
+    return _imba_ability
+
 
 

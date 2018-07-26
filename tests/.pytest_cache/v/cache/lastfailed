@@ -1,5 +1,7 @@
 {
   "AI/test_astar_AI.py::test_uses_enabler_abilities": true,
+  "AI/test_brute_AI.py::test_hits_take_prio": true,
+  "AI/test_brute_AI.py::test_no_suicide": true,
   "AI/test_brute_AI.py::test_returns_cell": true,
   "AI/test_random_AI.py::test_returns_cell": true,
   "AI/test_random_AI.py::test_returns_different_cells": true,

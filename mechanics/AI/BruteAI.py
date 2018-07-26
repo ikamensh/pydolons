@@ -19,8 +19,8 @@ class BruteAI:
             choices[util + random.random()] = a
 
         best_delta = max(choices.keys())
-        print(choices.keys())
-        print(best_delta)
+        # print(choices.keys())
+        # print(best_delta)
 
         return choices[best_delta]
 

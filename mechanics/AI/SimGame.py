@@ -26,21 +26,21 @@ class SimGame:
             yield sim
         my_context.the_game = old_game
 
-    def utility(self, fraction, schadenfreude = 5, use_position=True):
+    def utility(self, fraction, use_position=True):
         total = 0
 
         own_units = [unit for unit in self.units if self.fractions[unit] is fraction]
         opponent_units = [unit for unit in self.units if self.fractions[unit] is not fraction]
 
         total += sum([unit.utility for unit in own_units])
-        total -= sum([unit.utility for unit in opponent_units]) * schadenfreude
+        total -= sum([unit.utility for unit in opponent_units])
 
         if use_position:
-            total += self.position_utility(own_units, opponent_units) / (1 + 100 * len(self.units))
+            total += self.position_utility(own_units, opponent_units) / (1 + 1e13 * len(self.units))
 
         return total
 
-    def position_utility(self, own, opponent, schadenfreude = 5):
+    def position_utility(self, own, opponent):
 
         total = 0
         for own_unit in own:
@@ -50,25 +50,26 @@ class SimGame:
                 dist = self.battlefield.distance(own_unit, other)
 
                 # the closer the better
-                total += (3 - dist **(1/2)) * schadenfreude * importance
+                total += 1e5 * (3 - dist **(1/2)) * importance
 
                 # we want to face towards opponents
-                total += (1/dist) * ( 4 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
+                total += 1e9 * (1/dist) * ( 4 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
 
                 #its best for opponents to face away from us
-                total += (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * schadenfreude * importance
+                total += (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * importance
 
-        for unit in own:
-            for other in own:
-                importance = (unit.utility * other.utility) ** (1 / 2)
-                total -= importance * self.battlefield.distance(unit, other) ** (1/2)
+        # DELTA SPLIT!
+        # for unit in own:
+        #     for other in own:
+        #         importance = (unit.utility * other.utility) ** (1 / 2)
+        #         total -= importance * self.battlefield.distance(unit, other) ** (1/2)
 
         return total
 
-    def delta_util(self, active, target, use_positions=True, schadenfreude = 5):
+    def delta_util(self, active, target, use_positions=True):
 
         fraction = self.fractions[active.owner]
-        util_before = self.utility(fraction, schadenfreude, use_position=use_positions)
+        util_before = self.utility(fraction, use_position=use_positions)
 
         if active.simulate_callback:
             return self.fake_measure((active, target), fraction, use_position=use_positions) - util_before
@@ -77,7 +78,7 @@ class SimGame:
             sim_action = sim.find_active(active)
             sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
             sim_action.activate(sim_target)
-            util_after = sim.utility(fraction, schadenfreude, use_position=use_positions)
+            util_after = sim.utility(fraction, use_position=use_positions)
 
         return util_after - util_before
 
