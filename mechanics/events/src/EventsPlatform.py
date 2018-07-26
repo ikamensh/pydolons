@@ -1,27 +1,5 @@
-from my_utils.named_enums import auto, NameEnum
-
-class EventsChannels(NameEnum):
-    DamageChannel = auto()
-    HealingChannel = auto()
-
-    MovementChannel = auto()
-    TurnChannel = auto()
-    AttackChannel = auto()
-
-    ActiveChannel = auto()
-
-    UnitDiedChannel = auto()
-    ObstacleDestroyedChannel = auto()
-    ItemDestroyedChannel = auto()
-
-    BuffAppliedChannel = auto()
-    BuffDetachedChannel = auto()
-    BuffDispelledChannel = auto()
-    BuffExpiredChannel = auto()
-
-
-
 from GameLog import gamelog
+from mechanics.events import ActiveEvent, EventsChannels
 
 class EventsPlatform:
 
@@ -40,7 +18,8 @@ class EventsPlatform:
             interrupt.try_on_event(event)
 
         if not event.interrupted and event.check_conditions():
-            gamelog(event)
+            if not isinstance(event, ActiveEvent):
+                gamelog(event)
             event.resolve()
             for trigger in list(triggers):
                 assert isinstance(event, trigger.target_event_cls)

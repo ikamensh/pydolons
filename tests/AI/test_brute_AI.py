@@ -23,3 +23,15 @@ def test_is_deterministic(game):
         actions.add(action)
 
     assert 1 == len(actions)
+
+def test_chooses_imba_targets_enemy(game, imba_ability):
+
+
+    ai = BruteAI(game)
+    unit = list(game.battlefield.unit_locations.keys())[0]
+    unit.give_active(imba_ability)
+
+    action, target = ai.decide_step(unit, epsilon=0)
+
+    assert int(action.uid / 1e7) == imba_ability.uid
+    assert game.fractions[target] is not game.fractions[unit]

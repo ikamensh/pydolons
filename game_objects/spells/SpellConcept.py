@@ -46,10 +46,11 @@ class SpellConcept(Item):
 
     @property
     def bonuses(self):
+        #TODO test that same runes stack - set is a risk w/o copying the bonuses.
         if self.runes is None:
-            return []
+            return frozenset()
         else:
-            return flatten([rune.bonuses for rune in self.runes])
+            return frozenset(flatten([rune.bonuses for rune in self.runes]))
 
 
 

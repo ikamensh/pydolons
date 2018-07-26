@@ -2,7 +2,7 @@ from battlefield.Battlefield import Battlefield, Cell
 from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
-from mechanics.AI import BruteAI, RandomAI
+from mechanics.AI import BruteAI, RandomAI, SearchNode
 from mechanics.events import EventsPlatform
 import copy
 import my_context
@@ -180,9 +180,16 @@ class DreamGame:
         my_context.the_game = self
 
     @contextmanager
+    def temp_context(self):
+        old_game = my_context.the_game
+        my_context.the_game = self
+        yield
+        my_context.the_game = old_game
+
+    @contextmanager
     def simulation(self):
         old_game = my_context.the_game
-        sim:DreamGame = copy.deepcopy(old_game)
+        sim:DreamGame = copy.deepcopy(self)
         my_context.the_game = sim
         with gamelog.muted():
             yield sim
@@ -198,26 +205,6 @@ class DreamGame:
             for other in unit.actives:
                 if active.uid == other.uid:
                     return other
-
-    def get_possible_targets(self, active):
-
-        targeting_cls = active.targeting_cls
-        if targeting_cls is None:
-            return None
-
-        result = list()
-
-        if targeting_cls is Cell:
-            for c in self.battlefield.all_cells:
-                if active.check_target(c):
-                    result.append(c)
-            return result
-
-        if targeting_cls is BattlefieldObject:
-            for unit in self.battlefield.unit_locations:
-                if active.check_target(unit):
-                    result.append(unit)
-            return result
 
     def get_location(self, unit):
         assert unit in my_context.the_game.battlefield.unit_locations
@@ -244,7 +231,7 @@ class DreamGame:
         total += sum([unit.utility for unit in own_units])
         total -= sum([unit.utility for unit in opponent_units]) * schadenfreude
 
-        total += self.position_utility(own_units, opponent_units) / (10 * len(self.units))
+        total += self.position_utility(own_units, opponent_units) / (1 + 100 * len(self.units))
 
         return total
 
@@ -258,13 +245,13 @@ class DreamGame:
                 dist = self.battlefield.distance(own_unit, other)
 
                 # the closer the better
-                total -= dist **(1/2) * schadenfreude * importance
+                total += (3 - dist **(1/2)) * schadenfreude * importance
 
                 # we want to face towards opponents
-                total -= (1/dist) * self.battlefield.angle_to(own_unit, other)[0] / 45 * importance
+                total += (1/dist) * ( 4 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
 
                 #its best for opponents to face away from us
-                total += (1/dist) *self.battlefield.angle_to(other, own_unit)[0] / 45 * schadenfreude * importance
+                total += (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * schadenfreude * importance
 
         for unit in own:
             for other in own:
@@ -284,7 +271,57 @@ class DreamGame:
             sim_action.activate(sim_target)
             util_after = sim.utility(fraction, schadenfreude)
 
-        return util_before - util_after
+        return util_after - util_before
+
+    def get_possible_targets(self, active):
+
+        targeting_cls = active.targeting_cls
+        if targeting_cls is None:
+            return None
+
+        result = list()
+
+        if targeting_cls is Cell:
+            for c in self.battlefield.all_cells:
+                if active.check_target(c):
+                    result.append(c)
+            return result
+
+        if targeting_cls is BattlefieldObject:
+            for unit in self.battlefield.unit_locations:
+                if active.check_target(unit):
+                    result.append(unit)
+            return result
+
+    def get_all_actions(self, unit):
+        actives = unit.actives
+
+        actions = []
+        for a in actives:
+            if a.owner_can_afford_activation():
+                tgts = self.get_possible_targets(a)
+                if tgts:
+                    actions += [(a, tgt) for tgt in tgts]
+                elif tgts is None:
+                    actions.append( (a, None) )
+
+        return actions
+
+    def get_all_neighbouring_states(self, _unit):
+        with self.temp_context():
+            unit = self.find_unit(_unit)
+            actions = self.get_all_actions(unit)
+            nodes = []
+            for a in actions:
+                with self.simulation() as sim:
+                    active, target = a
+                    sim_active = sim.find_active(active)
+                    sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
+                    sim_active.activate(sim_target)
+                    nodes.append( SearchNode(self, a, sim) )
+
+            return nodes
+
 
 
 

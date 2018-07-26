@@ -13,7 +13,7 @@ def test_returns_targets_for_targeted_actions(game):
 
     battlefield = game.battlefield
     randomAI = RandomAI(game)
-    unit = list(battlefield.unit_locations.keys())[2]
+    unit = list(battlefield.unit_locations.keys())[1]
 
     for i in range(50):
         action, target = randomAI.decide_step(unit)
@@ -42,7 +42,7 @@ def test_returns_different_targets(game):
 
     for i in range(50):
         randomAI = RandomAI(game)
-        unit = list(game.battlefield.unit_locations.keys())[2]
+        unit = list(game.battlefield.unit_locations.keys())[1]
 
         action, target = randomAI.decide_step(unit)
         targets.setdefault(action, set()).add(target)

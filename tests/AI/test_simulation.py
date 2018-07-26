@@ -3,8 +3,6 @@ from content.triggers.immortality import immortality
 from content.triggers.damage_to_attacker import damage_to_attackers
 
 
-
-
 def test_simulation_units_dont_rly_die(game):
     real_unit_count_before = len( game.battlefield.unit_locations )
 
@@ -34,7 +32,7 @@ def test_simulation_units_dont_rly_move(game):
         sim_unit = list(sim.battlefield.unit_locations.keys())[0]
         sim_location_before = sim.battlefield.unit_locations[sim_unit]
 
-        sim.battlefield.move(sim_unit, 7j)
+        sim.battlefield.move(sim_unit, 0j)
 
         assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
 
@@ -54,7 +52,7 @@ def test_events_work(game):
         sim_unit = list(sim.battlefield.unit_locations.keys())[0]
         sim_location_before = sim.battlefield.unit_locations[sim_unit]
 
-        MovementEvent(sim_unit, 7j)
+        MovementEvent(sim_unit, 0j)
 
         assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
 
@@ -89,6 +87,17 @@ def test_triggers_present_in_sim(game, hero):
         sim_hero = sim.find_unit(hero)
         sim_hero.health -= 99999
         assert sim_hero.alive
+
+def test_sim_persists(game):
+
+    with game.simulation() as sim:
+        assert sim is not game
+        pirate = list(sim.battlefield.unit_locations.keys())[0]
+        pirate.health -= 99999
+        assert not pirate.alive
+
+    assert sim is not game
+    assert not pirate.alive
 
 
 

@@ -13,7 +13,7 @@ class BuffDetachedEvent(Event):
         return True
 
     def resolve(self):
-        self.buff.attached_to.buffs.remove(self.buff)
+        self.buff.attached_to.remove_buff(self.buff)
         my_context.the_game.turns_manager.remove_buff(self.buff)
 
     def __repr__(self):

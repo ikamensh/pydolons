@@ -62,8 +62,9 @@ class Unit(BattlefieldObject):
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.equipment :Equipment = base_type.equipment_cls(self)
-        self.abilities = []
-        self.buffs = []
+        self._abilities = []
+        self._buffs = []
+        self.bonuses = frozenset()
 
         self.alive = True
         self.is_obstacle = False
@@ -84,16 +85,26 @@ class Unit(BattlefieldObject):
             self.give_active(active)
 
 
+    def add_ability(self, ability):
+        self._abilities.append(ability)
+        self.recalc()
 
+    def remove_ability(self, ability):
+        self._abilities.remove(ability)
+        self.recalc()
 
+    def add_buff(self, buff):
+        self._buffs.append(buff)
+        self.recalc()
 
-    @property
-    def bonuses(self):
-        bonus_lists = [ability.bonuses for ability in self.abilities if ability.bonuses]
-        bonus_lists += [buff.bonuses for buff in self.buffs if buff.bonuses]
-        bonuses = list( flatten(bonus_lists))
+    def remove_buff(self, buff):
+        self._buffs.remove(buff)
+        self.recalc()
 
-        return bonuses
+    def recalc(self):
+        bonus_lists = [ability.bonuses for ability in self._abilities if ability.bonuses]
+        bonus_lists += [buff.bonuses for buff in self._buffs if buff.bonuses]
+        self.bonuses = frozenset(flatten(bonus_lists))
 
     @property
     def sight_range(self):
@@ -156,7 +167,7 @@ class Unit(BattlefieldObject):
         cpy = copy.deepcopy(active)
         self.actives.add(cpy)
         cpy.owner = self
-        cpy.uid = int(self.uid * 1e7 + cpy.uid)
+        cpy.uid = int(cpy.uid * 1e7 + self.uid)
         return cpy
 
     #TODO create target method that prompts the game to get right kind of targeting from the user
@@ -210,9 +221,11 @@ class Unit(BattlefieldObject):
     @property
     def utility(self):
         hp_factor = 1 + self.health
-        other_factors = (1+ self.mana + self.stamina + self.readiness/3) * len(self.actives) / 10
-        magnitude = sum([self.str, self.end, self.agi, self.prc, self.int, self.cha]) ** 2
+        other_factors = (1+ self.mana + self.stamina + self.readiness*3) * len(self.actives) / 10
+        magnitude = sum([self.str, self.end, self.agi, self.prc, self.int, self.cha])
         return magnitude * hp_factor * other_factors
 
     def __repr__(self):
-        return f"{self.type_name} with {self.health} HP and {int(self.utility)} utility"
+        return f"{self.type_name} with {self.health} HP"
+
+    # return f"{self.type_name} with {self.health} HP and {int(self.utility)} utility"

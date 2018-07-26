@@ -14,7 +14,7 @@ class AtbTurnsManager(TurnsManager):
             for unit in units:
                 self.add_unit(unit)
 
-            buffs = list(flatten([unit.buffs for unit in units]))
+            buffs = list(flatten([unit._buffs for unit in units]))
             self.managed += buffs
         self.time = 0
         gamelog(f"Action turn based battle started. its {self.time} now")
@@ -28,7 +28,7 @@ class AtbTurnsManager(TurnsManager):
                 m.duration -= time
 
         self.time += time
-        gamelog(f"{time:.3f} seconds passes. its {self.time:.3f} now")
+        # gamelog(f"{time:.3f} seconds passes. its {self.time:.3f} now")
 
     @staticmethod
     def time_until_turn(managee):

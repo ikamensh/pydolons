@@ -1,31 +1,37 @@
 from mechanics.AI import AstarAI
-from battlefield.Battlefield import Cell
-import pytest
+from mechanics.actives import Active
 
-@pytest.mark.skip(reason="currently not supported")
-def test_returns_cell(game):
 
-    ai = AstarAI(game.battlefield, game.fractions)
+def test_returns_actions(game):
+
+    ai = AstarAI(game)
     unit = list(game.battlefield.unit_locations.keys())[0]
 
-    cell = ai.decide_step(unit)
-    assert isinstance(cell, Cell)
+    action, target = ai.decide_step(unit)
+    assert isinstance(action, Active)
 
-@pytest.mark.skip(reason="currently not supported")
+
 def test_is_deterministic(game):
-    proposed_cells = set()
-    for i in range(10):
-        ai = AstarAI(game.battlefield, game.fractions)
+
+    actions = set()
+
+    for i in range(3):
+        ai = AstarAI(game)
         unit = list(game.battlefield.unit_locations.keys())[0]
 
-        cell = ai.decide_step(unit)
-        proposed_cells.add(cell)
-    assert len(proposed_cells) == 1
+        action, target = ai.decide_step(unit)
+        actions.add(action)
 
-@pytest.mark.skip(reason="currently not supported")
-def test_avoids_wall(walls_game):
-    game = walls_game
-    n_turns = game.loop(player_berserk=True)
+    assert 1 == len(actions)
 
-    assert n_turns < 20
+def test_chooses_imba_targets_enemy(game, imba_ability):
 
+
+    ai = AstarAI(game)
+    unit = list(game.battlefield.unit_locations.keys())[0]
+    unit.give_active(imba_ability)
+
+    action, target = ai.decide_step(unit)
+
+    assert int(action.uid / 1e7) == imba_ability.uid
+    assert game.fractions[target] is not game.fractions[unit]

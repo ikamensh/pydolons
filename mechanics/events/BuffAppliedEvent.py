@@ -15,7 +15,7 @@ class BuffAppliedEvent(Event):
 
     def resolve(self):
         self.buff.attached_to = self.unit
-        self.unit.buffs.append(self.buff)
+        self.unit.add_buff(self.buff)
         my_context.the_game.turns_manager.add_buff(self.buff)
 
     def __repr__(self):

@@ -9,7 +9,7 @@ def test_buff_applies(game, hero):
     buff = Buff(1)
     BuffAppliedEvent(buff, hero)
 
-    assert buff in hero.buffs
+    assert buff in hero._buffs
 
 
 def test_buff_expires(game, hero):
@@ -21,17 +21,17 @@ def test_buff_expires(game, hero):
     buff = Buff(1)
     BuffAppliedEvent(buff, hero)
 
-    assert buff in hero.buffs
+    assert buff in hero._buffs
     assert buff in game.turns_manager.managed
 
     atm.pass_time(0.5)
 
-    assert buff in hero.buffs
+    assert buff in hero._buffs
     assert buff in game.turns_manager.managed
 
     atm.pass_time(0.5)
 
-    assert buff not in hero.buffs
+    assert buff not in hero._buffs
     assert buff not in game.turns_manager.managed
 
 

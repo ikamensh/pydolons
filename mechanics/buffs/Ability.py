@@ -7,11 +7,11 @@ class Ability:
 
     def apply_to(self, unit):
         cpy = copy.deepcopy(self)
-        unit.abilities.append(cpy)
+        unit.add_ability(self)
         cpy.bound_to = unit
 
     def deactivate(self):
-        self.bound_to.abilities.remove(self)
+        self.bound_to.remove_ability(self)
         self.bound_to = None
 
 
