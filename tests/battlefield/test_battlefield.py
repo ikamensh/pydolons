@@ -1,5 +1,12 @@
 from battlefield.Battlefield import Cell
+from battlefield.Facing import Facing
 
+def test_movement_preserves_facing(game, hero):
+
+    for facing in [Facing.EAST, Facing.NORTH, Facing.WEST, Facing.SOUTH]:
+        game.battlefield.unit_facings[hero] = facing
+        game.battlefield.move(hero, (1+1j))
+        assert game.battlefield.unit_facings[hero] == facing
 
 
 def test_units_block_movement(game, hero):

@@ -9,6 +9,7 @@ from content.actives.std_movements import std_movements, turn_ccw, turn_cw
 from content.actives.std_melee_attack import std_attacks
 from my_utils.utils import flatten
 from character_creation.Masteries import Masteries, MasteriesEnum
+from contextlib import contextmanager
 
 import copy
 from functools import lru_cache
@@ -173,6 +174,7 @@ class Unit(BattlefieldObject):
     #TODO create target method that prompts the game to get right kind of targeting from the user
     def activate(self, active, user_targeting = None):
         assert active in self.actives
+        assert active.owner is self
         active.activate(user_targeting)
 
     @property
@@ -207,6 +209,8 @@ class Unit(BattlefieldObject):
 
         return result
 
+
+
     def pay(self, cost):
         self.mana -= cost.mana
         self.stamina -= cost.stamina
@@ -228,4 +232,17 @@ class Unit(BattlefieldObject):
     def __repr__(self):
         return f"{self.type_name} with {self.health} HP"
 
-    # return f"{self.type_name} with {self.health} HP and {int(self.utility)} utility"
+    @contextmanager
+    def virtual(self):
+        health_before = self.health
+        mana_before = self.mana
+        stamina_before = self.stamina
+        readiness_before = self.readiness
+
+        yield
+
+        self.health = health_before
+        self.mana = mana_before
+        self.stamina = stamina_before
+        self.readiness = readiness_before
+

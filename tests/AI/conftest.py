@@ -5,7 +5,7 @@ from battlefield.Battlefield import Battlefield
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
-from battlefield import Cell
+
 
 @pytest.fixture()
 def simple_battlefield():
@@ -40,6 +40,20 @@ def imba_ability():
                            "imba")
 
     return _imba_ability
+
+@pytest.fixture()
+def enabler(imba_ability):
+
+    enabler_callback = lambda a, unit: unit.give_active(imba_ability)
+
+    _enabler = Active(BattlefieldObject,
+                                [],
+                                Cost(readiness=0.1),
+                                [enabler_callback],
+                                [ActiveTags.ATTACK],
+                           "gives imba")
+
+    return _enabler
 
 
 

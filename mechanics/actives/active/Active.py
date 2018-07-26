@@ -2,11 +2,12 @@ from mechanics.events import ActiveEvent
 from mechanics.actives import ActiveTags
 from battlefield import Cell
 import copy
+from contextlib import contextmanager
 
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls, conditions, cost, callbacks, tags=None, name = "Mysterious"):
+    def __init__(self, targeting_cls, conditions, cost, callbacks, tags=None, name = "Mysterious", simulate = None):
         self.name = name
         self.targeting_cls = targeting_cls
         self.conditions = conditions
@@ -15,6 +16,7 @@ class Active:
         self.owner = None
         self.spell = None
         self.tags = tags or []
+        self.simulate_callback = simulate
 
         Active.last_uid += 1
         self.uid = Active.last_uid
@@ -55,6 +57,11 @@ class Active:
         new_active.spell = spell
 
         return new_active
+
+    @contextmanager
+    def simulate(self, target):
+        with self.simulate_callback(self, target):
+            yield
 
     def __repr__(self):
         return f"{self.name} active with {self.cost} cost ({self.tags[0] if len(self.tags) == 1 else self.tags}).".capitalize()

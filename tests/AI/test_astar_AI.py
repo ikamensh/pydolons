@@ -11,18 +11,18 @@ def test_returns_actions(game):
     assert isinstance(action, Active)
 
 
-def test_is_deterministic(game):
+def test_locations_are_intact(game):
 
-    actions = set()
+
+    locations_initial = (game.battlefield.unit_locations, game.battlefield.unit_facings)
 
     for i in range(3):
         ai = AstarAI(game)
         unit = list(game.battlefield.unit_locations.keys())[0]
 
-        action, target = ai.decide_step(unit)
-        actions.add(action)
+        ai.decide_step(unit)
+        assert locations_initial == (game.battlefield.unit_locations, game.battlefield.unit_facings)
 
-    assert 1 == len(actions)
 
 def test_chooses_imba_targets_enemy(game, imba_ability):
 
@@ -35,3 +35,14 @@ def test_chooses_imba_targets_enemy(game, imba_ability):
 
     assert int(action.uid / 1e7) == imba_ability.uid
     assert game.fractions[target] is not game.fractions[unit]
+
+def test_uses_enabler_abilities(game, enabler):
+
+
+    ai = AstarAI(game)
+    unit = list(game.battlefield.unit_locations.keys())[0]
+    unit.give_active(enabler)
+
+    action, target = ai.decide_step(unit)
+
+    assert int(action.uid / 1e7) == enabler.uid

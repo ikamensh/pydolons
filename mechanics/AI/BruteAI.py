@@ -6,12 +6,12 @@ class BruteAI:
         self.game = game
         self.random_ai = RandomAI(game)
 
-    def decide_step(self, active_unit, epsilon = 0.1):
+    def decide_step(self, active_unit, epsilon = 0.0):
 
         if random.random() < epsilon:
             return self.random_ai.decide_step(active_unit)
 
-        actions = self.game.get_all_actions(active_unit)
+        actions = self.game.get_all_choices(active_unit)
         choices = {}
 
         for a in actions:

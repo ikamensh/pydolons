@@ -20,7 +20,7 @@ def move_on_target_cell(active: Active, target: Cell):
     MovementEvent(active.owner, target)
 
 def turn_ccw_callback(active: Active, _):
-    TurnEvent(my_context.the_game.battlefield, active.owner, ccw=True)
+    TurnEvent(active.owner, ccw=True)
 
 def turn_cw_callback(active: Active, _):
-    TurnEvent(my_context.the_game.battlefield, active.owner, ccw=False)
+    TurnEvent(active.owner, ccw=False)

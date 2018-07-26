@@ -1,18 +1,15 @@
 from battlefield.Battlefield import Battlefield, Cell
-from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
-from mechanics.AI import BruteAI, RandomAI, SearchNode
+from mechanics.AI import BruteAI, RandomAI, AstarAI
+from mechanics.AI.SimGame import SimGame
 from mechanics.events import EventsPlatform
 import copy
 import my_context
-from GameLog import gamelog
-from contextlib import contextmanager
 
+class DreamGame(SimGame):
 
-class DreamGame:
-
-    def __init__(self, bf):
+    def __init__(self, bf, is_sim = False):
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
@@ -20,6 +17,7 @@ class DreamGame:
         self.random_ai = RandomAI(self)
         self.turns_manager = AtbTurnsManager()
         self.events_platform = EventsPlatform()
+        self.is_sim = is_sim
 
     @staticmethod
     def start_dungeon(dungeon, hero):
@@ -48,10 +46,12 @@ class DreamGame:
     def units(self):
         return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
 
+
     def add_unit(self, unit, cell,  fraction):
         self.fractions[unit] = fraction
         self.battlefield.place(unit, cell)
         self.turns_manager.add_unit(unit)
+
 
     def unit_died(self, unit):
         del self.fractions[unit]
@@ -59,11 +59,14 @@ class DreamGame:
         self.turns_manager.remove_unit(unit)
         unit.alive = False
 
+
     def obstacle_destroyed(self, obstacle):
         self.battlefield.remove(obstacle)
 
+
     def add_obstacle(self, obstacle, cell):
         self.battlefield.place(obstacle, cell)
+
 
     def loop(self):
         while True:
@@ -74,6 +77,7 @@ class DreamGame:
             if game_over:
                 print(game_over)
                 return self.turns_manager.time
+
 
     def game_over(self):
         own_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.PLAYER]
@@ -86,8 +90,10 @@ class DreamGame:
         else:
             return None
 
+
     def __repr__(self):
-        return "{} by {} dungeon with {} units in it.".format(self.battlefield.h, self.battlefield.w, len(self.battlefield.units_at))
+        return "Simulated" if self.is_sim else "" +f"{self.battlefield.h} by {self.battlefield.w} dungeon with {len(self.battlefield.units_at)} units in it."
+
 
     def order_move(self, unit, target_cell, AI_assist=True):
 
@@ -126,6 +132,7 @@ class DreamGame:
 
         return True, chosen_active
 
+
     def order_attack(self, unit, _target, AI_assist=True):
         unit_target = _target
         actives = unit.attack_actives
@@ -161,6 +168,7 @@ class DreamGame:
 
         return True, chosen_active
 
+
     @staticmethod
     def cost_heuristic(unit, factors = None):
         _factors = factors or {}
@@ -176,151 +184,31 @@ class DreamGame:
 
         return _
 
+
     def set_to_context(self):
         my_context.the_game = self
 
-    @contextmanager
-    def temp_context(self):
-        old_game = my_context.the_game
-        my_context.the_game = self
-        yield
-        my_context.the_game = old_game
-
-    @contextmanager
-    def simulation(self):
-        old_game = my_context.the_game
-        sim:DreamGame = copy.deepcopy(self)
-        my_context.the_game = sim
-        with gamelog.muted():
-            yield sim
-        my_context.the_game = old_game
-
-    def find_unit(self, unit):
-        for other in self.battlefield.unit_locations:
-            if unit.uid == other.uid:
-                return other
-
-    def find_active(self, active):
-        for unit in self.battlefield.unit_locations:
-            for other in unit.actives:
-                if active.uid == other.uid:
-                    return other
 
     def get_location(self, unit):
         assert unit in my_context.the_game.battlefield.unit_locations
         return self.battlefield.unit_locations[unit]
 
-    def print_all_units(self):
-        for unit, cell in self.battlefield.unit_locations.items():
-            x, y = cell.x, cell.y
-            print("There is a {} at ({},{})".format(unit, x, y))
 
     def get_unit_at(self, coord):
         return self.battlefield.units_at[coord]
+
 
     def get_units_distances_from(self, p):
         return self.battlefield.get_units_dists_to(p)
 
 
-    def utility(self, fraction, schadenfreude = 5):
-        total = 0
+    def print_all_units(self):
+        for unit, cell in self.battlefield.unit_locations.items():
+            x, y = cell.x, cell.y
+            print(f"There is a {unit} at ({x},{y})")
 
-        own_units = [unit for unit in self.units if self.fractions[unit] is fraction]
-        opponent_units = [unit for unit in self.units if self.fractions[unit] is not fraction]
 
-        total += sum([unit.utility for unit in own_units])
-        total -= sum([unit.utility for unit in opponent_units]) * schadenfreude
 
-        total += self.position_utility(own_units, opponent_units) / (1 + 100 * len(self.units))
-
-        return total
-
-    def position_utility(self, own, opponent, schadenfreude = 5):
-
-        total = 0
-        for own_unit in own:
-            for other in opponent:
-                importance = (own_unit.utility * other.utility) ** (1/2)
-
-                dist = self.battlefield.distance(own_unit, other)
-
-                # the closer the better
-                total += (3 - dist **(1/2)) * schadenfreude * importance
-
-                # we want to face towards opponents
-                total += (1/dist) * ( 4 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
-
-                #its best for opponents to face away from us
-                total += (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * schadenfreude * importance
-
-        for unit in own:
-            for other in own:
-                importance = (unit.utility * other.utility) ** (1 / 2)
-                total -= importance * self.battlefield.distance(unit, other) ** (1/2)
-
-        return total
-
-    def delta_util(self, action, target, schadenfreude = 5):
-
-        fraction = self.fractions[action.owner]
-
-        util_before = self.utility(fraction, schadenfreude)
-        with self.simulation() as sim:
-            sim_action = sim.find_active(action)
-            sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
-            sim_action.activate(sim_target)
-            util_after = sim.utility(fraction, schadenfreude)
-
-        return util_after - util_before
-
-    def get_possible_targets(self, active):
-
-        targeting_cls = active.targeting_cls
-        if targeting_cls is None:
-            return None
-
-        result = list()
-
-        if targeting_cls is Cell:
-            for c in self.battlefield.all_cells:
-                if active.check_target(c):
-                    result.append(c)
-            return result
-
-        if targeting_cls is BattlefieldObject:
-            for unit in self.battlefield.unit_locations:
-                if active.check_target(unit):
-                    result.append(unit)
-            return result
-
-    def get_all_actions(self, unit):
-        actives = unit.actives
-
-        actions = []
-        for a in actives:
-            if a.owner_can_afford_activation():
-                tgts = self.get_possible_targets(a)
-                if tgts:
-                    actions += [(a, tgt) for tgt in tgts]
-                elif tgts is None:
-                    actions.append( (a, None) )
-
-        return actions
-
-    def get_all_neighbouring_states(self, _unit):
-        with self.temp_context():
-            unit = self.find_unit(_unit)
-            actions = self.get_all_actions(unit)
-            nodes = []
-            for a in actions:
-                with self.simulation() as sim:
-                    active, target = a
-                    sim_active = sim.find_active(active)
-                    sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
-                    sim_active.activate(sim_target)
-                    nodes.append( SearchNode(self, a, sim) )
-
-            return nodes
 
 
 

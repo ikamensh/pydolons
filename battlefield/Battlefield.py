@@ -89,10 +89,14 @@ class Battlefield:
         p = self.unit_locations[unit]
         del self.units_at[p]
         del self.unit_locations[unit]
+        if not unit.is_obstacle:
+            del self.unit_facings[unit]
 
     def move(self, unit, new_position):
+        unit_facing = self.unit_facings[unit]
         self.remove(unit)
-        self.place(unit, new_position)
+        self.place(unit, new_position, unit_facing)
+
 
     def angle_to(self, unit, target):
         target_cell = target if isinstance(target, Cell) else self.unit_locations[target]
