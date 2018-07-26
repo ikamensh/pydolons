@@ -6,6 +6,7 @@ from game_objects.battlefield_objects import Unit, BaseType, Obstacle
 from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
 from mechanics.chances import ChanceCalculator
+from mechanics.fractions import Fractions
 
 @pytest.fixture()
 def no_chances(monkeypatch):
@@ -64,9 +65,10 @@ def pirate(pirate_basetype):
     yield Unit(pirate_basetype)
 
 @pytest.fixture()
-def game(battlefield):
+def game(battlefield, hero):
     _game = DreamGame(battlefield)
-    _game.fractions.update({unit: "QUACK" for unit in battlefield.unit_locations if not unit.is_obstacle})
+    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
+    _game.fractions[hero] = Fractions.PLAYER
     for unit in battlefield.unit_locations:
         _game.turns_manager.add_unit(unit)
     _game.set_to_context()

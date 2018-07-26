@@ -225,9 +225,9 @@ class Unit(BattlefieldObject):
     @property
     def utility(self):
         hp_factor = 1 + self.health
-        other_factors = (1+ self.mana + self.stamina + self.readiness*3) * len(self.actives) / 10
+        # other_factors = (1+ self.mana + self.stamina + self.readiness*3) * len(self.actives) / 10
         magnitude = sum([self.str, self.end, self.agi, self.prc, self.int, self.cha])
-        return magnitude * hp_factor * other_factors
+        return magnitude * hp_factor * 1
 
     def __repr__(self):
         return f"{self.type_name} with {self.health} HP"

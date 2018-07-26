@@ -13,7 +13,7 @@ def simple_battlefield():
     yield bf
 
 @pytest.fixture()
-def game(simple_battlefield, pirate,  hero):
+def minigame(simple_battlefield, pirate,  hero):
 
 
     _game = DreamGame(simple_battlefield)
@@ -31,6 +31,20 @@ def game(simple_battlefield, pirate,  hero):
 def imba_ability():
 
     imba_dmg_callback = lambda a, unit: unit.lose_health(99999, a.owner)
+
+    _imba_ability = Active(BattlefieldObject,
+                                [],
+                                Cost(readiness=0.1),
+                                [imba_dmg_callback],
+                                [ActiveTags.ATTACK],
+                           "imba")
+
+    return _imba_ability
+
+@pytest.fixture()
+def tiny_imba_ability():
+
+    imba_dmg_callback = lambda a, unit: unit.lose_health(9, a.owner)
 
     _imba_ability = Active(BattlefieldObject,
                                 [],

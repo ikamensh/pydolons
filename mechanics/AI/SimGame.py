@@ -26,7 +26,7 @@ class SimGame:
             yield sim
         my_context.the_game = old_game
 
-    def utility(self, fraction, schadenfreude = 5):
+    def utility(self, fraction, schadenfreude = 5, use_position=True):
         total = 0
 
         own_units = [unit for unit in self.units if self.fractions[unit] is fraction]
@@ -35,7 +35,8 @@ class SimGame:
         total += sum([unit.utility for unit in own_units])
         total -= sum([unit.utility for unit in opponent_units]) * schadenfreude
 
-        total += self.position_utility(own_units, opponent_units) / (1 + 100 * len(self.units))
+        if use_position:
+            total += self.position_utility(own_units, opponent_units) / (1 + 100 * len(self.units))
 
         return total
 
@@ -64,19 +65,19 @@ class SimGame:
 
         return total
 
-    def delta_util(self, active, target, schadenfreude = 5):
+    def delta_util(self, active, target, use_positions=True, schadenfreude = 5):
 
         fraction = self.fractions[active.owner]
-        util_before = self.utility(fraction, schadenfreude)
+        util_before = self.utility(fraction, schadenfreude, use_position=use_positions)
 
         if active.simulate_callback:
-            return self.fake_measure((active, target), fraction)
+            return self.fake_measure((active, target), fraction, use_position=use_positions) - util_before
 
         with self.simulation() as sim:
             sim_action = sim.find_active(active)
             sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
             sim_action.activate(sim_target)
-            util_after = sim.utility(fraction, schadenfreude)
+            util_after = sim.utility(fraction, schadenfreude, use_position=use_positions)
 
         return util_after - util_before
 
@@ -114,12 +115,12 @@ class SimGame:
 
         return choices
 
-    def fake_measure(self, choice, fraction):
+    def fake_measure(self, choice, fraction, use_position=True):
 
         active, target = choice
         with self.temp_context():
             with active.simulate(target):
-                return self.utility(fraction)
+                return self.utility(fraction, use_position=use_position)
 
     def get_all_neighbouring_states(self, _unit):
         with self.temp_context():

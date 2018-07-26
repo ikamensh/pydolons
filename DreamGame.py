@@ -42,10 +42,6 @@ class DreamGame(SimGame):
         return game
 
 
-    @property
-    def units(self):
-        return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
-
 
     def add_unit(self, unit, cell,  fraction):
         self.fractions[unit] = fraction
@@ -92,7 +88,7 @@ class DreamGame(SimGame):
 
 
     def __repr__(self):
-        return "Simulated" if self.is_sim else "" +f"{self.battlefield.h} by {self.battlefield.w} dungeon with {len(self.battlefield.units_at)} units in it."
+        return f"{'Simulated ' if self.is_sim else ''}{self.battlefield.h} by {self.battlefield.w} dungeon with {len(self.battlefield.units_at)} units in it."
 
 
     def order_move(self, unit, target_cell, AI_assist=True):
@@ -188,6 +184,10 @@ class DreamGame(SimGame):
     def set_to_context(self):
         my_context.the_game = self
 
+
+    @property
+    def units(self):
+        return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
 
     def get_location(self, unit):
         assert unit in my_context.the_game.battlefield.unit_locations

@@ -16,9 +16,11 @@ class BruteAI:
 
         for a in actions:
             util = self.game.delta_util(*a)
-            choices[util] = a
+            choices[util + random.random()] = a
 
         best_delta = max(choices.keys())
+        print(choices.keys())
+        print(best_delta)
 
         return choices[best_delta]
 
