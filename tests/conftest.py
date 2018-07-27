@@ -7,6 +7,8 @@ from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
 from mechanics.chances import ChanceCalculator
 from mechanics.fractions import Fractions
+from content.base_types.mud_golem import mud_golem_basetype
+
 
 @pytest.fixture()
 def no_chances(monkeypatch):
@@ -63,6 +65,10 @@ def hero(demohero_basetype):
 @pytest.fixture()
 def pirate(pirate_basetype):
     yield Unit(pirate_basetype)
+
+@pytest.fixture()
+def mud_golem():
+    yield(Unit(mud_golem_basetype))
 
 @pytest.fixture()
 def game(battlefield, hero):

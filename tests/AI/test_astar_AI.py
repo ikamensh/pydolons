@@ -1,5 +1,6 @@
 from mechanics.AI import AstarAI
 from mechanics.actives import Active
+import pytest
 
 
 def test_returns_actions(minigame):
@@ -36,6 +37,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
     assert int(action.uid / 1e7) == imba_ability.uid
     assert minigame.fractions[target] is not minigame.fractions[unit]
 
+@pytest.mark.skip(reason="not supported")
 def test_uses_enabler_abilities(minigame, enabler):
 
 

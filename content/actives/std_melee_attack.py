@@ -15,7 +15,8 @@ attack_unit_active = Active(BattlefieldObject,
                             [proximity_condition(1.5), within_angle(45)],
                             std_attack_cost,
                             [attack_callback],
-                            [ActiveTags.ATTACK])
+                            [ActiveTags.ATTACK],
+                            name="Standard attack")
 
 attack_cell_active = Active(Cell,
                             [proximity_condition(1.5), within_angle(45)],

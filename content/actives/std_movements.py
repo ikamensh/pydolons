@@ -3,7 +3,7 @@ from mechanics.actives import Cost
 from content.actives.callbacks import move_on_target_cell, turn_ccw_callback, turn_cw_callback
 from battlefield import Cell
 from content.actives.conditions import proximity_condition, within_angle, between_angles, target_cell_empty
-from content.actives.temp_simulation import sim_move_on_target_cell, sim_turn_ccw, sim_turn_cw
+from content.actives.temp_simulation import sim_move_on_target_cell, sim_turn
 
 
 
@@ -48,7 +48,7 @@ turn_cw = Active(None,
                  [turn_cw_callback],
                  [ActiveTags.TURNING],
                  "turn CW",
-                      simulate=sim_turn_cw)
+                      simulate=sim_turn(ccw=False))
 
 turn_ccw = Active(None,
                  None,
@@ -56,7 +56,7 @@ turn_ccw = Active(None,
                  [turn_ccw_callback],
                  [ActiveTags.TURNING],
                   "turn CCW",
-                    simulate=sim_turn_ccw)
+                    simulate=sim_turn(ccw=True))
 
 
 std_movements = [move_back, move_diag, move_forward, move_side]

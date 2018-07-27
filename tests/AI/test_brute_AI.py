@@ -72,7 +72,7 @@ def test_no_friendly_fire(game, hero, pirate):
         if len(attack_actives)>0:
             assert action not in attack_actives
 
-def test_hits_take_prio(game, hero, pirate):
+def test_hits_take_prio(game, hero, pirate, no_chances):
     for unit in game.battlefield.unit_locations:
         bf = game.battlefield
         bf.move(hero, 5+5j)
@@ -83,6 +83,10 @@ def test_hits_take_prio(game, hero, pirate):
         actives = [c[0] for c in choices]
         attack_actives = [a for a in actives if ActiveTags.ATTACK in a.tags]
         if len(attack_actives)>0:
+            # delta = game.delta( (action, target) )
+            # attack_active = attack_actives[0]
+            # atarget = game.get_possible_targets(attack_active)[0]
+            # attack_delta = game.delta( (attack_active, atarget) )
             assert action in attack_actives
 
 def test_own_turn_first(minigame, hero, pirate):

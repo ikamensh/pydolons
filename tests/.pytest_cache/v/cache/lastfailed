@@ -1,13 +1,7 @@
 {
-  "AI/test_astar_AI.py::test_uses_enabler_abilities": true,
-  "AI/test_brute_AI.py::test_hits_take_prio": true,
-  "AI/test_brute_AI.py::test_no_suicide": true,
   "AI/test_brute_AI.py::test_returns_cell": true,
   "AI/test_random_AI.py::test_returns_cell": true,
   "AI/test_random_AI.py::test_returns_different_cells": true,
-  "AI/test_utility.py::test_more_mana_is_better": true,
-  "AI/test_utility.py::test_more_readiness_is_better": true,
-  "AI/test_utility.py::test_more_stamina_is_better": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.AGI]": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.CHA]": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.END]": true,

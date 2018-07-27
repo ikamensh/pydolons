@@ -1,7 +1,7 @@
 from battlefield.Battlefield import Battlefield, Cell
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
-from mechanics.AI import BruteAI, RandomAI, AstarAI
+from mechanics.AI import BruteAI, RandomAI, BroadAI
 from mechanics.AI.SimGame import SimGame
 from mechanics.events import EventsPlatform
 import copy
@@ -13,7 +13,7 @@ class DreamGame(SimGame):
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
-        self.brute_ai = BruteAI(self)
+        self.brute_ai = BroadAI(self)
         self.random_ai = RandomAI(self)
         self.turns_manager = AtbTurnsManager()
         self.events_platform = EventsPlatform()
@@ -43,9 +43,9 @@ class DreamGame(SimGame):
 
 
 
-    def add_unit(self, unit, cell,  fraction):
+    def add_unit(self, unit, cell,  fraction, facing = None):
         self.fractions[unit] = fraction
-        self.battlefield.place(unit, cell)
+        self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
 
 

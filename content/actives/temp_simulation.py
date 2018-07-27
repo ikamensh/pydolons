@@ -1,6 +1,7 @@
 from mechanics.actives import Active
 from battlefield import Cell
 from contextlib import contextmanager
+from mechanics.AI.SimGame import SimGame
 import my_context
 
 @contextmanager
@@ -8,32 +9,26 @@ def sim_move_on_target_cell(active: Active, target: Cell):
     unit = active.owner
     location_before = my_context.the_game.battlefield.unit_locations[unit]
     my_context.the_game.battlefield.move(unit, target)
-    with unit.virtual():
+    with SimGame.virtual(unit):
         unit.pay(active.cost)
         yield
     my_context.the_game.battlefield.move(unit, location_before)
 
 
-@contextmanager
-def sim_turn_ccw(active: Active, _):
+def sim_turn(ccw):
+    turn = 1j if ccw else -1j
 
-    unit = active.owner
-    facing_before = my_context.the_game.battlefield.unit_facings[unit]
-    my_context.the_game.battlefield.unit_facings[unit] *= 1j
-    with unit.virtual():
-        unit.pay(active.cost)
-        yield
-    my_context.the_game.battlefield.unit_facings[unit] = facing_before
+    @contextmanager
+    def _(active: Active, _):
 
-@contextmanager
-def sim_turn_cw(active: Active, _):
+        unit = active.owner
+        facing_before = my_context.the_game.battlefield.unit_facings[unit]
+        my_context.the_game.battlefield.unit_facings[unit] *= turn
+        with SimGame.virtual(unit):
+            unit.pay(active.cost)
+            yield
+        my_context.the_game.battlefield.unit_facings[unit] = facing_before
 
-    unit = active.owner
-    facing_before = my_context.the_game.battlefield.unit_facings[unit]
-    my_context.the_game.battlefield.unit_facings[unit] *= -1j
-    with unit.virtual():
-        unit.pay(active.cost)
-        yield
-    my_context.the_game.battlefield.unit_facings[unit] = facing_before
+    return _
 
 

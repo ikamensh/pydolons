@@ -9,7 +9,6 @@ from content.actives.std_movements import std_movements, turn_ccw, turn_cw
 from content.actives.std_melee_attack import std_attacks
 from my_utils.utils import flatten
 from character_creation.Masteries import Masteries, MasteriesEnum
-from contextlib import contextmanager
 
 import copy
 from functools import lru_cache
@@ -209,8 +208,6 @@ class Unit(BattlefieldObject):
 
         return result
 
-
-
     def pay(self, cost):
         self.mana -= cost.mana
         self.stamina -= cost.stamina
@@ -222,27 +219,11 @@ class Unit(BattlefieldObject):
         self.last_damaged_by = source
         self.health -= dmg_amount
 
-    @property
-    def utility(self):
-        hp_factor = 1 + self.health
-        # other_factors = (1+ self.mana + self.stamina + self.readiness*3) * len(self.actives) / 10
-        magnitude = sum([self.str, self.end, self.agi, self.prc, self.int, self.cha])
-        return magnitude * hp_factor * 1
 
     def __repr__(self):
-        return f"{self.type_name} with {self.health} HP"
+        return f"{self.type_name} {self.uid} with {self.health} HP"
 
-    @contextmanager
-    def virtual(self):
-        health_before = self.health
-        mana_before = self.mana
-        stamina_before = self.stamina
-        readiness_before = self.readiness
 
-        yield
 
-        self.health = health_before
-        self.mana = mana_before
-        self.stamina = stamina_before
-        self.readiness = readiness_before
+
 
