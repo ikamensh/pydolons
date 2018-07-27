@@ -95,7 +95,8 @@ class SimGame:
         total -= sum([self.unit_utility(unit) for unit in opponent_units])
 
         if use_position:
-            total += self.position_utility(own_units, opponent_units) / (1 + 1e13 * len(self.units))
+            position_util = self.position_utility(own_units, opponent_units) / (1 + 1e13 * len(self.units))
+            total += position_util
 
         return total
 
@@ -109,13 +110,19 @@ class SimGame:
                 dist = self.battlefield.distance(own_unit, other)
 
                 # the closer the better
-                total += 1e5 * (6 - dist **(1/2)) * importance
+                distance_util = 1e5 * (6 - dist **(1/2)) * importance
+                assert distance_util >= 0
+                total += distance_util
 
                 # we want to face towards opponents
-                total += 1e9 * (1/dist) * ( 6 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
+                own_facing_util = 1e9 * (1/dist) * ( 6 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
+                assert own_facing_util >= 0
+                total += own_facing_util
 
                 #its best for opponents to face away from us
-                total += (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * importance
+                opponent_facing_away_util = (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * importance
+                assert opponent_facing_away_util >= 0
+                total += opponent_facing_away_util
 
         # DELTA SPLIT!
         # for unit in own:
