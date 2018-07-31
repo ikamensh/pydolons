@@ -127,3 +127,6 @@ def test_positions_can_go_out_of_utility(game):
 
     assert n_checked > 0
 
+
+
+

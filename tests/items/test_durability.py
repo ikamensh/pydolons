@@ -1,15 +1,18 @@
-from mechanics.events import DamageEvent
+from mechanics.events import AttackEvent
 import pytest
+import my_context
 
 
-def test_loses_durability(hero, weapon, pirate, armor, no_chances):
+def test_loses_durability(game, hero, weapon, pirate, armor, no_chances, monkeypatch):
     hero.equipment["hands"] = weapon
     pirate.equipment["body"] = armor
 
     weapon_dur_before = weapon.durability
     armor_dur_before = armor.durability
 
-    DamageEvent(None, pirate, source=hero, weapon=weapon)
+    monkeypatch.setattr(my_context.the_game.battlefield, 'x_sees_y', lambda x,y:True, raising=False)
+
+    AttackEvent(hero, pirate)
 
     weapon_dur_after = weapon.durability
     armor_dur_after = armor.durability

@@ -1,44 +1,79 @@
-from DreamGame import DreamGame
-from content.base_types.demo_hero import demohero_basetype
-from content.dungeons.demo_dungeon_walls import walls_dungeon
-from game_objects.battlefield_objects import Unit
-import sys
-import my_context
+import networkx as nx
+import random
+import numpy as np
+from collections import namedtuple
 
-def get_size(obj, seen=None):
-    """Recursively finds size of objects"""
-    size = sys.getsizeof(obj)
-    if seen is None:
-        seen = set()
-    obj_id = id(obj)
-    if obj_id in seen:
-        return 0
-    # Important mark as seen *before* entering recursion to gracefully handle
-    # self-referential objects
-    seen.add(obj_id)
-    if isinstance(obj, dict):
-        size += sum([get_size(v, seen) for v in obj.values()])
-        size += sum([get_size(k, seen) for k in obj.keys()])
-    elif hasattr(obj, '__dict__'):
-        size += get_size(obj.__dict__, seen)
-    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
-        size += sum([get_size(i, seen) for i in obj])
-    return size
+G=nx.gnp_random_graph(4,0.2,directed=True)
 
-game = DreamGame.start_dungeon(walls_dungeon, Unit(demohero_basetype))
-print(my_context.the_game is game)
-
-sims = []
-for i in range(1000):
-    sims.append(game.simulation())
+# DAG = nx.DiGraph([(u,v,{'weight':random.randint(-10,10)}) for (u,v) in G.edges() if u<v])
+# G = nx.Graph()
 
 
-print(len(sims))
+w = 40
+h = 30
+the_map = np.chararray([w, h])
+the_map[:] = 'x'
 
-print( get_size(sims) )
+area = w*h
 
-print( get_size(game) )
+n_rooms = len(G.nodes)
 
-print(my_context.the_game is game)
+boxes = {}
+Box = namedtuple("Box","x1 x2 y1 y2")
+
+def gen_random_box(w,h):
+    x1, y1 = random.randint(0,w), random.randint(0,h)
+    x2, y2 = x1 + random.randint(2,w/2), y1 + random.randint(2,h/2)
+
+    while x2 >= w or y2 >= h:
+        x1, y1 = random.randint(0, w), random.randint(0, h)
+        x2, y2 = x1 + random.randint(2, w / 2), y1 + random.randint(2, h / 2)
+
+    return Box(x1,x2,y1,y2)
+
+
+def check_crossection(bxs):
+    result = False
+    for b1 in bxs:
+        for b2 in bxs:
+            if b1 is b2:
+                continue
+
+            if b2.y1 <= b1.y1 <= b2.y2:
+                return True
+            elif b1.y1 <= b2.y1 <= b1.y2:
+                return True
+
+            if b2.x1 <= b1.x1 <= b2.x2:
+                return True
+            elif b1.x1 <= b2.x1 <= b1.x2:
+                return True
+
+    return result
+
+for node in G.nodes:
+    boxes[node] = gen_random_box(w, h)
+
+n_tries = 0
+while check_crossection(boxes.values()):
+    n_tries += 1
+    print(n_tries)
+    for node in G.nodes:
+        boxes[node] = gen_random_box(w, h)
+
+def onto_map(boxes):
+    for b in boxes:
+        the_map[b.x1:b.x2, b.y1:b.y2] = '.'
+        print(the_map[b.x1, b.y1])
+
+
+onto_map(boxes.values())
+
+with open('temp.txt', 'w') as fp:
+    for row in range(the_map.shape[0]):
+        fp.write( the_map[row].tobytes().decode("utf-8") + '\n')
+
+
+
 
 

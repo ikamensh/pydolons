@@ -1,4 +1,4 @@
-from mechanics.combat.AttackEvent import AttackEvent
+from mechanics.events import AttackEvent
 from battlefield.Cell import Cell
 from battlefield.Facing import Facing
 

@@ -6,16 +6,14 @@ from mechanics.chances import ImpactFactor
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
 
-    def __init__(self, damage, target, *,  weapon = None, source=None, impact_factor=ImpactFactor.HIT):
+    def __init__(self, damage, target, *, source=None, impact_factor=ImpactFactor.HIT):
         self.source = source
         self.target = target
-        self.weapon = weapon
-        if weapon:
-            assert damage is None
-            self.damage = weapon.damage
-        else:
-            self.damage = damage
+        self.damage = damage
         self.impact_factor = impact_factor
+
+        self.weapon_dur_dmg = None
+
         super().__init__()
 
 
@@ -35,12 +33,8 @@ class DamageEvent(Event):
             if body_armor and body_armor.durability:
                 body_armor.durability -= armor_dur_dmg
 
-        if self.weapon and self.weapon.durability:
-            self.weapon.durability -= weapon_dur_dmg
-
+        self.weapon_dur_dmg = weapon_dur_dmg
         self.target.lose_health(self.amount, self.source)
-
-
 
 
     def __repr__(self):

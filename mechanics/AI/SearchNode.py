@@ -19,3 +19,6 @@ class SearchNode:
 
         return nodes
 
+    def __repr__(self):
+        return f"{len(self.game.units) if self.game else 'Lazy'} via {self.choice[0]} targeted on {self.choice[1]}"
+

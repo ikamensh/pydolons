@@ -1,7 +1,7 @@
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
-from game_objects.battlefield_objects import Unit
+from game_objects.battlefield_objects import Unit, BattlefieldObject
 
 class Battlefield:
     def __init__(self, w, h):
@@ -24,18 +24,19 @@ class Battlefield:
         return Vision._distance(p1, p2)
 
     def distance(self, one, another):
-        if not isinstance(one, Cell):
+        if isinstance(one, BattlefieldObject):
             one = self.unit_locations[one]
-        if not isinstance(another, Cell):
+        if isinstance(another, BattlefieldObject):
             another = self.unit_locations[another]
-        return self._distance(one, another)
+        return self._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
 
     def get_units_dists_to(self, p, units_subset = None):
         unit_dist_tuples = [ (u, self.distance(p, u))
                              for u in units_subset or self.unit_locations]
         return sorted(unit_dist_tuples, key=lambda x:x[1])
 
-    def get_unit_at(self, cell):
+    def get_unit_at(self, _cell):
+        cell = Cell.maybe_complex(_cell)
         if cell in self.units_at:
             return self.units_at[cell]
         else:

@@ -2,6 +2,7 @@
   "AI/test_brute_AI.py::test_returns_cell": true,
   "AI/test_random_AI.py::test_returns_cell": true,
   "AI/test_random_AI.py::test_returns_different_cells": true,
+  "AI/test_utility.py::test_chooses_imba_targets_enemy": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.AGI]": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.CHA]": true,
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.END]": true,

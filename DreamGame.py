@@ -47,6 +47,7 @@ class DreamGame(SimGame):
         self.fractions[unit] = fraction
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
+        unit.alive = True
 
 
     def unit_died(self, unit):

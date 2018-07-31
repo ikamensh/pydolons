@@ -32,6 +32,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability, hero, pirate):
 
 
     ai = BroadAI(minigame)
+
     ingame_imba = hero.give_active(imba_ability)
 
     action, target = ai.decide_step(hero)
@@ -62,15 +63,17 @@ def test_uses_enabler_abilities(minigame, enabler):
 
     ai = BroadAI(minigame)
     unit = list(minigame.battlefield.unit_locations.keys())[0]
-    unit.give_active(enabler)
+    minigame.battlefield.move(unit, 0j)
+    ingame_imba = unit.give_active(enabler)
 
     action, target = ai.decide_step(unit)
 
-    assert int(action.uid / 1e7) == enabler.uid
+    assert action is ingame_imba
 
-
-def test_no_friendly_fire(battlefield, hero,  mud_golem, pirate_basetype):
-    _game = DreamGame(battlefield)
+@pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
+def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype):
+    _game = DreamGame(simple_battlefield)
+    _game.set_to_context()
     _game.add_unit(mud_golem, 3+3j, Fractions.ENEMY, 1j)
     _game.add_unit(hero, 3 + 4j, Fractions.PLAYER, 1+0j)
 
@@ -83,7 +86,7 @@ def test_no_friendly_fire(battlefield, hero,  mud_golem, pirate_basetype):
     _game.add_unit(pirate2, 4 + 5j, Fractions.ENEMY, -1+0j)
     _game.add_unit(pirate3, 5 + 3j, Fractions.ENEMY, 1+0j)
 
-    for i in range(50):
+    for i in range(10):
 
         active_unit = _game.turns_manager.get_next()
         active, target = _game.brute_ai.decide_step(active_unit)

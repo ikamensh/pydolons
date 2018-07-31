@@ -23,7 +23,8 @@ class Obstacle(BattlefieldObject):
         return copy.deepcopy(self)
 
 
-    def lose_health(self, dmg_amount, source):
+    def lose_health(self, dmg_amount, source=None):
         assert dmg_amount >= 0
-        self.last_damaged_by = source
+        if source:
+            self.last_damaged_by = source
         self.health -= dmg_amount

@@ -1,5 +1,5 @@
 from mechanics.events import Trigger
-from mechanics.combat.AttackEvent import AttackEvent
+from mechanics.events import AttackEvent
 from mechanics.events import DamageEvent
 import my_context
 

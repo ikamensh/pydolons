@@ -214,10 +214,13 @@ class Unit(BattlefieldObject):
         self.lose_health(cost.health, self)
         self.readiness -= cost.readiness
 
-    def lose_health(self, dmg_amount, source):
+    def lose_health(self, dmg_amount, source=None):
         assert dmg_amount >= 0
-        self.last_damaged_by = source
+        if source:
+            self.last_damaged_by = source
+
         self.health -= dmg_amount
+
 
 
     def __repr__(self):

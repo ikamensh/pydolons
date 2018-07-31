@@ -52,7 +52,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
 
 
 def test_no_suicide(game):
-    for i in range(50):
+    for i in range(10):
 
         active_unit = game.turns_manager.get_next()
         active, target = game.brute_ai.decide_step(active_unit)

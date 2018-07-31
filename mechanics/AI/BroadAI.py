@@ -18,7 +18,8 @@ class BroadAI:
             circle2 += node.get_all_neighbouring_states(active_unit)
 
         fraction = self.game.fractions[active_unit]
-        best_node2 = max(circle2, key=lambda x: x.utility(fraction))
+        utilities = {node:(node.utility(fraction) + node.node_from.utility(fraction)) for node in circle2}
+        best_node2 = max(circle2, key=lambda x: utilities[x])
         best_node1 = best_node2.node_from
 
         return best_node1.choice

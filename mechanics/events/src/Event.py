@@ -3,9 +3,10 @@ import my_context
 
 
 class Event:
-    def __init__(self):
+    def __init__(self, fire=True):
         self.interrupted = False
-        my_context.the_game.events_platform.process_event(self)
+        if fire:
+            my_context.the_game.events_platform.process_event(self)
 
     @abstractmethod
     def resolve(self):

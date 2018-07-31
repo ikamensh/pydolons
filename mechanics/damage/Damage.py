@@ -35,6 +35,23 @@ class Damage:
                Damage.calculate_weapon_dur_damage(damage.amount, damage_final, impact_factor)
 
     @staticmethod
+    def calculate_expected_damage(chances, damage, target):
+
+        result = 0
+        chance_crit, chance_hit, chance_graze = chances
+        running_chance = 1
+
+        result += Damage.calculate_damage(damage, target, ImpactFactor.CRIT)[0] * chance_crit
+        running_chance *= (1-chance_crit)
+        result += Damage.calculate_damage(damage, target, ImpactFactor.HIT)[0] * chance_hit
+        running_chance *= (1-chance_hit)
+        result += Damage.calculate_damage(damage, target, ImpactFactor.GRAZE)[0] * chance_graze
+
+        return result
+
+
+
+    @staticmethod
     def calculate_armor_dur_damage(final_damage, armor_amount, target_hp):
         if final_damage == 0:
             return 0

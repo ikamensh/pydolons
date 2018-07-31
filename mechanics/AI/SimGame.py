@@ -82,6 +82,13 @@ class SimGame:
         unit.stamina = stamina_before
         unit.readiness = readiness_before
 
+    @contextmanager
+    def simulate_death(self, unit):
+        self.unit_died(unit)
+        yield
+        self.add_unit(unit)
+
+
     # The marvel of convoluted math,
     # we evaluate how good the game is for a given fraction with a single number!
 
@@ -135,9 +142,9 @@ class SimGame:
     @staticmethod
     def unit_utility(unit):
         hp_factor = 1 + unit.health
-        # other_factors = (1+ self.mana + self.stamina + self.readiness*3) * len(self.actives) / 10
+        other_factors = 1 # + (unit.mana + unit.stamina + unit.readiness*3) * len(unit.actives) / 1000
         magnitude = sum([unit.str, unit.end, unit.agi, unit.prc, unit.int, unit.cha])
-        return magnitude * hp_factor * 1
+        return magnitude * hp_factor * 1 * other_factors
 
 
 

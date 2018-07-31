@@ -21,6 +21,25 @@ class Equipment:
     def __getitem__(self, slot_name):
         return self.map[slot_name].content
 
+    def equip_item(self, item):
+        slot_type = item.item_type
+
+        if slot_type is None:
+            return False
+
+        all_slots_of_type = self.slots_per_type[slot_type]
+        if not all_slots_of_type:
+            return False
+
+        empty_slots_of_type = [slot for slot in all_slots_of_type if not slot.content]
+
+        if empty_slots_of_type:
+            chosen_slot = empty_slots_of_type[0]
+            chosen_slot.content = item
+            return True
+        else:
+            return False
+
     def equip(self, slot_from):
         """
         Choose a fitting slot, and exchange items with it.
