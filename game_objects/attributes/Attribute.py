@@ -16,6 +16,14 @@ class Attribute:
             new_bonus = self.bonus + other
 
         return Attribute(new_base, new_multiplier, new_bonus)
+    
+    def __mul__(self, other):
+        new_base = self.base * other
+        new_multiplier = self.multiplier * other
+        new_bonus = self.bonus * other
+        return Attribute(new_base, new_multiplier, new_bonus)
+
+        
 
     def value(self):
         """

@@ -1,4 +1,5 @@
-from game_objects.items import StandardSlots, ItemTypes
+from game_objects.items import StandardSlots, ItemTypes, WearableItem
+import itertools
 
 
 class Equipment:
@@ -12,6 +13,15 @@ class Equipment:
 
         self.owner = owner
 
+
+    @property
+    def equiped_items(self):
+        return [slot.content for slot in self.contents if slot.content is not None]
+
+    @property
+    def bonuses(self):
+        return itertools.chain.from_iterable([item.bonuses for item in self.equiped_items])
+
     def remove_item(self, slot):
         return slot.pop_item()
 
@@ -21,7 +31,20 @@ class Equipment:
     def __getitem__(self, slot_name):
         return self.map[slot_name].content
 
+    def unequip_item(self, item):
+        for slot in self.contents:
+            if slot.content is item:
+                slot.pop_item()
+                self.owner.inventory.add(item)
+                self.owner.recalc()
+                return
+
+
     def equip_item(self, item):
+
+        if not isinstance(item, WearableItem):
+            return False
+
         slot_type = item.item_type
 
         if slot_type is None:
@@ -36,6 +59,7 @@ class Equipment:
         if empty_slots_of_type:
             chosen_slot = empty_slots_of_type[0]
             chosen_slot.content = item
+            self.owner.recalc()
             return True
         else:
             return False
@@ -48,6 +72,9 @@ class Equipment:
         """
 
         item = slot_from.content
+        if not isinstance(item, WearableItem):
+            return False
+
         slot_type = item.item_type
         if slot_type is None:
             return False
@@ -64,6 +91,7 @@ class Equipment:
             chosen_slot = all_slots_of_type[0]
 
         chosen_slot.swap_item(slot_from)
+        self.owner.recalc()
         return True
 
 

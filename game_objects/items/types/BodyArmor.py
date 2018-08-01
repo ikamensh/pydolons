@@ -15,3 +15,4 @@ class BodyArmor(WearableItem):
             return copy.copy(self._armor)
         else:
             return self._armor * self.durability_factor
+

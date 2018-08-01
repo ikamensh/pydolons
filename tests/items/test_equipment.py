@@ -12,11 +12,11 @@ def test_type_matters(weapon):
     with pytest.raises(AssertionError):
         eq["body"] = weapon
 
-def test_equip(weapon):
+def test_equip(weapon, hero):
     inventory_slot = Slot("inventory_01")
     inventory_slot.content = weapon
 
-    eq = Equipment(None)
+    eq = Equipment(hero)
     eq.equip(inventory_slot)
 
     assert eq["hands"] == weapon

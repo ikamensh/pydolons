@@ -1,4 +1,5 @@
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes
+from game_objects.battlefield_objects.CharAttributes import HP_PER_STR, MANA_PER_INT, STAMINA_PER_END, UNARMED_DAMAGE_PER_STR
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
 from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
@@ -14,10 +15,7 @@ import copy
 from functools import lru_cache
 
 class Unit(BattlefieldObject):
-    HP_PER_STR = 25
-    STAMINA_PER_END = 10
-    MANA_PER_INT = 10
-    UNARMED_DAMAGE_PER_STR = 5
+    
 
     str = AttributeWithBonuses("str_base", CharAttributes.STREINGTH)
     end = AttributeWithBonuses("end_base", CharAttributes.ENDURANCE)
@@ -104,6 +102,7 @@ class Unit(BattlefieldObject):
     def recalc(self):
         bonus_lists = [ability.bonuses for ability in self._abilities if ability.bonuses]
         bonus_lists += [buff.bonuses for buff in self._buffs if buff.bonuses]
+        bonus_lists += self.equipment.bonuses
         self.bonuses = frozenset(flatten(bonus_lists))
 
     @property
@@ -120,15 +119,15 @@ class Unit(BattlefieldObject):
 
     @property
     def max_health_base(self):
-        return Attribute(self.str * Unit.HP_PER_STR, 100, 0)
+        return Attribute(self.str * HP_PER_STR, 100, 0)
 
     @property
     def max_mana_base(self):
-        return Attribute(self.int * Unit.MANA_PER_INT, 100, 0)
+        return Attribute(self.int * MANA_PER_INT, 100, 0)
 
     @property
     def max_stamina_base(self):
-        return Attribute(self.end * Unit.STAMINA_PER_END, 100, 0)
+        return Attribute(self.end * STAMINA_PER_END, 100, 0)
 
     @property
     def initiative_base(self):
@@ -186,7 +185,7 @@ class Unit(BattlefieldObject):
 
 
     def get_unarmed_weapon(self):
-        dmg = Damage(amount=self.str * Unit.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
+        dmg = Damage(amount=self.str * UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
         return Weapon(name="Fists", damage=dmg, mastery=MasteriesEnum.UNARMED)
 
 
