@@ -55,6 +55,7 @@ class Character:
             self.preliminary_attributes = copy.copy(self.base_type.attributes)
         self.preliminary_attributes[attrib_enum] += 1
 
+
     def increase_mastery(self, mastery):
         if not mastery in self.masteries_can_go_up:
             return
@@ -71,6 +72,7 @@ class Character:
 
         self.masteries = self.preliminary_masteries
         self.preliminary_masteries = None
+
 
     def reset(self):
         self.preliminary_attributes = None

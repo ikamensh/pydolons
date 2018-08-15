@@ -55,6 +55,7 @@ class Unit(BattlefieldObject):
         self.readiness = 0
         self.disabled = False
         self.masteries = masteries or Masteries(base_type.xp)
+        self.xp = base_type.xp
 
         self.type_name = base_type.type_name
         self.actives = set(base_type.actives)
@@ -225,7 +226,6 @@ class Unit(BattlefieldObject):
             self.last_damaged_by = source
 
         self.health -= dmg_amount
-
 
 
     def __repr__(self):

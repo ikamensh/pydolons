@@ -3,12 +3,13 @@ from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
 from mechanics.AI import BruteAI, RandomAI, BroadAI
 from mechanics.events import EventsPlatform
+from mechanics.rpg.experience import exp_rule
 import copy
 import my_context
 
 class DreamGame:
 
-    def __init__(self, bf, is_sim = False):
+    def __init__(self, bf, rules=None, is_sim = False):
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
@@ -18,6 +19,9 @@ class DreamGame:
         self.events_platform = EventsPlatform()
         self.is_sim = is_sim
 
+        for rule in (rules or []):
+            rule()
+
     @classmethod
     def start_dungeon(cls, dungeon, hero):
 
@@ -25,7 +29,7 @@ class DreamGame:
         unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
-        game = cls(bf)
+        game = cls(bf, [exp_rule])
         if unit_locations:
             bf.place_many(unit_locations)
         game.the_hero = hero
@@ -50,7 +54,6 @@ class DreamGame:
 
 
     def unit_died(self, unit):
-        del self.fractions[unit]
         self.battlefield.remove(unit)
         self.turns_manager.remove_unit(unit)
         unit.alive = False

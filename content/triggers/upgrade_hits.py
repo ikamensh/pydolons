@@ -8,9 +8,9 @@ def upgrade_hits(unit, n_hits):
         damage_event.impact_factor = ImpactFactor.CRIT
 
     trig = CounteredInterrupt(DamageEvent,
-                              conditions={"source":unit, "impact_factor":ImpactFactor.HIT},
+                              conditions={lambda t,e : e.source is unit and e.impact_factor is ImpactFactor.HIT},
                               n_counters=n_hits,
                               interrupt_event=False,
-                              event_callbacks=[upgrade_hit_to_crit_callback])
+                              callbacks=[upgrade_hit_to_crit_callback])
     return trig
 
