@@ -5,7 +5,7 @@ from mechanics.events import ItemDestroyedEvent
 class WearableItem(Item):
 
     durability = DynamicParameter("max_durability", on_zero_callbacks=[ItemDestroyedEvent])
-    energy = DynamicParameter
+    energy = DynamicParameter("max_energy")
 
     def __init__(self, name, item_type, *, blueprint=None, quality=None, material=None, max_durability=None):
         super().__init__(name, item_type)

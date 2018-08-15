@@ -5,8 +5,6 @@ from mechanics.actives import ActiveTags
 from mechanics.actives import Cost
 
 
-
-
 Node = namedtuple("PathNode", "pos facing")
 
 from astar import AStar

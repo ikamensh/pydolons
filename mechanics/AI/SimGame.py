@@ -2,11 +2,12 @@ from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.AI import SearchNode
 from battlefield.Battlefield import Cell
 from GameLog import gamelog
+from DreamGame import DreamGame
 from contextlib import contextmanager
 import my_context
 import copy
 
-class SimGame:
+class SimGame(DreamGame):
 
     @contextmanager
     def temp_context(self):
@@ -17,13 +18,10 @@ class SimGame:
 
     @contextmanager
     def simulation(self):
-        old_game = my_context.the_game
         sim = copy.deepcopy(self)
         sim.is_sim = True
-        my_context.the_game = sim
-        with gamelog.muted():
+        with gamelog.muted(), sim.temp_context():
             yield sim
-        my_context.the_game = old_game
 
 
     def get_all_neighbouring_states(self, _unit):
@@ -67,31 +65,9 @@ class SimGame:
         _delta = self.get_neighbour(choice).utility(_fraction) - self.utility(_fraction)
         return _delta
 
-    @staticmethod
-    @contextmanager
-    def virtual(unit):
-        health_before = unit.health
-        mana_before = unit.mana
-        stamina_before = unit.stamina
-        readiness_before = unit.readiness
-
-        yield
-
-        unit.health = health_before
-        unit.mana = mana_before
-        unit.stamina = stamina_before
-        unit.readiness = readiness_before
-
-    @contextmanager
-    def simulate_death(self, unit):
-        self.unit_died(unit)
-        yield
-        self.add_unit(unit)
-
 
     # The marvel of convoluted math,
     # we evaluate how good the game is for a given fraction with a single number!
-
     def utility(self, fraction, use_position=True):
         total = 0
 

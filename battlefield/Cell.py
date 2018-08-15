@@ -1,5 +1,6 @@
 from cmath import phase, pi
 
+
 class Cell:
     def __init__(self, x, y):
         self.x = x

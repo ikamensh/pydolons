@@ -29,10 +29,16 @@ class Unit(BattlefieldObject):
     max_stamina = AttributeWithBonuses("max_stamina_base", CharAttributes.STAMINA)
     _initiative = AttributeWithBonuses("initiative_base", CharAttributes.INITIATIVE)
 
+    armor = AttributeWithBonuses("armor_base", CharAttributes.ARMOR)
+    resists = AttributeWithBonuses("resists_base", CharAttributes.RESISTANCES)
+
+
 
     health = DynamicParameter("max_health", [UnitDiedEvent])
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
+
+
 
     last_uid = 0
 
@@ -55,11 +61,11 @@ class Unit(BattlefieldObject):
 
         self.unarmed_damage_type = base_type.unarmed_damage_type
         self.unarmed_chances = base_type.unarmed_chances
-        self.resists = Resistances(base_type.resists)
+        self.resists_base = Resistances(base_type.resists)
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
-        self.equipment :Equipment = base_type.equipment_cls(self)
+        self.equipment :Equipment = Equipment(self)
         self._abilities = []
         self._buffs = []
         self.bonuses = frozenset()
@@ -110,7 +116,7 @@ class Unit(BattlefieldObject):
         return 1 + (self.prc/4) ** (2/3)
 
     @property
-    def armor(self):
+    def armor_base(self):
         body_armor = self.equipment["body"]
         if body_armor:
             return body_armor.armor + self.natural_armor

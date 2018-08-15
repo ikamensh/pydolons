@@ -1,6 +1,7 @@
 
 def test_lightning_depends_on_mastery(game, pirate_band, hero, lightning_active):
 
+    hero.int_base += -50
     pirate = pirate_band[0]
     hp_before = pirate.health
 
@@ -12,7 +13,7 @@ def test_lightning_depends_on_mastery(game, pirate_band, hero, lightning_active)
 
 
     hero.activate(lightning_active, pirate)
-
+    #failed to activate - complexity mismatch
     assert mana_before == hero.mana
     assert stamina_before == hero.stamina
     assert readiness_before == hero.readiness
@@ -32,6 +33,7 @@ def test_lightning_depends_on_mastery(game, pirate_band, hero, lightning_active)
 
 def test_lightning_depends_on_int(hero, game, pirate_band, lightning_active):
 
+    hero.int_base += -50
     pirate = pirate_band[0]
     hp_before = pirate.health
 
@@ -43,6 +45,7 @@ def test_lightning_depends_on_int(hero, game, pirate_band, lightning_active):
 
 
     hero.activate(lightning_active, pirate)
+    # failed to activate - complexity mismatch
 
     assert mana_before == hero.mana
     assert stamina_before == hero.stamina

@@ -10,13 +10,29 @@ class Resistances:
         self.resist_values = {}
         for dtype in DamageTypes:
             if dtype in resists_in:
-                self.resist_values[dtype] = clamp(resists_in[dtype],
-                                                 Resistances.MAX_VULNERABILITY,
-                                                 Resistances.MAX_RESISTANCE)
+                self.resist_values[dtype] = resists_in[dtype]
             else:
                 self.resist_values[dtype] = 0
 
+    def value(self):
+        self.finalize()
+        return self
+
+    def finalize(self):
+        for dtype in DamageTypes:
+            self.resist_values[dtype] = clamp(self.resist_values[dtype],
+                                             Resistances.MAX_VULNERABILITY,
+                                             Resistances.MAX_RESISTANCE)
+
     def __getitem__(self, item):
         return self.resist_values[item]
+
+
+    def __add__(self, other):
+        result = {}
+        for damage_type in self.resist_values.keys():
+            result[damage_type] = self[damage_type] + other[damage_type]
+        return Resistances(resists_dict=result)
+
 
 

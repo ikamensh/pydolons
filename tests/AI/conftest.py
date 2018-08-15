@@ -1,6 +1,7 @@
 import pytest
 
-from DreamGame import DreamGame, Fractions
+from DreamGame import Fractions
+from mechanics.AI.SimGame import SimGame
 from battlefield.Battlefield import Battlefield
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
@@ -16,7 +17,7 @@ def simple_battlefield():
 def minigame(simple_battlefield, pirate,  hero):
 
 
-    _game = DreamGame(simple_battlefield)
+    _game = SimGame(simple_battlefield)
 
     _game.add_unit(hero, (2+2j), Fractions.PLAYER)
 
@@ -25,6 +26,21 @@ def minigame(simple_battlefield, pirate,  hero):
     _game.set_to_context()
 
 
+    yield _game
+
+@pytest.fixture()
+def game(battlefield, hero):
+    _game = SimGame(battlefield)
+    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
+    _game.fractions[hero] = Fractions.PLAYER
+    for unit in battlefield.unit_locations:
+        _game.turns_manager.add_unit(unit)
+    _game.set_to_context()
+    yield _game
+
+@pytest.fixture()
+def walls_game(walls_dungeon, hero):
+    _game = SimGame.start_dungeon(walls_dungeon, hero)
     yield _game
 
 @pytest.fixture()
@@ -71,18 +87,18 @@ def enabler(imba_ability):
 
 
 @pytest.fixture()
-def take_drugs(minigame):
+def increase_utility(minigame):
 
     minigame.utility = lambda : 0
 
-    def drugs_callback(a, unit):
+    def increase_utility(_, __):
         minigame.utility = lambda : 1e3
 
 
     _imba_ability = Active(BattlefieldObject,
                                 [],
                                 Cost(readiness=0.1),
-                                [drugs_callback],
+                                [increase_utility],
                                 [ActiveTags.ATTACK],
                            "imba")
 
