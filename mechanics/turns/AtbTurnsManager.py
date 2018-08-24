@@ -47,7 +47,6 @@ class AtbTurnsManager(TurnsManager):
             return managee.duration
 
     def get_next(self):
-
         self.sort()
         next_managed = self.managed[0]
         while not isinstance(next_managed, Unit):
@@ -83,5 +82,3 @@ class AtbTurnsManager(TurnsManager):
 
     def remove_buff(self, buff):
         self.managed.remove(buff)
-
-

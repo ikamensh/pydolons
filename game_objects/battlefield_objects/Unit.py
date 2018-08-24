@@ -15,7 +15,7 @@ import copy
 from functools import lru_cache
 
 class Unit(BattlefieldObject):
-    
+
 
     str = AttributeWithBonuses("str_base", CharAttributes.STREINGTH)
     end = AttributeWithBonuses("end_base", CharAttributes.ENDURANCE)
@@ -37,7 +37,7 @@ class Unit(BattlefieldObject):
     last_uid = 0
 
     def __init__(self, base_type: BaseType, masteries = None):
-        Unit.last_uid += 1
+        Unit.last_uid += 1        
         self.uid = Unit.last_uid
 
         self.str_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.STREINGTH])
@@ -224,8 +224,3 @@ class Unit(BattlefieldObject):
 
     def __repr__(self):
         return f"{self.type_name} {self.uid} with {self.health} HP"
-
-
-
-
-

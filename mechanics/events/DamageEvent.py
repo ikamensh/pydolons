@@ -2,6 +2,7 @@ from mechanics.events import EventsChannels
 from mechanics.events.src.Event import Event
 from mechanics.damage import Damage
 from mechanics.chances import ImpactFactor
+from gamechanel import gamechanel
 
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
@@ -44,6 +45,7 @@ class DamageEvent(Event):
                 .format(self.impact_factor, self.target, self.damage.type)
 
         if self.source:
+            gamechanel.sendMessage({'amount':self.amount,'target':self.target})
             return "{}! {} recieves {} {} damage from {}.".format(
                                                                 self.impact_factor,
                                                                 self.target,
@@ -51,6 +53,7 @@ class DamageEvent(Event):
                                                                 self.damage.type,
                                                                 self.source)
         else:
+            gamechanel.sendMessage({'amount':self.amount,'target':self.target})
             return "{}! {} recieves {} {} damage.".format(self.impact_factor,
                                                           self.target,
                                                           self.amount,

@@ -18,11 +18,3 @@ from game_objects.items.blueprints.QualityLevels import QualityLevels
 from game_objects.items.blueprints.types.WeaponBlueprint import WeaponBlueprint
 from game_objects.items.blueprints.types.ArmorBlueprint import ArmorBlueprint
 from game_objects.items.materials.Materials import Material
-
-
-
-
-
-
-
-

@@ -8,7 +8,6 @@ class EventsPlatform:
         self.triggers = { ch: set() for ch in EventsChannels }
 
     def process_event(self, event):
-
         channel = event.channel
         interrupts = self.interrupts[channel]
         triggers = self.triggers[channel]

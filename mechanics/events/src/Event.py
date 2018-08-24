@@ -14,13 +14,3 @@ class Event:
 
     def check_conditions(self):
         return True
-
-
-
-
-
-
-
-
-
-

@@ -29,7 +29,7 @@ class Damage:
 
         damage_final = int(max((damage.amount - armor) * (1 - resist), 0) *
                            Damage.effect_coef[impact_factor])
-
+        # print(damage_final)
         return damage_final, \
                Damage.calculate_armor_dur_damage(damage_final, armor, target.max_health), \
                Damage.calculate_weapon_dur_damage(damage.amount, damage_final, impact_factor)
@@ -67,13 +67,3 @@ class Damage:
             return int(5 * (reduction_over_threshold / damage_initial))
         else:
             return 0
-
-
-
-
-
-
-
-
-
-

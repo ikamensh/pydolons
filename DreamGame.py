@@ -6,6 +6,7 @@ from mechanics.AI.SimGame import SimGame
 from mechanics.events import EventsPlatform
 import copy
 import my_context
+import time
 
 class DreamGame(SimGame):
 
@@ -207,12 +208,3 @@ class DreamGame(SimGame):
         for unit, cell in self.battlefield.unit_locations.items():
             x, y = cell.x, cell.y
             print(f"There is a {unit} at ({x},{y})")
-
-
-
-
-
-
-
-
-

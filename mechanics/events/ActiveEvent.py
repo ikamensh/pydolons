@@ -15,6 +15,8 @@ class ActiveEvent(Event):
                    self.active.check_target(self.targeting)])
 
     def resolve(self):
+        # print(type(self.active))
+        # print('self.targeting dir :\n',type(self.targeting))
         self.active.resolve(self.targeting)
 
     def __repr__(self):

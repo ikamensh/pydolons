@@ -19,14 +19,11 @@ def one_game():
 #
 # print(f"it took {time()-t} sec of real time.")
 
+one_game()
 
-from cProfile import Profile
-
-profiler = Profile()
-profiler.runcall(one_game)
-
-profiler.print_stats('cumulative')
-
-
-
-
+# from cProfile import Profile
+#
+# profiler = Profile()
+# profiler.runcall(one_game)
+#
+# profiler.print_stats('cumulative')
