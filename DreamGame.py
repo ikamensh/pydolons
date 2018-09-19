@@ -2,32 +2,35 @@ from battlefield.Battlefield import Battlefield, Cell
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
 from mechanics.AI import BruteAI, RandomAI, BroadAI
-from mechanics.AI.SimGame import SimGame
 from mechanics.events import EventsPlatform
+from mechanics.rpg.experience import exp_rule
 import copy
 import my_context
 import time
 
-class DreamGame(SimGame):
+class DreamGame:
 
-    def __init__(self, bf, is_sim = False):
+    def __init__(self, bf, rules=None, is_sim = False):
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
-        self.brute_ai = BroadAI(self)
+        self.enemy_ai = BroadAI(self)
         self.random_ai = RandomAI(self)
         self.turns_manager = AtbTurnsManager()
         self.events_platform = EventsPlatform()
         self.is_sim = is_sim
 
-    @staticmethod
-    def start_dungeon(dungeon, hero):
+        for rule in (rules or []):
+            rule()
+
+    @classmethod
+    def start_dungeon(cls, dungeon, hero):
 
         unit_locations = dungeon.unit_locations
         unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
-        game = DreamGame(bf)
+        game = cls(bf, [exp_rule])
         if unit_locations:
             bf.place_many(unit_locations)
         game.the_hero = hero
@@ -52,7 +55,6 @@ class DreamGame(SimGame):
 
 
     def unit_died(self, unit):
-        del self.fractions[unit]
         self.battlefield.remove(unit)
         self.turns_manager.remove_unit(unit)
         unit.alive = False
@@ -69,7 +71,7 @@ class DreamGame(SimGame):
     def loop(self):
         while True:
             active_unit = self.turns_manager.get_next()
-            active, target = self.brute_ai.decide_step(active_unit)
+            active, target = self.enemy_ai.decide_step(active_unit)
             active_unit.activate(active, target)
             game_over = self.game_over()
             if game_over:

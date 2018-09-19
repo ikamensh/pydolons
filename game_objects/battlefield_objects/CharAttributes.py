@@ -15,10 +15,13 @@ class CharAttributes(NameEnum):
     STAMINA = auto()
     INITIATIVE = auto()
 
+    ARMOR = auto()
+    RESISTANCES = auto()
+
 abbrev_to_enum = {'str':CharAttributes.STREINGTH, 'end':CharAttributes.ENDURANCE, 'agi':CharAttributes.AGILITY,
            'prc':CharAttributes.PERCEPTION, 'int':CharAttributes.INTELLIGENCE, 'cha':CharAttributes.CHARISMA,
            'health':CharAttributes.HEALTH, 'stamina': CharAttributes.STAMINA, 'mana':CharAttributes.MANA,
-                  'initiative':CharAttributes.INITIATIVE}
+                  'initiative':CharAttributes.INITIATIVE, 'armor':CharAttributes.ARMOR, 'resistances':CharAttributes.RESISTANCES}
 
 enum_to_abbrev = {v: k for k, v in abbrev_to_enum.items()}
 

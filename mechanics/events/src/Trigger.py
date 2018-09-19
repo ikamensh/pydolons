@@ -2,17 +2,17 @@ import inspect
 import my_context
 
 class Trigger:
-    def __init__(self, target_event_cls, conditions, source = None,
-                 effect_trigger_pack = None, is_interrupt = False, event_callbacks=None):
+    def __init__(self, target_event_cls, conditions = None,
+                 source = None,
+                 is_interrupt = False,
+                 callbacks=None):
 
         assert inspect.isclass(target_event_cls)
-        assert isinstance(conditions, dict)
         self.target_event_cls = target_event_cls
         self.conditions = conditions
-        self.effect_pack = effect_trigger_pack
         self.source = source
         self.is_interrupt = is_interrupt
-        self.event_callbacks = event_callbacks
+        self.callbacks = callbacks
         self.platform = my_context.the_game.events_platform
         self.activate()
 
@@ -24,19 +24,15 @@ class Trigger:
 
     def check_conditions(self, event):
         assert isinstance(event, self.target_event_cls)
-        for key, value in self.conditions.items():
-            if getattr(event, key) != value:
-                return False
-
-        return True
+        if not self.conditions:
+            return True
+        return all((cond(self, event) for cond in self.conditions))
 
     def try_on_event(self, event):
         if self.check_conditions(event):
-            if self.effect_pack:
-                self.effect_pack.resolve(self.source, event)
-            if self.event_callbacks:
-                for modifier in self.event_callbacks:
-                    modifier(self, event)
+            if self.callbacks:
+                for callback in self.callbacks:
+                    callback(self, event)
 
     def deactivate(self):
         if self.is_interrupt:

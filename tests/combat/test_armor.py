@@ -8,7 +8,7 @@ def test_armor_only_vs_valid_damage_types():
     with pytest.raises(AssertionError):
         armor["BULLSHIT_DAMAGE_TYPE"] = 55
 
-def test_armor_reduces_damage(hero):
+def test_armor_reduces_damage(game, hero):
 
     hp_before_dmg = hero.health
     dmg = Damage(5, DamageTypes.FIRE)

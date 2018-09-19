@@ -1,7 +1,7 @@
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
-from game_objects.battlefield_objects import Unit, BattlefieldObject
+import game_objects.battlefield_objects as bf_objs
 
 class Battlefield:
     def __init__(self, w, h):
@@ -24,9 +24,9 @@ class Battlefield:
         return Vision._distance(p1, p2)
 
     def distance(self, one, another):
-        if isinstance(one, BattlefieldObject):
+        if isinstance(one, bf_objs.BattlefieldObject):
             one = self.unit_locations[one]
-        if isinstance(another, BattlefieldObject):
+        if isinstance(another, bf_objs.BattlefieldObject):
             another = self.unit_locations[another]
         return self._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
 
@@ -77,7 +77,7 @@ class Battlefield:
 
         self.units_at[p] = unit
         self.unit_locations[unit] = p
-        if isinstance(unit, Unit):
+        if isinstance(unit, bf_objs.Unit):
             self.unit_facings[unit] = facing or Facing.NORTH
 
     def place_many(self, unit_locations):

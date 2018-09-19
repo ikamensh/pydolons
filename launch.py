@@ -1,4 +1,4 @@
-from DreamGame import DreamGame
+from mechanics.AI.SimGame import SimGame as DreamGame
 from content.base_types.demo_hero import demohero_basetype
 from content.dungeons.demo_dungeon import demo_dungeon
 from game_objects.battlefield_objects import Unit

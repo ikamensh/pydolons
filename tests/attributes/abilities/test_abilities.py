@@ -5,7 +5,7 @@ from game_objects.battlefield_objects import CharAttributes, get_attrib_by_enum
 from mechanics.buffs import Ability
 
 
-@pytest.fixture(params=CharAttributes)
+@pytest.fixture(params = set(CharAttributes) - {CharAttributes.ARMOR, CharAttributes.RESISTANCES})
 def attrib(request):
     yield request.param
 

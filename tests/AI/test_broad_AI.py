@@ -89,7 +89,7 @@ def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype)
     for i in range(10):
 
         active_unit = _game.turns_manager.get_next()
-        active, target = _game.brute_ai.decide_step(active_unit)
+        active, target = _game.enemy_ai.decide_step(active_unit)
         if isinstance(target, Unit):
             if _game.fractions[target] is _game.fractions[active_unit]:
                 assert False

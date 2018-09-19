@@ -31,7 +31,7 @@ class Attribute:
         multiplier can not be less than 10%
         """
         multiplier = max(10, self.multiplier)
-        return int(self.base * multiplier / 100 + self.bonus)
+        return max(1, int(self.base * multiplier / 100 + self.bonus) )
 
     @staticmethod
     def attribute_or_none(base):

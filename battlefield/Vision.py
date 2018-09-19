@@ -50,6 +50,10 @@ class Vision:
     @staticmethod
     @functools.lru_cache(maxsize=int(2**10))
     def std_vision_field(sight_range, facing, cell_from, bf):
+        """
+        :return: a set of cells from battlefield :bf which are normally visible
+        from :cell_from when facing in the direction :facing and having :sight_range
+        """
         w = bf.h
         h = bf.h
 
@@ -59,6 +63,7 @@ class Vision:
         c1 = facing * v1 + cell_from.complex
         c2 = facing * (v2 - v1) + cell_from.complex
 
+        # max vision box - rough approximation, strictly bigger area
         xmin, xmax = min(c1.real, c2.real), max(c1.real, c2.real)
         ymin, ymax = min(c1.imag, c2.imag), max(c1.imag, c2.imag)
 
@@ -101,7 +106,12 @@ class Vision:
 
     @staticmethod
     @functools.lru_cache(maxsize=int(2**16))
-    def blocks(looking_from, looking_to, obstacle):
+    def blocks(looking_from: Cell, looking_to: Cell, obstacle: Cell)-> bool:
+        """
+        tests if the cell :obstacle is blocking
+        when :looking_from towards :looking_to
+        :return: True if the :obstacle blocks the view
+        """
 
         # caching trick: halve the search space (assumes symmetry, which is tested)
         if looking_from.x > looking_to.x:

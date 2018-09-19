@@ -27,7 +27,6 @@ def test_locations_are_intact(minigame):
 
 def test_chooses_imba_targets_enemy(minigame, imba_ability):
 
-
     ai = AstarAI(minigame)
     unit = list(minigame.battlefield.unit_locations.keys())[0]
     unit.give_active(imba_ability)

@@ -1,7 +1,6 @@
 from mechanics.events import Trigger
 from mechanics.events import AttackEvent
 from mechanics.events import DamageEvent
-import my_context
 
 
 def damage_to_attackers(source, protected_unit, damage, interrupt=False):
@@ -11,9 +10,9 @@ def damage_to_attackers(source, protected_unit, damage, interrupt=False):
 
 
     trig = Trigger(AttackEvent,
-                   conditions={"target":protected_unit},
+                   conditions={lambda t,e: e.target == protected_unit},
                    source=source,
-                   event_callbacks=[callback_deal_damage],
+                   callbacks=[callback_deal_damage],
                    is_interrupt=interrupt)
 
     return trig
