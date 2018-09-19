@@ -6,10 +6,10 @@ my_random = random.Random(100)
 the_game = None
 
 
-# from DreamGame import DreamGame
-# import random
-#
-# my_random = random.Random(100)
-# # my_random = random.Random()
-#
-# the_game = DreamGame()
+import os
+
+pydolons_rootdir = os.path.dirname(os.path.realpath(__file__))
+
+
+
+

@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from units import *
-#
+
+from ui.units import GameObject
 from GameLog import gamelog
 
 #    ______

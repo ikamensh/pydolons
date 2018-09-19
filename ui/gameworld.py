@@ -1,6 +1,6 @@
-from PySide2 import QtCore, QtGui, QtWidgets
-from units import *
-from gamechanel import gamechanel
+from PySide2 import QtGui, QtWidgets, QtCore
+from ui.units import GameObject
+from ui.gui_util.gamechanel import gamechanel
 
 
 class GameWorld(QtWidgets.QGraphicsItemGroup):
@@ -175,7 +175,7 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
         self.tooltip.setVisible(False)
         self.addToGroup(self.tooltip)
 
-    def showToolTip(self, x, y, point):
+    def showToolTip(self, point):
         if point in self.level.units.units_location.keys():
             unit = self.level.units.getUnit(point[0], point[1])
             self.tooltip.setPos(unit.pos())
@@ -188,7 +188,7 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
         else:
             self.tooltip.setVisible(False)
 
-    def removeUnitLeyar(self, uid):
+    def removeUnitLayer(self, uid):
         self.removeFromGroup(self.unit_hps[uid])
         del self.unit_hps[uid]
         self.removeFromGroup(self.unit_hptxts[uid])

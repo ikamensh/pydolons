@@ -1,3 +1,4 @@
 astar
 pytest
 numpy
+PySide2

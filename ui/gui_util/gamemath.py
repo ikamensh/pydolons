@@ -12,12 +12,7 @@ class GameMath(object):
         """
         dVectors = ((0,1),(1,1),(1,0),(1,-1),(0,-1),(-1,-1),(-1,0),(-1,1))
         deg = int(math.degrees(math.atan2(x, y)))
-        # print(deg)
-        # dx = x*math.cos(at) - y*math.sin(at)
-        # dy = x*math.sin(at) + y*math.cos(at)
-        # print(int(dx), int(dy))
-        # print(int(math.sin(at)), int(math.cos(at)))
-        # print(x, y)
+
         if x == 0 and y == 0:
             return dVectors[0]
         elif (x, y) is dVectors:

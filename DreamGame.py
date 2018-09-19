@@ -19,6 +19,7 @@ class DreamGame:
         self.turns_manager = AtbTurnsManager()
         self.events_platform = EventsPlatform()
         self.is_sim = is_sim
+        self.set_to_context()
 
         for rule in (rules or []):
             rule()
@@ -41,7 +42,7 @@ class DreamGame:
         units_who_make_turns = [unit for unit in unit_locations.keys()
                                 if not unit.is_obstacle]
         game.turns_manager = AtbTurnsManager(units_who_make_turns)
-        game.set_to_context()
+
 
         return game
 
@@ -70,18 +71,25 @@ class DreamGame:
 
     def loop(self):
         while True:
-            active_unit = self.turns_manager.get_next()
-            active, target = self.enemy_ai.decide_step(active_unit)
-            active_unit.activate(active, target)
             game_over = self.game_over()
             if game_over:
                 print(game_over)
                 return self.turns_manager.time
 
 
+            active_unit = self.turns_manager.get_next()
+            if self.fractions[active_unit] == Fractions.PLAYER:
+                time.sleep(0.03)
+                continue
+            else:
+                active, target = self.enemy_ai.decide_step(active_unit)
+                active_unit.activate(active, target)
+
+
+
     def game_over(self):
-        own_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.PLAYER]
-        enemy_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.ENEMY]
+        own_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.PLAYER and unit.alive]
+        enemy_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.ENEMY and unit.alive]
 
         if len(own_units) == 0:
             return "DEFEAT"
@@ -93,6 +101,16 @@ class DreamGame:
 
     def __repr__(self):
         return f"{'Simulated ' if self.is_sim else ''}{self.battlefield.h} by {self.battlefield.w} dungeon with {len(self.battlefield.units_at)} units in it."
+
+
+    def ui_order(self, point):
+        if self.turns_manager.get_next() is self.the_hero:
+            x, y = point
+            cell = Cell.from_complex(x + y* 1j)
+            if cell in self.battlefield.units_at:
+                self.order_attack(self.the_hero, self.battlefield.units_at[cell])
+            else:
+                self.order_move(self.the_hero, cell)
 
 
     def order_move(self, unit, target_cell, AI_assist=True):

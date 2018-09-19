@@ -1,19 +1,15 @@
-from gameworld import GameWorld, MidleLayer
-#
-from DreamGame import DreamGame
-from content.base_types.demo_hero import demohero_basetype
+from PySide2 import QtCore
+
+
+from ui.gameworld import GameWorld, MidleLayer
 from content.dungeons.demo_dungeon import demo_dungeon
-from game_objects.battlefield_objects import Unit
-from mechanics.events import MovementEvent
-#
-from units import *
-#
-from PySide2.QtCore import Slot
+from ui.units import Units, BasicUnit
+
 
 class DemoGameTread(QtCore.QThread):
     """docstring for DemoGameTread."""
     finished = QtCore.Signal(str)
-    # unitMove = QtCore.Signal(str)
+
     def __init__(self, ):
         super(DemoGameTread, self).__init__()
 
@@ -21,17 +17,11 @@ class DemoGameTread(QtCore.QThread):
         self.game = game
 
     def createDemoDungeon(self):
-        #
-        # game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
         time = self.game.loop()
-        #
         return time
 
     def run(self):
         self.finished.emit(self.createDemoDungeon())
-        # self.unitMove.emit()
-
-
 
 
 
@@ -62,11 +52,9 @@ class Level_demo_dungeon(object):
         self.midleLayer.setUpLevel(self)
         # setUp game manager
         self.game = game
-        # setUp units
+
         self.setUpUnits(self.game.battlefield)
-        # setUp curent game configuration
         self.gameconfig.setUpLevel(self.world)
-        # setUp curent game configuration for controller
         self.controller.setUp(self.world, self.units, self.midleLayer)
 
 
@@ -75,7 +63,6 @@ class Level_demo_dungeon(object):
 
     def setUpUnits(self, battlefield):
         self.units = Units()
-        # setUp units
         self.units.unit_locations = {}
         self.units.locations = []
 
@@ -87,30 +74,16 @@ class Level_demo_dungeon(object):
             gameUnit.setWorldPos(unit_pos.x - 4, unit_pos.y -4)
             print('uid = ',unit.uid)
             gameUnit.uid = unit.uid
-            # gameUnit.setBefore(unit_pos.x*1.1)
+
             self.units.addToGroup(gameUnit)
             self.units.units_bf[unit.uid] = unit
             self.units.units_at[unit.uid] = gameUnit
             self.units.units_location[(gameUnit.worldPos.x(), gameUnit.worldPos.y())] = gameUnit
             self.units.locations.append(gameUnit.worldPos)
-            # self.units.activateNextUnit()
-        self.units.active_unit = self.units.units_at[self.game.active_unit.uid]
+
+        self.units.active_unit = self.units.units_at[self.game.turns_manager.get_next().uid]
         self.units.setUnitStack(self.game.turns_manager.managed)
         self.midleLayer.createHPBar()
-        # add hero
-        # self.hero = BasicUnit(self.res.unit_width, self.res.unit_height)
-        # self.hero.setPixmap(self.res.hero)
-        # self.hero.setWorldPos(demo_dungeon.hero_entrance.x - 4, demo_dungeon.hero_entrance.y - 4)
-        # self.units.addToGroup(self.hero)
-        # self.units.hero = self.hero
 
-    # @Slot()
-    # def timerSlot(self):
-    #     # print('helo')
-    #     for unit, unit_pos in self.game.battlefield.unit_locations.items():
-    #         # print('uid = ',unit.uid)
-    #         # print('self.units = ',self.units)
-    #         gameUnit = self.units.units_at[unit.uid]
-    #         gameUnit.setWorldPos(unit_pos.x - 4, unit_pos.y - 4)
-    #         # print(gameUnit.worldPos)
-    #         # self.units.unit_locations.update((unit, unit_pos))
+
+

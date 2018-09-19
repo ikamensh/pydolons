@@ -1,7 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
-# from abc import ABC
-
-
+from PySide2 import QtCore, QtWidgets
 
 class GameObject(QtWidgets.QGraphicsPixmapItem):
     def __init__(self, w = 1, h = 1):
