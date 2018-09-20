@@ -1,0 +1,77 @@
+from PySide2 import QtWidgets
+from ui.units.GameObject import GameObject
+
+class BasicUnit(GameObject):
+    """docstring for BasicUnit."""
+    def __init__(self, *arg, gameconfig):
+        super(BasicUnit, self).__init__(*arg)
+        self.uid = 0
+        self.gameconfig = gameconfig
+        self.directionPix = self.gameconfig.getPicFile('DIRECTION POINTER.png')
+        self.setUpDirections()
+        self.activate = False
+        self.hp = 100
+
+
+
+    def setUpDirections(self):
+        self.dirS = QtWidgets.QGraphicsPixmapItem(self)
+        dirY = self.h - self.directionPix.height()
+        dirX = (self.w / 2) - (self.directionPix.width() / 2)
+        self.dirS.setPos(dirX, dirY)
+        self.dirS.setPixmap(self.directionPix)
+        self.dirS.setVisible(False)
+
+        self.dirN = QtWidgets.QGraphicsPixmapItem(self)
+        self.dirN.setPixmap(self.directionPix)
+        dirY = self.directionPix.height()
+        dirX = (self.w / 2) + (self.directionPix.width() / 2)
+        self.dirN.setPos(dirX, dirY)
+        self.dirN.setRotation(180.0)
+        self.dirN.setVisible(False)
+
+        self.dirW = QtWidgets.QGraphicsPixmapItem(self)
+        self.dirW.setPixmap(self.directionPix)
+        dirY = (self.h / 2) - (self.directionPix.height() / 2)
+        dirX = self.directionPix.width()
+        self.dirW.setPos(dirX, dirY)
+        self.dirW.setRotation(90.0)
+        self.dirW.setVisible(False)
+
+
+        self.dirO = QtWidgets.QGraphicsPixmapItem(self)
+        self.dirO.setPixmap(self.directionPix)
+        dirY = (self.h / 2) + (self.directionPix.height() / 2)
+        dirX = self.w - self.directionPix.width()
+        self.dirO.setPos(dirX, dirY)
+        self.dirO.setRotation(-90.0)
+        self.dirO.setVisible(False)
+
+
+    def setDirection(self, x, y):
+        if y >= 1 and x == 0:
+            self.dirS.setVisible(True)
+            self.dirN.setVisible(False)
+            self.dirW.setVisible(False)
+            self.dirO.setVisible(False)
+        elif y <= -1 and x == 0:
+            self.dirS.setVisible(False)
+            self.dirN.setVisible(True)
+            self.dirW.setVisible(False)
+            self.dirO.setVisible(False)
+        if x >= 1 and y == 0:
+            self.dirS.setVisible(False)
+            self.dirN.setVisible(False)
+            self.dirW.setVisible(False)
+            self.dirO.setVisible(True)
+        elif x <= -1 and y == 0:
+            self.dirS.setVisible(False)
+            self.dirN.setVisible(False)
+            self.dirW.setVisible(True)
+            self.dirO.setVisible(False)
+
+    def __eq__(self, other):
+        return self.worldPos.x == other.worldPos.x and self.y == other.worldPos.y
+
+    def __hash__(self):
+        return hash(self.worldPos.x*10000 + self.worldPos.y)

@@ -7,7 +7,7 @@ from ui.units import Units, BasicUnit
 
 
 class DemoGameTread(QtCore.QThread):
-    """docstring for DemoGameTread."""
+
     finished = QtCore.Signal(str)
 
     def __init__(self, ):
@@ -25,15 +25,11 @@ class DemoGameTread(QtCore.QThread):
 
 
 
-class Level_demo_dungeon(object):
-    """docstring for Level_demo_dungeon."""
+class Level_demo_dungeon:
+
     def __init__(self, gameconfig):
-        super(Level_demo_dungeon, self).__init__()
         self.gameconfig = gameconfig
         self.z_values = [ i for i in range(demo_dungeon.w)]
-
-    def setController(self, controller):
-        self.controller = controller
 
     def unitDied(self, unit):
         del self.units.units_at[unit]
@@ -42,20 +38,18 @@ class Level_demo_dungeon(object):
         del self.units.unit_locations[unit]
 
 
-    def setUpLevel(self, game ):
-        # setUP world
+    def setUpLevel(self, game, controller):
         self.world = GameWorld(self.gameconfig)
         self.world.setWorldSize(demo_dungeon.w, demo_dungeon.h)
         self.world.setFloor(self.gameconfig.getPicFile('floor.png'))
-        # setUp midle
-        self.midleLayer = MidleLayer(self.gameconfig)
-        self.midleLayer.setUpLevel(self)
-        # setUp game manager
+
+        self.middleLayer = MidleLayer(self.gameconfig)
+        self.middleLayer.setUpLevel(self)
         self.game = game
 
         self.setUpUnits(self.game.battlefield)
-        self.gameconfig.setUpLevel(self.world)
-        self.controller.setUp(self.world, self.units, self.midleLayer)
+        self.gameconfig.setWorld(self.world)
+        controller.setUp(self.world, self.units, self.middleLayer)
 
 
     def printResult(self, time):
@@ -83,7 +77,7 @@ class Level_demo_dungeon(object):
 
         self.units.active_unit = self.units.units_at[self.game.turns_manager.get_next().uid]
         self.units.setUnitStack(self.game.turns_manager.managed)
-        self.midleLayer.createHPBar()
+        self.middleLayer.createHPBar()
 
 
 

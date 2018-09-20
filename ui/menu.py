@@ -10,9 +10,6 @@ from GameLog import gamelog
 #/
 
 class GuiConsole(QtWidgets.QPlainTextEdit):
-    """docstring for GuiConsole.
-    QPalette.ColorRole.WindowText = 0
-    """
     def __init__(self, *args):
         super(GuiConsole, self).__init__(*args)
         self.last_msg = None
@@ -137,7 +134,6 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
 
 class MyCursor(QtWidgets.QGraphicsPixmapItem):
-    """docstring for MyCursor."""
     def __init__(self, *arg):
         super(MyCursor, self).__init__()
 

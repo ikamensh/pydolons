@@ -24,17 +24,10 @@ class GameConfiguration:
     def setWorld(self, world):
         """
         метод добавляет атрибуты игрового мира, которые доступны все классам
-        self.world_size = world.worldSize
-        self.world_a_size = world.worldHalfSize
         """
         self.world_size = world.worldSize
         self.world_a_size = world.worldHalfSize
 
-    def setUpLevel(self, world = None):
-        """временный метод, аргументы будут расширены позже
-        """
-        if world:
-            self.setWorld(world)
 
     def setUpScreen(self):
         """

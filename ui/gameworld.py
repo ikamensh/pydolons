@@ -4,7 +4,6 @@ from ui.gui_util.gamechanel import gamechanel
 
 
 class GameWorld(QtWidgets.QGraphicsItemGroup):
-    """docstring for GameWorld."""
     def __init__(self, gameconfig):
         super(GameWorld, self).__init__()
         self.gameconfig = gameconfig
@@ -30,10 +29,10 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
                 # self.floors =self.floors +col
             self.floors.append(col)
 
-class HealtBar(QtWidgets.QGraphicsRectItem):
+class HealthBar(QtWidgets.QGraphicsRectItem):
     """docstring for HealtBar."""
     def __init__(self):
-        super(HealtBar, self).__init__()
+        super(HealthBar, self).__init__()
         self.setOpacity(0.6)
 
     def setHP(self, hp):
@@ -49,9 +48,9 @@ class HealtBar(QtWidgets.QGraphicsRectItem):
         self.rect().setWidth(w)
         self.setRect(0, y, w, h)
 
-class HealtText(QtWidgets.QGraphicsTextItem):
+class HealthText(QtWidgets.QGraphicsTextItem):
     def __init__(self):
-        super(HealtText, self).__init__()
+        super(HealthText, self).__init__()
         self.w = 128
         self.h = 128
         # self.setOpacity(1.0)
@@ -72,7 +71,6 @@ class HealtText(QtWidgets.QGraphicsTextItem):
 
     def setUnitPos(self, pos):
         self.setPos(pos.x() + 32, pos.y() - 32)
-        # super().setPos(newpos.x() + 32, newpos.x() - 32)
 
     def timerSlot(self):
         self.setOpacity(self.opacity() - 0.1)
@@ -84,7 +82,6 @@ class HealtText(QtWidgets.QGraphicsTextItem):
 
 
 class MidleLayer(QtWidgets.QGraphicsItemGroup):
-    """docstring for MidleLayer."""
     def __init__(self, gameconfig):
         super(MidleLayer, self).__init__()
         self.gameconfig = gameconfig
@@ -100,7 +97,7 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
         self.select_item.setOpacity(0.5)
         self.select_item.setBrush(QtCore.Qt.red)
         self.addToGroup(self.select_item)
-        #
+
         self.selected_item = QtWidgets.QGraphicsRectItem()
         self.selected_item.setRect(0, 0, self.w, self.h)
         self.selected_item.setOpacity(0.3)
@@ -125,7 +122,7 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
 
     def createHPBar(self):
         for unit in self.level.units.units_at.values():
-            hp = HealtBar()
+            hp = HealthBar()
             hp.setBrush(QtCore.Qt.cyan)
             hp.setRect(0, self.h , self.w, 32)
             hp.setPos(unit.pos())
@@ -137,7 +134,7 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
 
     def createHPText(self):
         for unit in self.level.units.units_at.values():
-            hpText = HealtText()
+            hpText = HealthText()
             hpText.setUnitPos(unit.pos())
             self.unit_hptxts[unit.uid] = hpText
             self.addToGroup(self.unit_hptxts[unit.uid])
