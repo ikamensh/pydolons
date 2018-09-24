@@ -1,7 +1,9 @@
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
-import game_objects.battlefield_objects as bf_objs
+# @autor:reef425
+# циклический импорт, Unit импортируется хотя он еще не создался
+# from game_objects.battlefield_objects.Unit import Unit, BattlefieldObject
 
 class Battlefield:
     def __init__(self, w, h):
@@ -24,9 +26,13 @@ class Battlefield:
         return Vision._distance(p1, p2)
 
     def distance(self, one, another):
-        if isinstance(one, bf_objs.BattlefieldObject):
+        # @autor:reef425
+        # Данный метод не стабилен и требует переработки
+        # из за этого импорт перенесен внутрь
+        from game_objects.battlefield_objects import BattlefieldObject
+        if isinstance(one, BattlefieldObject):
             one = self.unit_locations[one]
-        if isinstance(another, bf_objs.BattlefieldObject):
+        if isinstance(another, BattlefieldObject):
             another = self.unit_locations[another]
         return self._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
 
@@ -69,6 +75,11 @@ class Battlefield:
 
 
     def place(self, unit, _p, facing=None):
+        # @autor:reef425
+        # Данный метод не стабилен и требует переработки
+        # из за этого импорт перенесен внутрь
+        from game_objects.battlefield_objects.Unit import Unit
+
         p = Cell.maybe_complex(_p)
 
         assert 0 <= p.x < self.w
@@ -77,7 +88,9 @@ class Battlefield:
 
         self.units_at[p] = unit
         self.unit_locations[unit] = p
-        if isinstance(unit, bf_objs.Unit):
+        # @autor:reef425
+        # циклический импорт, Unit импортируется хотя он еще не создался
+        if isinstance(unit, Unit):
             self.unit_facings[unit] = facing or Facing.NORTH
 
     def place_many(self, unit_locations):
@@ -120,8 +133,3 @@ class Battlefield:
         for unit in self.unit_locations:
             if not unit.is_obstacle:
                 yield unit
-
-
-
-
-
