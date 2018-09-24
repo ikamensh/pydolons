@@ -45,13 +45,14 @@ class GameController:
         self.screenMenu.resize(self.view)
 
     def keyPressEvent(self, e):
-        self.attackUnit(e)
-        self.setFacingHero(e)
+        pass
+        # self.attackUnit(e)
+        # self.setFacingHero(e)
         # self.moveUnit(e)
-        self.tabUnit(e)
+        # self.tabUnit(e)
 
     def wheelEvent(self, e):
-        """ Метод перехватывает собитие мышки скролл, скролл больше 0 зумм +,
+        """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
         скролл меньше нуля зумм -
         """
         if e.delta() > 0.0:
@@ -150,4 +151,3 @@ class GameController:
 
         self.middleLayer.showToolTip(self.last_point)
         self.middleLayer.showSelectItem(self.last_point)
-
