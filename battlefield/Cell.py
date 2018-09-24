@@ -43,6 +43,9 @@ class Cell:
         return  angle / pi * 180, p1 <= p2
 
     def __eq__(self, other):
+        if self is other: return True
+        if other is None: return False
+        if self.__class__ != other.__class__: return False
         return self.x == other.x and self.y == other.y
 
     def __hash__(self):
