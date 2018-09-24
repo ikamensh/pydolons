@@ -4,7 +4,13 @@ from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicPara
 from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
-from mechanics.events import UnitDiedEvent
+# @autor:reef425
+# оставить до рефакторинга
+try:
+    from mechanics.events import UnitDiedEvent
+except Exception as e:
+    print(e)
+    UnitDiedEvent = object
 from mechanics.actives import ActiveTags
 from content.actives.std_movements import std_movements, turn_ccw, turn_cw
 from content.actives.std_melee_attack import std_attacks
@@ -43,7 +49,7 @@ class Unit(BattlefieldObject):
     last_uid = 0
 
     def __init__(self, base_type: BaseType, masteries = None):
-        Unit.last_uid += 1        
+        Unit.last_uid += 1
         self.uid = Unit.last_uid
 
         self.str_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.STREINGTH])
