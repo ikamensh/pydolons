@@ -1,21 +1,27 @@
+from battlefield import Cell
 from PySide2 import QtCore, QtWidgets
 
 class GameObject(QtWidgets.QGraphicsPixmapItem):
 
     def __init__(self, w = 1, h = 1):
+        """
+        w, h -- задают ширину и высоту объекта
+        self.pos() -- метод который возвращает текущее положение на сцене
+        self.worldPos -- объект который задает положение в игровом мире не связанном с сценой
+        """
         super(GameObject, self).__init__()
-        self.worldPos = QtCore.QPoint()
+        self.worldPos = Cell(0, 0)
         self.w = w
         self.h = h
 
 
     def setWorldX(self, x):
-        self.worldPos.setX(x)
+        self.worldPos.x = x
         self.setX(x * self.w)
 
 
     def setWorldY(self, y):
-        self.worldPos.setY(y)
+        self.worldPos.y = y
         self.setY(y * self.h)
 
 
@@ -25,4 +31,4 @@ class GameObject(QtWidgets.QGraphicsPixmapItem):
 
 
     def getWorldPos(self):
-        return self.worldPos.x(), self.worldPos.y()
+        return self.worldPos.x, self.worldPos.y
