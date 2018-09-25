@@ -6,8 +6,7 @@ from ui.menu import ScreenMenu
 from ui.gamecontroller import GameController
 from ui.levels import Level_demo_dungeon
 
-from ui.GameConfiguration import GameConfiguration
-from ui.NotMyView import MyView
+from ui.GameView import GameView
 
 
 class TheUI(QtWidgets.QWidget):
@@ -16,7 +15,6 @@ class TheUI(QtWidgets.QWidget):
 
         super().__init__()
         self.the_game = game
-        self.gameconfig = GameConfiguration()
         self.gameTimer = QtCore.QTimer()
         self.gameTimer.timeout.connect(self.timerSlot)
         self.gameTimer.startTimer(int(1000 / 50))
@@ -27,11 +25,12 @@ class TheUI(QtWidgets.QWidget):
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
 
-        self.view = MyView(self)
+        self.view = GameView(self)
+        self.gameconfig = self.view.gameconfig
         self.layout.addWidget(self.view)
         self.layout.setMargin(2)
 
-        self.scene = QtWidgets.QGraphicsScene(-250, -250, 500, 500)
+        self.scene = QtWidgets.QGraphicsScene(0, 0, 500, 500)
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtGui.QBrush(self.gameconfig.getPicFile('dungeon.jpg')))
 
@@ -42,15 +41,17 @@ class TheUI(QtWidgets.QWidget):
         self.level = Level_demo_dungeon(self.gameconfig)
         self.level.setUpLevel(self.the_game, self.controller)
 
+        self.scene.addItem(self.level.world)
+        self.scene.addItem(self.level.units)
+        self.scene.addItem(self.level.middleLayer)
+        self.scene.addItem(self.controller.cursor)
+
+        self.view.resized.connect(menu.updateGui)
         menu.setGameConfig(self.gameconfig)
         menu.setUpLevel(self.level)
         menu.setUpGui(self.view)
         menu.setScene(self.scene)
 
-        self.scene.addItem(self.level.world)
-        self.scene.addItem(self.level.units)
-        self.scene.addItem(self.level.middleLayer)
-        self.scene.addItem(self.controller.cursor)
 
         self.view.controller = self.controller
         self.view.setScene(self.scene)
