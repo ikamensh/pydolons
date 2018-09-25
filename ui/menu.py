@@ -30,7 +30,8 @@ class NotifyText(QtWidgets.QGraphicsTextItem):
         self.setDefaultTextColor(QtCore.Qt.blue)
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.timerSlot)
-        self.setPos(-160, -120)
+        # Связать с gameconfig
+        self.setPos(300, 300)
         self.setVisible(False)
 
     def setText(self, value):
@@ -63,7 +64,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.notify.setText(text)
 
     def setUpDefaultPosition(self):
-        self.console_pos = self.gameconfig.ava_ha_size[0] - 320, self.gameconfig.ava_ha_size[1] - 240
+        self.console_pos = self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240
 
     def setScene(self, scene):
         scene.addItem(self)
@@ -80,7 +81,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     def setUpGui(self, view):
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
-        self.unitStack.setPos(-300, -178)
+        self.unitStack.setPos(0, 0)
         self.active_select = GameObject()
         self.active_select.setPixmap(self.gameconfig.getPicFile('active select 96.png').scaled(64, 64))
         self.active_select.setParentItem(self.unitStack)
@@ -118,19 +119,17 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.unitStack.rect().setWidth(w * 64)
         i = 0
         for bf_unit in self.level.units.units_stack:
-            self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i* 64, self.unitStack.y())
+            self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
             i+=1
-
-    def resize(self, w, h, view):
-        x = w - 120
-        y = h - 240
-        mapPos = view.mapToScene(x, y)
 
     def setDefaultPos(self):
         pos = self.scene().views()[0].mapToScene(self.gameconfig.correct_size[0], self.gameconfig.correct_size[1])
         self.gui_console.move(self.console_pos[0] + pos.x(), self.console_pos[1] + pos.y())
         self.setX(pos.x())
         self.setY(pos.y())
+
+    def updateGui(self):
+        self.gui_console.move(self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240)
 
 
 class MyCursor(QtWidgets.QGraphicsPixmapItem):
