@@ -65,19 +65,16 @@ class Level_demo_dungeon:
             if unit.icon == 'hero.png':
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
-            gameUnit.setWorldPos(unit_pos.x - 4, unit_pos.y -4)
+            gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
             print('uid = ',unit.uid)
             gameUnit.uid = unit.uid
 
             self.units.addToGroup(gameUnit)
             self.units.units_bf[unit.uid] = unit
             self.units.units_at[unit.uid] = gameUnit
-            self.units.units_location[(gameUnit.worldPos.x(), gameUnit.worldPos.y())] = gameUnit
+            self.units.units_location[(gameUnit.worldPos.x, gameUnit.worldPos.y)] = gameUnit
             self.units.locations.append(gameUnit.worldPos)
 
         self.units.active_unit = self.units.units_at[self.game.turns_manager.get_next().uid]
         self.units.setUnitStack(self.game.turns_manager.managed)
         self.middleLayer.createHPBar()
-
-
-
