@@ -3,7 +3,6 @@ from PySide2 import QtGui, QtWidgets
 
 from my_context import pydolons_rootdir
 
-
 class GameConfiguration:
     """docstring for GameConfiguration.
     Установка конфигурации игровых объектов, настроек экрана и системы
@@ -42,6 +41,10 @@ class GameConfiguration:
         self.ava_size = self.desktop.availableGeometry().width(), self.desktop.availableGeometry().height()
         self.ava_ha_size = int(self.ava_size[0] / 2), int(self.ava_size[1] / 2)
         self.correct_size = self.ava_ha_size[0] - 3, self.ava_ha_size[1] - 17
+
+    def updateScreenSize(self, w, h):
+        self.screenSize = (w, h)
+        self.dev_size = self.screenSize
 
     def setUpUnits(self):
         """
