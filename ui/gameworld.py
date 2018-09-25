@@ -15,12 +15,10 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         self.worldHalfSize = (int(w / 2), int(h / 2))
 
     def setFloor(self, pixMap):
-        w = int(self.worldSize[0]/2)
-        h = int(self.worldSize[1]/2)
         self.floors = []
-        for i in range(-w, w, 1):
+        for i in range(self.worldSize[0]):
             col = []
-            for j in range(-h, h, 1):
+            for j in range(self.worldSize[1]):
                 floor = GameObject(self.gameconfig.unit_size[0], self.gameconfig.unit_size[1])
                 floor.setPixmap(pixMap)
                 floor.setWorldPos(i, j)
