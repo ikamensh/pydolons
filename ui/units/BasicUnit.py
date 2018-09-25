@@ -12,9 +12,9 @@ class BasicUnit(GameObject):
         self.activate = False
         self.hp = 100
 
-
-
     def setUpDirections(self):
+        """Метод отображает стрелку в определенном направлении
+        """
         self.dirS = QtWidgets.QGraphicsPixmapItem(self)
         dirY = self.h - self.directionPix.height()
         dirX = (self.w / 2) - (self.directionPix.width() / 2)
@@ -71,7 +71,10 @@ class BasicUnit(GameObject):
             self.dirO.setVisible(False)
 
     def __eq__(self, other):
-        return self.worldPos.x == other.worldPos.x and self.y == other.worldPos.y
+        if self is other: return True
+        if other is None: return False
+        if self.__class__ != other.__class__: return False
+        return self.worldPos == other.worldPos.x
 
     def __hash__(self):
-        return hash(self.worldPos.x*10000 + self.worldPos.y)
+        return hash(self.worldPos)*3
