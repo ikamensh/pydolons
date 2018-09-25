@@ -32,17 +32,13 @@ class GameController:
         """
         newPos = self.view.mapToScene(e.x(), e.y())
         self.moveCursor(newPos)
-        # self.translateScene(e)
         self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
-        self.the_game.ui_order( (self.last_point[0] +4, self.last_point[1] +4) )
+        self.the_game.ui_order( (self.last_point[0], self.last_point[1]) )
         self.updateWorld()
         self.selected_point = self.last_point
         self.middleLayer.showSelectedItem(self.selected_point)
-
-    def resizeEvent(self, e):
-        self.screenMenu.resize(self.view)
 
     def keyPressEvent(self, e):
         pass
@@ -70,8 +66,8 @@ class GameController:
             else:
                 cell = self.the_game.battlefield.unit_locations.setdefault(unit, None)
                 if not cell is None:
-                    pos = (self.units.units_at[uid].worldPos.x(), self.units.units_at[uid].worldPos.y())
-                    self.units.units_at[uid].setWorldPos(cell.x - 4, cell.y - 4)
+                    pos = (self.units.units_at[uid].worldPos.x, self.units.units_at[uid].worldPos.y)
+                    self.units.units_at[uid].setWorldPos(cell.x , cell.y )
                     self.units.updateLocations(self.units.units_at[uid], pos)
         self.middleLayer.updateSupport()
 
@@ -110,7 +106,6 @@ class GameController:
         """Данный метод обеспечивает перемещение сцены внутри представления
          метод проверяет приблизился ли курсор к краю представления
         """
-
         rect = self.scene.sceneRect()
         if e.x() - 5.0 < 5.0:
             rect.translate(-10, 0)
@@ -145,8 +140,8 @@ class GameController:
         if newPos.y() < 0:
              y -= 1
 
-        world_x, world_y = self.gameconfig.world_a_size
-        if -world_x <= x < world_x and  -world_y <= y < world_y:
+        world_x, world_y = self.gameconfig.world_size
+        if 0 <= x < world_x and  0 <= y < world_y:
             self.last_point = x, y
 
         self.middleLayer.showToolTip(self.last_point)
