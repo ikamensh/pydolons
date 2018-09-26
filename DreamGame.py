@@ -103,9 +103,8 @@ class DreamGame:
         return f"{'Simulated ' if self.is_sim else ''}{self.battlefield.h} by {self.battlefield.w} dungeon with {len(self.battlefield.units_at)} units in it."
 
 
-    def ui_order(self, point):
+    def ui_order(self, x, y):
         if self.turns_manager.get_next() is self.the_hero:
-            x, y = point
             cell = Cell.from_complex(x + y* 1j)
             if cell in self.battlefield.units_at:
                 self.order_attack(self.the_hero, self.battlefield.units_at[cell])
