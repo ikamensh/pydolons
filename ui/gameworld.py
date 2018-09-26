@@ -9,6 +9,11 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         self.gameconfig = gameconfig
         self.worldSize = (1, 1)
         self.worldHalfSize = (1, 1)
+        self.level = None
+
+    def setLevel(self, level):
+        self.level =  level
+        self.level.world = self
 
     def setWorldSize(self, w, h):
         self.worldSize = (w, h)
@@ -79,14 +84,19 @@ class HealthText(QtWidgets.QGraphicsTextItem):
 
 
 
-class MidleLayer(QtWidgets.QGraphicsItemGroup):
+class MiddleLayer(QtWidgets.QGraphicsItemGroup):
     def __init__(self, gameconfig):
-        super(MidleLayer, self).__init__()
+        super(MiddleLayer, self).__init__()
         self.gameconfig = gameconfig
         self.w, self.h = self.gameconfig.unit_size[0], self.gameconfig.unit_size[1]
         self.unit_hptxts = {}
         self.unit_hps = {}
         self.setUpSelectItem()
+        self.level = None
+
+    def setLevel(self, level):
+        self.level =  level
+        self.level.middleLayer = self
 
 
     def setUpSelectItem(self):
@@ -108,37 +118,33 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
         self.selected_item.setY(point[1] * self.h)
         self.selected_item.setVisible(True)
 
-    def showSelectItem(self, point):
-        self.select_item.setX(point[0] * self.w)
-        self.select_item.setY(point[1] * self.h)
+    def showSelectItem(self, x, y):
+        self.select_item.setX(x * self.w)
+        self.select_item.setY(y * self.h)
 
+    def createHPBar(self, unit):
+        hp = HealthBar()
+        hp.setBrush(QtCore.Qt.cyan)
+        hp.setRect(0, self.h , self.w, 32)
+        hp.setPos(unit.pos())
+        hp.setHP(100)
+        self.unit_hps[unit.uid] = hp
+        self.addToGroup(self.unit_hps[unit.uid])
 
-    def setUpLevel(self, level):
-        self.level = level
-
-
-
-    def createHPBar(self):
-        for unit in self.level.units.units_at.values():
-            hp = HealthBar()
-            hp.setBrush(QtCore.Qt.cyan)
-            hp.setRect(0, self.h , self.w, 32)
-            hp.setPos(unit.pos())
-            hp.setHP(100)
-            self.unit_hps[unit.uid] = hp
-            self.addToGroup(self.unit_hps[unit.uid])
-        self.createToolTip()
-        self.createHPText()
-
-    def createHPText(self):
-        for unit in self.level.units.units_at.values():
-            hpText = HealthText()
-            hpText.setUnitPos(unit.pos())
-            self.unit_hptxts[unit.uid] = hpText
-            self.addToGroup(self.unit_hptxts[unit.uid])
+    def createHPText(self, unit):
+        hpText = HealthText()
+        hpText.setUnitPos(unit.pos())
+        self.unit_hptxts[unit.uid] = hpText
+        self.addToGroup(self.unit_hptxts[unit.uid])
 
     def getHPprec(self, unit):
         return (unit.health * 100)/unit.max_health
+
+    def createSuppot(self, units_at):
+        self.createToolTip()
+        for unit in units_at.values():
+            self.createHPBar(unit)
+            self.createHPText(unit)
 
     def moveSupport(self, unit):
         self.unit_hptxts[unit.uid].setUnitPos(unit.pos())
@@ -147,7 +153,6 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
     def updateSupport(self, unit, amount):
         self.unit_hps[unit.uid].setHP(self.getHPprec(unit))
         self.unit_hptxts[unit.uid].setText(amount)
-
 
     def createToolTip(self):
         self.tooltip = QtWidgets.QGraphicsRectItem()
@@ -162,14 +167,16 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
         self.tooltip.setVisible(False)
         self.addToGroup(self.tooltip)
 
-    def showToolTip(self, point):
-        if point in self.level.units.units_location.keys():
-            unit = self.level.units.getUnit(point[0], point[1])
+    def showToolTip(self, cell, units_at):
+        if cell in [unit.worldPos for unit in units_at.values()]:
+            unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
+            print('showToolTip units= ',unit)
             self.tooltip.setPos(unit.pos())
             txt = 'uid = ' + str(unit.uid)
-            txt += '\nhp = ' + str(self.level.units.units_bf[unit.uid].health)
-            txt += '\nmana = ' + str(self.level.units.units_bf[unit.uid].mana)
-            txt += '\nstamina = ' + str(self.level.units.units_bf[unit.uid].stamina)
+            # Буде восстановлено после рафкторинга
+            txt += '\nhp = ' + str(unit.hp)
+            # txt += '\nmana = ' + str(self.level.units.units_bf[unit.uid].mana)
+            # txt += '\nstamina = ' + str(self.level.units.units_bf[unit.uid].stamina)
             self.toolText.setPlainText(txt)
             self.tooltip.setVisible(True)
         else:
