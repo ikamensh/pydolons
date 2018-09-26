@@ -137,24 +137,16 @@ class MidleLayer(QtWidgets.QGraphicsItemGroup):
             self.unit_hptxts[unit.uid] = hpText
             self.addToGroup(self.unit_hptxts[unit.uid])
 
-    def updateHPText(self):
-        message = gamechanel.getMessage()
-        if message != {} and message['target'].alive:
-            unit = self.level.units.units_at[message['target'].uid]
-            self.unit_hptxts[unit.uid].setUnitPos(unit.pos())
-            self.unit_hptxts[unit.uid].setText(message['amount'])
-
     def getHPprec(self, unit):
         return (unit.health * 100)/unit.max_health
 
-    def updateHPBar(self):
-        for unit in self.level.units.units_at.values():
-            self.unit_hps[unit.uid].setHP(self.getHPprec(self.level.units.units_bf[unit.uid]))
-            self.unit_hps[unit.uid].setPos(unit.pos())
+    def moveSupport(self, unit):
+        self.unit_hptxts[unit.uid].setUnitPos(unit.pos())
+        self.unit_hps[unit.uid].setPos(unit.pos())
 
-    def updateSupport(self):
-        self.updateHPBar()
-        self.updateHPText()
+    def updateSupport(self, unit, amount):
+        self.unit_hps[unit.uid].setHP(self.getHPprec(unit))
+        self.unit_hptxts[unit.uid].setText(amount)
 
 
     def createToolTip(self):
