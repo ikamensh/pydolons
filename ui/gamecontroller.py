@@ -1,9 +1,12 @@
+from battlefield import Cell
 from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class GameController:
     def __init__(self, gameconfig, game, view, scene, menu):
-
+        """
+        last_point = Cell() -- последняя точка, на которую указывает игрок
+        """
         self.gameconfig = gameconfig
         self.the_game = game
         self.view = view
@@ -14,8 +17,8 @@ class GameController:
 
         self.cursor = QtWidgets.QGraphicsEllipseItem(-10, -10, 20, 20)
 
-        self.last_point = (0, 0)
-        self.selected_point = None
+        self.last_point = Cell(0, 0)
+        self.selected_point = Cell(0, 0)
 
 
     def setUp(self, world, units, middleLayer):
@@ -35,16 +38,12 @@ class GameController:
         self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
-        self.the_game.ui_order( (self.last_point[0], self.last_point[1]) )
-        self.selected_point = self.last_point
-        self.middleLayer.showSelectedItem(self.selected_point)
+        self.the_game.ui_order(self.last_point.x, self.last_point.y)
+        self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+        self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
 
     def keyPressEvent(self, e):
         pass
-        # self.attackUnit(e)
-        # self.setFacingHero(e)
-        # self.moveUnit(e)
-        # self.tabUnit(e)
 
     def wheelEvent(self, e):
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
@@ -54,22 +53,6 @@ class GameController:
             self.zoomIn()
         elif e.delta() < 0.0:
             self.zoomOut()
-
-
-
-    def moveUnit(self, e):
-        """ Управление двжением героя
-        """
-        if e.key() == QtCore.Qt.Key_W:
-            print('up')
-        if e.key() == QtCore.Qt.Key_S:
-            print('down')
-        if e.key() == QtCore.Qt.Key_A:
-            print('left')
-        if e.key() == QtCore.Qt.Key_D:
-            print('right')
-        # Данный метод изменен
-        # self.middleLayer.updateSupport()
 
     def zoomIn(self):
         self.tr.scale(1.05, 1.05)
@@ -113,11 +96,7 @@ class GameController:
             self.scene.setSceneRect(rect)
             self.screenMenu.setDefaultPos()
 
-
-
-
     def itemSelect(self, newPos):
-
         x = int((newPos.x() / self.tr.m11()) / self.gameconfig.unit_size[0])
         if newPos.x() < 0:
             x -= 1
@@ -128,7 +107,7 @@ class GameController:
 
         world_x, world_y = self.gameconfig.world_size
         if 0 <= x < world_x and  0 <= y < world_y:
-            self.last_point = x, y
+            self.last_point.x, self.last_point.y = x, y
 
-        self.middleLayer.showToolTip(self.last_point)
-        self.middleLayer.showSelectItem(self.last_point)
+        self.middleLayer.showToolTip(self.last_point, self.units.units_at)
+        self.middleLayer.showSelectItem(x, y)
