@@ -55,19 +55,6 @@ class GameController:
         elif e.delta() < 0.0:
             self.zoomOut()
 
-    def updateWorld(self):
-        # for uid, unit in list(self.units.units_bf.items()):
-        #     if not unit.alive:
-        #         print('not live:', unit)
-        #         self.units.diedUnit(uid)
-        #         self.middleLayer.removeUnitLayer(uid)
-        #         self.screenMenu.updateUnitStack(uid)
-        #     else:
-        #         cell = self.the_game.battlefield.unit_locations.setdefault(unit, None)
-        #         if not cell is None:
-        #             self.units.moveUnit(unit, cell)
-        # self.middleLayer.updateSupport()
-        pass
 
 
     def moveUnit(self, e):
@@ -81,7 +68,8 @@ class GameController:
             print('left')
         if e.key() == QtCore.Qt.Key_D:
             print('right')
-        self.middleLayer.updateSupport()
+        # Данный метод изменен
+        # self.middleLayer.updateSupport()
 
     def zoomIn(self):
         self.tr.scale(1.05, 1.05)
