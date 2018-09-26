@@ -2,6 +2,7 @@ from mechanics.events import EventsChannels
 from mechanics.events.src.Event import Event
 from mechanics.damage import Damage
 from mechanics.chances import ImpactFactor
+from ui.gui_util.gamechanel import gamechanel
 
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
@@ -35,6 +36,8 @@ class DamageEvent(Event):
 
         self.weapon_dur_dmg = weapon_dur_dmg
         self.target.lose_health(self.amount, self.source)
+        if self.source:
+            gamechanel.sendMessage({'event':'DamageEvent','amount':self.amount,'target':self.target})
 
 
     def __repr__(self):

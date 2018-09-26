@@ -2,6 +2,7 @@ from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 from battlefield import Cell
 import my_context
+from ui.gui_util.gamechanel import gamechanel
 
 class MovementEvent(Event):
     channel = EventsChannels.MovementChannel
@@ -18,6 +19,7 @@ class MovementEvent(Event):
 
     def resolve(self):
         self.battlefield.move(self.unit, self.cell_to)
+        gamechanel.sendMessage({'event':'MovementEvent','unit':self.unit,'cell_to':self.cell_to })
 
     def __repr__(self):
         return "{} moves from {} to {}".format(self.unit, self.cell_from, self.cell_to)
