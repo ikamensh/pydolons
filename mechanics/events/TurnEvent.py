@@ -5,7 +5,7 @@ import my_context
 
 
 class TurnEvent(Event):
-    channel = EventsChannels.MovementChannel
+    channel = EventsChannels.TurnChannel
 
     def __init__(self, unit, ccw):
         self.unit = unit

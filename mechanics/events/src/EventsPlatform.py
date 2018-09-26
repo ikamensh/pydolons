@@ -21,7 +21,8 @@ class EventsPlatform:
                 gamelog(event)
             event.resolve()
             for trigger in list(triggers):
-                assert isinstance(event, trigger.target_event_cls)
+                if not isinstance(event, trigger.target_event_cls):
+                    print(channel, trigger, event)
                 trigger.try_on_event(event)
         else:
             gamelog(repr(channel)+": INTERRUPTED")

@@ -4,6 +4,7 @@ from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicPara
 from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
+
 # @autor:reef425
 # оставить до рефакторинга
 try:
@@ -11,6 +12,8 @@ try:
 except Exception as e:
     print(e)
     UnitDiedEvent = object
+
+
 from mechanics.actives import ActiveTags
 from content.actives.std_movements import std_movements, turn_ccw, turn_cw
 from content.actives.std_melee_attack import std_attacks
@@ -82,6 +85,7 @@ class Unit(BattlefieldObject):
         self.last_damaged_by = None
 
         self.icon = base_type.icon
+        self.sound_map = base_type.sound_map
 
         self.turn_ccw_active = self.give_active(turn_ccw)
         self.turn_ccw = lambda : self.activate(self.turn_ccw_active)
