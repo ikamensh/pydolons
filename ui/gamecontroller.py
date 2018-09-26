@@ -36,7 +36,6 @@ class GameController:
 
     def mousePressEvent(self, e):
         self.the_game.ui_order( (self.last_point[0], self.last_point[1]) )
-        self.updateWorld()
         self.selected_point = self.last_point
         self.middleLayer.showSelectedItem(self.selected_point)
 
@@ -57,19 +56,18 @@ class GameController:
             self.zoomOut()
 
     def updateWorld(self):
-        for uid, unit in list(self.units.units_bf.items()):
-            if not unit.alive:
-                print('not live:', unit)
-                self.units.removeUnit(uid)
-                self.middleLayer.removeUnitLayer(uid)
-                self.screenMenu.updateUnitStack(uid)
-            else:
-                cell = self.the_game.battlefield.unit_locations.setdefault(unit, None)
-                if not cell is None:
-                    pos = (self.units.units_at[uid].worldPos.x, self.units.units_at[uid].worldPos.y)
-                    self.units.units_at[uid].setWorldPos(cell.x , cell.y )
-                    self.units.updateLocations(self.units.units_at[uid], pos)
-        self.middleLayer.updateSupport()
+        # for uid, unit in list(self.units.units_bf.items()):
+        #     if not unit.alive:
+        #         print('not live:', unit)
+        #         self.units.diedUnit(uid)
+        #         self.middleLayer.removeUnitLayer(uid)
+        #         self.screenMenu.updateUnitStack(uid)
+        #     else:
+        #         cell = self.the_game.battlefield.unit_locations.setdefault(unit, None)
+        #         if not cell is None:
+        #             self.units.moveUnit(unit, cell)
+        # self.middleLayer.updateSupport()
+        pass
 
 
     def moveUnit(self, e):
