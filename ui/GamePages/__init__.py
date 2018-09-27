@@ -21,7 +21,8 @@ class GamePages(object):
 
     def setUpGameMenu(self):
         self.gameMenu = ScreenMenu()
-        self.scene.addItem(self.gameMenu)
+        self.gameRoot.scene.addItem(self.gameMenu)
+        self.gameMenu.setGameRoot(self.gameRoot)
         self.gameMenu.setUpGui()
         self.gameMenu.setUpConsole()
 
