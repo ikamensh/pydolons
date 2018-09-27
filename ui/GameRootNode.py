@@ -6,6 +6,11 @@ class GameRootNode(object):
         self.level = None
         self.levels = None
         self.gamePages = None
+        self.cfg = None
+
+    def setGameConfig(self, gameConfig):
+        self.cfg = gameConfig
+        self.cfg.gameRoot = self
 
     def setLevel(self, level):
         self.level = level
