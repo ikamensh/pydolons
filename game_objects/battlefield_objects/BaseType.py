@@ -3,14 +3,15 @@ from mechanics.chances.CritHitGrazeMiss import ImpactChances
 from mechanics.damage import DamageTypes
 
 from character_creation.Masteries import Masteries
+from ui.sounds import sound_maps
 
 
 class BaseType:
     default_unarmed_chances = ImpactChances(crit=0.05, hit=0.5, graze=0.6)
 
-    def __init__(self, attributes, type_name, unarmed_damage_type=DamageTypes.CRUSH, resists=None,
+    def __init__(self, attributes, type_name, *, unarmed_damage_type=DamageTypes.CRUSH, resists=None,
                  armor_dict=None, armor_base=0, inventory_capacity = 20,
-                 actives=None, icon="default.png", unarmed_chances = default_unarmed_chances, xp = None):
+                 actives=None, icon="default.png", unarmed_chances = default_unarmed_chances, xp = None, sound_map = None):
 
         self.attributes = {}
         for attr in list(attributes.keys()):
@@ -31,6 +32,7 @@ class BaseType:
         self.inventory_capacity = inventory_capacity
         self.armor_base = armor_base
         self.icon = icon
+        self.sound_map = sound_map or sound_maps.std_sound_map
         self.unarmed_chances = unarmed_chances
 
         self.xp = xp or Masteries.cumulative_cost( sum(self.attributes.values()) - 40 )

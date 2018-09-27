@@ -18,14 +18,14 @@ def condition(t,e):
         my_context.the_game.fractions[e.unit] is Fractions.ENEMY and \
         my_context.the_game.fractions[e.killer] is Fractions.PLAYER
 
-def callback(t,e):
+def grant_xp_callback(t, e):
     e.killer.xp += compute_exp_gain(e.killer, e.unit)
 
 
 def exp_rule():
     return Trigger(UnitDiedEvent,
                    conditions={condition},
-                   callbacks=[callback])
+                   callbacks=[grant_xp_callback])
 
 
 
