@@ -33,7 +33,7 @@ class BaseLevel(object):
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
-        self.gameRoot.currentLevel = self
+        self.gameRoot.level = self
 
     def setMiddleLayer(self, middleLayer):
         self.middleLayer = middleLayer
@@ -57,20 +57,22 @@ class Level_demo_dungeon(BaseLevel):
         self.gamechanel.unitDied.connect(self.unitDiedSlot)
         self.gamechanel.unitMove.connect(self.unitMoveSlot)
         self.gamechanel.targetDamage.connect(self.targetDamageSlot)
+        self.gamechanel.attackTo.connect(self.attackToSlot)
+
 
     def unitDiedSlot(self, msg):
-        print('died slot run')
         self.units.dieadUnit(msg.get('unit'))
         self.middleLayer.removeUnitLayer(msg.get('unit').uid)
 
     def unitMoveSlot(self, msg):
-        print('move slot run')
         self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
 
     def targetDamageSlot(self, msg):
-        print('target Damage run')
         self.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+
+    def attackToSlot(self, msg):
+        self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
 
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
