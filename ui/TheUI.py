@@ -5,7 +5,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from ui.GameRootNode import GameRootNode
 
 from ui.GamePages import GamePages
-from ui.gamecontroller import GameController
+from ui.GameController import GameController
 from ui.levels import Level_demo_dungeon
 
 from ui.GameView import GameView
@@ -41,9 +41,8 @@ class TheUI(QtWidgets.QWidget):
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtGui.QBrush(self.gameconfig.getPicFile('dungeon.jpg')))
 
-
-
-        self.controller = GameController(self.gameconfig, self.the_game, self.view, self.scene, menu)
+        self.controller = GameController(self.the_game)
+        self.gameRoot.setGameController(self.controller)
 
         self.level = Level_demo_dungeon(self.gameconfig)
         self.level.setUpLevel(self.the_game, self.controller)
