@@ -30,17 +30,19 @@ class TheUI(QtWidgets.QWidget):
         self.setLayout(self.layout)
 
         self.view = GameView(self)
+        self.gameRoot.setView(self.view)
         self.gameconfig = self.view.gameconfig
         self.gameRoot.setGameConfig(self.view.gameconfig)
         self.layout.addWidget(self.view)
         self.layout.setMargin(2)
 
         self.scene = QtWidgets.QGraphicsScene(0, 0, 500, 500)
+        self.gameRoot.setScene(self.scene)
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtGui.QBrush(self.gameconfig.getPicFile('dungeon.jpg')))
 
 
-        menu = ScreenMenu()
+
         self.controller = GameController(self.gameconfig, self.the_game, self.view, self.scene, menu)
 
         self.level = Level_demo_dungeon(self.gameconfig)
@@ -52,10 +54,9 @@ class TheUI(QtWidgets.QWidget):
         self.scene.addItem(self.controller.cursor)
 
         self.view.resized.connect(menu.updateGui)
-        menu.setGameConfig(self.gameconfig)
-        menu.setUpLevel(self.level)
-        menu.setUpGui(self.view)
-        menu.setScene(self.scene)
+        self.gamePages = GamePages()
+        self.gameRoot.setGamePages(self.gamePages)
+        self.gamePages.setUpPages()
 
 
         self.view.controller = self.controller
