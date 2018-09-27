@@ -1,7 +1,7 @@
 from PySide2 import QtCore
 
 
-from ui.gameworld import GameWorld, MidleLayer
+from ui.gameworld import GameWorld, MiddleLayer
 from content.dungeons.demo_dungeon import demo_dungeon
 from ui.units import Units, BasicUnit
 from ui.gui_util.GameProxyChanel import GameProxyChanel
