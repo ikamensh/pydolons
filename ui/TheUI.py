@@ -31,6 +31,7 @@ class TheUI(QtWidgets.QWidget):
 
         self.view = GameView(self)
         self.gameconfig = self.view.gameconfig
+        self.gameRoot.setGameConfig(self.view.gameconfig)
         self.layout.addWidget(self.view)
         self.layout.setMargin(2)
 
