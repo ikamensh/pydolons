@@ -23,6 +23,12 @@ class GameRootNode(object):
         self.cfg = gameConfig
         self.cfg.gameRoot = self
 
+    def setGameController(self, controller):
+        self.controller = controller
+        self.controller.gameRoot = self
+
+
+
     def setLevel(self, level):
         self.level = level
         self.level.setGameRoot(self)
