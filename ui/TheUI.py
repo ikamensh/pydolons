@@ -52,11 +52,10 @@ class TheUI(QtWidgets.QWidget):
         self.scene.addItem(self.level.middleLayer)
         self.scene.addItem(self.controller.cursor)
 
-        self.view.resized.connect(menu.updateGui)
         self.gamePages = GamePages()
         self.gameRoot.setGamePages(self.gamePages)
         self.gamePages.setUpPages()
-
+        self.view.resized.connect(self.gamePages.updateGui)
 
         self.view.controller = self.controller
         self.view.setScene(self.scene)
