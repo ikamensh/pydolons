@@ -113,12 +113,11 @@ class MiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.selected_item.setVisible(False)
         self.addToGroup(self.selected_item)
 
-    def showSelectedItem(self, point):
-        self.selected_item.setX(point[0] * self.w)
-        self.selected_item.setY(point[1] * self.h)
+    def showSelectedItem(self, x, y):
+        self.selectItem( x, y)
         self.selected_item.setVisible(True)
 
-    def showSelectItem(self, x, y):
+    def selectItem(self, x, y):
         self.select_item.setX(x * self.w)
         self.select_item.setY(y * self.h)
 
@@ -170,7 +169,6 @@ class MiddleLayer(QtWidgets.QGraphicsItemGroup):
     def showToolTip(self, cell, units_at):
         if cell in [unit.worldPos for unit in units_at.values()]:
             unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
-            print('showToolTip units= ',unit)
             self.tooltip.setPos(unit.pos())
             txt = 'uid = ' + str(unit.uid)
             # Буде восстановлено после рафкторинга
