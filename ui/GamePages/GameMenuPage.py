@@ -51,10 +51,15 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     def __init__(self, *arg):
         super(ScreenMenu, self).__init__(*arg)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
-        self.level = None
         self.gui_console = None
-        self.gameconfig = None
         self.setUpNotify()
+        self.gameRoot = None
+
+    def setGameRoot(self, gameRoot):
+        self.gameRoot =  gameRoot
+        self.gameconfig = self.gameRoot.gameconfig
+        self.setUpDefaultPosition()
+
 
     def setUpNotify(self):
         self.notify = NotifyText()
@@ -66,19 +71,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     def setUpDefaultPosition(self):
         self.console_pos = self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240
 
-    def setScene(self, scene):
-        scene.addItem(self)
-        self.setUpConsole()
-
-
-    def setGameConfig(self, gameconfig):
-        self.gameconfig = gameconfig
-        self.setUpDefaultPosition()
-
-    def setUpLevel(self, level):
-        self.level = level
-
-    def setUpGui(self, view):
+    def setUpGui(self):
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
         self.unitStack.setPos(0, 0)
@@ -86,14 +79,14 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.active_select.setPixmap(self.gameconfig.getPicFile('active select 96.png').scaled(64, 64))
         self.active_select.setParentItem(self.unitStack)
         self.active_select.setPos(self.unitStack.x(), self.unitStack.y())
-        if not self.level is None:
+        if not self.gameRoot.level is None:
             self.createUnitStack()
 
     def createUnitStack(self):
         self.unitStack.items = {}
         i = 0
-        for bf_unit in self.level.units.units_stack:
-            unit = self.level.units.units_at[bf_unit.uid]
+        for bf_unit in self.gameRoot.level.units.units_stack:
+            unit = self.gameRoot.level.units.units_at[bf_unit.uid]
             item = GameObject(64, 64)
             item.setParentItem(self.unitStack)
             item.setPixmap(unit.pixmap().scaled(64, 64))
@@ -115,10 +108,10 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         if not uid is None:
             self.unitStack.items[uid].setParentItem(None)
             del self.unitStack.items[uid]
-        w = len(self.level.units.units_stack)
+        w = len(self.gameRoot.level.units.units_stack)
         self.unitStack.rect().setWidth(w * 64)
         i = 0
-        for bf_unit in self.level.units.units_stack:
+        for bf_unit in self.gameRoot.level.units.units_stack:
             self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
             i+=1
 
