@@ -14,6 +14,7 @@ class GamePages(object):
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
+        self.gameRoot.gamePages = self
 
     def setUpPages(self):
         self.setUpGameMenu()
