@@ -45,6 +45,7 @@ class TheUI(QtWidgets.QWidget):
         self.gameRoot.setGameController(self.controller)
 
         self.level = Level_demo_dungeon(self.gameconfig)
+        self.gameRoot.setLevel(self.level)
         self.level.setUpLevel(self.the_game, self.controller)
 
         self.scene.addItem(self.level.world)
