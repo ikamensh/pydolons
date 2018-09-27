@@ -79,8 +79,8 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     def createUnitStack(self):
         self.unitStack.items = {}
         i = 0
-        for bf_unit in self.gameRoot.level.units.units_stack:
-            unit = self.gameRoot.level.units.units_at[bf_unit.uid]
+        for unit in self.gameRoot.level.units.units_at.values():
+            # unit = self.gameRoot.level.units.units_at[bf_unit.uid]
             item = GameObject(64, 64)
             item.setParentItem(self.unitStack)
             item.setPixmap(unit.pixmap().scaled(64, 64))
