@@ -1,19 +1,10 @@
-from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes
+from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 from game_objects.battlefield_objects.CharAttributes import HP_PER_STR, MANA_PER_INT, STAMINA_PER_END, UNARMED_DAMAGE_PER_STR
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
 from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
-
-# @autor:reef425
-# оставить до рефакторинга
-try:
-    from mechanics.events import UnitDiedEvent
-except Exception as e:
-    print(e)
-    UnitDiedEvent = object
-
-
+from mechanics import events
 from mechanics.actives import ActiveTags
 from content.actives.std_movements import std_movements, turn_ccw, turn_cw
 from content.actives.std_melee_attack import std_attacks
@@ -26,24 +17,24 @@ from functools import lru_cache
 class Unit(BattlefieldObject):
 
 
-    str = AttributeWithBonuses("str_base", CharAttributes.STREINGTH)
-    end = AttributeWithBonuses("end_base", CharAttributes.ENDURANCE)
-    prc = AttributeWithBonuses("prc_base", CharAttributes.PERCEPTION)
-    agi = AttributeWithBonuses("agi_base", CharAttributes.AGILITY)
-    int = AttributeWithBonuses("int_base", CharAttributes.INTELLIGENCE)
-    cha = AttributeWithBonuses("cha_base", CharAttributes.CHARISMA)
+    str = AttributeWithBonuses("str_base", ca.STREINGTH)
+    end = AttributeWithBonuses("end_base", ca.ENDURANCE)
+    prc = AttributeWithBonuses("prc_base", ca.PERCEPTION)
+    agi = AttributeWithBonuses("agi_base", ca.AGILITY)
+    int = AttributeWithBonuses("int_base", ca.INTELLIGENCE)
+    cha = AttributeWithBonuses("cha_base", ca.CHARISMA)
 
-    max_health = AttributeWithBonuses("max_health_base", CharAttributes.HEALTH)
-    max_mana = AttributeWithBonuses("max_mana_base", CharAttributes.MANA)
-    max_stamina = AttributeWithBonuses("max_stamina_base", CharAttributes.STAMINA)
-    _initiative = AttributeWithBonuses("initiative_base", CharAttributes.INITIATIVE)
+    max_health = AttributeWithBonuses("max_health_base", ca.HEALTH)
+    max_mana = AttributeWithBonuses("max_mana_base", ca.MANA)
+    max_stamina = AttributeWithBonuses("max_stamina_base", ca.STAMINA)
+    _initiative = AttributeWithBonuses("initiative_base", ca.INITIATIVE)
 
-    armor = AttributeWithBonuses("armor_base", CharAttributes.ARMOR)
-    resists = AttributeWithBonuses("resists_base", CharAttributes.RESISTANCES)
+    armor = AttributeWithBonuses("armor_base", ca.ARMOR)
+    resists = AttributeWithBonuses("resists_base", ca.RESISTANCES)
 
 
 
-    health = DynamicParameter("max_health", [UnitDiedEvent])
+    health = DynamicParameter("max_health", [events.UnitDiedEvent])
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
@@ -55,12 +46,12 @@ class Unit(BattlefieldObject):
         Unit.last_uid += 1
         self.uid = Unit.last_uid
 
-        self.str_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.STREINGTH])
-        self.end_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.ENDURANCE])
-        self.prc_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.PERCEPTION])
-        self.agi_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.AGILITY])
-        self.int_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.INTELLIGENCE])
-        self.cha_base = Attribute.attribute_or_none(base_type.attributes[CharAttributes.CHARISMA])
+        self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
+        self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
+        self.prc_base = Attribute.attribute_or_none(base_type.attributes[ca.PERCEPTION])
+        self.agi_base = Attribute.attribute_or_none(base_type.attributes[ca.AGILITY])
+        self.int_base = Attribute.attribute_or_none(base_type.attributes[ca.INTELLIGENCE])
+        self.cha_base = Attribute.attribute_or_none(base_type.attributes[ca.CHARISMA])
         self.readiness = 0
         self.disabled = False
         self.masteries = masteries or Masteries(base_type.xp)
@@ -214,15 +205,12 @@ class Unit(BattlefieldObject):
             return self.get_unarmed_weapon()
 
     def can_pay(self, cost):
-        result = True
-        if cost.mana > self.mana:
-            result = False
-        if cost.stamina > self.stamina:
-            result = False
-        if cost.health > self.health:
-            result = False
+        return not any( [
+            cost.mana > self.mana,
+            cost.stamina > self.stamina,
+            cost.health > self.health])
 
-        return result
+
 
     def pay(self, cost):
         self.mana -= cost.mana

@@ -1,10 +1,9 @@
-from game_objects.items import Item, ItemTypes
-from my_utils.named_enums import NameEnum, auto
+import game_objects.items as items
 
 
-class MaterialPieces(Item):
+class MaterialPieces(items.Item):
     def __init__(self, material, pieces):
-        super().__init__(material.name, ItemTypes.MATERIAL)
+        super().__init__(material.name, items.ItemTypes.MATERIAL)
         self.pieces = pieces
 
 
