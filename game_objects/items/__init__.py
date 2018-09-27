@@ -14,7 +14,6 @@ from game_objects.items.on_unit.ItemTransactions import ItemTransactions
 
 from game_objects.items.types.Weapon import Weapon
 from game_objects.items.blueprints.Blueprint import Blueprint
-from game_objects.items.blueprints.QualityLevels import QualityLevels
 from game_objects.items.blueprints.types.WeaponBlueprint import WeaponBlueprint
 from game_objects.items.blueprints.types.ArmorBlueprint import ArmorBlueprint
-from game_objects.items.materials.Materials import Material
+from game_objects.items.materials.Materials import Material, MaterialPieces

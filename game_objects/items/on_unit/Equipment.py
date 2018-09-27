@@ -67,8 +67,6 @@ class Equipment:
     def equip(self, slot_from):
         """
         Choose a fitting slot, and exchange items with it.
-        :param item: 
-        :return: 
         """
 
         item = slot_from.content
