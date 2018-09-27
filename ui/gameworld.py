@@ -81,9 +81,6 @@ class HealthText(QtWidgets.QGraphicsTextItem):
             self.setVisible(False)
             self.timer.stop()
 
-
-
-
 class MiddleLayer(QtWidgets.QGraphicsItemGroup):
     def __init__(self, gameconfig):
         super(MiddleLayer, self).__init__()
@@ -114,7 +111,8 @@ class MiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.addToGroup(self.selected_item)
 
     def showSelectedItem(self, x, y):
-        self.selectItem( x, y)
+        self.selected_item.setX(x * self.w)
+        self.selected_item.setY(y * self.h)
         self.selected_item.setVisible(True)
 
     def selectItem(self, x, y):
