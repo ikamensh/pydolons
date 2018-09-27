@@ -2,6 +2,8 @@ import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
+from ui.GameRootNode import GameRootNode
+
 from ui.GamePages import GamePages
 from ui.gamecontroller import GameController
 from ui.levels import Level_demo_dungeon
@@ -21,6 +23,8 @@ class TheUI(QtWidgets.QWidget):
 
         cursor = QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'))
         self.setCursor(cursor)
+
+        self.gameRoot = GameRootNode()
 
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
