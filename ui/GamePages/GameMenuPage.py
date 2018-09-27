@@ -51,7 +51,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
-        self.gameconfig = self.gameRoot.gameconfig
+        self.gameconfig = self.gameRoot.cfg
         self.setUpDefaultPosition()
 
 
