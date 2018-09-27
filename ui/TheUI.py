@@ -2,7 +2,7 @@ import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from ui.menu import ScreenMenu
+from ui.GamePages import GamePages
 from ui.gamecontroller import GameController
 from ui.levels import Level_demo_dungeon
 
