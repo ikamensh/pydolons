@@ -3,12 +3,6 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from ui.units import GameObject
 from GameLog import gamelog
 
-#    ______
-#   /     /
-#  /_____/
-# /
-#/
-
 class GuiConsole(QtWidgets.QPlainTextEdit):
     def __init__(self, *args):
         super(GuiConsole, self).__init__(*args)
