@@ -112,4 +112,4 @@ class GameController:
             self.last_point.x, self.last_point.y = x, y
 
         self.middleLayer.showToolTip(self.last_point, self.units.units_at)
-        self.middleLayer.showSelectItem(x, y)
+        self.middleLayer.selectItem(x, y)
