@@ -1,4 +1,4 @@
-import game_objects.items as items
+from game_objects import items
 
 
 class MaterialPieces(items.Item):
@@ -17,6 +17,3 @@ class Material:
 
     def to_pieces(self, count_pieces):
         return MaterialPieces(self, count_pieces)
-
-
-
