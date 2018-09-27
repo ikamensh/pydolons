@@ -19,6 +19,11 @@ class GameConfiguration:
         self.setUpUnits()
         self.loadFilesPath()
         self.setUpPixmaps()
+        self.gameRoot = None
+
+    def setGameRoot(self, gameRoot):
+        self.gameRoot =  gameRoot
+        self.gameRoot.cfg = self
 
     def setWorld(self, world):
         """
