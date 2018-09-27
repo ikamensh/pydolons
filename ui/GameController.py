@@ -35,7 +35,7 @@ class GameController:
     def mouseMoveEvent(self, e):
         """ Метод перехватывает событие движение мыши
         """
-        newPos = self.view.mapTogameRoot.scene(e.x(), e.y())
+        newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
         self.moveCursor(newPos)
         self.itemSelect(newPos)
 
@@ -83,7 +83,7 @@ class GameController:
             self.gameRoot.scene.setSceneRect(rect)
             self.gameRoot.gameMenu.setDefaultPos()
 
-        if e.x() + 5.0 > self.view.viewport().width() - 5.0:
+        if e.x() + 5.0 > self.gameRoot.view.viewport().width() - 5.0:
             rect.translate(10, 0)
             self.gameRoot.scene.setSceneRect(rect)
             self.gameRoot.gameMenu.setDefaultPos()
@@ -93,7 +93,7 @@ class GameController:
             self.gameRoot.scene.setSceneRect(rect)
             self.gameRoot.gameMenu.setDefaultPos()
 
-        if e.y() + 5.0 > self.view.viewport().height() - 5.0:
+        if e.y() + 5.0 > self.gameRoot.view.viewport().height() - 5.0:
             rect.translate(0, 10)
             self.gameRoot.scene.setSceneRect(rect)
             self.gameRoot.gameMenu.setDefaultPos()
