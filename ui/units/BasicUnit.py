@@ -78,3 +78,6 @@ class BasicUnit(GameObject):
 
     def __hash__(self):
         return hash(self.worldPos)*3
+
+    def __repr__(self):
+        return f"{self.worldPos} -> BasicUnit {self.uid} "
