@@ -19,13 +19,14 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
+        self.level.gameRoot.cfg.sound_maps['SftStep3.wav'].play()
         x, y = cell_to.x, cell_to.y
         self.units_at[unit.uid].setWorldPos(x, y)
 
     def dieadUnit(self, unit):
-        unit = self.units_at[uid]
+        unit = self.units_at[unit.uid]
         self.removeFromGroup(unit)
-        del self.units.units_at[unit.uid]
+        del self.units_at[unit.uid]
 
     def collisionHeorOfUnits(self, x = None, y = None):
         if x is None:
