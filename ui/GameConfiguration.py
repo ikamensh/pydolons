@@ -1,5 +1,5 @@
 import os
-from PySide2 import QtGui, QtWidgets
+from PySide2 import QtGui, QtWidgets, QtMultimedia
 
 from my_context import pydolons_rootdir
 
@@ -8,17 +8,21 @@ class GameConfiguration:
     Установка конфигурации игровых объектов, настроек экрана и системы
     """
     def __init__(self):
-        # Форматы изображений
-        self.pic_format = ('png', 'jpg')
         # Игнорируемые папки
         self.ignore_path = ('resources/assets/sprites/axe', )
+        # Форматы изображений
+        self.pic_format = ('png', 'jpg')
         # Словарь путей к изображениям, ключ название файла
         self.pic_file_paths = {}
-
+        # Форматы звуков
+        self.sound_format = ('wav')
+        # Словарь путей к звукам, ключ название файла
+        self.sound_file_paths = {}
         self.setUpScreen()
         self.setUpUnits()
         self.loadFilesPath()
         self.setUpPixmaps()
+        self.setUpSounds()
         self.gameRoot = None
 
     def setGameRoot(self, gameRoot):
@@ -79,6 +83,8 @@ class GameConfiguration:
                 for name in item[2]:
                     if name[-3:] in self.pic_format:
                         self.pic_file_paths[name] = os.path.join(item[0], name)
+                    elif name[-3:] in self.sound_format:
+                        self.sound_file_paths[name] = os.path.join(item[0], name)
 
     def getPicFile(self, filename):
         """
@@ -89,6 +95,16 @@ class GameConfiguration:
         """
         assert self.pix_maps.get(filename) is not None
         return self.pix_maps.get(filename)
+
+    def setUpSounds(self):
+        self.sound_maps = {}
+        for filename, path in self.sound_file_paths.items():
+            sound = None
+            try:
+                sound = QtMultimedia.QSound(path)
+                self.sound_maps[filename] = sound
+            except Exception as e:
+                print(filename, ' : ', e)
 
     def setUpPixmaps(self):
         """Метод перебирает словарь GameConfiguration.pic_file_paths
