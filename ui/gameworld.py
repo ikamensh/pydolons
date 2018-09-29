@@ -164,15 +164,16 @@ class MiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.tooltip.setVisible(False)
         self.addToGroup(self.tooltip)
 
-    def showToolTip(self, cell, units_at):
+    def showToolTip(self, cell, units_at, units_bf):
         if cell in [unit.worldPos for unit in units_at.values()]:
+            # print('at = >', units_at)
+            # print('bf = >', units_bf)
             unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
             self.tooltip.setPos(unit.pos())
             txt = 'uid = ' + str(unit.uid)
-            # Буде восстановлено после рафкторинга
-            txt += '\nhp = ' + str(unit.hp)
-            # txt += '\nmana = ' + str(self.level.units.units_bf[unit.uid].mana)
-            # txt += '\nstamina = ' + str(self.level.units.units_bf[unit.uid].stamina)
+            txt += '\nhp = ' + str(units_bf[cell].health)
+            txt += '\nmana = ' + str(units_bf[cell].mana)
+            txt += '\nstamina = ' + str(units_bf[cell].stamina)
             self.toolText.setPlainText(txt)
             self.tooltip.setVisible(True)
         else:
