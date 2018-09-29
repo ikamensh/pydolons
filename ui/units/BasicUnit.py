@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets
-from ui.units.GameObject import GameObject
+from ui.gamecore import GameObject
 
 class BasicUnit(GameObject):
     """docstring for BasicUnit."""
