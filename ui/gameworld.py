@@ -1,5 +1,5 @@
 from PySide2 import QtGui, QtWidgets, QtCore
-from ui.units import GameObject
+from ui.gamecore import GameObject
 from ui.gui_util.gamechanel import gamechanel
 
 
