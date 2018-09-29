@@ -4,7 +4,7 @@ from content.dungeons.demo_dungeon import demo_dungeon
 from game_objects.battlefield_objects import Unit
 from ui.TheUI import TheUI
 from threading import Thread
-from ui.sounds.sound_triggers import attack_sounds_trig, damage_sounds_trig, move_sounds_trig, perish_sounds_trig
+# from ui.sounds.sound_triggers import attack_sounds_trig, damage_sounds_trig, move_sounds_trig, perish_sounds_trig
 
 from time import time
 
@@ -14,7 +14,7 @@ def one_game():
 
     # attack_sounds_trig(),
     # damage_sounds_trig(),
-    move_sounds_trig(),
+    # move_sounds_trig(),
     # perish_sounds_trig()
 
     print(game)
