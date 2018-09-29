@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from ui.units import GameObject
+from ui.gamecore.GameObject import GameObject
 from GameLog import gamelog
 
 class GuiConsole(QtWidgets.QPlainTextEdit):
