@@ -1,7 +1,8 @@
 from PySide2 import QtCore
 
 
-from ui.gameworld import GameWorld, MiddleLayer
+from ui.GameWorld import GameWorld
+from ui.units import UnitMiddleLayer
 from content.dungeons.demo_dungeon import demo_dungeon
 from ui.units import Units, BasicUnit
 from ui.gui_util.GameProxyChanel import GameProxyChanel
@@ -87,7 +88,7 @@ class Level_demo_dungeon(BaseLevel):
         self.world.setWorldSize(demo_dungeon.w, demo_dungeon.h)
         self.world.setFloor(self.gameconfig.getPicFile('floor.png'))
 
-        self.setMiddleLayer(MiddleLayer(self.gameconfig))
+        self.setMiddleLayer(UnitMiddleLayer(self.gameconfig))
         self.game = game
 
         self.setUpUnits(self.game.battlefield)
