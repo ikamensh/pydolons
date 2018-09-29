@@ -16,17 +16,31 @@ class GameProxyChanel(QtCore.QObject):
         self.timer.start(10)
 
     def slotAlarmTimer(self):
-        message = gamechanel.getMessage()
-        # if message != {}:
-        #     print(message)
-        if message.get('event') == 'UnitDiedEvent':
-            self.unitDied.emit(message)
-        if message.get('event') == 'MovementEvent':
-            self.unitMove.emit(message)
-        if message.get('event') == 'DamageEvent':
-            self.targetDamage.emit(message)
-        if message.get('event') == 'AttackEvent':
-            self.attackTo.emit(message)
+        self.slotStackWork()
+        # message = gamechanel.getMessage()
+        # # if message != {}:
+        # #     print(message)
+        # if message.get('event') == 'UnitDiedEvent':
+        #     self.unitDied.emit(message)
+        # elif message.get('event') == 'MovementEvent':
+        #     self.unitMove.emit(message)
+        # elif message.get('event') == 'DamageEvent':
+        #     self.targetDamage.emit(message)
+        # elif message.get('event') == 'AttackEvent':
+        #     self.attackTo.emit(message)
+
+    def slotStackWork(self):
+        while gamechanel.msg_stack:
+            message = gamechanel.msg_stack.pop(0)
+            if message.get('event') == 'UnitDiedEvent':
+                self.unitDied.emit(message)
+            elif message.get('event') == 'MovementEvent':
+                self.unitMove.emit(message)
+            elif message.get('event') == 'DamageEvent':
+                self.targetDamage.emit(message)
+            elif message.get('event') == 'AttackEvent':
+                self.attackTo.emit(message)
+
 
 
     def sendMessage(self, message):
