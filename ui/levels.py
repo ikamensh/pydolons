@@ -61,15 +61,23 @@ class Level_demo_dungeon(BaseLevel):
 
 
     def unitDiedSlot(self, msg):
-        self.units.dieadUnit(msg.get('unit'))
+        print(msg)
         self.middleLayer.removeUnitLayer(msg.get('unit').uid)
+        self.units.dieadUnit(msg.get('unit'))
 
     def unitMoveSlot(self, msg):
+        print('move unit')
         self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
+        print('at = >', self.units.units_at)
+        print('bf = >', self.game.battlefield.units_at)
 
     def targetDamageSlot(self, msg):
-        self.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+        # Требуется рефакторинг метод срабатывает после смерти юнита
+        # self.gameRoot.cfg.sound_maps['ATTACK_WOLF_2.wav'].play(
+        if msg.get('target').uid in self.units.units_at.keys():
+            self.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+        pass
 
     def attackToSlot(self, msg):
         self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
