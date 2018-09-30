@@ -19,21 +19,26 @@ class Level_demo_dungeon(BaseLevel):
         self.gamechanel = GameProxyChanel()
         self.gamechanel.unitDied.connect(self.unitDiedSlot)
         self.gamechanel.unitMove.connect(self.unitMoveSlot)
+        self.gamechanel.unitTurn.connect(self.unitTurnSlot)
         self.gamechanel.targetDamage.connect(self.targetDamageSlot)
         self.gamechanel.attackTo.connect(self.attackToSlot)
 
 
     def unitDiedSlot(self, msg):
-        print(msg)
+        # print(msg)
         self.middleLayer.removeUnitLayer(msg.get('unit').uid)
         self.units.dieadUnit(msg.get('unit'))
 
     def unitMoveSlot(self, msg):
-        print('move unit')
+        # print('move unit')
         self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
-        print('at = >', self.units.units_at)
-        print('bf = >', self.game.battlefield.units_at)
+        # print('at = >', self.units.units_at)
+        # print('bf = >', self.game.battlefield.units_at)
+
+    def unitTurnSlot(self, msg):
+        self.units.units_at[msg.get('uid')].setDirection(msg.get('turn'))
+        # print(msg)
 
     def targetDamageSlot(self, msg):
         # Требуется рефакторинг метод срабатывает после смерти юнита
@@ -68,6 +73,8 @@ class Level_demo_dungeon(BaseLevel):
             if unit.icon == 'hero.png':
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
+            gameUnit.setDirection(battlefield.unit_facings[unit])
+            print(battlefield.unit_facings[unit])
             gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
             gameUnit.uid = unit.uid
             self.units.addToGroup(gameUnit)
