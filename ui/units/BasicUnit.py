@@ -48,23 +48,23 @@ class BasicUnit(GameObject):
         self.dirO.setVisible(False)
 
 
-    def setDirection(self, x, y):
-        if y >= 1 and x == 0:
+    def setDirection(self, turn):
+        if turn == (0 - 1j):
             self.dirS.setVisible(True)
             self.dirN.setVisible(False)
             self.dirW.setVisible(False)
             self.dirO.setVisible(False)
-        elif y <= -1 and x == 0:
+        elif turn == (0 + 1j):
             self.dirS.setVisible(False)
             self.dirN.setVisible(True)
             self.dirW.setVisible(False)
             self.dirO.setVisible(False)
-        if x >= 1 and y == 0:
+        if turn == (1 + 0j):
             self.dirS.setVisible(False)
             self.dirN.setVisible(False)
             self.dirW.setVisible(False)
             self.dirO.setVisible(True)
-        elif x <= -1 and y == 0:
+        elif turn == (-1 + 0j):
             self.dirS.setVisible(False)
             self.dirN.setVisible(False)
             self.dirW.setVisible(True)
