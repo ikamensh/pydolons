@@ -8,6 +8,7 @@ class GameProxyChanel(QtCore.QObject):
     attackTo = QtCore.Signal(dict)
     unitDied = QtCore.Signal(dict)
     unitMove = QtCore.Signal(dict)
+    unitTurn = QtCore.Signal(dict)
     targetDamage = QtCore.Signal(dict)
     def __init__(self):
         super(GameProxyChanel, self).__init__()
@@ -34,6 +35,8 @@ class GameProxyChanel(QtCore.QObject):
             message = gamechanel.msg_stack.pop(0)
             if message.get('event') == 'UnitDiedEvent':
                 self.unitDied.emit(message)
+            elif message.get('event') == 'TurnEvent':
+                self.unitTurn.emit(message)
             elif message.get('event') == 'MovementEvent':
                 self.unitMove.emit(message)
             elif message.get('event') == 'DamageEvent':
