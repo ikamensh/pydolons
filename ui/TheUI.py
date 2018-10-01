@@ -13,6 +13,8 @@ from ui.GameView import GameView
 
 class TheUI(QtWidgets.QWidget):
     view = None
+    singleton = None
+
     def __init__(self, game):
 
         super().__init__()
@@ -24,7 +26,7 @@ class TheUI(QtWidgets.QWidget):
         cursor = QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'))
         self.setCursor(cursor)
 
-        self.gameRoot = GameRootNode()
+        self.gameRoot: GameRootNode = GameRootNode()
 
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
@@ -80,7 +82,9 @@ class TheUI(QtWidgets.QWidget):
     def launch(game):
         app = QtWidgets.QApplication(sys.argv)
         window = TheUI(game)
+        TheUI.singleton = window
         sys.exit(app.exec_())
+
 
 
 if __name__ == '__main__':

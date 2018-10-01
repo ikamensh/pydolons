@@ -4,23 +4,32 @@ from content.dungeons.demo_dungeon import demo_dungeon
 from game_objects.battlefield_objects import Unit
 from ui.TheUI import TheUI
 from threading import Thread
-# from ui.sounds.sound_triggers import attack_sounds_trig, damage_sounds_trig, move_sounds_trig, perish_sounds_trig
+from ui.sounds.sound_triggers import attack_sounds_trig, damage_sounds_trig, move_sounds_trig, perish_sounds_trig
+from ui.triggers.animation_triggers import move_anim_trigger
 
-from time import time
+import time
 
 
 def one_game():
     game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
 
-    # attack_sounds_trig(),
-    # damage_sounds_trig(),
-    # move_sounds_trig(),
-    # perish_sounds_trig()
+
+    #attack_sounds_trig(),
+    #damage_sounds_trig(),
+    #move_sounds_trig(),
+    #perish_sounds_trig()
+    move_anim_trigger()
 
     print(game)
     game.print_all_units()
+
     Thread(target=TheUI.launch, args=[game]).start()
-    time = game.loop()
+    time.sleep(5)
+    print(TheUI.singleton.gameRoot.cfg)
+    TheUI.singleton.gameRoot.cfg.sound_maps["SftStep3.wav"].play()
+
+
+    game.loop()
     print(f"battle lasted for {time}")
 
 # t = time()

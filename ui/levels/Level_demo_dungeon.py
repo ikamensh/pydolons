@@ -38,10 +38,11 @@ class Level_demo_dungeon(BaseLevel):
 
     def unitMoveSlot(self, msg):
         # print('move unit')
-        self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
-        self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
+        #self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
+        #self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
         # print('at = >', self.units.units_at)
         # print('bf = >', self.game.battlefield.units_at)
+        print("BLABLA")
 
     def unitTurnSlot(self, msg):
         self.units.turnUnit(msg.get('uid'), msg.get('turn'))
