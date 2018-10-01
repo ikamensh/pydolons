@@ -8,6 +8,7 @@ from ui.gui_util.GameProxyChanel import GameProxyChanel
 
 from ui.levels.BaseLevel import BaseLevel
 
+import my_context
 
 
 class Level_demo_dungeon(BaseLevel):
@@ -17,12 +18,18 @@ class Level_demo_dungeon(BaseLevel):
         self.gameconfig = gameconfig
         self.z_values = [ i for i in range(demo_dungeon.w)]
         self.gamechanel = GameProxyChanel()
+        self.gamechanel.unitActive.connect(self.unitActiveSlot)
         self.gamechanel.unitDied.connect(self.unitDiedSlot)
         self.gamechanel.unitMove.connect(self.unitMoveSlot)
         self.gamechanel.unitTurn.connect(self.unitTurnSlot)
         self.gamechanel.targetDamage.connect(self.targetDamageSlot)
         self.gamechanel.attackTo.connect(self.attackToSlot)
 
+    def unitActiveSlot(self, msg):
+        pass
+        # print()
+        # print(self.game.active_unit)
+        # print(msg)
 
     def unitDiedSlot(self, msg):
         # print(msg)
@@ -37,7 +44,7 @@ class Level_demo_dungeon(BaseLevel):
         # print('bf = >', self.game.battlefield.units_at)
 
     def unitTurnSlot(self, msg):
-        self.units.units_at[msg.get('uid')].setDirection(msg.get('turn'))
+        self.units.turnUnit(msg.get('uid'), msg.get('turn'))
         # print(msg)
 
     def targetDamageSlot(self, msg):
