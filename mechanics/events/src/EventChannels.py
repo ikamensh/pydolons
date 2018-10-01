@@ -19,3 +19,5 @@ class EventsChannels(NameEnum):
     BuffDispelledChannel = auto()
     BuffExpiredChannel = auto()
 
+    NextUnitChannel = auto()
+

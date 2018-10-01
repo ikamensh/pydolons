@@ -22,6 +22,7 @@ from mechanics.events.AttackEvent import AttackEvent
 
 from mechanics.events.MovementEvent import MovementEvent
 from mechanics.events.TurnEvent import TurnEvent
+from mechanics.events.NextUnitEvent import NextUnitEvent
 
 from mechanics.events.src.EventsPlatform import EventsPlatform
 

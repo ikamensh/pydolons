@@ -19,6 +19,9 @@ class AtbTurnsManager(TurnsManager):
         self.time = 0
         gamelog(f"Action turn based battle started. its {self.time} now")
 
+    @property
+    def managed_units(self):
+        return [elem for elem in self.managed if elem.alive]
 
     def pass_time(self, time):
         for m in list(self.managed):

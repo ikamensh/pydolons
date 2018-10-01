@@ -3,6 +3,8 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from ui.gamecore.GameObject import GameObject
 from GameLog import gamelog
 
+import my_context
+
 class GuiConsole(QtWidgets.QPlainTextEdit):
     def __init__(self, *args):
         super(GuiConsole, self).__init__(*args)
@@ -105,6 +107,10 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         w = len(self.gameRoot.level.units.units_stack)
         self.unitStack.rect().setWidth(w * 64)
         i = 0
+
+        #units_stack = my_context.the_game.turns_manager.managed_units
+        #next_unit = my_context.the_game.turns_manager.get_next()
+
         for bf_unit in self.gameRoot.level.units.units_stack:
             self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
             i+=1
