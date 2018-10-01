@@ -14,6 +14,10 @@ class Sound(object):
         super(Sound, self).__init__()
         self.arg = arg
 
+    def play(self):
+        print('play from', self.arg)
+
+
 
 # Sound = object
 
