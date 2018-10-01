@@ -28,6 +28,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.removeFromGroup(unit)
         del self.units_at[unit.uid]
 
+    def turnUnit(self, uid, turn):
+        self.units_at[uid].setDirection(turn)
+
     def collisionHeorOfUnits(self, x = None, y = None):
         if x is None:
             if not (self.active_unit.worldPos.x, y) in self.getUitsLocations():
