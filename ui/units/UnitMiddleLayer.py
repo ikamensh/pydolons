@@ -54,7 +54,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.unit_hptxts[unit.uid] = hpText
         self.addToGroup(self.unit_hptxts[unit.uid])
 
-    def getHPprec(self, unit):
+    def getHPprec(self, unit = None):
         return (unit.health * 100)/unit.max_health
 
     def createSuppot(self, units_at):
