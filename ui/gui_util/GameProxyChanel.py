@@ -6,6 +6,7 @@ class GameProxyChanel(QtCore.QObject):
     Данный класс генерирует сигналы о событиях
     """
     attackTo = QtCore.Signal(dict)
+    unitActive = QtCore.Signal(dict)
     unitDied = QtCore.Signal(dict)
     unitMove = QtCore.Signal(dict)
     unitTurn = QtCore.Signal(dict)
@@ -35,6 +36,8 @@ class GameProxyChanel(QtCore.QObject):
             message = gamechanel.msg_stack.pop(0)
             if message.get('event') == 'UnitDiedEvent':
                 self.unitDied.emit(message)
+            elif message.get('event') == 'ActiveEvent':
+                self.unitActive.emit(message)
             elif message.get('event') == 'TurnEvent':
                 self.unitTurn.emit(message)
             elif message.get('event') == 'MovementEvent':
