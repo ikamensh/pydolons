@@ -59,6 +59,7 @@ def perish_sounds_trig():
 
 def play_move_sound(t, e):
     sound = e.unit.sound_map.move
+    print(e.unit)
     sound.play()
 
 def move_sounds_trig():
