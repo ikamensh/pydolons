@@ -78,11 +78,11 @@ class DreamGame:
 
 
             active_unit = self.turns_manager.get_next()
-            NextUnitEvent(active_unit)
             if self.fractions[active_unit] == Fractions.PLAYER:
                 time.sleep(0.03)
                 continue
             else:
+                NextUnitEvent(active_unit)
                 active, target = self.enemy_ai.decide_step(active_unit)
                 active_unit.activate(active, target)
 
