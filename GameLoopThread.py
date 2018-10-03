@@ -35,6 +35,7 @@ class GameLoopThread(QtCore.QThread):
     play_perish_anim = QtCore.Signal(dict)
     play_trun_anim = QtCore.Signal(dict)
     play_nextunit_anim = QtCore.Signal()
+    play_levelstatus = QtCore.Signal(str)
     def __init__(self, parent=None):
         super(GameLoopThread, self).__init__(parent)
         self.game = None
@@ -54,6 +55,7 @@ class GameLoopThread(QtCore.QThread):
         proxy_cls.play_perish_anim = self.play_perish_anim
         proxy_cls.play_trun_anim = self.play_trun_anim
         proxy_cls.play_nextunit_anim = self.play_nextunit_anim
+        proxy_cls.play_levelstatus = self.play_levelstatus
         # Здесь происходит присоединение слотов к сигналам
         self.setConnection()
 
@@ -65,6 +67,7 @@ class GameLoopThread(QtCore.QThread):
         self.play_perish_anim.connect(self.the_ui.gameRoot.level.units.unitDiedSlot)
         self.play_trun_anim.connect(self.the_ui.gameRoot.level.unitTurnSlot)
         self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.updateUnitStack)
+        self.play_levelstatus.connect(self.the_ui.gameRoot.level.setStatus)
 
     def run(self):
         self.game.loop()
