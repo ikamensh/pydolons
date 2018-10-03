@@ -1,9 +1,9 @@
-import pygame
-
-pygame.mixer.init()
-pygame.init()
-
-Sound = pygame.mixer.Sound
+# import pygame
+#
+# pygame.mixer.init()
+# pygame.init()
+#
+# Sound = pygame.mixer.Sound
 
 
 
