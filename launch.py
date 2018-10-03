@@ -1,6 +1,6 @@
 # import game_loop object and ProxyEmit
 from GameLoopThread import GameLoopThread, ProxyEmit
-
+from character_creation.Character import Character
 from mechanics.AI.SimGame import SimGame as DreamGame
 from content.base_types.demo_hero import demohero_basetype
 from content.dungeons.demo_dungeon import demo_dungeon
@@ -28,6 +28,7 @@ def one_game():
     app = QtWidgets.QApplication(sys.argv)
     # Logical engine initialization
     game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
+    game.character = Character(demohero_basetype)
     # Ui engine initialization
     window = TheUI(game)
     TheUI.singleton = window
@@ -56,8 +57,8 @@ def one_game():
     # if the game_loop completes work then thread will completes its work
     loop.start()
     # debug time sleep
-    time.sleep(5)
-
+    # time.sleep(5)
+    # debug print
     # Qt application exit
     sys.exit(app.exec_())
 
