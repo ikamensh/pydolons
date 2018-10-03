@@ -44,8 +44,8 @@ class GameProxyChanel(QtCore.QObject):
                 # self.unitMove.emit(message)
             # elif message.get('event') == 'DamageEvent':
                 # self.targetDamage.emit(message)
-            elif message.get('event') == 'AttackEvent':
-                self.attackTo.emit(message)
+            # elif message.get('event') == 'AttackEvent':
+            #     self.attackTo.emit(message)
 
 
 
