@@ -22,3 +22,6 @@ class BaseLevel(object):
     def setUnits(self, units):
         self.units = units
         self.units.level = self
+
+    def setStatus(self, status):
+        self.gameRoot.gamePages.gameMenu.showNotify(status)

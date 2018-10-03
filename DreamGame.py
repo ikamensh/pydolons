@@ -2,7 +2,7 @@ from battlefield.Battlefield import Battlefield, Cell
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
 from mechanics.AI import BruteAI, RandomAI, BroadAI
-from mechanics.events import EventsPlatform, NextUnitEvent
+from mechanics.events import EventsPlatform, NextUnitEvent, LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 import copy
 import my_context
@@ -78,11 +78,11 @@ class DreamGame:
 
 
             active_unit = self.turns_manager.get_next()
-            NextUnitEvent(active_unit)
             if self.fractions[active_unit] == Fractions.PLAYER:
                 time.sleep(0.03)
                 continue
             else:
+                NextUnitEvent(active_unit)
                 active, target = self.enemy_ai.decide_step(active_unit)
                 active_unit.activate(active, target)
 
@@ -93,8 +93,10 @@ class DreamGame:
         enemy_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.ENEMY and unit.alive]
 
         if len(own_units) == 0:
+            LevelStatusEvent("DEFEAT")
             return "DEFEAT"
         elif len(enemy_units) == 0:
+            LevelStatusEvent("VICTORY")
             return "VICTORY"
         else:
             return None

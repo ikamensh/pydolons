@@ -4,7 +4,6 @@ from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from content.dungeons.demo_dungeon import demo_dungeon
 from ui.units import Units, BasicUnit
-from ui.gui_util.GameProxyChanel import GameProxyChanel
 
 from ui.levels.BaseLevel import BaseLevel
 
@@ -17,32 +16,14 @@ class Level_demo_dungeon(BaseLevel):
         super(Level_demo_dungeon, self).__init__()
         self.gameconfig = gameconfig
         self.z_values = [ i for i in range(demo_dungeon.w)]
-        self.gamechanel = GameProxyChanel()
-        self.gamechanel.unitActive.connect(self.unitActiveSlot)
-        self.gamechanel.unitDied.connect(self.unitDiedSlot)
-        self.gamechanel.unitMove.connect(self.unitMoveSlot)
-        self.gamechanel.unitTurn.connect(self.unitTurnSlot)
-        self.gamechanel.targetDamage.connect(self.targetDamageSlot)
-        self.gamechanel.attackTo.connect(self.attackToSlot)
 
     def unitActiveSlot(self, msg):
         pass
-        # print()
-        # print(self.game.active_unit)
-        # print(msg)
-
-    def unitDiedSlot(self, msg):
-        # print(msg)
-        self.middleLayer.removeUnitLayer(msg.get('unit').uid)
-        self.units.dieadUnit(msg.get('unit'))
 
     def unitMoveSlot(self, msg):
-        # print('move unit')
-        #self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
-        #self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
-        # print('at = >', self.units.units_at)
-        # print('bf = >', self.game.battlefield.units_at)
-        print("BLABLA")
+        self.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
+        self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
+        self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
 
     def unitTurnSlot(self, msg):
         self.units.turnUnit(msg.get('uid'), msg.get('turn'))
@@ -50,13 +31,19 @@ class Level_demo_dungeon(BaseLevel):
 
     def targetDamageSlot(self, msg):
         # Требуется рефакторинг метод срабатывает после смерти юнита
-        # self.gameRoot.cfg.sound_maps['ATTACK_WOLF_2.wav'].play(
         if msg.get('target').uid in self.units.units_at.keys():
             self.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+            self.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
+            # print('debug -> damage_type', msg.get('damage_type'))
         pass
 
-    def attackToSlot(self, msg):
-        self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
+    def targetDamageHitSlot(self, msg):
+        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+
+    def attackSlot(self, msg):
+        # self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
+        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+
 
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
@@ -82,7 +69,6 @@ class Level_demo_dungeon(BaseLevel):
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
             gameUnit.setDirection(battlefield.unit_facings[unit])
-            print(battlefield.unit_facings[unit])
             gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
             gameUnit.uid = unit.uid
             self.units.addToGroup(gameUnit)
@@ -90,5 +76,4 @@ class Level_demo_dungeon(BaseLevel):
             self.units.units_at[unit.uid] = gameUnit
 
         self.units.active_unit = self.units.units_at[self.game.turns_manager.get_next().uid]
-        self.units.setUnitStack(self.game.turns_manager.managed)
         self.middleLayer.createSuppot(self.units.units_at)

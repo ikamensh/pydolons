@@ -1,13 +1,22 @@
 from battlefield import Cell
 from PySide2 import QtWidgets
 
+
 class Units(QtWidgets.QGraphicsItemGroup):
     def __init__(self, *arg):
         super(Units, self).__init__(*arg)
         self.active_unit = None
         self.units_at = {}
-        self.units_stack = None
         self.level = None
+
+# set slots
+
+    def unitDiedSlot(self, msg):
+        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
+        self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+        self.level.middleLayer.removeUnitLayer(msg.get('unit').uid)
+        self.dieadUnit(msg.get('unit'))
+
 
     def setLevel(self, level):
         self.level =  level
@@ -19,7 +28,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
-        self.level.gameRoot.cfg.sound_maps['SftStep3.wav'].play()
         x, y = cell_to.x, cell_to.y
         self.units_at[unit.uid].setWorldPos(x, y)
 
@@ -43,6 +51,3 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def setActiveUnit(self, unit):
         self.active_unit = self.units_at[unit.uid]
-
-    def setUnitStack(self, units):
-        self.units_stack = units
