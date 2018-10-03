@@ -27,6 +27,19 @@ def demohero_basetype():
     yield  _demohero_basetype
 
 @pytest.fixture()
+def hero(demohero_basetype):
+    yield Unit(demohero_basetype)
+
+@pytest.fixture()
+def pirate(pirate_basetype):
+    yield Unit(pirate_basetype)
+
+@pytest.fixture()
+def mud_golem():
+    yield(Unit(mud_golem_basetype))
+
+
+@pytest.fixture()
 def steel_wall():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
@@ -57,33 +70,11 @@ def walls_dungeon(pirate_basetype, steel_wall):
 
     yield  _walls_dungeon
 
-
-@pytest.fixture()
-def hero(demohero_basetype):
-    yield Unit(demohero_basetype)
-
-@pytest.fixture()
-def pirate(pirate_basetype):
-    yield Unit(pirate_basetype)
-
-@pytest.fixture()
-def mud_golem():
-    yield(Unit(mud_golem_basetype))
-
-@pytest.fixture()
-def game(battlefield, hero):
-    _game = DreamGame(battlefield)
-    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
-    _game.fractions[hero] = Fractions.PLAYER
-    for unit in battlefield.unit_locations:
-        _game.turns_manager.add_unit(unit)
-    _game.set_to_context()
-    yield _game
-
 @pytest.fixture()
 def walls_game(walls_dungeon, hero):
     _game = DreamGame.start_dungeon(walls_dungeon, hero)
     yield _game
+
 
 @pytest.fixture()
 def pirate_band(pirate_basetype):
@@ -101,6 +92,17 @@ def battlefield(pirate_band, hero):
     yield bf
 
 @pytest.fixture()
-def pirate_band(pirate_basetype):
-    _pirate_band = [Unit(pirate_basetype) for i in range(3)]
-    yield _pirate_band
+def game(battlefield, hero):
+    _game = DreamGame(battlefield)
+    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
+    _game.fractions[hero] = Fractions.PLAYER
+    for unit in battlefield.unit_locations:
+        _game.turns_manager.add_unit(unit)
+    _game.set_to_context()
+    yield _game
+
+
+
+
+
+

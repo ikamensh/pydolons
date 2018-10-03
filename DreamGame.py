@@ -103,14 +103,29 @@ class DreamGame:
     def __repr__(self):
         return f"{'Simulated ' if self.is_sim else ''}{self.battlefield.h} by {self.battlefield.w} dungeon with {len(self.battlefield.units_at)} units in it."
 
+    def order_step(self, c_vec):
+        if self.turns_manager.get_next() is self.the_hero:
+            cell_from = self.battlefield.unit_locations[self.the_hero]
+            facing = self.battlefield.unit_facings[self.the_hero]
+            cell_to = Cell.from_complex( cell_from.complex + c_vec * facing )
+            self.ui_order(cell_to.x, cell_to.y)
 
     def ui_order(self, x, y):
+        print(f"ordered: move to {x},{y}")
         if self.turns_manager.get_next() is self.the_hero:
             cell = Cell.from_complex(x + y* 1j)
             if cell in self.battlefield.units_at:
                 self.order_attack(self.the_hero, self.battlefield.units_at[cell])
             else:
                 self.order_move(self.the_hero, cell)
+
+    def order_turn_cw(self):
+        if self.turns_manager.get_next() is self.the_hero:
+            self.the_hero.turn_cw()
+
+    def order_turn_ccw(self):
+        if self.turns_manager.get_next() is self.the_hero:
+            self.the_hero.turn_ccw()
 
 
     def order_move(self, unit, target_cell, AI_assist=True):

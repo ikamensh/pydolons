@@ -1,7 +1,7 @@
 import pytest
 
 from game_objects.items import WeaponBlueprint, WeaponTypes, Material, MaterialTypes, ArmorTypes, ArmorBlueprint
-from game_objects.items.blueprints.QualityLevels import QualityLevel
+from game_objects.items import QualityLevel
 from game_objects.items import  BodyArmor, Weapon
 from mechanics.damage import Damage, DamageTypes, Armor
 

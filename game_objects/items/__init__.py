@@ -1,3 +1,4 @@
+from game_objects.items.QualityLevel import QualityLevel
 from game_objects.items.ItemTypes import ItemTypes
 from game_objects.items.materials.MaterialTypes import MaterialTypes
 from game_objects.items.blueprints.types.WeaponTypes import WeaponTypes

@@ -1,5 +1,5 @@
 from GameLog import gamelog
-from mechanics.events import ActiveEvent, EventsChannels
+from mechanics.events import ActiveEvent, EventsChannels, NextUnitEvent
 
 class EventsPlatform:
 
@@ -17,7 +17,7 @@ class EventsPlatform:
             interrupt.try_on_event(event)
 
         if not event.interrupted and event.check_conditions():
-            if not isinstance(event, ActiveEvent):
+            if not isinstance(event, ActiveEvent) and not isinstance(event, NextUnitEvent):
                 gamelog(event)
             event.resolve()
             for trigger in list(triggers):

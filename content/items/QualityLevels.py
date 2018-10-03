@@ -1,5 +1,4 @@
-from collections import namedtuple
-QualityLevel = namedtuple("quality_level", "name rarity")
+from game_objects.items import QualityLevel
 
 class QualityLevels:
     CRUDE = QualityLevel("Crude", 0.6)

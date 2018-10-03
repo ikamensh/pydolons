@@ -11,8 +11,8 @@ import time
 
 
 def one_game():
-    game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
 
+    game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
 
     #attack_sounds_trig(),
     #damage_sounds_trig(),
@@ -25,11 +25,9 @@ def one_game():
 
     Thread(target=TheUI.launch, args=[game]).start()
     time.sleep(5)
-    print(TheUI.singleton.gameRoot.cfg)
-    TheUI.singleton.gameRoot.cfg.sound_maps["SftStep3.wav"].play()
+    t = game.loop()
 
 
-    game.loop()
     print(f"battle lasted for {time}")
 
 # t = time()
