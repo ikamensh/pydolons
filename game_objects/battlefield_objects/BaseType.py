@@ -3,7 +3,7 @@ from mechanics.chances.CritHitGrazeMiss import ImpactChances
 from mechanics.damage import DamageTypes
 
 from character_creation.Masteries import Masteries
-# from ui.sounds import sound_maps
+from ui.sounds import sound_maps
 
 
 class BaseType:
@@ -32,8 +32,7 @@ class BaseType:
         self.inventory_capacity = inventory_capacity
         self.armor_base = armor_base
         self.icon = icon
-        # self.sound_map = sound_map or sound_maps.std_sound_map
-        self.sound_map = sound_map
+        self.sound_map = sound_map or sound_maps.std_sound_map
         self.unarmed_chances = unarmed_chances
 
         self.xp = xp or Masteries.cumulative_cost( sum(self.attributes.values()) - 40 )
