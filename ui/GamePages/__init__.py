@@ -5,6 +5,7 @@
 """
 
 from ui.GamePages.GameMenuPage import ScreenMenu
+from ui.GamePages.CharacterPage import CharacterPage
 
 class GamePages(object):
     """docstring for GamePages."""
@@ -17,6 +18,7 @@ class GamePages(object):
         self.gameRoot.gamePages = self
 
     def setUpPages(self):
+        self.setUpCharecterPage()
         self.setUpGameMenu()
 
     def setUpGameMenu(self):
@@ -26,6 +28,10 @@ class GamePages(object):
         self.gameMenu.setUpGui()
         self.gameMenu.setUpConsole()
 
+    def setUpCharecterPage(self):
+        self.characterPage = CharacterPage()
+        self.characterPage.gamePages = self
+        self.characterPage.setUpGui()
 
     def updateGui(self):
         self.gameMenu.updateGui()
