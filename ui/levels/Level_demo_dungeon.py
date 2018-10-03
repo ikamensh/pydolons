@@ -20,10 +20,10 @@ class Level_demo_dungeon(BaseLevel):
         self.gamechanel = GameProxyChanel()
         self.gamechanel.unitActive.connect(self.unitActiveSlot)
         self.gamechanel.unitDied.connect(self.unitDiedSlot)
-        self.gamechanel.unitMove.connect(self.unitMoveSlot)
+        # self.gamechanel.unitMove.connect(self.unitMoveSlot)
         self.gamechanel.unitTurn.connect(self.unitTurnSlot)
-        self.gamechanel.targetDamage.connect(self.targetDamageSlot)
-        self.gamechanel.attackTo.connect(self.attackToSlot)
+        # self.gamechanel.targetDamage.connect(self.targetDamageSlot)
+        # self.gamechanel.attackTo.connect(self.attackToSlot)
 
     def unitActiveSlot(self, msg):
         pass
@@ -37,6 +37,7 @@ class Level_demo_dungeon(BaseLevel):
         self.units.dieadUnit(msg.get('unit'))
 
     def unitMoveSlot(self, msg):
+        self.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
         self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
 
@@ -55,8 +56,10 @@ class Level_demo_dungeon(BaseLevel):
     def targetDamageHitSlot(self, msg):
         self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
-    def attackToSlot(self, msg):
-        self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
+    def attackSlot(self, msg):
+        # self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
+        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+
 
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
@@ -82,7 +85,6 @@ class Level_demo_dungeon(BaseLevel):
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
             gameUnit.setDirection(battlefield.unit_facings[unit])
-            print(battlefield.unit_facings[unit])
             gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
             gameUnit.uid = unit.uid
             self.units.addToGroup(gameUnit)
