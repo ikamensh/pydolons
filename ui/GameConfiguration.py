@@ -2,6 +2,7 @@ import os
 from PySide2 import QtGui, QtWidgets, QtMultimedia
 
 from my_context import pydolons_rootdir
+from mechanics.damage import DamageTypes
 
 class GameConfiguration:
     """docstring for GameConfiguration.
@@ -105,6 +106,15 @@ class GameConfiguration:
                 self.sound_maps[filename] = sound
             except Exception as e:
                 print(filename, ' : ', e)
+        # set Up from damage type
+        self.sound_maps[DamageTypes.CRUSH] = self.sound_maps['bash.wav']
+        self.sound_maps[DamageTypes.SLASH] = self.sound_maps['slash.wav']
+        self.sound_maps[DamageTypes.PIERCE] = self.sound_maps['pierce.wav']
+        self.sound_maps[DamageTypes.FIRE] = self.sound_maps['fire.wav']
+        # self.sound_maps[DamageTypes.ICE] = self.sound_maps['ice.wav']
+        self.sound_maps[DamageTypes.LIGHTNING] = self.sound_maps['lightning.wav']
+        self.sound_maps[DamageTypes.ACID] = self.sound_maps['acid.wav']
+        # self.sound_maps[DamageTypes.SONIC] = self.sound_maps['soinc.wav']
 
     def setUpPixmaps(self):
         """Метод перебирает словарь GameConfiguration.pic_file_paths
