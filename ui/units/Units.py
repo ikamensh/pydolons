@@ -1,6 +1,7 @@
 from battlefield import Cell
 from PySide2 import QtWidgets
 
+
 class Units(QtWidgets.QGraphicsItemGroup):
     def __init__(self, *arg):
         super(Units, self).__init__(*arg)
@@ -19,7 +20,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
-        self.level.gameRoot.cfg.sound_maps['SftStep3.wav'].play()
         x, y = cell_to.x, cell_to.y
         self.units_at[unit.uid].setWorldPos(x, y)
 
