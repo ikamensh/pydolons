@@ -5,7 +5,7 @@ from content.dungeons.demo_dungeon import demo_dungeon
 from game_objects.battlefield_objects import Unit
 from ui.TheUI import TheUI
 from threading import Thread
-from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger
+from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, perish_anim_trigger, turn_anim_trigger
 
 import time
 
@@ -20,6 +20,8 @@ def one_game():
     window = TheUI(game)
     TheUI.singleton = window
 
+    turn_anim_trigger(),
+    perish_anim_trigger(),
     attack_anin_trigger(),
     damage_anim_trigger(),
     move_anim_trigger()
