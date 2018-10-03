@@ -77,12 +77,12 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.active_select.setPos(self.unitStack.x(), self.unitStack.y())
         if not self.gameRoot.level is None:
             self.createUnitStack()
+            self.updateUnitStack()
 
     def createUnitStack(self):
         self.unitStack.items = {}
         i = 0
         for unit in self.gameRoot.level.units.units_at.values():
-            # unit = self.gameRoot.level.units.units_at[bf_unit.uid]
             item = GameObject(64, 64)
             item.setParentItem(self.unitStack)
             item.setPixmap(unit.pixmap().scaled(64, 64))
@@ -100,18 +100,19 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.gui_console.resize(320, 240)
         self.scene().addWidget(self.gui_console)
 
-    def updateUnitStack(self, uid = None):
-        if not uid is None:
-            self.unitStack.items[uid].setParentItem(None)
-            del self.unitStack.items[uid]
-        w = len(self.gameRoot.level.units.units_stack)
+    def rmToUnitStack(self, uid):
+        self.unitStack.items[uid].setParentItem(None)
+        del self.unitStack.items[uid]
+        self.updateUnitStack()
+
+
+    def updateUnitStack(self):
+        units_stack = my_context.the_game.turns_manager.managed_units
+        w = len(units_stack)
         self.unitStack.rect().setWidth(w * 64)
         i = 0
-
-        #units_stack = my_context.the_game.turns_manager.managed_units
         #next_unit = my_context.the_game.turns_manager.get_next()
-
-        for bf_unit in self.gameRoot.level.units.units_stack:
+        for bf_unit in units_stack:
             self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
             i+=1
 
