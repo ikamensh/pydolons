@@ -1,6 +1,5 @@
 from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent
 from ui.triggers.no_sim_condition import no_sim_condition
-from ui.gui_util.gamechanel import gamechanel
 from ui.TheUI import TheUI
 from GameLoopThread import ProxyEmit
 
@@ -56,7 +55,6 @@ def perish_anim_trigger():
                    conditions={no_sim_condition},
                    callbacks=[play_perish_anim])
 
- # gamechanel.sendMessage({'event':'TurnEvent','uid':self.unit.uid,'turn':new_turning})
 
 ########### Turn #################
 
