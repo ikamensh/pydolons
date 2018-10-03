@@ -19,14 +19,6 @@ class Level_demo_dungeon(BaseLevel):
 
     def unitActiveSlot(self, msg):
         pass
-        # print()
-        # print(self.game.active_unit)
-        # print(msg)
-
-    def unitDiedSlot(self, msg):
-        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
-        self.middleLayer.removeUnitLayer(msg.get('unit').uid)
-        self.units.dieadUnit(msg.get('unit'))
 
     def unitMoveSlot(self, msg):
         self.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
@@ -84,5 +76,4 @@ class Level_demo_dungeon(BaseLevel):
             self.units.units_at[unit.uid] = gameUnit
 
         self.units.active_unit = self.units.units_at[self.game.turns_manager.get_next().uid]
-        self.units.setUnitStack(self.game.turns_manager.managed)
         self.middleLayer.createSuppot(self.units.units_at)
