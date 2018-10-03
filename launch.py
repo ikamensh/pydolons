@@ -15,11 +15,18 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 
 def one_game():
+    """
+
+    DO NOT MODIFY THIS FILE!
+
+    """
     app = QtWidgets.QApplication(sys.argv)
     game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
     window = TheUI(game)
     TheUI.singleton = window
 
+    # NEW TRIGGER ADD THIS |
+    #                      V
     turn_anim_trigger(),
     perish_anim_trigger(),
     attack_anin_trigger(),
