@@ -25,8 +25,8 @@ class GameLoopThread(QtCore.QThread):
 
     def setConnection(self):
         self.play_movement_anim.connect(self.the_ui.gameRoot.level.unitMoveSlot)
-        # self.maybe_play_damage_anim.connect(self.the_ui.gameRoot.level.targetDamageSlot)
-        # self.maybe_play_hit_anim
+        self.maybe_play_damage_anim.connect(self.the_ui.gameRoot.level.targetDamageSlot)
+        self.maybe_play_hit_anim.connect(self.the_ui.gameRoot.level.targetDamageHitSlot)
 
     def run(self):
         self.game.loop()
