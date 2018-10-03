@@ -4,7 +4,6 @@ from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from content.dungeons.demo_dungeon import demo_dungeon
 from ui.units import Units, BasicUnit
-from ui.gui_util.GameProxyChanel import GameProxyChanel
 
 from ui.levels.BaseLevel import BaseLevel
 
@@ -17,13 +16,6 @@ class Level_demo_dungeon(BaseLevel):
         super(Level_demo_dungeon, self).__init__()
         self.gameconfig = gameconfig
         self.z_values = [ i for i in range(demo_dungeon.w)]
-        self.gamechanel = GameProxyChanel()
-        self.gamechanel.unitActive.connect(self.unitActiveSlot)
-        self.gamechanel.unitDied.connect(self.unitDiedSlot)
-        # self.gamechanel.unitMove.connect(self.unitMoveSlot)
-        self.gamechanel.unitTurn.connect(self.unitTurnSlot)
-        # self.gamechanel.targetDamage.connect(self.targetDamageSlot)
-        # self.gamechanel.attackTo.connect(self.attackToSlot)
 
     def unitActiveSlot(self, msg):
         pass
@@ -32,7 +24,7 @@ class Level_demo_dungeon(BaseLevel):
         # print(msg)
 
     def unitDiedSlot(self, msg):
-        # print(msg)
+        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.middleLayer.removeUnitLayer(msg.get('unit').uid)
         self.units.dieadUnit(msg.get('unit'))
 
