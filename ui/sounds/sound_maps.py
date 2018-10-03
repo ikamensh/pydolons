@@ -25,7 +25,7 @@ prefix_perish = "resources/sounds/units/perish/"
 
 
 class std_sound_map:
-    move = Sound(prefix_move + "SftStep3.wav")
+    move = "SftStep3.wav"
     hit = "c_goblin_hit2.wav"
-    attack = Sound(prefix_attack + "ATTACK_WOLF_2.wav")
-    perish = Sound(prefix_perish + "c_goblin_death.wav")
+    attack = "ATTACK_WOLF_2.wav"
+    perish = "c_goblin_death.wav"
