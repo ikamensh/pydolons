@@ -32,3 +32,14 @@ def damage_anim_trigger():
     return Trigger(DamageEvent,
                    conditions={no_sim_condition},
                    callbacks=[maybe_play_damage_anim, maybe_play_hit_anim])
+########### ATTACK #################
+
+def play_attack_anim(t, e):
+    # print('e dir :\n',dir(e))
+    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.attack})
+    pass
+
+def attack_anin_trigger():
+    return Trigger(AttackEvent,
+                   conditions={no_sim_condition},
+                   callbacks=[play_attack_anim])
