@@ -1,4 +1,4 @@
-from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent
+from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent
 from ui.triggers.no_sim_condition import no_sim_condition
 from ui.TheUI import TheUI
 from GameLoopThread import ProxyEmit
@@ -67,3 +67,15 @@ def turn_anim_trigger():
     return Trigger(TurnEvent,
                    conditions={no_sim_condition},
                    callbacks=[play_trun_anim])
+
+########### NextUnit #################
+
+
+def play_nextunit_anim(t, e):
+    ProxyEmit.play_nextunit_anim.emit()
+    pass
+
+def nexunit_anim_trigger():
+    return Trigger(NextUnitEvent,
+                   conditions={no_sim_condition},
+                   callbacks=[play_nextunit_anim])
