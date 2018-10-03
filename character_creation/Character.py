@@ -1,7 +1,7 @@
 import copy
 
 from game_objects.battlefield_objects import BaseType, Unit
-from game_objects.battlefield_objects.Unit import CharAttributes
+from game_objects.battlefield_objects import CharAttributes
 from character_creation.Masteries import Masteries, MasteriesEnum
 
 
