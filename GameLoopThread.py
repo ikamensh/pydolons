@@ -13,6 +13,8 @@ class GameLoopThread(QtCore.QThread):
     maybe_play_damage_anim = QtCore.Signal(dict)
     maybe_play_hit_anim = QtCore.Signal(dict)
     play_attack_anim = QtCore.Signal(dict)
+    play_perish_anim = QtCore.Signal(dict)
+    play_trun_anim = QtCore.Signal(dict)
     def __init__(self, parent=None):
         super(GameLoopThread, self).__init__(parent)
         self.game = None
@@ -23,6 +25,8 @@ class GameLoopThread(QtCore.QThread):
         proxy_cls.maybe_play_damage_anim = self.maybe_play_damage_anim
         proxy_cls.maybe_play_hit_anim = self.maybe_play_hit_anim
         proxy_cls.play_attack_anim = self.play_attack_anim
+        proxy_cls.play_perish_anim = self.play_perish_anim
+        proxy_cls.play_trun_anim = self.play_trun_anim
         self.setConnection()
 
     def setConnection(self):
@@ -30,6 +34,8 @@ class GameLoopThread(QtCore.QThread):
         self.maybe_play_damage_anim.connect(self.the_ui.gameRoot.level.targetDamageSlot)
         self.maybe_play_hit_anim.connect(self.the_ui.gameRoot.level.targetDamageHitSlot)
         self.play_attack_anim.connect(self.the_ui.gameRoot.level.attackSlot)
+        self.play_perish_anim.connect(self.the_ui.gameRoot.level.unitDiedSlot)
+        self.play_trun_anim.connect(self.the_ui.gameRoot.level.unitTurnSlot)
 
     def run(self):
         self.game.loop()
