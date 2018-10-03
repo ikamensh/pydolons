@@ -2,7 +2,7 @@ from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels, DamageEvent
 from mechanics.chances.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
 from GameLog import gamelog
-from ui.gui_util.gamechanel import gamechanel
+# from ui.gui_util.gamechanel import gamechanel
 
 import my_context
 
@@ -33,7 +33,7 @@ class AttackEvent(Event):
                 self.weapon.durability -= dmg_event.weapon_dur_dmg
         else:
             gamelog("MISS")
-            gamechanel.sendMessage({'event':'AttackEvent','msg':'MISS' })
+            # gamechanel.sendMessage({'event':'AttackEvent','msg':'MISS' })
 
 
 
