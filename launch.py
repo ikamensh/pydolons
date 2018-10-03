@@ -31,6 +31,7 @@ def one_game():
     # Ui engine initialization
     window = TheUI(game)
     TheUI.singleton = window
+
     # NEW TRIGGER ADD THIS |
     #
     levelstatus_trigger(),
@@ -40,6 +41,8 @@ def one_game():
     attack_anin_trigger(),
     damage_anim_trigger(),
     move_anim_trigger()
+
+
     # debug print
     game.print_all_units()
     # game_loop thread initialization
@@ -49,7 +52,6 @@ def one_game():
     loop.the_ui = window
     # Qt signal initialization
     loop.setSiganls(ProxyEmit)
-    # game_loop run
     # if the game_loop completes work then thread will completes its work
     loop.start()
     # debug time sleep
@@ -59,17 +61,10 @@ def one_game():
     # Qt application exit
     sys.exit(app.exec_())
 
-# t = time()
-#
-# one_game()
-#
-# print(f"it took {time()-t} sec of real time.")
 
 one_game()
 
 # from cProfile import Profile
-#
 # profiler = Profile()
 # profiler.runcall(one_game)
-#
 # profiler.print_stats('cumulative')

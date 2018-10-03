@@ -1,6 +1,8 @@
 from PySide2 import QtWidgets
 from ui.gamecore import GameObject
 
+from battlefield.Facing import Facing
+
 class BasicUnit(GameObject):
     """docstring for BasicUnit."""
     def __init__(self, *arg, gameconfig):
@@ -49,26 +51,28 @@ class BasicUnit(GameObject):
 
 
     def setDirection(self, turn):
-        if turn == (0 - 1j):
+        if turn == Facing.SOUTH:
             self.dirS.setVisible(True)
             self.dirN.setVisible(False)
             self.dirW.setVisible(False)
             self.dirO.setVisible(False)
-        elif turn == (0 + 1j):
+        elif turn == Facing.NORTH:
             self.dirS.setVisible(False)
             self.dirN.setVisible(True)
             self.dirW.setVisible(False)
             self.dirO.setVisible(False)
-        if turn == (1 + 0j):
+        if turn == Facing.EAST:
             self.dirS.setVisible(False)
             self.dirN.setVisible(False)
             self.dirW.setVisible(False)
             self.dirO.setVisible(True)
-        elif turn == (-1 + 0j):
+        elif turn == Facing.WEST:
             self.dirS.setVisible(False)
             self.dirN.setVisible(False)
             self.dirW.setVisible(True)
             self.dirO.setVisible(False)
+        # else:
+        #     raise Exception("turn has invalid value.")
 
     def __eq__(self, other):
         if self is other: return True

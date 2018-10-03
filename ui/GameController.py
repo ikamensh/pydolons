@@ -1,5 +1,7 @@
 from battlefield import Cell
 from PySide2 import QtCore, QtGui, QtWidgets
+from battlefield.Facing import Facing
+
 
 
 class GameController:
@@ -45,7 +47,7 @@ class GameController:
         self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
 
     def keyPressEvent(self, e):
-        pass
+        self.order_from_hotkey(e)
 
     def wheelEvent(self, e):
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
@@ -112,3 +114,26 @@ class GameController:
             self.last_point.x, self.last_point.y = x, y
         self.middleLayer.showToolTip(self.last_point, self.units.units_at, self.gameRoot.level.game.battlefield.units_at)
         self.middleLayer.selectItem(x, y)
+
+    orientations = {
+        QtCore.Qt.Key_W: Facing.EAST,
+        QtCore.Qt.Key_A: Facing.NORTH,
+        QtCore.Qt.Key_S: Facing.WEST,
+        QtCore.Qt.Key_D: Facing.SOUTH,
+
+        QtCore.Qt.Key_Up: Facing.EAST,
+        QtCore.Qt.Key_Left: Facing.NORTH,
+        QtCore.Qt.Key_Down: Facing.WEST,
+        QtCore.Qt.Key_Right: Facing.SOUTH,
+    }
+
+    def order_from_hotkey(self, e):
+
+        if e.key() == QtCore.Qt.Key_Q:
+            self.the_game.order_turn_ccw()
+        elif e.key() == QtCore.Qt.Key_E:
+            self.the_game.order_turn_cw()
+        elif e.key() in GameController.orientations:
+            self.the_game.order_step(GameController.orientations[e.key()])
+
+

@@ -17,7 +17,7 @@ class TurnEvent(Event):
         return True
 
     def resolve(self):
-        turn = 1j if self.ccw else -1j
+        turn = -1j if self.ccw else 1j
         old_turning = self.battlefield.unit_facings[self.unit]
         new_turning = self.battlefield.unit_facings[self.unit] * turn
         self.battlefield.unit_facings[self.unit] = new_turning
