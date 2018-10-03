@@ -4,8 +4,8 @@ from ui.gui_util.gamechanel import gamechanel
 from ui.TheUI import TheUI
 from GameLoopThread import ProxyEmit
 
-########### DAMAGE #################
 
+########### MOVE #################
 
 
 def play_movement_anim(t, e):
@@ -18,15 +18,14 @@ def move_anim_trigger():
                    conditions={no_sim_condition},
                    callbacks=[play_movement_anim])
 
+########### DAMAGE #################
 
 def maybe_play_damage_anim(t, e):
-    print('debug->damage_trig',dir(e))
-    print('debug->',e.damage.type)
-    ProxyEmit.maybe_play_damage_anim.emit({'type':e})
+    ProxyEmit.maybe_play_damage_anim.emit({'amount':e.amount,'target':e.target, 'damage_type':e.damage.type})
     pass
 
 def maybe_play_hit_anim(t, e):
-    print('debug->hit_trig',dir(e))
+    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.target.sound_map.hit})
     pass
 
 def damage_anim_trigger():
