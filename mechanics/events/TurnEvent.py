@@ -2,7 +2,7 @@ from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 from battlefield.Facing import Facing
 import my_context
-from ui.gui_util.gamechanel import gamechanel
+# from ui.gui_util.gamechanel import gamechanel
 
 
 class TurnEvent(Event):
@@ -22,7 +22,7 @@ class TurnEvent(Event):
         old_turning = self.battlefield.unit_facings[self.unit]
         new_turning = self.battlefield.unit_facings[self.unit] * turn
         self.battlefield.unit_facings[self.unit] = new_turning
-        gamechanel.sendMessage({'event':'TurnEvent','uid':self.unit.uid,'turn':new_turning})
+        # gamechanel.sendMessage({'event':'TurnEvent','uid':self.unit.uid,'turn':new_turning})
 
 
     def __repr__(self):

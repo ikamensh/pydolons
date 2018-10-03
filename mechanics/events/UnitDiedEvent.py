@@ -1,7 +1,7 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 import my_context
-from ui.gui_util.gamechanel import gamechanel
+# from ui.gui_util.gamechanel import gamechanel
 
 class UnitDiedEvent(Event):
     channel = EventsChannels.UnitDiedChannel
@@ -16,7 +16,7 @@ class UnitDiedEvent(Event):
 
     def resolve(self):
         my_context.the_game.unit_died(self.unit)
-        gamechanel.sendMessage({'event':'UnitDiedEvent','unit':self.unit})
+        # gamechanel.sendMessage({'event':'UnitDiedEvent','unit':self.unit})
 
     def __repr__(self):
         if self.killer:
