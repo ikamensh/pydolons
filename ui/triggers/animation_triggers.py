@@ -1,4 +1,4 @@
-from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent
+from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent
 from ui.triggers.no_sim_condition import no_sim_condition
 from ui.gui_util.gamechanel import gamechanel
 from ui.TheUI import TheUI
@@ -43,3 +43,29 @@ def attack_anin_trigger():
     return Trigger(AttackEvent,
                    conditions={no_sim_condition},
                    callbacks=[play_attack_anim])
+
+########### DIED #################
+
+
+def play_perish_anim(t, e):
+    ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'sound':e.unit.sound_map.perish})
+    pass
+
+def perish_anim_trigger():
+    return Trigger(UnitDiedEvent,
+                   conditions={no_sim_condition},
+                   callbacks=[play_perish_anim])
+
+ # gamechanel.sendMessage({'event':'TurnEvent','uid':self.unit.uid,'turn':new_turning})
+
+########### Turn #################
+
+
+def play_trun_anim(t, e):
+    ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.battlefield.unit_facings[e.unit]})
+    pass
+
+def turn_anim_trigger():
+    return Trigger(TurnEvent,
+                   conditions={no_sim_condition},
+                   callbacks=[play_trun_anim])
