@@ -1,12 +1,15 @@
 from battlefield.Battlefield import Battlefield, Cell
+import game_objects.battlefield_objects as bf_objs
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
 from mechanics.AI import BruteAI, RandomAI, BroadAI
-from mechanics.events import EventsPlatform, NextUnitEvent, LevelStatusEvent
+from mechanics.events import EventsPlatform, NextUnitEvent
+from ui.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 import copy
 import my_context
 import time
+from exceptions import InvalidTargetException, PydolonsException, CantAffordActiveException
 
 class DreamGame:
 
@@ -14,7 +17,7 @@ class DreamGame:
         self.battlefield = bf
         self.the_hero = None
         self.fractions = {}
-        self.enemy_ai = BroadAI(self)
+        self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
         self.turns_manager = AtbTurnsManager()
         self.events_platform = EventsPlatform()
@@ -25,7 +28,7 @@ class DreamGame:
             rule()
 
     @classmethod
-    def start_dungeon(cls, dungeon, hero):
+    def start_dungeon(cls, dungeon, hero: bf_objs.Unit):
 
         unit_locations = dungeon.unit_locations
         unit_locations = copy.deepcopy(unit_locations)
@@ -48,14 +51,14 @@ class DreamGame:
 
 
 
-    def add_unit(self, unit, cell,  fraction, facing = None):
+    def add_unit(self, unit: bf_objs.Unit, cell,  fraction, facing = None):
         self.fractions[unit] = fraction
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
         unit.alive = True
 
 
-    def unit_died(self, unit):
+    def unit_died(self, unit: bf_objs.Unit):
         self.battlefield.remove(unit)
         self.turns_manager.remove_unit(unit)
         unit.alive = False
@@ -114,6 +117,9 @@ class DreamGame:
 
     def ui_order(self, x, y):
         print(f"ordered: move to {x},{y}")
+
+
+
         if self.turns_manager.get_next() is self.the_hero:
             cell = Cell.from_complex(x + y* 1j)
             if cell in self.battlefield.units_at:
@@ -130,27 +136,54 @@ class DreamGame:
             self.the_hero.turn_ccw()
 
 
-    def order_move(self, unit, target_cell, AI_assist=True):
+    def _complain_missing(self, unit, actives, action):
+        if unit.stamina < min([a.cost.stamina for a in actives]):
+            missing = "stamina"
+        elif unit.mana < min([a.cost.mana for a in actives]):
+            missing = "mana"
+        # elif unit.health < min([a.cost.health for a in actives]):
+        else:
+            missing = "health"
+
+        raise CantAffordActiveException(action, missing)
+
+    def order_move(self, unit: bf_objs.Unit, target_cell: Cell, AI_assist=True):
+
+
+        if not 0 <= target_cell.x < self.battlefield.w or not 0 <= target_cell.y < self.battlefield.h:
+            raise PydolonsException("Can't move there!")
 
         cell_from = self.battlefield.unit_locations[unit]
         if cell_from == target_cell:
-            return False, "Unit is already at the target cell."
+            raise PydolonsException("Unit is already at the target cell.")
 
         actives = unit.movement_actives
         if len(actives) == 0:
-            return False, "The unit has no movement actives."
+            if unit is self.the_hero:
+                raise PydolonsException("The hero is immobilized.")
 
 
-        valid_actives = [a for a in actives if a.check_target(target_cell) and a.owner_can_afford_activation()]
+        affordable_actives = [a for a in actives if a.owner_can_afford_activation()]
 
-        if len(valid_actives) == 0:
+        if not affordable_actives:
+            self._complain_missing(unit, actives, "move")
+
+        valid_actives = [a for a in affordable_actives if a.check_target(target_cell)]
+
+        if valid_actives:
+            chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
+            chosen_active.activate(target_cell)
+            return
+        else:
             # We can't directly execute this order.
-            if AI_assist:
+            if not AI_assist:
+                raise PydolonsException("None of the user movement actives can reach the target cell.")
+            else:
                 facing = self.battlefield.unit_facings[unit]
                 angle, ccw = Cell.angle_between(facing, target_cell.complex - cell_from.complex)
                 if angle >= 45:
                     unit.turn_ccw() if ccw else unit.turn_cw()
-                    return True, unit.turn_ccw_active if ccw else unit.turn_cw_active
+                    return
 
                 distance = self.battlefield.distance(unit, target_cell)
 
@@ -158,54 +191,60 @@ class DreamGame:
                     vec = target_cell.complex - cell_from.complex
                     vec_magnitude_1 = vec / abs(vec)
                     closer_target = Cell.from_complex(cell_from.complex + vec_magnitude_1)
-                    return self.order_move(unit, closer_target)
-
-            return False, "None of the user movement actives can reach the target cell."
-
-        chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
-        chosen_active.activate(target_cell)
-
-        return True, chosen_active
+                    self.order_move(unit, closer_target)
+                else:
+                    raise PydolonsException("None of the user movement actives can reach the target.")
 
 
-    def order_attack(self, unit, _target, AI_assist=True):
+
+    def order_attack(self, unit: bf_objs.Unit, _target: bf_objs.Unit, AI_assist=True):
         unit_target = _target
         actives = unit.attack_actives
         if len(actives) == 0:
-            return False, "The unit has no attack actives."
+            raise PydolonsException("The unit has no attack actives.")
 
         if isinstance(unit_target, Cell):
             unit_target = self.battlefield.units_at.get(unit_target, None)
             if unit_target is None:
-                return False, "Can't attack an empty cell."
+                raise PydolonsException("Can't attack an empty cell.")
 
-        valid_actives = [a for a in actives if a.check_target(unit_target) and a.owner_can_afford_activation()]
+        affordable_actives = [a for a in actives if a.owner_can_afford_activation()]
 
-        if len(valid_actives) == 0:
-            if AI_assist:
+        if not affordable_actives:
+            self._complain_missing(unit, actives, "attack")
 
-                facing = self.battlefield.unit_facings[unit]
+        valid_actives = [a for a in affordable_actives if a.check_target(unit_target)]
+
+        if valid_actives:
+            chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
+            chosen_active.activate(unit_target)
+            return
+        else:
+            if not AI_assist:
+                raise PydolonsException("None of the user attack actives can reach the target.")
+            else:
                 target_cell = self.battlefield.unit_locations[unit_target]
                 cell_from = self.battlefield.unit_locations[unit]
+
+                facing = self.battlefield.unit_facings[unit]
                 angle, ccw = Cell.angle_between(facing, target_cell.complex -cell_from.complex)
                 if angle >= 45:
                     unit.turn_ccw() if ccw else unit.turn_cw()
-                    return True, unit.turn_ccw_active if ccw else unit.turn_cw_active
+                    return
 
                 distance = self.battlefield.distance(unit, target_cell)
                 if distance >= 2:
-                    return self.order_move(unit, target_cell)
+                    self.order_move(unit, target_cell)
+                else:
+                    raise PydolonsException("None of the user attack actives can reach the target.")
 
-            return False, "None of the user attack actives can reach the target."
 
-        chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
-        chosen_active.activate(unit_target)
 
-        return True, chosen_active
+
 
 
     @staticmethod
-    def cost_heuristic(unit, factors = None):
+    def cost_heuristic(unit: bf_objs.Unit, factors = None):
         _factors = factors or {}
 
         def _(active):
@@ -228,7 +267,7 @@ class DreamGame:
     def units(self):
         return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
 
-    def get_location(self, unit):
+    def get_location(self, unit: bf_objs.Unit):
         assert unit in my_context.the_game.battlefield.unit_locations
         return self.battlefield.unit_locations[unit]
 

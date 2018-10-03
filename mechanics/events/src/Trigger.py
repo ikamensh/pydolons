@@ -8,7 +8,7 @@ class Trigger:
                  callbacks=None):
 
         assert inspect.isclass(target_event_cls)
-        self.target_event_cls = target_event_cls
+        self.channel = target_event_cls.channel
         self.conditions = conditions
         self.source = source
         self.is_interrupt = is_interrupt
@@ -18,12 +18,11 @@ class Trigger:
 
     def activate(self):
         if self.is_interrupt:
-            self.platform.interrupts[self.target_event_cls.channel].add(self)
+            self.platform.interrupts[self.channel].add(self)
         else:
-            self.platform.triggers[self.target_event_cls.channel].add(self)
+            self.platform.triggers[self.channel].add(self)
 
     def check_conditions(self, event):
-        assert isinstance(event, self.target_event_cls)
         if not self.conditions:
             return True
         return all((cond(self, event) for cond in self.conditions))
@@ -36,8 +35,8 @@ class Trigger:
 
     def deactivate(self):
         if self.is_interrupt:
-            self.platform.interrupts[self.target_event_cls.channel].remove(self)
+            self.platform.interrupts[self.channel].remove(self)
         else:
-            self.platform.triggers[self.target_event_cls.channel].remove(self)
+            self.platform.triggers[self.channel].remove(self)
 
 

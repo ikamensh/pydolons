@@ -2,6 +2,9 @@ from battlefield import Cell
 from PySide2 import QtCore, QtGui, QtWidgets
 from battlefield.Facing import Facing
 
+from ui.events import UiErrorMessageEvent
+from exceptions import PydolonsException
+
 
 
 class GameController:
@@ -42,12 +45,18 @@ class GameController:
         self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
-        self.the_game.ui_order(self.last_point.x, self.last_point.y)
-        self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-        self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+        try:
+            self.the_game.ui_order(self.last_point.x, self.last_point.y)
+            self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+            self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+        except PydolonsException as exc:
+            UiErrorMessageEvent(repr(exc))
 
     def keyPressEvent(self, e):
-        self.order_from_hotkey(e)
+        try:
+            self.order_from_hotkey(e)
+        except PydolonsException as exc:
+            UiErrorMessageEvent(repr(exc))
 
     def wheelEvent(self, e):
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,

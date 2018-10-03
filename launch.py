@@ -8,7 +8,8 @@ from game_objects.battlefield_objects import Unit
 from ui.TheUI import TheUI
 from threading import Thread
 # import triggers
-from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger
+from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
+    perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger
 
 import time
 
@@ -34,6 +35,7 @@ def one_game():
     # NEW TRIGGER ADD THIS |
     #
     levelstatus_trigger(),
+    ui_error_message_trigger(),
     nexunit_anim_trigger(),
     turn_anim_trigger(),
     perish_anim_trigger(),
