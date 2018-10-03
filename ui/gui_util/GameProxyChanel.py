@@ -5,12 +5,12 @@ class GameProxyChanel(QtCore.QObject):
     """docstring for GameChanel.
     Данный класс генерирует сигналы о событиях
     """
-    attackTo = QtCore.Signal(dict)
-    unitActive = QtCore.Signal(dict)
-    unitDied = QtCore.Signal(dict)
-    unitMove = QtCore.Signal(dict)
-    unitTurn = QtCore.Signal(dict)
-    targetDamage = QtCore.Signal(dict)
+    # attackTo = QtCore.Signal(dict)
+    # unitActive = QtCore.Signal(dict)
+    # unitDied = QtCore.Signal(dict)
+    # unitMove = QtCore.Signal(dict)
+    # unitTurn = QtCore.Signal(dict)
+    # targetDamage = QtCore.Signal(dict)
     def __init__(self):
         super(GameProxyChanel, self).__init__()
         self.timer = QtCore.QTimer()
@@ -34,12 +34,12 @@ class GameProxyChanel(QtCore.QObject):
     def slotStackWork(self):
         while gamechanel.msg_stack:
             message = gamechanel.msg_stack.pop(0)
-            if message.get('event') == 'UnitDiedEvent':
-                self.unitDied.emit(message)
-            elif message.get('event') == 'ActiveEvent':
-                self.unitActive.emit(message)
-            elif message.get('event') == 'TurnEvent':
-                self.unitTurn.emit(message)
+            # if message.get('event') == 'UnitDiedEvent':
+            #     self.unitDied.emit(message)
+            # if message.get('event') == 'ActiveEvent':
+            #     self.unitActive.emit(message)
+            # if message.get('event') == 'TurnEvent':
+                # self.unitTurn.emit(message)
             # elif message.get('event') == 'MovementEvent':
                 # self.unitMove.emit(message)
             # elif message.get('event') == 'DamageEvent':
