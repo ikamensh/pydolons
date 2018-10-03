@@ -46,10 +46,14 @@ class Level_demo_dungeon(BaseLevel):
 
     def targetDamageSlot(self, msg):
         # Требуется рефакторинг метод срабатывает после смерти юнита
-        # self.gameRoot.cfg.sound_maps['ATTACK_WOLF_2.wav'].play(
         if msg.get('target').uid in self.units.units_at.keys():
             self.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+            self.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
+            # print('debug -> damage_type', msg.get('damage_type'))
         pass
+
+    def targetDamageHitSlot(self, msg):
+        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
     def attackToSlot(self, msg):
         self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
