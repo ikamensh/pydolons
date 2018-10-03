@@ -1,4 +1,4 @@
-from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent
+from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent, LevelStatusEvent
 from ui.triggers.no_sim_condition import no_sim_condition
 from ui.TheUI import TheUI
 from GameLoopThread import ProxyEmit
@@ -79,3 +79,15 @@ def nexunit_anim_trigger():
     return Trigger(NextUnitEvent,
                    conditions={no_sim_condition},
                    callbacks=[play_nextunit_anim])
+
+########### LevelStatus #################
+
+
+def play_levelstatus(t, e):
+    ProxyEmit.play_levelstatus.emit(e.status)
+    pass
+
+def levelstatus_trigger():
+    return Trigger(LevelStatusEvent,
+                   conditions={no_sim_condition},
+                   callbacks=[play_levelstatus])
