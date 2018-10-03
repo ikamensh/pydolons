@@ -55,13 +55,8 @@ def one_game():
     # if the game_loop completes work then thread will completes its work
     loop.start()
     # debug time sleep
-<<<<<<< HEAD
     # time.sleep(5)
     # debug print
-=======
-    time.sleep(5)
-
->>>>>>> eb6fd355c255baee6d05a340ca208477817daab3
     # Qt application exit
     sys.exit(app.exec_())
 
