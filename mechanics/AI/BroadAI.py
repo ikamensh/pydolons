@@ -19,16 +19,8 @@ class BroadAI:
 
         fraction = self.game.fractions[active_unit]
         utilities = {node:(node.utility(fraction) + node.node_from.utility(fraction)) for node in circle2}
+        # this bug a lot of taps
         best_node2 = max(circle2, key=lambda x: utilities[x])
         best_node1 = best_node2.node_from
 
         return best_node1.choice
-
-
-
-
-
-
-
-
-

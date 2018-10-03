@@ -86,14 +86,15 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
 
     def showToolTip(self, cell, units_at, units_bf):
         if cell in [unit.worldPos for unit in units_at.values()]:
-            unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
-            self.tooltip.setPos(unit.pos())
-            txt = 'uid = ' + str(unit.uid)
-            txt += '\nhp = ' + str(units_bf[cell].health)
-            txt += '\nmana = ' + str(units_bf[cell].mana)
-            txt += '\nstamina = ' + str(units_bf[cell].stamina)
-            self.toolText.setPlainText(txt)
-            self.tooltip.setVisible(True)
+            if cell in units_bf.keys():
+                unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
+                self.tooltip.setPos(unit.pos())
+                txt = 'uid = ' + str(unit.uid)
+                txt += '\nhp = ' + str(units_bf[cell].health)
+                txt += '\nmana = ' + str(units_bf[cell].mana)
+                txt += '\nstamina = ' + str(units_bf[cell].stamina)
+                self.toolText.setPlainText(txt)
+                self.tooltip.setVisible(True)
         else:
             self.tooltip.setVisible(False)
 
