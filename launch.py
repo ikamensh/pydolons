@@ -57,7 +57,6 @@ def one_game():
     # debug time sleep
     # time.sleep(5)
     # debug print
-    print(f"battle lasted for {time}")
     # Qt application exit
     sys.exit(app.exec_())
 
