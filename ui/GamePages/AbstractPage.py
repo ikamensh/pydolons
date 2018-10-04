@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
+from PySide2 import QtCore, QtGui, QtWidgets
 
-class AbstractPage(ABC):
+
+class AbstractPage(QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
     def __init__(self):
         super(AbstractPage, self).__init__()
