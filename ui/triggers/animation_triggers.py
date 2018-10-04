@@ -1,6 +1,6 @@
-from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent, LevelStatusEvent
+from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent
+from ui.events import UiErrorMessageEvent, LevelStatusEvent
 from ui.triggers.no_sim_condition import no_sim_condition
-from ui.TheUI import TheUI
 from GameLoopThread import ProxyEmit
 
 
@@ -9,7 +9,6 @@ from GameLoopThread import ProxyEmit
 
 def play_movement_anim(t, e):
     ProxyEmit.play_movement_anim.emit({'unit':e.unit,"cell_to":e.cell_to})
-    pass
 
 
 def move_anim_trigger():
@@ -21,11 +20,9 @@ def move_anim_trigger():
 
 def maybe_play_damage_anim(t, e):
     ProxyEmit.maybe_play_damage_anim.emit({'amount':e.amount,'target':e.target, 'damage_type':e.damage.type})
-    pass
 
 def maybe_play_hit_anim(t, e):
     ProxyEmit.maybe_play_hit_anim.emit({'sound':e.target.sound_map.hit})
-    pass
 
 def damage_anim_trigger():
     return Trigger(DamageEvent,
@@ -61,7 +58,6 @@ def perish_anim_trigger():
 
 def play_trun_anim(t, e):
     ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.battlefield.unit_facings[e.unit]})
-    pass
 
 def turn_anim_trigger():
     return Trigger(TurnEvent,
@@ -73,7 +69,6 @@ def turn_anim_trigger():
 
 def play_nextunit_anim(t, e):
     ProxyEmit.play_nextunit_anim.emit()
-    pass
 
 def nexunit_anim_trigger():
     return Trigger(NextUnitEvent,
@@ -85,9 +80,19 @@ def nexunit_anim_trigger():
 
 def play_levelstatus(t, e):
     ProxyEmit.play_levelstatus.emit(e.status)
-    pass
 
 def levelstatus_trigger():
     return Trigger(LevelStatusEvent,
                    conditions={no_sim_condition},
                    callbacks=[play_levelstatus])
+
+########### UiError #################
+
+
+def display_ui_error(t, e):
+    ProxyEmit.play_levelstatus.emit(e.message)
+
+def ui_error_message_trigger():
+    return Trigger(UiErrorMessageEvent,
+                   conditions={no_sim_condition},
+                   callbacks=[display_ui_error])

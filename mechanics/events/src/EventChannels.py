@@ -20,4 +20,5 @@ class EventsChannels(NameEnum):
     BuffExpiredChannel = auto()
 
     NextUnitChannel = auto()
-    LevelStatusEvent = auto()
+    LevelStatus = auto()
+    UiErrorMessage = auto()

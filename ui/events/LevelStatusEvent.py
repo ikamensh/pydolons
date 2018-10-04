@@ -2,7 +2,7 @@ from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 
 class LevelStatusEvent(Event):
-    channel = EventsChannels.LevelStatusEvent
+    channel = EventsChannels.LevelStatus
 
     def __init__(self, status):
         self.status = status
