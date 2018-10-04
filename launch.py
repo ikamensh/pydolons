@@ -29,6 +29,7 @@ def one_game():
     # Logical engine initialization
     game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
     game.character = Character(demohero_basetype)
+    print(game.character)
     # Ui engine initialization
     window = TheUI(game)
     TheUI.singleton = window
@@ -49,6 +50,16 @@ def one_game():
     game.print_all_units()
     # game_loop thread initialization
     loop = GameLoopThread()
+    # example correct stop thread
+    def close_app():
+        # game.loop stop condition
+        game.loop_state = False
+        # thread call quit, exit from thread
+        loop.quit()
+        # application waiting for shutdown thread
+        loop.wait()
+    # call exit from window
+    app.aboutToQuit.connect(close_app)
     # set game and ui engine
     loop.game = game
     loop.the_ui = window
