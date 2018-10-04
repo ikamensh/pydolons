@@ -23,6 +23,7 @@ class DreamGame:
         self.events_platform = EventsPlatform()
         self.is_sim = is_sim
         self.set_to_context()
+        self.loop_state = True
 
         for rule in (rules or []):
             rule()
@@ -73,7 +74,7 @@ class DreamGame:
 
 
     def loop(self):
-        while True:
+        while self.loop_state:
             game_over = self.game_over()
             if game_over:
                 print(game_over)
