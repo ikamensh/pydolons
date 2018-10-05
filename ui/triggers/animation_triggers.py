@@ -2,13 +2,16 @@ from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, M
 from ui.events import UiErrorMessageEvent, LevelStatusEvent
 from ui.triggers.no_sim_condition import no_sim_condition
 from GameLoopThread import ProxyEmit
-
+import my_context
+from ui.TheUI import TheUI
 
 ########### MOVE #################
 
 
 def play_movement_anim(t, e):
-    ProxyEmit.play_movement_anim.emit({'unit':e.unit,"cell_to":e.cell_to})
+    # comment bug threading
+    # ProxyEmit.play_movement_anim.emit({'unit':e.unit,"cell_to":e.cell_to})
+    TheUI.singleton.gameRoot.level.unitMoveSlot({'unit':e.unit,"cell_to":e.cell_to})
 
 
 def move_anim_trigger():
