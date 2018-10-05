@@ -26,10 +26,12 @@ def one_game():
     """
     # Qt application initialization
     app = QtWidgets.QApplication(sys.argv)
-    # Logical engine initialization
-    game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
-    game.character = Character(demohero_basetype)
-    print(game.character)
+    # The_hero character init
+    character  = Character(demohero_basetype)
+    # Logical engine initialization, the_hero create from character
+    game = DreamGame.start_dungeon(demo_dungeon, character.unit)
+    # add character field for game
+    game.character = character
     # Ui engine initialization
     window = TheUI(game)
     TheUI.singleton = window
