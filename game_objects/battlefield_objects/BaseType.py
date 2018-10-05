@@ -11,7 +11,8 @@ class BaseType:
 
     def __init__(self, attributes, type_name, *, unarmed_damage_type=DamageTypes.CRUSH, resists=None,
                  armor_dict=None, armor_base=0, inventory_capacity = 20,
-                 actives=None, icon="default.png", unarmed_chances = default_unarmed_chances, xp = None, sound_map = None):
+                 actives=None, icon="default.png", unarmed_chances = default_unarmed_chances, xp = None,
+                 sound_map = None):
 
         self.attributes = {}
         for attr in list(attributes.keys()):

@@ -60,6 +60,7 @@ def one_game():
         loop.quit()
         # application waiting for shutdown thread
         loop.wait()
+
     # call exit from window
     app.aboutToQuit.connect(close_app)
     # set game and ui engine
@@ -69,10 +70,6 @@ def one_game():
     loop.setSiganls(ProxyEmit)
     # if the game_loop completes work then thread will completes its work
     loop.start()
-    # debug time sleep
-    # time.sleep(5)
-    # debug print
-    # Qt application exit
     sys.exit(app.exec_())
 
 

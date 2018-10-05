@@ -10,15 +10,14 @@ class Adventure:
         self.first_mission = first_mission
 
     def start(self):
-        Shop.enter_shop(self.character)
         for dungeon in self.first_mission:
-            game = SimGame.start_dungeon(dungeon, Unit(self.character.base_type))
+            hero_unit = self.character.unit
+            game = SimGame.start_dungeon(dungeon, hero_unit)
             result = game.loop()
             if result != "VICTORY":
                 print("you have lost the game.")
                 return "DEFEAT"
-            else:
-                Shop.enter_shop(self.character)
+            self.character.update(hero_unit)
 
         return "VICTORY"
 
