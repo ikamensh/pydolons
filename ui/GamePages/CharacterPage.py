@@ -1,9 +1,12 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from ui.GamePages.widgets import WidgetFactory
+
 from character_creation.Character import Character
 from game_objects.battlefield_objects.BaseType import BaseType
 
-class CharacterPage(QtWidgets.QGraphicsRectItem):
+from ui.GamePages.widgets import WidgetFactory
+from ui.GamePages import AbstractPage
+
+class CharacterPage(AbstractPage):
     """docstring for CharacterPage."""
     def __init__(self):
         super(CharacterPage, self).__init__()
