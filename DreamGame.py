@@ -14,8 +14,8 @@ from exceptions import InvalidTargetException, PydolonsException, CantAffordActi
 class DreamGame:
 
     def __init__(self, bf, rules=None, is_sim = False):
-        self.battlefield = bf
-        self.the_hero = None
+        self.battlefield :Battlefield = bf
+        self.the_hero : bf_objs.Unit= None
         self.fractions = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
@@ -87,7 +87,10 @@ class DreamGame:
                 continue
             else:
                 NextUnitEvent(active_unit)
-                active, target = self.enemy_ai.decide_step(active_unit)
+                try:
+                    active, target = self.enemy_ai.decide_step(active_unit)
+                except:
+                    active, target = self.random_ai.decide_step(active_unit)
                 active_unit.activate(active, target)
 
 

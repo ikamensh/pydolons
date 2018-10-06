@@ -1,4 +1,5 @@
 from battlefield.Battlefield import Cell
+from battlefield.Facing import Facing
 import pytest
 
 def test_move(game, hero):
@@ -12,7 +13,7 @@ def test_move(game, hero):
 def test_facing_no_problem(game, hero):
     initial_location = game.get_location(hero)
 
-    game.battlefield.unit_facings[hero] = 0-1j
+    game.battlefield.unit_facings[hero] = Facing.NORTH
 
     target_location = Cell(1, 2)
     try:
@@ -28,7 +29,7 @@ def test_facing_no_problem(game, hero):
 def test_can_make_multiple_steps(game, hero):
     initial_location = game.get_location(hero)
 
-    game.battlefield.unit_facings[hero] = 0-1j
+    game.battlefield.unit_facings[hero] = Facing.NORTH
 
     target_location = Cell(0, 6)
     try:
@@ -42,6 +43,7 @@ def test_can_make_multiple_steps(game, hero):
 
 def test_can_use_diag_step(game, hero):
     initial_location = game.get_location(hero)
+    game.battlefield.unit_facings[hero] = Facing.SOUTH
 
     target_location = Cell(2, 2)
     game.order_move(hero, target_location)

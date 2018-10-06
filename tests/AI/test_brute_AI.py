@@ -100,7 +100,7 @@ def test_own_turn_first(minigame, hero, pirate):
     ai = BruteAI(minigame)
     active, target = ai.decide_step(pirate, epsilon=0)
 
-    assert active is pirate.turn_cw_active
+    assert active is pirate.turn_ccw_active
 
 
 def test_moves_closer(minigame, hero, pirate):

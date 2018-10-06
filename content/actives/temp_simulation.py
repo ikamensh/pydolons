@@ -37,7 +37,7 @@ def sim_attack(active: Active, target: BattlefieldObject):
 
 
 def sim_turn(ccw):
-    turn = 1j if ccw else -1j
+    turn = -1j if ccw else 1j
 
     @contextmanager
     def _(active: Active, _):

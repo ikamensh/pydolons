@@ -7,8 +7,7 @@ def test_visibility(game, hero):
     bf = game.battlefield
     bf.unit_locations = {}
     bf.units_at = {}
-    bf.place(hero, Cell(1,1))
-    assert bf.unit_facings[hero] is Facing.NORTH
+    bf.place(hero, Cell(1,1), Facing.SOUTH)
 
     vision = Vision(bf)
     cells_seen = vision.std_seen_cells(hero)
@@ -29,7 +28,7 @@ def test_visibility(game, hero):
 def test_borders(game, hero):
 
     bf = game.battlefield
-    assert bf.unit_facings[hero] is Facing.NORTH
+    bf.unit_facings[hero] = Facing.SOUTH
 
     bf.move(hero, Cell(1, 1))
     vision = Vision(bf)
@@ -45,7 +44,8 @@ def test_borders(game, hero):
 def test_direction(game, hero):
 
     bf = game.battlefield
-    assert bf.unit_facings[hero] is Facing.NORTH
+    bf.unit_facings[hero] = Facing.SOUTH
+
 
     vision = Vision(bf)
     bf.unit_locations = {}

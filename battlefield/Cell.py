@@ -24,7 +24,7 @@ class Cell:
         """
         :param c1: complex vector 1
         :param c2: complex vector 2
-        :return: smallest angle between the two vectors, and it is ccw from c1 to c2
+        :return: smallest angle between the two vectors, and if it is ccw from c1 to c2
         """
         p1 = phase(c1)
         p2 = phase(c2)
@@ -40,7 +40,7 @@ class Cell:
             angle = abs( angle - 2* pi )
 
 
-        return  angle / pi * 180, p1 <= p2
+        return  angle / pi * 180, p1 >= p2
 
     def __eq__(self, other):
         if self is other: return True
