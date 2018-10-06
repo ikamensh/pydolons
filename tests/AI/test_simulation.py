@@ -1,6 +1,5 @@
 from mechanics.events import MovementEvent
 from content.triggers.immortality import immortality
-from content.triggers.damage_to_attacker import damage_to_attackers
 
 
 def test_simulation_units_dont_rly_die(minigame):
