@@ -38,16 +38,6 @@ class Masteries:
     def values(self):
         return { m: Masteries.achieved_level(exp) for m, exp in self.exp_spent.items()}
 
-    # @staticmethod
-    # def requirements(m, level):
-    #     reqs = {}
-    #     for mastery in MasteriesEnum:
-    #         coupling = MasteriesGroups.coupling(mastery, m)
-    #         if mastery is not m and coupling > 0:
-    #             reqs[mastery] = int(level * coupling)
-    #
-    #     return reqs
-
     def calculate_cost(self, mastery_up):
 
         direct_cost = self.cumulative_cost(self.values[mastery_up] + 1) - self.exp_spent[mastery_up]
@@ -65,6 +55,15 @@ class Masteries:
         self.exp_spent[mastery_up] += direct_cost
         for m in indirect_costs:
             self.exp_spent[m] += indirect_costs[m]
+
+    @staticmethod
+    def max_out(exp, chosen: MasteriesEnum, percentage = 0.9):
+        assert 0 <= percentage <= 1
+        distributed_xp = exp * (1-percentage)
+        _masteries = Masteries(exp = distributed_xp)
+
+        _masteries.exp_spent[chosen] += exp - distributed_xp
+        return _masteries
 
 
     def __getitem__(self, item):

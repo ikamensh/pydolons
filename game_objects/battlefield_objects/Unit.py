@@ -152,11 +152,14 @@ class Unit(BattlefieldObject):
         else:
             return self._initiative
 
+    @property
+    def melee_mastery(self):
+        weapon = self.get_melee_weapon()
+        return weapon.mastery or MasteriesEnum.UNARMED
 
     @property
     def melee_precision(self):
-        weapon = self.get_melee_weapon()
-        mastery = self.masteries[weapon.mastery or MasteriesEnum.UNARMED]
+        mastery = self.masteries[self.melee_mastery]
         return self.str + self.agi + mastery
 
     @property
