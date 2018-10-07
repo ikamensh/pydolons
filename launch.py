@@ -2,8 +2,8 @@
 from GameLoopThread import GameLoopThread, ProxyEmit
 from character_creation.Character import Character
 from mechanics.AI.SimGame import SimGame as DreamGame
-from content.base_types.demo_hero import demohero_basetype
-from content.dungeons.demo_dungeon import demo_dungeon
+from cntent.base_types.demo_hero import demohero_basetype
+from cntent.dungeons.demo_dungeon import demo_dungeon
 from ui.TheUI import TheUI
 # import triggers
 from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \

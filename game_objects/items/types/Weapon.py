@@ -5,8 +5,8 @@ from mechanics.chances.CritHitGrazeMiss import ImpactChances
 import copy
 
 class Weapon(WearableItem):
-    def __init__(self, name, damage, chances=None, *,max_durability=None, mastery=None, blueprint=None, material=None,
-                                                                                                quality=None):
+    def __init__(self, name, damage, chances=None, atb_factor=1., *,max_durability=None,
+                 mastery=None, blueprint=None, material=None,quality=None):
         super().__init__(name, item_type=ItemTypes.WEAPON, blueprint=blueprint, quality=quality, material=material, max_durability=max_durability)
         assert isinstance(damage, Damage)
         if chances:
@@ -14,6 +14,7 @@ class Weapon(WearableItem):
 
         self._damage = damage
         self.chances = chances or ImpactChances(0.05, 0.4, 0.5)
+        self.atb_factor = atb_factor
         self.mastery = mastery
 
     @property
@@ -22,3 +23,7 @@ class Weapon(WearableItem):
             return copy.copy(self._damage)
 
         return Damage(self._damage.amount * self.durability_factor, self._damage.type)
+
+
+    def __repr__(self):
+        return f"{self.name} dealing {self.damage}"

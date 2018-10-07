@@ -1,4 +1,4 @@
-from content.triggers.damage_to_attacker import damage_to_attackers
+from cntent.triggers.damage_to_attacker import damage_to_attackers
 from mechanics.combat import Attack
 from mechanics.damage import Damage, DamageTypes
 

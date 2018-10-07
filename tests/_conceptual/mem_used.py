@@ -1,6 +1,6 @@
 from DreamGame import DreamGame
-from content.base_types.demo_hero import demohero_basetype
-from content.dungeons.demo_dungeon_walls import walls_dungeon
+from cntent.base_types.demo_hero import demohero_basetype
+from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from game_objects.battlefield_objects import Unit
 import sys
 import my_context

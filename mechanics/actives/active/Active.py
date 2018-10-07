@@ -11,7 +11,7 @@ class Active:
         self.name = name
         self.targeting_cls = targeting_cls
         self.conditions = conditions
-        self.cost = cost
+        self._cost = cost
         self.callbacks = callbacks
         self.owner = None
         self.spell = None
@@ -36,7 +36,7 @@ class Active:
 
         if self.owner_can_afford_activation() and self.check_target(targeting):
             cpy = copy.copy(self)
-            cpy.cost = copy.copy(cpy.cost)
+            cpy._cost = copy.copy(cpy._cost)
             cpy.spell = copy.copy(cpy.spell)
             self.owner.pay(self.cost)
             ActiveEvent(cpy, targeting)
@@ -63,6 +63,16 @@ class Active:
     def simulate(self, target):
         with self.simulate_callback(self, target):
             yield
+
+    # the hack is here because sometimes we want to calculate cost dynamically. setting property doesn't work -
+    # deepcopy throws TypeError on properties. But it does not on lambdas. Therefore _cost is either a Cost
+    # object, or a lambda self: -> Cost
+    @property
+    def cost(self):
+        try:
+            return self._cost(self)
+        except TypeError:
+            return self._cost
 
     def __repr__(self):
         return f"{self.name} active with {self.cost} cost ({self.tags[0] if len(self.tags) == 1 else self.tags}).".capitalize()

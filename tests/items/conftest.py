@@ -11,6 +11,10 @@ def bronze():
     return Material(MaterialTypes.METAL, "bronze", 0.5)
 
 @pytest.fixture()
+def silver():
+    return Material(MaterialTypes.METAL, "bronze", 1.1)
+
+@pytest.fixture()
 def troll_skin():
     return Material(MaterialTypes.SKIN, "Black Troll Hide", 1.4)
 

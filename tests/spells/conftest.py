@@ -1,6 +1,6 @@
 from mechanics.damage import Damage, DamageTypes
 from mechanics.events import DamageEvent
-from content.spells import runes
+from cntent.spells import runes
 from game_objects.spells import  SpellConcept
 from character_creation.MasteriesEnum import MasteriesEnum
 from mechanics.actives import Cost, Active

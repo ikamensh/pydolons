@@ -1,5 +1,5 @@
-from content.spells.concepts import lightning_concept, heal_concept
-from content.spells import runes
+from cntent.spells.concepts import lightning_concept, heal_concept
+from cntent.spells import runes
 from mechanics.actives import Active
 
 spell = lightning_concept.to_spell([runes.double_damage_rune])
