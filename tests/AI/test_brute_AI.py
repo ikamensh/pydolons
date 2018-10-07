@@ -51,7 +51,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
     assert int(action.uid / 1e7) == imba_ability.uid
     assert minigame.fractions[target] is not minigame.fractions[unit]
 
-@pytest.mark.skip(reason="non-deterministic ai does not guarantee this.")
+# @pytest.mark.skip(reason="non-deterministic ai does not guarantee this.")
 def test_no_suicide(game):
     for i in range(10):
 
