@@ -100,7 +100,7 @@ def test_own_turn_first(minigame, hero, pirate):
     ai = BruteAI(minigame)
     active, target = ai.decide_step(pirate, epsilon=0)
 
-    assert active is pirate.turn_cw_active
+    assert active is pirate.turn_ccw_active
 
 
 def test_moves_closer(minigame, hero, pirate):
@@ -150,6 +150,68 @@ def avoids_punishing_action(take_punishment, minigame, hero):
     action, target = ai.decide_step(hero, epsilon=0)
 
     assert int(action.uid / 1e7) != take_punishment.uid
+
+
+import pytest
+
+from DreamGame import Fractions
+from mechanics.AI.SimGame import SimGame
+from mechanics.actives import Active, ActiveTags
+from battlefield.Facing import Facing
+import copy
+
+
+
+@pytest.fixture()
+def just_hero_game(simple_battlefield, pirate,  hero):
+
+
+    _game = SimGame(simple_battlefield)
+
+    _game.add_unit(hero, (3+3j), Fractions.PLAYER)
+
+
+    _game.set_to_context()
+
+
+    yield _game
+
+def test_attacks(just_hero_game, hero, pirate):
+
+    g = just_hero_game
+    pirates = [copy.deepcopy(pirate) for _ in range(3)]
+    pirate2, pirate3, pirate4 = pirates
+
+    g.add_unit(pirate, (3 + 4j), Fractions.ENEMY, facing=Facing.NORTH)
+    g.add_unit(pirate2, (4 + 3j), Fractions.ENEMY, facing=Facing.WEST)
+    g.add_unit(pirate3, (3 + 2j), Fractions.ENEMY, facing=Facing.SOUTH)
+    g.add_unit(pirate4, (2 + 3j), Fractions.ENEMY, facing=Facing.EAST)
+
+    ai = BruteAI(g)
+
+    g.battlefield.unit_facings[hero] = Facing.WEST
+
+    a, t = ai.decide_step(pirate)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+    a.activate(t)
+    a, t = ai.decide_step(pirate2)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+    a.activate(t)
+    a, t = ai.decide_step(pirate3)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+    a.activate(t)
+    a, t = ai.decide_step(pirate4)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+
+
+
+
+
+
 
 
 

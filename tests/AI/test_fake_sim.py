@@ -6,6 +6,8 @@ def test_results_match(minigame, hero):
     choices = minigame.get_all_choices(hero)
     fraction = minigame.fractions[hero]
 
+    mismatches = []
+
     for c in choices:
         active, target = c
         if active.simulate_callback:
@@ -13,9 +15,10 @@ def test_results_match(minigame, hero):
             fake_util = minigame.fake_measure(c, fraction)
             sim = minigame.step_into_sim(active, target)
             real_util = sim.utility(fraction)
-            assert fake_util == real_util
+            if fake_util != real_util:
+                mismatches.append(c)
 
-
+    assert len(mismatches) == 0
     assert count_simulated > 0
 
 

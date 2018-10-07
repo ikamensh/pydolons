@@ -55,15 +55,17 @@ def test_visibility(game, hero, pirate):
     bf = game.battlefield
     hero.prc_base += 100
     bf.move(hero, Cell(1,1))
-    assert bf.unit_facings[hero] is Facing.NORTH
+    bf.unit_facings[hero] = Facing.SOUTH
+
 
     vision = Vision(bf)
 
     cells_seen = vision.std_seen_cells(hero)
-
+    print(cells_seen)
+    assert Cell(1, 4) in cells_seen
     assert Cell(1, 5) in cells_seen
     assert Cell(5, 1) in cells_seen
-    assert Cell(1, 4) in cells_seen
+
 
     bf.place(pirate, Cell(1,2))
 

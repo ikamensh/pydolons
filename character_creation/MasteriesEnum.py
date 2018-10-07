@@ -18,6 +18,7 @@ class MasteriesEnum(NameEnum):
     LIGHTNING  = auto()
     EARTH = auto()
     ACID  = auto()
+
     LIGHT  = auto()
     SONIC  = auto()
     ASTRAL = auto()

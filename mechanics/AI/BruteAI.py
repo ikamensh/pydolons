@@ -6,7 +6,7 @@ class BruteAI:
         self.game = game
         self.random_ai = RandomAI(game)
 
-    def decide_step(self, active_unit, epsilon = 0.0):
+    def decide_step(self, active_unit, epsilon = 0.0) :
 
         if random.random() < epsilon:
             return self.random_ai.decide_step(active_unit)
@@ -14,6 +14,7 @@ class BruteAI:
         neighbour_nodes = self.game.get_all_neighbouring_states(active_unit)
 
         fraction = self.game.fractions[active_unit]
+        # nodes_utils = [(node, node.utility(fraction)) for node in neighbour_nodes] #easy debug
         best_node = max(neighbour_nodes, key= lambda x: x.utility(fraction))
 
         return best_node.choice

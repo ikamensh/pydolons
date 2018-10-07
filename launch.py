@@ -4,9 +4,7 @@ from character_creation.Character import Character
 from mechanics.AI.SimGame import SimGame as DreamGame
 from content.base_types.demo_hero import demohero_basetype
 from content.dungeons.demo_dungeon import demo_dungeon
-from game_objects.battlefield_objects import Unit
 from ui.TheUI import TheUI
-from threading import Thread
 # import triggers
 from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
     perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger
@@ -60,6 +58,7 @@ def one_game():
         loop.quit()
         # application waiting for shutdown thread
         loop.wait()
+
     # call exit from window
     app.aboutToQuit.connect(close_app)
     # set game and ui engine
@@ -69,10 +68,6 @@ def one_game():
     loop.setSiganls(ProxyEmit)
     # if the game_loop completes work then thread will completes its work
     loop.start()
-    # debug time sleep
-    # time.sleep(5)
-    # debug print
-    # Qt application exit
     sys.exit(app.exec_())
 
 

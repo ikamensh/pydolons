@@ -93,6 +93,10 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
                 txt += '\nhp = ' + str(units_bf[cell].health)
                 txt += '\nmana = ' + str(units_bf[cell].mana)
                 txt += '\nstamina = ' + str(units_bf[cell].stamina)
+
+                txt += '\nattack = ' + str(units_bf[cell].melee_precision)
+                txt += '\ndefence = ' + str(units_bf[cell].melee_evasion)
+
                 self.toolText.setPlainText(txt)
                 self.tooltip.setVisible(True)
         else:

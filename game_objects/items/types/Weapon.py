@@ -1,13 +1,19 @@
 from mechanics.damage.Damage import Damage
 from game_objects.items import WearableItem, ItemTypes
+from mechanics.chances.CritHitGrazeMiss import ImpactChances
+
 import copy
 
 class Weapon(WearableItem):
-    def __init__(self, name, damage, max_durability=None, *,mastery=None, blueprint=None, material=None,
+    def __init__(self, name, damage, chances=None, *,max_durability=None, mastery=None, blueprint=None, material=None,
                                                                                                 quality=None):
         super().__init__(name, item_type=ItemTypes.WEAPON, blueprint=blueprint, quality=quality, material=material, max_durability=max_durability)
         assert isinstance(damage, Damage)
+        if chances:
+            assert isinstance(chances, ImpactChances)
+
         self._damage = damage
+        self.chances = chances or ImpactChances(0.05, 0.4, 0.5)
         self.mastery = mastery
 
     @property

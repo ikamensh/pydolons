@@ -7,7 +7,7 @@ from contextlib import contextmanager
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls, conditions, cost, callbacks, tags=None, name = "Mysterious", simulate = None):
+    def __init__(self, targeting_cls, conditions, cost, callbacks, tags=None, name = "Mysterious", simulate = None, icon = "fire.jpg"):
         self.name = name
         self.targeting_cls = targeting_cls
         self.conditions = conditions
@@ -17,6 +17,7 @@ class Active:
         self.spell = None
         self.tags = tags or []
         self.simulate_callback = simulate
+        self.icon = icon
 
         Active.last_uid += 1
         self.uid = Active.last_uid

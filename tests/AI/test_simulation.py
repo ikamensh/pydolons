@@ -1,6 +1,5 @@
 from mechanics.events import MovementEvent
 from content.triggers.immortality import immortality
-from content.triggers.damage_to_attacker import damage_to_attackers
 
 
 def test_simulation_units_dont_rly_die(minigame):
@@ -98,6 +97,20 @@ def test_sim_persists(minigame):
 
     assert sim is not minigame
     assert not pirate.alive
+
+
+def test_hp_transfered(minigame, hero):
+
+    hero.health -= 200
+    hero.mana -= 100
+    hero.stamina -= 11
+    with minigame.simulation() as sim:
+        sim_hero = sim.find_unit(hero)
+
+        assert hero.health == sim_hero.health
+        assert hero.mana == sim_hero.mana
+        assert hero.stamina == sim_hero.stamina
+
 
 
 
