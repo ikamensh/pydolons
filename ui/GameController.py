@@ -144,5 +144,7 @@ class GameController:
             self.the_game.order_turn_cw()
         elif e.key() in GameController.orientations:
             self.the_game.order_step(GameController.orientations[e.key()])
-
-
+        elif e.key() == QtCore.Qt.Key_O:
+            self.gameRoot.gamePages.showPage('CharacterPage')
+        elif e.key() == QtCore.Qt.Key_Escape:
+            self.gameRoot.gamePages.close()

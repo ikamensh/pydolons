@@ -21,16 +21,22 @@ class SpinBox(AbstactWidget):
         self.gameconfig = gameconfig
 
     def paint(self, painter, option = None, widget = None):
-        painter.drawText(self.x, self.y + 22, self.data['text'])
-        painter.drawText(self.x + 150, self.y + 22, str(self.data['value']))
+        if not self.page is None:
+            try:
+                x, y = self.page.x() + self.x, self.page.y() + self.y
+            except Exception as e:
+                print(e)
+                x, y = self.x, self.y
+        painter.drawText(x, y + 22, self.data['text'])
+        painter.drawText(x + 150, y + 22, str(self.data['value']))
         if self.data['btn_up']:
-            painter.drawPixmap(self.x + 100, self.y + 1 , self.gameconfig.getPicFile('up4.png'))
+            painter.drawPixmap(x + 100, y + 1 , self.gameconfig.getPicFile('up4.png'))
         else:
-            painter.drawPixmap(self.x + 100, self.y + 1  , self.gameconfig.getPicFile('up4.png').scaled(25, 16))
+            painter.drawPixmap(x + 100, y + 1  , self.gameconfig.getPicFile('up4.png').scaled(25, 16))
         if self.data['btn_down']:
-            painter.drawPixmap(self.x + 100, self.y + 21 , self.gameconfig.getPicFile('down4.png'))
+            painter.drawPixmap(x + 100, y + 21 , self.gameconfig.getPicFile('down4.png'))
         else:
-            painter.drawPixmap(self.x + 100, self.y + 21 , self.gameconfig.getPicFile('down4.png').scaled(25, 16))
+            painter.drawPixmap(x + 100, y + 21 , self.gameconfig.getPicFile('down4.png').scaled(25, 16))
 
     def collision(self, pos):
         if pos.y() > self.y + 21 and pos.y() < self.y + 38 and pos.x() > self.x + 100 and  pos.x() < self.x + 127:

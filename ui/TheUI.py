@@ -10,14 +10,15 @@ from ui.levels import Level_demo_dungeon
 
 from ui.GameView import GameView
 
+from datetime import datetime
 
 class TheUI(QtWidgets.QWidget):
     view = None
     singleton = None
 
     def __init__(self, game):
-
         super().__init__()
+        print('cfg ===> start init TheUI', datetime.now())
         self.the_game = game
         self.gameTimer = QtCore.QTimer()
         self.gameTimer.timeout.connect(self.timerSlot)
@@ -64,6 +65,8 @@ class TheUI(QtWidgets.QWidget):
         self.view.setScene(self.scene)
 
         self.showMaximized()
+        print('cfg ===> init TheUI', datetime.now())
+
 
 
 

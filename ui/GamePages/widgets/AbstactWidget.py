@@ -10,6 +10,7 @@ class AbstactWidget(QtCore.QObject):
     @abstractmethod
     def __init__(self, name, w = 100, h = 20):
         super(AbstactWidget, self).__init__()
+        self.page = None
         self.setSize(w, h)
         self.setPos(0, 0)
         self.data = {'name':name}

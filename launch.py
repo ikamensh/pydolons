@@ -12,6 +12,7 @@ from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigge
     perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger
 
 import time
+from datetime import datetime
 
 import sys
 
@@ -29,9 +30,10 @@ def one_game():
     # The_hero character init
     character  = Character(demohero_basetype)
     # Logical engine initialization, the_hero create from character
+    print('cfg ===> start init DreamGame', datetime.now())
     # game = DreamGame.start_dungeon(walls_dungeon, character.unit)
     game = DreamGame.start_dungeon(demo_dungeon, character.unit)
-
+    print('cfg ===> init DreamGame', datetime.now())
     # add character field for game
     game.character = character
     # Ui engine initialization

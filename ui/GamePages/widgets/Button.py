@@ -15,13 +15,19 @@ class Button(AbstactWidget):
         pass
 
     def paint(self, painter, option = None, widget = None):
+        if not self.page is None:
+            try:
+                x, y = self.page.x() + self.x, self.page.y() + self.y
+            except Exception as e:
+                print(e)
+                x, y = self.x, self.y
         self.last_brush = painter.brush()
         if self.data['presed']:
             painter.setBrush(QtGui.QColor(128,128,128))
         else:
             painter.setBrush(QtCore.Qt.black)
-        painter.drawRect(self.x, self.y, self.w, self.h)
-        painter.drawText(self.x + 10, self.y + 15, self.data['text'])
+        painter.drawRect(x, y, self.w, self.h)
+        painter.drawText(x + 10, y + 15, self.data['text'])
         painter.setBrush(self.last_brush)
 
     def collision(self, pos):
