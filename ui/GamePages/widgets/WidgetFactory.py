@@ -4,6 +4,7 @@ class WidgetFactory(object):
     """docstring for WidgetFactory."""
     def __init__(self, gameconfig):
         super(WidgetFactory, self).__init__()
+        self.page = None
         self.gameconfig = gameconfig
         self.widgets = {}
 
@@ -11,6 +12,7 @@ class WidgetFactory(object):
         if name is None:
             name = 'spn_bx_' + str(len(self.widgets) + 1)
         spinbox = SpinBox(name, text, w, h,  value ,step, max_v, min_v)
+        spinbox.page = self.page
         spinbox.setUp(self.gameconfig)
         self.widgets[name] = spinbox
         return spinbox
@@ -19,6 +21,7 @@ class WidgetFactory(object):
         if name is None:
             name = 'btn_' + str(len(self.widgets) + 1)
         button = Button(name, text, w, h)
+        button.page = self.page
         self.widgets[name] = button
         return button
 
@@ -26,6 +29,7 @@ class WidgetFactory(object):
         if name is None:
             name = 'bxValue_' + str(len(self.widgets) + 1)
         boxValue = BoxValue(name, w, h)
+        boxValue.page = self.page
         self.widgets[name] = boxValue
         return boxValue
 
@@ -36,3 +40,6 @@ class WidgetFactory(object):
     def release(self):
         for widget in self.widgets.values():
             widget.release()
+
+    def update(self):
+        pass
