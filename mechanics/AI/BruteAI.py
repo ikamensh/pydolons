@@ -6,7 +6,7 @@ class BruteAI:
         self.game = game
         self.random_ai = RandomAI(game)
 
-    def decide_step(self, active_unit, epsilon = 0.0):
+    def decide_step(self, active_unit, epsilon = 0.0) :
 
         if random.random() < epsilon:
             return self.random_ai.decide_step(active_unit)

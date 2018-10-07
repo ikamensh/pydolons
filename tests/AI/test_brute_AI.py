@@ -192,46 +192,21 @@ def test_attacks(just_hero_game, hero, pirate):
     g.battlefield.unit_facings[hero] = Facing.WEST
 
     a, t = ai.decide_step(pirate)
-    print(a,t)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+    a.activate(t)
     a, t = ai.decide_step(pirate2)
-    print(a,t)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+    a.activate(t)
     a, t = ai.decide_step(pirate3)
-    print(a,t)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
+    a.activate(t)
     a, t = ai.decide_step(pirate4)
-    print(a,t)
+    assert ActiveTags.ATTACK in a.tags
+    assert t is hero
 
-    g.battlefield.unit_facings[hero] = Facing.EAST
-
-    a, t = ai.decide_step(pirate)
-    print(a, t)
-    a, t = ai.decide_step(pirate2)
-    print(a, t)
-    a, t = ai.decide_step(pirate3)
-    print(a, t)
-    a, t = ai.decide_step(pirate4)
-    print(a, t)
-
-    g.battlefield.unit_facings[hero] = Facing.NORTH
-
-    a, t = ai.decide_step(pirate)
-    print(a, t)
-    a, t = ai.decide_step(pirate2)
-    print(a, t)
-    a, t = ai.decide_step(pirate3)
-    print(a, t)
-    a, t = ai.decide_step(pirate4)
-    print(a, t)
-
-    g.battlefield.unit_facings[hero] = Facing.SOUTH
-
-    a, t = ai.decide_step(pirate)
-    print(a, t)
-    a, t = ai.decide_step(pirate2)
-    print(a, t)
-    a, t = ai.decide_step(pirate3)
-    print(a, t)
-    a, t = ai.decide_step(pirate4)
-    print(a, t)
 
 
 

@@ -1,28 +1,26 @@
 from mechanics.damage import DamageTypes
-from my_utils.named_enums import NameEnum, auto
 from character_creation.MasteriesEnum import MasteriesEnum
 
+from mechanics.chances.CritHitGrazeMiss import ImpactChances
 
-class WeaponTypes(NameEnum):
-    AXE = auto()
-    SWORD = auto()
-    DAGGER = auto()
-    SPEAR = auto()
-    HAMMER = auto()
-    CLUB = auto()
+default_unarmed_chances = ImpactChances(crit=0.05, hit=0.5, graze=0.6)
 
-w = WeaponTypes
+class WeaponType:
+    def __init__(self, damage_type, mastery, chances):
+        self.damage_type = damage_type
+        self.mastery = mastery
+        self.chances = chances
+
 d = DamageTypes
-
-damage_type_from_weapon_type = {w.AXE : d.SLASH, w.SWORD : d.SLASH,
-                                w.DAGGER: d.PIERCE, w.SPEAR : d.PIERCE,
-                                w.CLUB : d.CRUSH, w.HAMMER: d.CRUSH }
-
 m = MasteriesEnum
 
-mastery_from_weapon_type = {}
+class WeaponTypes:
+    AXE = WeaponType(d.SLASH, m.AXE, ImpactChances(0.05, 0.3, 0.7))
+    SWORD = WeaponType(d.SLASH, m.SWORD, ImpactChances(0.05, 0.4, 0.5))
+    DAGGER = WeaponType(d.PIERCE, m.DAGGER, ImpactChances(0.1, 0.4, 0.5))
+    SPEAR = WeaponType(d.PIERCE, m.SPEAR, ImpactChances(0.05, 0.4, 0.5))
+    HAMMER = WeaponType(d.CRUSH, m.HAMMER, ImpactChances(0.1, 0.35, 0.25))
+    CLUB = WeaponType(d.CRUSH, m.CLUB, ImpactChances(0.07, 0.37, 0.47))
 
-for wt in WeaponTypes:
-    for me in MasteriesEnum:
-        if repr(wt) == repr(me):
-            mastery_from_weapon_type[wt] = me
+
+print(WeaponTypes.AXE.damage_type)

@@ -197,7 +197,7 @@ class Unit(BattlefieldObject):
 
     def get_unarmed_weapon(self):
         dmg = Damage(amount=self.str * UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
-        return Weapon(name="Fists", damage=dmg, mastery=MasteriesEnum.UNARMED)
+        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, mastery=MasteriesEnum.UNARMED)
 
 
     def get_melee_weapon(self):

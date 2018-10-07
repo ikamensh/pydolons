@@ -1,4 +1,4 @@
-from content.base_types.pirate import pirate_basetype
+from content.base_types.pirate import pirate_basetype, pirate_2_basetype, pirate_3_basetype
 from content.items.std import std_items
 
 import copy

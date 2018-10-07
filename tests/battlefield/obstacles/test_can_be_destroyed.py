@@ -31,7 +31,7 @@ def test_can_be_destroyed(obstacle, game):
     assert obstacle not in game.battlefield.unit_locations
 
 
-def test_can_be_attacked(obstacle, hero):
+def test_can_be_attacked(obstacle, hero, no_chances):
     health_before = obstacle.health
 
     Attack.attack(hero, obstacle)

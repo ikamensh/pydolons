@@ -23,8 +23,7 @@ class AttackEvent(Event):
 
         precision, evasion = self.effective_precision_evasion()
 
-        #TODO replace with weapon chances as soon as available
-        impact = ImpactCalculator.roll_impact(self.source.unarmed_chances, precision, evasion)
+        impact = ImpactCalculator.roll_impact(self.weapon.chances, precision, evasion)
         if impact is not ImpactFactor.MISS:
             dmg_event = DamageEvent(self.weapon.damage, self.target, source=self.source, impact_factor = impact)
 
