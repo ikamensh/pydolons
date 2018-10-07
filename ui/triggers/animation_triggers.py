@@ -10,8 +10,8 @@ from ui.TheUI import TheUI
 
 def play_movement_anim(t, e):
     # comment bug threading
-    # ProxyEmit.play_movement_anim.emit({'unit':e.unit,"cell_to":e.cell_to})
-    TheUI.singleton.gameRoot.level.unitMoveSlot({'unit':e.unit,"cell_to":e.cell_to})
+    ProxyEmit.play_movement_anim.emit({'unit':e.unit,"cell_to":e.cell_to})
+    # TheUI.singleton.gameRoot.level.unitMoveSlot({'unit':e.unit,"cell_to":e.cell_to})
 
 
 def move_anim_trigger():
