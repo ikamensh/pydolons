@@ -36,8 +36,28 @@ class GamePages(object):
 
     def setUpCharecterPage(self):
         self.characterPage = CharacterPage()
+        self.characterPage.setPos(280, 65)
         self.characterPage.gamePages = self
         self.characterPage.setUpGui()
+        self.characterPage.pageUpdate()
+
+    def showPage(self, pageName):
+        assert(pageName, str)
+        if pageName == 'CharacterPage' and not self.characterPage.state:
+            x, y = 0, 0
+            self.gameRoot.scene.addItem(self.characterPage)
+            if self.gameRoot.cfg.dev_size[0] > 800:
+                x = (self.gameRoot.cfg.dev_size[0] - self.characterPage.w)/2
+                y = (self.gameRoot.cfg.dev_size[1] - self.characterPage.h)/2
+            print(x, y)
+            # self.characterPage.setPos(int(x), int(y))
+            self.characterPage.pageUpdate()
+            self.characterPage.state = True
+    def close(self):
+        if self.characterPage.state:
+            self.gameRoot.scene.removeItem(self.characterPage)
+            self.characterPage.state = False
+
 
     def updateGui(self):
         self.gameMenu.updateGui()
