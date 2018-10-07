@@ -62,7 +62,14 @@ class Equipment:
             self.owner.recalc()
             return True
         else:
-            return False
+            if self.owner.inventory.add_from(all_slots_of_type[0]):
+                all_slots_of_type[0].content = item
+                self.owner.recalc()
+                return True
+            else:
+                return False
+
+
 
     def equip(self, slot_from):
         """

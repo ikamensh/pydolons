@@ -7,7 +7,7 @@ from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
 from mechanics.chances import ChanceCalculator
 from mechanics.fractions import Fractions
-from content.base_types.mud_golem import mud_golem_basetype
+from cntent.base_types.mud_golem import mud_golem_basetype
 
 
 @pytest.fixture()
@@ -28,7 +28,7 @@ def demohero_basetype():
 
 @pytest.fixture()
 def hero(demohero_basetype):
-    yield Unit(demohero_basetype)
+    return Unit(demohero_basetype)
 
 @pytest.fixture()
 def pirate(pirate_basetype):

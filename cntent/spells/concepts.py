@@ -2,7 +2,7 @@ from game_objects.spells import  SpellConcept
 from game_objects.battlefield_objects import Unit
 from character_creation.MasteriesEnum import MasteriesEnum
 from mechanics.actives import Cost
-from content.spells.callbacks import healing_callback, lightning_bolt_callback
+from cntent.spells.callbacks import healing_callback, lightning_bolt_callback
 
 lightning_concept = SpellConcept(name="lightning bolt",
                                  school=MasteriesEnum.LIGHTNING,

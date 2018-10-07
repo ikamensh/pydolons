@@ -1,4 +1,4 @@
-from content.actives.std_movements import turn_cw, turn_ccw
+from cntent.actives.std_movements import turn_cw, turn_ccw
 from battlefield import Facing
 
 

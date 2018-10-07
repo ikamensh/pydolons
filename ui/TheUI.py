@@ -89,8 +89,8 @@ class TheUI(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     from mechanics.AI.SimGame import SimGame as DreamGame
-    from content.base_types.demo_hero import demohero_basetype
-    from content.dungeons.demo_dungeon import demo_dungeon
+    from cntent.base_types.demo_hero import demohero_basetype
+    from cntent.dungeons.demo_dungeon import demo_dungeon
     from game_objects.battlefield_objects import Unit
 
     from threading import Thread

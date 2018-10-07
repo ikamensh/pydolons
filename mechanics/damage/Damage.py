@@ -17,7 +17,11 @@ class Damage:
         self.amount = amount
         self.type = type
 
-    # def __mul__(self, other):
+    def __mul__(self, other):
+        return Damage(self.amount*other, self.type)
+
+    def __imul__(self, other):
+        return Damage(self.amount * other, self.type)
 
     @staticmethod
     def calculate_damage(damage, target, impact_factor=ImpactFactor.HIT):
@@ -67,3 +71,7 @@ class Damage:
             return int(5 * (reduction_over_threshold / damage_initial))
         else:
             return 0
+
+
+    def __repr__(self):
+        return f"{self.amount:.1f} of {self.type} damage"

@@ -5,11 +5,12 @@ from game_objects.items import Inventory, Equipment, Weapon
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics import events
-from mechanics.actives import ActiveTags
-from content.actives.std_movements import std_movements, turn_ccw, turn_cw
-from content.actives.std_melee_attack import std_attacks
+from mechanics.actives import ActiveTags, Active
+from cntent.actives.std_movements import std_movements, turn_ccw, turn_cw
+from cntent.actives.std_melee_attack import std_attacks
 from my_utils.utils import flatten
 from character_creation.Masteries import Masteries, MasteriesEnum
+from typing import Set
 
 import copy
 from functools import lru_cache
@@ -58,7 +59,7 @@ class Unit(BattlefieldObject):
         self.xp = base_type.xp
 
         self.type_name = base_type.type_name
-        self.actives = set(base_type.actives)
+        self.actives : Set[Active]= set(base_type.actives)
 
         self.unarmed_damage_type = base_type.unarmed_damage_type
         self.unarmed_chances = base_type.unarmed_chances
@@ -227,6 +228,10 @@ class Unit(BattlefieldObject):
             self.last_damaged_by = source
 
         self.health -= dmg_amount
+
+    @property
+    def attacks(self):
+        return [a for a in self.actives if ActiveTags.ATTACK in a.tags]
 
 
     def __repr__(self):

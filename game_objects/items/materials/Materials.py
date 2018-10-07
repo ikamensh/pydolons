@@ -17,3 +17,6 @@ class Material:
 
     def to_pieces(self, count_pieces):
         return MaterialPieces(self, count_pieces)
+
+    def __repr__(self):
+        return f"{self.name}"

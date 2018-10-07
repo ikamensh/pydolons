@@ -34,7 +34,7 @@ class DynamicParameter:
             return None
 
         self._rescale(unit)
-        return getattr(unit, self.storage_name)
+        return int(getattr(unit, self.storage_name))
 
     def __set__(self, unit, value):
         max_value = getattr(unit, self.max_name)

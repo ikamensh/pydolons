@@ -1,4 +1,4 @@
-from content.triggers.upgrade_hits import upgrade_hits
+from cntent.triggers.upgrade_hits import upgrade_hits
 from mechanics.damage import Damage, DamageTypes
 from mechanics.chances import ImpactFactor
 from mechanics.events import DamageEvent

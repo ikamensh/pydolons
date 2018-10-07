@@ -16,3 +16,6 @@ class BodyArmor(WearableItem):
         else:
             return self._armor * self.durability_factor
 
+    def __repr__(self):
+        return f"{self.name} providing {self.armor} armor"
+

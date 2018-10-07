@@ -19,7 +19,7 @@ class ArmorBlueprint(Blueprint):
         total_rarity = material.rarity * quality.rarity *self.rarity
         armor = Armor(armor_dict={t: v*total_rarity for t, v in self.armor.items()} )
         durability = self.item_durability(total_rarity)
-        full_name = f"{quality} {self.name} of {material}"
+        full_name = f"{quality.name} {self.name} of {material}"
         return BodyArmor(full_name, armor, durability, blueprint=self, material=material, quality=quality)
 
     def __repr__(self):

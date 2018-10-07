@@ -1,6 +1,7 @@
 from mechanics.AI import BroadAI
 from mechanics.actives import Active
 from DreamGame import  DreamGame
+from mechanics.AI.SimGame import SimGame
 from mechanics.fractions import Fractions
 from game_objects.battlefield_objects import Unit
 import pytest
@@ -70,9 +71,9 @@ def test_uses_enabler_abilities(minigame, enabler):
 
     assert action is ingame_imba
 
-@pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
+# @pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
 def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype):
-    _game = DreamGame(simple_battlefield)
+    _game = SimGame(simple_battlefield)
     _game.set_to_context()
     _game.add_unit(mud_golem, 3+3j, Fractions.ENEMY, 1j)
     _game.add_unit(hero, 3 + 4j, Fractions.PLAYER, 1+0j)
