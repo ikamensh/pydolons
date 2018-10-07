@@ -12,7 +12,10 @@ class DamageEvent(Event):
         self.damage = damage
         self.impact_factor = impact_factor
 
-        self.weapon_dur_dmg = None
+        self.weapon_dur_dmg = 0
+
+        _, _, self.weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target,
+                                                                       self.impact_factor)
 
         super().__init__()
 
@@ -26,7 +29,8 @@ class DamageEvent(Event):
         return self.target.alive and self.amount > 0
 
     def resolve(self):
-        _ , armor_dur_dmg, weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target, self.impact_factor)
+
+        _, armor_dur_dmg, weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target, self.impact_factor)
 
         if not self.target.is_obstacle:
             body_armor = self.target.equipment["body"]

@@ -3,17 +3,17 @@ from game_objects.items import MaterialTypes
 
 
 class Metals:
-    bronze = Material(MaterialTypes.METAL, "bronze", 2)
-    iron = Material(MaterialTypes.METAL, "iron", 2.4)
-    steel = Material(MaterialTypes.METAL, "steel", 3.7)
-    mithril = Material(MaterialTypes.METAL, "mithril", 5)
+    bronze = Material(MaterialTypes.METAL, "bronze", 1.3)
+    iron = Material(MaterialTypes.METAL, "iron", 1.6)
+    steel = Material(MaterialTypes.METAL, "steel", 2.1)
+    mithril = Material(MaterialTypes.METAL, "mithril", 2.5)
 
 
 class Stones:
-    stone = Material(MaterialTypes.STONE, "thin skin", 0.5)
-    granite = Material(MaterialTypes.STONE, "skin", 0.75)
-    flintstone = Material(MaterialTypes.STONE, "thick_skin", 1.15)
-    obsidian = Material(MaterialTypes.STONE, "lizard_skin", 1.4)
+    stone = Material(MaterialTypes.STONE, "stone", 0.5)
+    granite = Material(MaterialTypes.STONE, "granite", 0.75)
+    flintstone = Material(MaterialTypes.STONE, "flintstone", 1.15)
+    obsidian = Material(MaterialTypes.STONE, "obsidian", 1.4)
 
 
 class Leathers:

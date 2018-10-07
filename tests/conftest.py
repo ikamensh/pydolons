@@ -44,7 +44,7 @@ def steel_wall():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall = Obstacle("Wall of steel!", 5000, resists=resists, armor=500, icon="wall.png")
+    _steel_wall = lambda: Obstacle("Wall of steel!", 5000, resists=resists, armor=500, icon="wall.png")
     return _steel_wall
 
 
@@ -63,7 +63,7 @@ def walls_dungeon(pirate_basetype, steel_wall):
 
     wall_x = 4
     for wall_y in range(0, 6):
-        unit_locations[steel_wall.clone()] =  Cell(wall_x, wall_y)
+        unit_locations[steel_wall()] =  Cell(wall_x, wall_y)
 
     unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
     _walls_dungeon = Dungeon(unit_locations, 12, 12, hero_entrance=Cell(0, 0))

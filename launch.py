@@ -4,6 +4,8 @@ from character_creation.Character import Character
 from mechanics.AI.SimGame import SimGame as DreamGame
 from cntent.base_types.demo_hero import demohero_basetype
 from cntent.dungeons.demo_dungeon import demo_dungeon
+from cntent.dungeons.demo_dungeon_walls import walls_dungeon
+from cntent.dungeons.pirate_lair import pirate_lair
 from ui.TheUI import TheUI
 # import triggers
 from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
@@ -27,7 +29,9 @@ def one_game():
     # The_hero character init
     character  = Character(demohero_basetype)
     # Logical engine initialization, the_hero create from character
+    # game = DreamGame.start_dungeon(walls_dungeon, character.unit)
     game = DreamGame.start_dungeon(demo_dungeon, character.unit)
+
     # add character field for game
     game.character = character
     # Ui engine initialization

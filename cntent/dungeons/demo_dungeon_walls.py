@@ -10,7 +10,7 @@ unit_locations = {pirate_band[i]: locations[i] for i in range(3)}
 
 wall_x = 8
 for wall_y in range(0,9):
-    unit_locations[mud_wall.clone()] = Cell(wall_x, wall_y)
+    unit_locations[mud_wall()] = Cell(wall_x, wall_y)
 
 unit_locations[Unit(mud_golem_basetype)] = Cell(11, 0)
 

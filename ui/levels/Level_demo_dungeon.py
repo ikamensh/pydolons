@@ -4,6 +4,7 @@ from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from ui.units import Units, BasicUnit
+from game_objects import battlefield_objects as bf_objs
 
 from ui.levels.BaseLevel import BaseLevel
 
@@ -68,7 +69,8 @@ class Level_demo_dungeon(BaseLevel):
             if unit.icon == 'hero.png':
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
-            gameUnit.setDirection(battlefield.unit_facings[unit])
+            if isinstance(unit, bf_objs.Unit):
+                gameUnit.setDirection(battlefield.unit_facings[unit])
             gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
             gameUnit.uid = unit.uid
             self.units.addToGroup(gameUnit)

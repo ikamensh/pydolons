@@ -24,6 +24,7 @@ class DreamGame:
         self.is_sim = is_sim
         self.set_to_context()
         self.loop_state = True
+        self.player_turn_lock = False
 
         for rule in (rules or []):
             rule()
@@ -83,7 +84,9 @@ class DreamGame:
 
             active_unit = self.turns_manager.get_next()
             if self.fractions[active_unit] == Fractions.PLAYER:
-                time.sleep(0.03)
+                self.player_turn_lock = True
+                while self.player_turn_lock:
+                    time.sleep(0.02)
                 continue
             else:
                 NextUnitEvent(active_unit)
@@ -130,14 +133,19 @@ class DreamGame:
                 self.order_attack(self.the_hero, self.battlefield.units_at[cell])
             else:
                 self.order_move(self.the_hero, cell)
+            self.player_turn_lock = False
+
 
     def order_turn_cw(self):
         if self.turns_manager.get_next() is self.the_hero:
             self.the_hero.turn_cw()
+            self.player_turn_lock = False
 
     def order_turn_ccw(self):
         if self.turns_manager.get_next() is self.the_hero:
             self.the_hero.turn_ccw()
+            self.player_turn_lock = False
+
 
 
     def _complain_missing(self, unit, actives, action):

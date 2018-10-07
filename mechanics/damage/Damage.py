@@ -24,21 +24,6 @@ class Damage:
         return Damage(self.amount * other, self.type)
 
     @staticmethod
-    def calculate_damage(damage, target, impact_factor=ImpactFactor.HIT):
-        dmg_type = damage.type
-
-        resist = target.resists[dmg_type]
-        armor = target.armor[dmg_type] * \
-                Damage.protection_coef[impact_factor]
-
-        damage_final = int(max((damage.amount - armor) * (1 - resist), 0) *
-                           Damage.effect_coef[impact_factor])
-        # print(damage_final)
-        return damage_final, \
-               Damage.calculate_armor_dur_damage(damage_final, armor, target.max_health), \
-               Damage.calculate_weapon_dur_damage(damage.amount, damage_final, impact_factor)
-
-    @staticmethod
     def calculate_expected_damage(chances, damage, target):
 
         result = 0
@@ -52,6 +37,22 @@ class Damage:
         result += Damage.calculate_damage(damage, target, ImpactFactor.GRAZE)[0] * chance_graze
 
         return result
+
+
+    @staticmethod
+    def calculate_damage(damage, target, impact_factor=ImpactFactor.HIT):
+        dmg_type = damage.type
+
+        resist = target.resists[dmg_type]
+        armor = target.armor[dmg_type] * \
+                Damage.protection_coef[impact_factor]
+
+        damage_final = int(max((damage.amount - armor) * (1 - resist), 0) *
+                           Damage.effect_coef[impact_factor])
+        # print(damage_final)
+        return damage_final, \
+               Damage.calculate_armor_dur_damage(damage_final, armor, target.max_health), \
+               Damage.calculate_weapon_dur_damage(damage.amount, damage_final, impact_factor)
 
 
 

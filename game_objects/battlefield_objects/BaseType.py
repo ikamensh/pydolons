@@ -5,7 +5,6 @@ from mechanics.damage import DamageTypes
 from character_creation.Masteries import Masteries
 from ui.sounds import sound_maps
 
-
 class BaseType:
     default_unarmed_chances = ImpactChances(crit=0.05, hit=0.5, graze=0.6)
 

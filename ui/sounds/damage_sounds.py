@@ -25,7 +25,6 @@ class sound_paths:
 damage_sounds = {}
 t = DamageTypes
 
-from ui.sounds.sound import Sound
 
 
 damage_sounds[t.SLASH] = sound_paths.slash
@@ -39,5 +38,4 @@ damage_sounds[t.CRUSH] = sound_paths.bash
 
 # damage_sounds[t.SONIC] = sound_paths.sonic
 
-for k, v in damage_sounds.items():
-    damage_sounds[k] = Sound(v)
+
