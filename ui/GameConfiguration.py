@@ -4,11 +4,14 @@ from PySide2 import QtGui, QtWidgets, QtMultimedia
 from my_context import pydolons_rootdir
 from mechanics.damage import DamageTypes
 
+from datetime import datetime
+
 class GameConfiguration:
     """docstring for GameConfiguration.
     Установка конфигурации игровых объектов, настроек экрана и системы
     """
     def __init__(self):
+        print('cfg ===> start init', datetime.now())
         # Игнорируемые папки
         self.ignore_path = ('resources/assets/sprites/axe', )
         # Форматы изображений
@@ -20,10 +23,14 @@ class GameConfiguration:
         # Словарь путей к звукам, ключ название файла
         self.sound_file_paths = {}
         self.setUpScreen()
+        print('cfg ===> setUpScreen', datetime.now())
         self.setUpUnits()
         self.loadFilesPath()
+        print('cfg ===> loadFilesPath', datetime.now())
         self.setUpPixmaps()
+        print('cfg ===> setUpPixmaps', datetime.now())
         self.setUpSounds()
+        print('cfg ===> setUpSounds', datetime.now())
         self.gameRoot = None
 
     def setGameRoot(self, gameRoot):
