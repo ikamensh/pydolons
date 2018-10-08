@@ -2,15 +2,16 @@ from mechanics.events import EventsChannels
 from mechanics.events.src.Event import Event
 from mechanics.damage import Damage
 from mechanics.chances import ImpactFactor
+from game_objects import battlefield_objects as bf_objs
 
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
 
     def __init__(self, damage, target, *, source=None, impact_factor=ImpactFactor.HIT):
-        self.source = source
-        self.target = target
-        self.damage = damage
-        self.impact_factor = impact_factor
+        self.source: bf_objs.Unit = source
+        self.target: bf_objs.Unit = target
+        self.damage: Damage = damage
+        self.impact_factor: ImpactFactor = impact_factor
 
         self.weapon_dur_dmg = 0
 

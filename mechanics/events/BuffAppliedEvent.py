@@ -14,7 +14,6 @@ class BuffAppliedEvent(Event):
         return self.unit.alive
 
     def resolve(self):
-        self.buff.attached_to = self.unit
         self.unit.add_buff(self.buff)
         my_context.the_game.turns_manager.add_buff(self.buff)
 

@@ -40,7 +40,7 @@ def test_right_type_works(game, hero, special_resist):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    special_resist.apply_to(hero)
+    hero.add_ability(special_resist)
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -56,7 +56,7 @@ def test_wrong_type_useless(game, hero, special_resist):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    special_resist.apply_to(hero)
+    hero.add_ability(special_resist)
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -72,7 +72,7 @@ def test_armor_reduces_damage(game, hero, total_resist):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    total_resist.apply_to(hero)
+    hero.add_ability(total_resist)
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -85,12 +85,13 @@ def test_ability_stacks(game, hero, total_resist):
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.FIRE)
 
-    total_resist.apply_to(hero)
+    hero.add_ability(total_resist)
     DamageEvent(dmg, hero)
     dealt_armor1 = hp_before_dmg - hero.health
 
     hp_before_dmg = hero.health
-    total_resist.apply_to(hero)
+    import copy
+    hero.add_ability(copy.deepcopy(total_resist))
     DamageEvent(dmg, hero)
     dealt_armor2 = hp_before_dmg - hero.health
 
@@ -106,7 +107,7 @@ def test_negative_armor(game, hero, vulnerability):
     dealt_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    vulnerability.apply_to(hero)
+    hero.add_ability(vulnerability)
 
     DamageEvent(dmg, hero)
     dealt_reduced_armor = hp_before_dmg - hero.health

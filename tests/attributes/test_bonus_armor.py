@@ -40,7 +40,7 @@ def test_right_type_works(game, hero, special_armor):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    special_armor.apply_to(hero)
+    hero.add_ability(special_armor)
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -56,7 +56,7 @@ def test_wrong_type_useless(game, hero, special_armor):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    special_armor.apply_to(hero)
+    hero.add_ability(special_armor)
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -72,7 +72,7 @@ def test_armor_reduces_damage(game, hero, total_armor):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    total_armor.apply_to(hero)
+    hero.add_ability(total_armor)
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -90,7 +90,7 @@ def test_ability_stacks(game, hero, total_armor):
     dealt_armor1 = hp_before_dmg - hero.health
 
     hp_before_dmg = hero.health
-    total_armor.apply_to(hero)
+    hero.add_ability(total_armor)
     DamageEvent(dmg, hero)
     dealt_armor2 = hp_before_dmg - hero.health
 
@@ -108,7 +108,7 @@ def test_negative_armor(game, hero, broken_armor):
     dealt_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    broken_armor.apply_to(hero)
+    hero.add_ability(broken_armor)
 
     DamageEvent(dmg, hero)
     dealt_reduced_armor = hp_before_dmg - hero.health

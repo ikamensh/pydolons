@@ -32,7 +32,7 @@ def hero(demohero_basetype):
 
 @pytest.fixture()
 def pirate(pirate_basetype):
-    yield Unit(pirate_basetype)
+    return Unit(pirate_basetype)
 
 @pytest.fixture()
 def mud_golem():

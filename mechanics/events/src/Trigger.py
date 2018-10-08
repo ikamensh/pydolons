@@ -32,6 +32,8 @@ class Trigger:
             if self.callbacks:
                 for callback in self.callbacks:
                     callback(self, event)
+        # else: #easier debug!
+        #     print([cond(self,event) for cond in self.conditions])
 
     def deactivate(self):
         if self.is_interrupt:

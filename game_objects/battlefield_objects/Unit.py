@@ -68,9 +68,15 @@ class Unit(BattlefieldObject):
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.equipment :Equipment = Equipment(self)
-        self._abilities = []
-        self._buffs = []
+
         self.bonuses = frozenset()
+        self._buffs = []
+        self._abilities = []
+        for abil in base_type.abilities:
+            self.add_ability(abil())
+
+
+
 
         self.alive = True
         self.is_obstacle = False
@@ -93,18 +99,22 @@ class Unit(BattlefieldObject):
 
 
     def add_ability(self, ability):
+        ability.apply_to(self)
         self._abilities.append(ability)
         self.recalc()
 
     def remove_ability(self, ability):
+        ability.deactivate()
         self._abilities.remove(ability)
         self.recalc()
 
     def add_buff(self, buff):
+        buff.apply_to(self)
         self._buffs.append(buff)
         self.recalc()
 
     def remove_buff(self, buff):
+        buff.deactivate()
         self._buffs.remove(buff)
         self.recalc()
 
