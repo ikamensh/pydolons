@@ -42,4 +42,5 @@ class WidgetFactory(object):
             widget.release()
 
     def update(self):
-        pass
+        for widget in self.widgets.values():
+            widget.update()
