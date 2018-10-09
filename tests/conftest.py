@@ -32,7 +32,7 @@ def hero(demohero_basetype):
 
 @pytest.fixture()
 def pirate(pirate_basetype):
-    yield Unit(pirate_basetype)
+    return Unit(pirate_basetype)
 
 @pytest.fixture()
 def mud_golem():
@@ -79,7 +79,7 @@ def walls_game(walls_dungeon, hero):
 @pytest.fixture()
 def pirate_band(pirate_basetype):
     _pirate_band = [Unit(pirate_basetype) for i in range(3)]
-    yield _pirate_band
+    return _pirate_band
 
 @pytest.fixture()
 def battlefield(pirate_band, hero):
@@ -89,7 +89,20 @@ def battlefield(pirate_band, hero):
     units_locations = {pirate_band[i]: locations[i] for i in range(3)}
     units_locations[hero] = Cell(1, 1)
     bf.place_many(units_locations)
-    yield bf
+    return bf
+
+@pytest.fixture()
+def simple_battlefield():
+    bf = Battlefield(6, 6)
+    return bf
+
+@pytest.fixture()
+def empty_game(simple_battlefield):
+
+    _game = DreamGame(simple_battlefield)
+    _game.set_to_context()
+
+    return _game
 
 @pytest.fixture()
 def game(battlefield, hero):
@@ -99,7 +112,7 @@ def game(battlefield, hero):
     for unit in battlefield.unit_locations:
         _game.turns_manager.add_unit(unit)
     _game.set_to_context()
-    yield _game
+    return _game
 
 
 

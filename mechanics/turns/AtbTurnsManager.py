@@ -1,8 +1,11 @@
-from mechanics.turns import TurnsManager
-from GameLog import gamelog
 from my_utils.utils import flatten
+
+from GameLog import gamelog
 from game_objects.battlefield_objects import Unit
+
+from mechanics.turns import TurnsManager
 from mechanics.buffs import Buff
+from mechanics.events import TimePassedEvent
 
 from my_context import my_random as random
 
@@ -24,6 +27,7 @@ class AtbTurnsManager(TurnsManager):
         return [elem for elem in self.managed if elem.alive]
 
     def pass_time(self, time):
+
         for m in list(self.managed):
             if isinstance(m, Unit):
                 m.readiness += m.initiative * time / 10
@@ -31,6 +35,7 @@ class AtbTurnsManager(TurnsManager):
                 m.duration -= time
 
         self.time += time
+        TimePassedEvent(time)
         # gamelog(f"{time:.3f} seconds passes. its {self.time:.3f} now")
 
     @staticmethod

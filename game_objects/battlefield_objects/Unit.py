@@ -39,7 +39,7 @@ class Unit(BattlefieldObject):
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
-
+    is_obstacle = False
 
     last_uid = 0
 
@@ -68,12 +68,17 @@ class Unit(BattlefieldObject):
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.equipment :Equipment = Equipment(self)
-        self._abilities = []
-        self._buffs = []
+
         self.bonuses = frozenset()
+        self._buffs = []
+        self._abilities = []
+        for abil in base_type.abilities:
+            self.add_ability(abil())
+
+
+
 
         self.alive = True
-        self.is_obstacle = False
         self.last_damaged_by = None
 
         self.icon = base_type.icon
@@ -93,23 +98,27 @@ class Unit(BattlefieldObject):
 
 
     def add_ability(self, ability):
-        self._abilities.append(ability)
+        ability.apply_to(self)
+        self.abilities.append(ability)
         self.recalc()
 
     def remove_ability(self, ability):
-        self._abilities.remove(ability)
+        ability.deactivate()
+        self.abilities.remove(ability)
         self.recalc()
 
     def add_buff(self, buff):
+        buff.apply_to(self)
         self._buffs.append(buff)
         self.recalc()
 
     def remove_buff(self, buff):
+        buff.deactivate()
         self._buffs.remove(buff)
         self.recalc()
 
     def recalc(self):
-        bonus_lists = [ability.bonuses for ability in self._abilities if ability.bonuses]
+        bonus_lists = [ability.bonuses for ability in self.abilities if ability.bonuses]
         bonus_lists += [buff.bonuses for buff in self._buffs if buff.bonuses]
         bonus_lists += self.equipment.bonuses
         self.bonuses = frozenset(flatten(bonus_lists))
@@ -233,6 +242,14 @@ class Unit(BattlefieldObject):
     def attacks(self):
         return [a for a in self.actives if ActiveTags.ATTACK in a.tags]
 
+    @property
+    def abilities(self):
+        return self._abilities
+
+    @property
+    def buffs(self):
+        return self._buffs
+
 
     def __repr__(self):
-        return f"{self.type_name} {self.uid} with {self.health} HP"
+        return f"{self.type_name} {self.uid} with {self.health :.0f} HP"

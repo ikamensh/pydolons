@@ -8,10 +8,7 @@ from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
 
 
-@pytest.fixture()
-def simple_battlefield():
-    bf = Battlefield(6, 6)
-    yield bf
+
 
 @pytest.fixture()
 def minigame(simple_battlefield, pirate,  hero):
@@ -25,8 +22,9 @@ def minigame(simple_battlefield, pirate,  hero):
 
     _game.set_to_context()
 
+    return _game
 
-    yield _game
+
 
 @pytest.fixture()
 def game(battlefield, hero):
@@ -36,12 +34,12 @@ def game(battlefield, hero):
     for unit in battlefield.unit_locations:
         _game.turns_manager.add_unit(unit)
     _game.set_to_context()
-    yield _game
+    return _game
 
 @pytest.fixture()
 def walls_game(walls_dungeon, hero):
     _game = SimGame.start_dungeon(walls_dungeon, hero)
-    yield _game
+    return _game
 
 @pytest.fixture()
 def imba_ability():

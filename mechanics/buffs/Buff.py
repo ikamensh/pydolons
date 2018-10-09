@@ -1,21 +1,15 @@
 from mechanics.buffs.Ability import Ability
 from game_objects.attributes import DynamicParameter
 from mechanics.events import BuffExpiredEvent
-import copy
+import my_context
 
 class Buff(Ability):
     duration = DynamicParameter("max_duration", [BuffExpiredEvent])
 
 
-    def __init__(self,duration, bonuses = None ):
-        super().__init__(bonuses)
+    def __init__(self,duration, bonuses = None, triggers = None):
+        super().__init__(bonuses, triggers)
         self.max_duration = duration
-        self.attached_to = None
-
-    def clone(self):
-        cpy = copy.deepcopy(self)
-        cpy.reset()
-        return cpy
 
     def reset(self):
         DynamicParameter.reset(self)

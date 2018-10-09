@@ -6,7 +6,10 @@ class Event:
     def __init__(self, fire=True):
         self.interrupted = False
         if fire:
-            my_context.the_game.events_platform.process_event(self)
+            self.fire()
+
+    def fire(self):
+        my_context.the_game.events_platform.process_event(self)
 
     @abstractmethod
     def resolve(self):

@@ -1,14 +1,16 @@
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
+import game_objects.battlefield_objects as bf_objs
+import typing
 
 class Battlefield:
     def __init__(self, w, h):
         self.w = w
         self.h = h
         self.units_at = {}              #cell -> unit
-        self.unit_locations = {}        #unit -> cell
-        self.unit_facings = {}          #unit -> direction
+        self.unit_locations: typing.Dict[bf_objs.BattlefieldObject:Cell] = {}        #unit -> cell
+        self.unit_facings :typing.Dict[bf_objs.Unit:complex] = {}          #unit -> direction
         self.vision = Vision(self)
 
     def x_sees_y(self, x, y):
@@ -18,22 +20,21 @@ class Battlefield:
         cells_x_sees = self.vision.std_seen_cells(x)
         return self.unit_locations[y] in cells_x_sees
 
-    @staticmethod
-    def _distance(p1, p2):
-        return Vision._distance(p1, p2)
 
     def distance(self, one, another):
-        import game_objects.battlefield_objects as bf_objs
         if isinstance(one, bf_objs.BattlefieldObject):
             one = self.unit_locations[one]
         if isinstance(another, bf_objs.BattlefieldObject):
             another = self.unit_locations[another]
-        return self._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
+        return Cell._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
 
     def get_units_dists_to(self, p, units_subset = None):
         unit_dist_tuples = [ (u, self.distance(p, u))
                              for u in units_subset or self.unit_locations]
         return sorted(unit_dist_tuples, key=lambda x:x[1])
+
+    def get_units_within_radius(self, center, radius):
+        return [ u for u in self.unit_locations if self.distance(center, u) <= radius]
 
     def get_unit_at(self, _cell):
         cell = Cell.maybe_complex(_cell)
@@ -42,25 +43,13 @@ class Battlefield:
         else:
             return None
 
-    def get_neighbouring_cells(self, cell, distance=1):
-        neighbours = self.get_cells_within_dist(cell, distance)
+    def neighbours_exclude_center(self, cell, distance=1):
+        neighbours = set(self.get_cells_within_dist(cell, distance))
         neighbours.remove(cell)
         return neighbours
 
     def get_cells_within_dist(self, cell, distance):
-        x = cell.x
-        y = cell.y
-
-        neighbours = []
-        steps = list(range(-int(distance), int(distance) + 1))
-        for dx in steps:
-            for dy in steps:
-                if 0 <= x + dx < self.w and 0 <= y + dy < self.h:
-                    new_cell = Cell(x + dx, y + dy)
-                    if self._distance(cell, new_cell) <= distance:
-                        neighbours.append(new_cell)
-
-        return neighbours
+        return Cell.get_neighbours(cell,distance, self.w, self.h)
 
     def get_nearest_cell(self, candidates, target):
         pairs = [(c, self.distance(c, target)) for c in candidates]
@@ -110,13 +99,23 @@ class Battlefield:
             return 9000, None
         return Cell.angle_between(facing, vector_to_target)
 
+    @staticmethod
+    def _distance(p1, p2):
+        return Cell._distance(p1, p2)
+
     @property
     def all_cells(self):
         result = set()
         for i in range(self.w):
             for j in range(self.h):
-                result.add(Cell(i,j))
+                result.add(Cell(i, j))
         return result
+
+
+    def units_in_area(self, cells : typing.Collection[Cell]):
+        cells_with_units = set(self.units_at.keys()).intersection(set(cells))
+        return [self.units_at[c] for c in cells_with_units]
+
 
     def __iter__(self):
         for unit in self.unit_locations:

@@ -31,7 +31,7 @@ def test_str_helps(hero, inner_power, attrib):
 
     attrib_before = get_attrib_by_enum(hero, attrib)
 
-    inner_power.apply_to(hero)
+    hero.add_ability(inner_power)
     hero.reset()
 
     attrib_after = get_attrib_by_enum(hero, attrib)
@@ -41,7 +41,7 @@ def test_str_helps(hero, inner_power, attrib):
 def test_rescale(hero, bonus_str):
     hp_before = hero.health
 
-    bonus_str.apply_to(hero)
+    hero.add_ability(bonus_str)
     hp_after = hero.health
 
     assert hp_after > hp_before
@@ -53,7 +53,7 @@ def test_multiplier(hero, pirate):
     abil_hp = Ability([bonus_hp])
 
     hp_before = hero.health
-    abil_hp.apply_to(hero)
+    hero.add_ability(abil_hp)
     delta_hero = hero.health - hp_before
 
     hp_before = pirate.health
@@ -69,14 +69,14 @@ def test_bonus(hero, pirate):
     abil_hp = Ability([bonus_hp])
 
     hp_before = hero.health
-    abil_hp.apply_to(hero)
+    hero.add_ability(abil_hp)
 
     delta_hero = hero.health - hp_before
 
     assert delta_hero > 0
 
     hp_before = pirate.health
-    abil_hp.apply_to(pirate)
+    pirate.add_ability(abil_hp)
     delta_pirate = pirate.health - hp_before
 
     assert delta_hero == delta_pirate

@@ -1,7 +1,7 @@
 from battlefield.Cell import Cell
-from math import hypot
 import numpy as np
 import functools
+
 
 class Vision:
 
@@ -36,10 +36,10 @@ class Vision:
         :return: set of new imaginary obstacles
         """
         new_obstacles = set()
-        diag_dist = Vision._distance(Cell(0,0), Cell(1,1))
+        diag_dist = Cell._distance(Cell(0,0), Cell(1,1))
         for o1 in obstacles:
             for o2 in obstacles:
-                if Vision._distance(o1, o2) == diag_dist:
+                if Cell._distance(o1, o2) == diag_dist:
                     new_obstacles.add(Cell( (o1.x+o2.x)/2 , (o1.y+o2.y)/2 ))
 
         return new_obstacles
@@ -89,20 +89,12 @@ class Vision:
 
     @staticmethod
     def dist_eliptic_x(p1, p2):
-        return hypot( 1.45*(p1.x - p2.x) , (p1.y - p2.y) )
+        return Cell._hypot( 1.45*(p1.x - p2.x) , (p1.y - p2.y) )
 
     @staticmethod
     def dist_eliptic_y(p1, p2):
-        return hypot((p1.x - p2.x), 1.45*(p1.y - p2.y))
+        return Cell._hypot((p1.x - p2.x), 1.45*(p1.y - p2.y))
 
-    @staticmethod
-    def _distance(p1, p2):
-        return Vision.__hypot(p1.x - p2.x, p1.y - p2.y)
-
-    @staticmethod
-    @functools.lru_cache()
-    def __hypot(x, y):
-        return hypot(x, y)
 
     @staticmethod
     @functools.lru_cache(maxsize=int(2**16))
@@ -124,7 +116,7 @@ class Vision:
             return False
 
         #obstacle behind the target can't block it.
-        if Vision._distance(looking_from, looking_to) < Vision._distance(looking_from, obstacle):
+        if Cell._distance(looking_from, looking_to) < Cell._distance(looking_from, obstacle):
             return False
 
 

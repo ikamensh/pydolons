@@ -1,5 +1,6 @@
 from battlefield.Battlefield import Cell
-from cntent.base_types import pirate_basetype, mud_golem_basetype, mud_wall
+from cntent.base_types import mud_golem_basetype, mud_wall
+from cntent.monsters.pirates import pirate_basetype
 from game_objects.battlefield_objects import Unit
 from game_objects.dungeon.Dungeon import Dungeon
 

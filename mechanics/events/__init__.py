@@ -20,6 +20,8 @@ from mechanics.events.ActiveEvent import ActiveEvent
 from mechanics.events.DamageEvent import DamageEvent
 from mechanics.events.AttackEvent import AttackEvent
 
+from mechanics.events.TimePassedEvent import TimePassedEvent
+
 from mechanics.events.MovementEvent import MovementEvent
 from mechanics.events.TurnEvent import TurnEvent
 from mechanics.events.NextUnitEvent import NextUnitEvent
