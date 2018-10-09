@@ -32,6 +32,9 @@ class GameView(QtWidgets.QGraphicsView):
     def mousePressEvent(self, e):
         self.controller.mousePressEvent(e)
 
+    def mouseReleaseEvent(self, e):
+        self.controller.mouseReleaseEvent(e)
+
     def resizeEvent(self, e):
         self.timer.start(50)
         super().resizeEvent(e)
