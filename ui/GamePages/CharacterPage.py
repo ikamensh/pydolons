@@ -11,21 +11,17 @@ class CharacterPage(AbstractPage):
     def __init__(self):
         super(CharacterPage, self).__init__()
         self.character = None
-        self.gamePages = None
         self.w, self.h = 790, 590
         self.w_2 = int(self.w / 2)
         self.h_2 = int(self.h / 2)
 
 
     def setUpGui(self):
-        self.setFlags(QtWidgets.QGraphicsItem.ItemIsSelectable|QtWidgets.QGraphicsItem.ItemIsMovable|QtWidgets.QGraphicsItem.ItemIsFocusable)
         self.setUpWidgets()
 
     def pageUpdate(self):
-        # self.bx_hp.update(self.model.data['hp'], self.model.data['max_hp'])
-        # self.bx_mana.update(self.model.data['mana'], self.model.data['max_mana'])
-        # self.bx_stamina.update(self.model.data['stamina'], self.model.data['max_stamina'])
         self.update( self.x(), self.y(), self.w, self.h)
+        self.widgetFactory.update()
 
     def setUpWidgets(self):
         x, y = 264, 18
@@ -52,11 +48,11 @@ class CharacterPage(AbstractPage):
         # Button ok
         self.btn_ok = self.widgetFactory.createButton('ok', w = 60, h = 20)
         self.btn_ok.setPos(40,  self.h - 40)
-        # self.btn_ok.presed.connect(self.onPressClose)
+        self.btn_ok.presed.connect(self.onPressOk)
         # Button cancel
         self.btn_cancel = self.widgetFactory.createButton('cancel', w = 60, h = 20)
         self.btn_cancel.setPos(110, self.h - 40)
-        # self.btn_ok.presed.connect(self.onPressClose)
+        self.btn_cancel.presed.connect(self.onPressCancel)
         # Box value
         self.bx_hp = self.widgetFactory.createBoxValue()
         self.bx_hp.setPos( 100,  295)
@@ -64,10 +60,6 @@ class CharacterPage(AbstractPage):
         self.bx_mana.setPos( 100,  335)
         self.bx_stamina = self.widgetFactory.createBoxValue()
         self.bx_stamina.setPos(100, 375)
-        
-
-    def onPressClose(self):
-        self.scene().removeItem(self)
 
     def paint(self, painter, option, widget):
         painter.setPen(QtCore.Qt.white)
@@ -136,3 +128,28 @@ class CharacterPage(AbstractPage):
 
     def boundingRect(self):
         return QtCore.QRectF(self.x() , self.y(), self.w, self.h)
+
+    def onPressClose(self):
+        self.state = False
+        self.gamePages.page = None
+        self.scene().removeItem(self)
+
+    def collisions(self, pos):
+            self.widgetFactory.collisions(pos)
+            self.pageUpdate()
+
+    def release(self):
+            self.widgetFactory.release()
+            self.pageUpdate()
+
+
+
+    def onPressCancel(self):
+        # self.state = False
+        # self.scene().removeItem(self)
+        pass
+
+    def onPressOk(self):
+        # self.state = False
+        # self.scene().removeItem(self)
+        pass
