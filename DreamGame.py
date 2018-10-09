@@ -85,7 +85,8 @@ class DreamGame:
             active_unit = self.turns_manager.get_next()
             if self.fractions[active_unit] == Fractions.PLAYER:
                 self.player_turn_lock = True
-                while self.player_turn_lock:
+                # don't stop game loop
+                while self.player_turn_lock and self.loop_state :
                     time.sleep(0.02)
                 continue
             else:
