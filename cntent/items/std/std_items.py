@@ -22,10 +22,10 @@ elven_skimitar = bp_weapons.scimitar.to_item(Metals.mithril, QualityLevels.MASTE
 smiths_hammer = bp_weapons.hammer.to_item(Metals.steel, QualityLevels.SUPERIOR)
 
 
-pirate_jacket = bp_armor.pirate_jacket.to_item(Leathers.skin, QualityLevels.PRIMITIVE)
-hero_jacket = bp_armor.leather_outfit.to_item(Leathers.thick_skin, QualityLevels.SUPERIOR)
+jacket_cheap = bp_armor.pirate_jacket.to_item(Leathers.skin, QualityLevels.PRIMITIVE)
+jacket_usual = bp_armor.leather_outfit.to_item(Leathers.thick_skin, QualityLevels.SUPERIOR)
 
-trollhide_jacket = bp_armor.leather_outfit.to_item(Leathers.troll_skin, QualityLevels.USUAL)
-inferior_scalemail = bp_armor.scalemail.to_item(Metals.iron, QualityLevels.PRIMITIVE)
-cuirass = bp_armor.cuirass.to_item(Metals.steel, QualityLevels.USUAL)
+jacket_trollhide = bp_armor.leather_outfit.to_item(Leathers.troll_skin, QualityLevels.USUAL)
+scalemail_inferior = bp_armor.scalemail.to_item(Metals.iron, QualityLevels.PRIMITIVE)
+cuirass_usual = bp_armor.cuirass.to_item(Metals.steel, QualityLevels.USUAL)
 

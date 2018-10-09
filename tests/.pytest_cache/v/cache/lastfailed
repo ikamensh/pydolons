@@ -13,5 +13,6 @@
   "combat/abilities/test_abilities.py::test_str_helps[resistances]": true,
   "spells/test_spell_active.py::test_attack_cell": true,
   "test_items.py::test_equip[BodyArmor]": true,
-  "test_items.py::test_equip[Weapon]": true
+  "test_items.py::test_equip[Weapon]": true,
+  "ui/test_std_movements.py::test_can_move_forward": true
 }

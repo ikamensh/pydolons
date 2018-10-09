@@ -37,27 +37,27 @@ def test_distance_unit_to_point(battlefield):
 
 def test_neighbouring_cells(battlefield):
     #corners have 2 adjecent cells
-    assert len(battlefield.get_neighbouring_cells(Cell(0, 0))) == 2
-    assert len(battlefield.get_neighbouring_cells(Cell(0, 7))) == 2
-    assert len(battlefield.get_neighbouring_cells(Cell(7, 0))) == 2
-    assert len(battlefield.get_neighbouring_cells(Cell(7, 7))) == 2
-    assert Cell(7, 6) in battlefield.get_neighbouring_cells(Cell(7, 7))
-    assert Cell(6, 7) in battlefield.get_neighbouring_cells(Cell(7, 7))
+    assert len(battlefield.neighbours_exclude_center(Cell(0, 0))) == 2
+    assert len(battlefield.neighbours_exclude_center(Cell(0, 7))) == 2
+    assert len(battlefield.neighbours_exclude_center(Cell(7, 0))) == 2
+    assert len(battlefield.neighbours_exclude_center(Cell(7, 7))) == 2
+    assert Cell(7, 6) in battlefield.neighbours_exclude_center(Cell(7, 7))
+    assert Cell(6, 7) in battlefield.neighbours_exclude_center(Cell(7, 7))
 
     # top and side have 3 adjecent cells
-    assert len(battlefield.get_neighbouring_cells(Cell(0, 4))) == 3
-    assert len(battlefield.get_neighbouring_cells(Cell(5, 7))) == 3
-    assert Cell(6, 7) in battlefield.get_neighbouring_cells(Cell(5, 7))
-    assert Cell(4, 7) in battlefield.get_neighbouring_cells(Cell(5, 7))
-    assert Cell(5, 6) in battlefield.get_neighbouring_cells(Cell(5, 7))
+    assert len(battlefield.neighbours_exclude_center(Cell(0, 4))) == 3
+    assert len(battlefield.neighbours_exclude_center(Cell(5, 7))) == 3
+    assert Cell(6, 7) in battlefield.neighbours_exclude_center(Cell(5, 7))
+    assert Cell(4, 7) in battlefield.neighbours_exclude_center(Cell(5, 7))
+    assert Cell(5, 6) in battlefield.neighbours_exclude_center(Cell(5, 7))
 
     # usual cells have 4 adjecent cells
-    assert len(battlefield.get_neighbouring_cells(Cell(2, 4))) == 4
-    assert len(battlefield.get_neighbouring_cells(Cell(5, 3))) == 4
-    assert Cell(6, 3) in battlefield.get_neighbouring_cells(Cell(5, 3))
-    assert Cell(4, 3) in battlefield.get_neighbouring_cells(Cell(5, 3))
-    assert Cell(5, 2) in battlefield.get_neighbouring_cells(Cell(5, 3))
-    assert Cell(5, 4) in battlefield.get_neighbouring_cells(Cell(5, 3))
+    assert len(battlefield.neighbours_exclude_center(Cell(2, 4))) == 4
+    assert len(battlefield.neighbours_exclude_center(Cell(5, 3))) == 4
+    assert Cell(6, 3) in battlefield.neighbours_exclude_center(Cell(5, 3))
+    assert Cell(4, 3) in battlefield.neighbours_exclude_center(Cell(5, 3))
+    assert Cell(5, 2) in battlefield.neighbours_exclude_center(Cell(5, 3))
+    assert Cell(5, 4) in battlefield.neighbours_exclude_center(Cell(5, 3))
 
 
 def test_cells_within_dist(battlefield):

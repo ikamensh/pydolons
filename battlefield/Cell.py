@@ -1,5 +1,6 @@
 from cmath import phase, pi
-
+import functools
+from math import hypot
 
 class Cell:
     def __init__(self, x, y):
@@ -41,6 +42,33 @@ class Cell:
 
 
         return  angle / pi * 180, p1 >= p2
+
+    @staticmethod
+    @functools.lru_cache()
+    def get_neighbours(cell_or_complex, distance, w=1000, h=1000):
+        c = Cell.maybe_complex(cell_or_complex)
+
+        neighbours = []
+        x_min, x_max = int(max(0, c.x - distance)), int(min(w-1, c.x+distance))
+        y_min, y_max = int(max(0, c.y - distance)), int(min(h-1, c.y+distance))
+
+        for x in range(x_min, x_max+1):
+            for y in range(y_min, y_max+1):
+                test_cell = Cell(x,y)
+                if Cell._distance(c, test_cell) <= distance:
+                    neighbours.append(test_cell)
+
+        return neighbours
+
+
+    @staticmethod
+    def _distance(p1, p2):
+        return Cell._hypot(p1.x - p2.x, p1.y - p2.y)
+
+    @staticmethod
+    @functools.lru_cache(maxsize=2**9)
+    def _hypot(x, y):
+        return hypot(x, y)
 
     def __eq__(self, other):
         if self is other: return True
