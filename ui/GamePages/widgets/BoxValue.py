@@ -16,7 +16,7 @@ class BoxValue(AbstactWidget):
         """
         pass
 
-    def update(self, value, max_v):
+    def updateValue(self, value, max_v):
         self.value = value
         self.max_v = max_v
         pres = (self.value * 100) / self.max_v
