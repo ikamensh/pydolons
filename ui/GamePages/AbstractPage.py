@@ -6,8 +6,9 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
     def __init__(self):
         super(AbstractPage, self).__init__()
+        self.gamePages = None
         self.state = False
-
+        
     @abstractmethod
     def setUp(self, arg):
         """
