@@ -46,11 +46,17 @@ class GameController:
 
     def mousePressEvent(self, e):
         try:
-            self.the_game.ui_order(self.last_point.x, self.last_point.y)
-            self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-            self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            if self.gameRoot.gamePages.page is None:
+                self.the_game.ui_order(self.last_point.x, self.last_point.y)
+                self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            else:
+                self.gameRoot.gamePages.mousePressEvent(e.pos())
         except PydolonsException as exc:
             UiErrorMessageEvent(repr(exc))
+
+    def mouseReleaseEvent(self, e):
+        self.gameRoot.gamePages.mouseReleaseEvent()
 
     def keyPressEvent(self, e):
         try:
@@ -66,6 +72,7 @@ class GameController:
             self.zoomIn()
         elif e.delta() < 0.0:
             self.zoomOut()
+        pass
 
     def zoomIn(self):
         self.tr.scale(1.05, 1.05)
