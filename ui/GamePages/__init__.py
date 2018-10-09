@@ -13,6 +13,8 @@ class GamePages(object):
     def __init__(self):
         super(GamePages, self).__init__()
         self.gameRoot = None
+        # this is current page
+        self.page = None
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -36,28 +38,51 @@ class GamePages(object):
 
     def setUpCharecterPage(self):
         self.characterPage = CharacterPage()
-        self.characterPage.setPos(280, 65)
+        self.characterPage.setPos(0, 0)
         self.characterPage.gamePages = self
         self.characterPage.setUpGui()
         self.characterPage.pageUpdate()
 
     def showPage(self, pageName):
-        assert(pageName, str)
+        """
+        This is bug transformation item to scene
+
+        How to get x, y for item in scene ?
+
+        if screen size = 420, 340
+        page size = 100, 50
+        correct x, y = ((420 - 100) / 2) /2, ((320 - 50) / 2) /2
+        x, y = (420 - 50) / 4, (320 - 50) / 4
+        """
+        assert isinstance(pageName, str)
         if pageName == 'CharacterPage' and not self.characterPage.state:
             x, y = 0, 0
             self.gameRoot.scene.addItem(self.characterPage)
+            self.page = self.characterPage
             if self.gameRoot.cfg.dev_size[0] > 800:
-                x = (self.gameRoot.cfg.dev_size[0] - self.characterPage.w)/2
-                y = (self.gameRoot.cfg.dev_size[1] - self.characterPage.h)/2
-            print(x, y)
-            # self.characterPage.setPos(int(x), int(y))
+                x = (self.gameRoot.cfg.dev_size[0] - self.characterPage.w) / 4
+                y = (self.gameRoot.cfg.dev_size[1] - self.characterPage.h) / 4
+            self.characterPage.setPos(int(x), int(y))
             self.characterPage.pageUpdate()
             self.characterPage.state = True
+
     def close(self):
         if self.characterPage.state:
             self.gameRoot.scene.removeItem(self.characterPage)
+            self.page = None
             self.characterPage.state = False
 
+    # def mouseMoveEvent(self, pos):
+    #     if not self.page is None:
+    #         self.page.widgetFactory.collisions(pos)
+
+    def mousePressEvent(self, pos):
+        if not self.page is None:
+            self.page.collisions(pos)
+
+    def mouseReleaseEvent(self):
+        if not self.page is None:
+            self.page.release()
 
     def updateGui(self):
         self.gameMenu.updateGui()
