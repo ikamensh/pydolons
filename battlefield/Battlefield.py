@@ -1,6 +1,7 @@
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
+import game_objects.battlefield_objects as bf_objs
 import typing
 
 class Battlefield:
@@ -8,8 +9,8 @@ class Battlefield:
         self.w = w
         self.h = h
         self.units_at = {}              #cell -> unit
-        self.unit_locations = {}        #unit -> cell
-        self.unit_facings = {}          #unit -> direction
+        self.unit_locations: typing.Dict[bf_objs.BattlefieldObject:Cell] = {}        #unit -> cell
+        self.unit_facings :typing.Dict[bf_objs.Unit:complex] = {}          #unit -> direction
         self.vision = Vision(self)
 
     def x_sees_y(self, x, y):
@@ -21,7 +22,6 @@ class Battlefield:
 
 
     def distance(self, one, another):
-        import game_objects.battlefield_objects as bf_objs
         if isinstance(one, bf_objs.BattlefieldObject):
             one = self.unit_locations[one]
         if isinstance(another, bf_objs.BattlefieldObject):

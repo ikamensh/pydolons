@@ -19,7 +19,7 @@ def empty_battlefield(hero):
     yield bf
 
 @pytest.fixture()
-def empty_game(empty_battlefield, hero):
+def hero_only_game(empty_battlefield, hero):
     _game = DreamGame(empty_battlefield)
     _game.fractions[hero] = Fractions.PLAYER
     for unit in empty_battlefield.unit_locations:

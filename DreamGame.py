@@ -6,10 +6,11 @@ from mechanics.AI import BruteAI, RandomAI, BroadAI
 from mechanics.events import EventsPlatform, NextUnitEvent
 from ui.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
+from mechanics.rpg.regen import regen_rule
 import copy
 import my_context
 import time
-from exceptions import InvalidTargetException, PydolonsException, CantAffordActiveException
+from exceptions import PydolonsException, CantAffordActiveException
 
 class DreamGame:
 
@@ -26,7 +27,7 @@ class DreamGame:
         self.loop_state = True
         self.player_turn_lock = False
 
-        for rule in (rules or []):
+        for rule in (rules or [exp_rule, regen_rule]):
             rule()
 
     @classmethod
@@ -36,7 +37,7 @@ class DreamGame:
         unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
-        game = cls(bf, [exp_rule])
+        game = cls(bf)
         if unit_locations:
             bf.place_many(unit_locations)
         game.the_hero = hero

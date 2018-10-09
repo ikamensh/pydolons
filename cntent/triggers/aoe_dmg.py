@@ -8,16 +8,15 @@ import random
 
 
 def aoe_damage_callback(t,e:DamageEvent):
-    chance = t.chance
-    if random.random() < chance:
-        bf = my_context.the_game.battlefield
-        target_cell = bf.unit_locations[e.target]
-        recipients = bf.get_units_within_radius(center=target_cell, radius=t.radius)
-        for unit in recipients:
-            new_e = DamageEvent(e.damage*t.percentage, unit,
-                        source=e.source, impact_factor=ImpactFactor.GRAZE, fire=False)
-            new_e.secondary = True
-            new_e.fire()
+
+    bf = my_context.the_game.battlefield
+    target_cell = bf.unit_locations[e.target]
+    recipients = bf.get_units_within_radius(center=target_cell, radius=t.radius)
+    for unit in recipients:
+        new_e = DamageEvent(e.damage*t.percentage, unit,
+                    source=e.source, impact_factor=ImpactFactor.GRAZE, fire=False)
+        new_e.secondary = True
+        new_e.fire()
 
 
 def aoe_damage(unit, radius, percentage):

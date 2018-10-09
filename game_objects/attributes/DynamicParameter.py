@@ -34,7 +34,7 @@ class DynamicParameter:
             return None
 
         self._rescale(unit)
-        return int(getattr(unit, self.storage_name))
+        return getattr(unit, self.storage_name)
 
     def __set__(self, unit, value):
         max_value = getattr(unit, self.max_name)
@@ -57,5 +57,5 @@ class DynamicParameter:
             if new_max_value == old_max_value:
                 return
             percentage_full = getattr(unit, self.storage_name) / old_max_value
-            setattr(unit, self.storage_name, int(new_max_value * percentage_full) )
+            setattr(unit, self.storage_name, new_max_value * percentage_full)
             setattr(unit, self.old_max_storage, new_max_value)
