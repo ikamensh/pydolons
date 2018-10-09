@@ -19,7 +19,16 @@ class AbstactWidget(QtCore.QObject):
     def setPos(self, x, y):
         """метод для установки текущей позиции виджета self.x, self.y
         """
-        self.x, self.y = x, y
+        if not self.page is None:
+            self.p_x, self.p_y = x, y
+            self.x, self.y = self.page.x() + self.p_x, self.page.y() + self.p_y
+        else:
+            self.p_x, self.p_y = x, y
+            self.x, self.y = self.p_x, self.p_y
+
+    def update(self):
+        if not self.page is None:
+            self.x, self.y = self.page.x() + self.p_x, self.page.y() + self.p_y
 
     def setSize(self, w, h):
         """метод для установки текущего размера виджета self.w, self.h
