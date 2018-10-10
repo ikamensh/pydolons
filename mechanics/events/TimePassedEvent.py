@@ -4,7 +4,7 @@ from mechanics.events import EventsChannels
 import my_context
 
 class TimePassedEvent(Event):
-    channel = EventsChannels.NextUnitChannel
+    channel = EventsChannels.TimePassedChannel
 
     def __init__(self, dt):
         self.dt = dt

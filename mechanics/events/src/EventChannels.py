@@ -21,6 +21,14 @@ class EventsChannels(NameEnum):
 
     TimePassedChannel = auto()
 
+    # UI
     NextUnitChannel = auto()
     LevelStatus = auto()
     UiErrorMessage = auto()
+
+    # multiplayer
+    ServerOrderIssuedChannel = auto()
+    ServerOrderRecievedChannel = auto()
+    ClientOrderIssuedChannel = auto()
+    ClientOrderRecievedChannel = auto()
+
