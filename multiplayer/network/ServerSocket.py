@@ -1,12 +1,12 @@
-import socket
-from threading import Thread
 import pickle
+import socket
 import sys
+from threading import Thread
 
-from multiplayer.config import host, port, MyDatagram
-from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ClientOrderIssuedEvent import ClientOrderIssuedEvent
 from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
+from multiplayer.network.config import host, port
+
 
 class MyServer:
     def __init__(self, fractions_for_players):
@@ -19,7 +19,6 @@ class MyServer:
         self.free_fractions = list(fractions_for_players)
         self.socket_fractions = {}
 
-        # self.history = None
 
     def listen(self):
         print("listening.")
@@ -57,10 +56,5 @@ class MyServer:
             ServerOrderRecievedEvent(self.socket_fractions[clientsocket],
                                      e.unit_uid, e.active_uid, e.target)
 
-if __name__ == "__main__":
-    my_server = MyServer(["abra"])
-    th = Thread(target=my_server.listen)
-    th.start()
-    # my_server.listen()
 
 

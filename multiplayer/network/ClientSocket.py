@@ -1,15 +1,14 @@
+import pickle
 import socket
 import sys
-import pickle
-import time
-from threading import Thread
 
-from multiplayer.config import host, port, MyDatagram
 from multiplayer.events.ClientOrderRecievedEvent import ClientOrderRecievedEvent
+from multiplayer.events.ClientOrderIssuedEvent import ClientOrderIssuedEvent
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
+from multiplayer.network.config import host, port
 
 
-class MyClient:
+class ClientSocket:
     def __init__(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.name = None
@@ -28,7 +27,7 @@ class MyClient:
         while True:
             data = self.socket.recv(4096)
             print("bytes actually recieved: ", sys.getsizeof(data))
-            e = pickle.loads(data)
+            e : ServerOrderIssuedEvent = pickle.loads(data)
             assert isinstance(e, ServerOrderIssuedEvent)
 
             if self.next_order != e.uid:
@@ -42,22 +41,10 @@ class MyClient:
                     self.next_order += 1
 
 
-    def send(self, new_chunk):
-        data_string = pickle.dumps(new_chunk)
+    def send(self, e : ClientOrderRecievedEvent):
+        data_string = pickle.dumps(e)
         self.socket.send(data_string)
 
 
-if __name__ == "__main__":
 
-    my_client = MyClient()
-    my_client.connect()
-
-    ct = Thread(target=my_client.myreceive)
-    ct.start()
-
-    ctr = 1
-    while True:
-        ctr += 10
-        my_client.send(MyDatagram(my_client.name, ctr, ctr+5))
-        time.sleep(10)
 

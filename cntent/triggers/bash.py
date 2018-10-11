@@ -1,13 +1,13 @@
 from mechanics.events import Trigger
 from mechanics.events import DamageEvent
 from mechanics.damage import DamageTypeGroups
-from my_context import my_random as random
+import my_context
 
 
 
 def bash_callback(t,e:DamageEvent):
     chance = t.chance
-    if random.random() < chance:
+    if my_context.random.random() < chance:
         e.target.readiness -= 0.25 * e.source.str / e.target.str
 
 

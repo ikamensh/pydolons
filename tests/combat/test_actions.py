@@ -35,7 +35,9 @@ def test_can_make_multiple_steps(game, hero):
     try:
         for _ in range(20):
             game.order_move(hero, target_location)
-    except:
+            hero.readiness = 1
+    except Exception as e:
+        print(e)
         pass
 
     assert initial_location != game.get_location(hero)
@@ -59,19 +61,25 @@ def test_go_and_hit(game, hero):
     """
     pirate_location = Cell(4, 4)
     the_enemy_pirate = game.get_unit_at(pirate_location)
+    hero.readiness = 1
 
     path = [Cell(c[0], c[1]) for c in [(1, 2), (2, 2), (2, 3), (3, 3), (3, 4)]]
     try:
         for step in path:
             game.order_move(hero,step)
+            hero.readiness = 1
+
 
 
         while the_enemy_pirate.health > 0:
             game.order_attack(hero, pirate_location)
+            hero.readiness = 1
+
 
         game.order_move(hero, pirate_location)
     except Exception as e:
-        assert False, repr(e)
+        print(e)
+        assert False
 
     assert pirate_location == game.get_location(hero)
 
