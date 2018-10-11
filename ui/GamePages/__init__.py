@@ -91,3 +91,6 @@ class GamePages(object):
     def setHeroUnit(self, unit):
         self.unit = unit
         self.characterPage.unit = unit
+
+    def setCharacter(self, character):
+        self.characterPage.character = character
