@@ -1,7 +1,8 @@
 from mechanics.events import Trigger
 from mechanics.events import DamageEvent
 from mechanics.damage import DamageTypeGroups
-import random
+from my_context import my_random as random
+
 
 
 def bash_callback(t,e:DamageEvent):

@@ -23,6 +23,7 @@ from ui.TheUI import TheUI
 from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
     perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger
 from datetime import datetime
+from mechanics.events import NextUnitEvent
 
 import sys
 
@@ -49,6 +50,7 @@ if __name__ == "__main__":
         assert g.turns_manager.get_next() is unit
 
         unit.activate(active, target)
+        NextUnitEvent(g.turns_manager.get_next())
         g.player_turn_lock = False
 
 

@@ -1,4 +1,4 @@
-import random
+import my_context
 import copy
 
 class MonsterEquipment:
@@ -20,7 +20,7 @@ class MonsterEquipment:
         self.sequence = corrected_seq
 
     def new_sequence(self):
-        return [copy.deepcopy( random.choice(group) ) for group in self.sequence]
+        return [copy.deepcopy( my_context.random.choice(group) ) for group in self.sequence]
 
     def __iter__(self):
         return iter(self.new_sequence())

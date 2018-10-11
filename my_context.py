@@ -1,7 +1,6 @@
 import random
 
-my_random = random.Random(100)
-# my_random = random.Random()
+random = random.Random(100)
 
 the_game = None
 

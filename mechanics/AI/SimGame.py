@@ -6,15 +6,19 @@ from DreamGame import DreamGame
 from contextlib import contextmanager
 import my_context
 import copy
+import random
 
 class SimGame(DreamGame):
 
     @contextmanager
     def temp_context(self):
         old_game = my_context.the_game
+        old_random = my_context.random
         my_context.the_game = self
+        my_context.random = random.Random()
         yield
         my_context.the_game = old_game
+        my_context.random = old_random
 
     @contextmanager
     def simulation(self):

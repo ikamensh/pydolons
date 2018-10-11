@@ -7,7 +7,7 @@ from mechanics.turns import TurnsManager
 from mechanics.buffs import Buff
 from mechanics.events import TimePassedEvent
 
-from my_context import my_random as random
+import my_context
 
 epsilon = 1e-6
 class AtbTurnsManager(TurnsManager):
@@ -79,7 +79,7 @@ class AtbTurnsManager(TurnsManager):
     def add_unit(self, unit):
         if unit not in self.managed:
             self.managed.append(unit)
-            unit.readiness = random.random() * 0.25
+            unit.readiness = my_context.random.random() * 0.25
 
     def remove_unit(self, unit):
         assert unit in self.managed

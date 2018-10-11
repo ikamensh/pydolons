@@ -13,6 +13,9 @@ class MyClient:
     def __init__(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.name = None
+        self.next_order = 1
+        self.orders_stored = {}
+
 
 
     def connect(self):
@@ -27,7 +30,17 @@ class MyClient:
             print("bytes actually recieved: ", sys.getsizeof(data))
             e = pickle.loads(data)
             assert isinstance(e, ServerOrderIssuedEvent)
-            ClientOrderRecievedEvent(e.unit_uid, e.active_uid, e.target)
+
+            if self.next_order != e.uid:
+                self.orders_stored[e.uid] = e
+            else:
+                ClientOrderRecievedEvent(e.unit_uid, e.active_uid, e.target)
+                self.next_order += 1
+                while self.next_order in self.orders_stored:
+                    e = self.orders_stored[self.next_order]
+                    ClientOrderRecievedEvent(e.unit_uid, e.active_uid, e.target)
+                    self.next_order += 1
+
 
     def send(self, new_chunk):
         data_string = pickle.dumps(new_chunk)
