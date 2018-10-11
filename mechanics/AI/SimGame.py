@@ -175,3 +175,14 @@ class SimGame(DreamGame):
             for other in unit.actives:
                 if active.uid == other.uid:
                     return other
+
+    def find_unit_by_uid(self, unit_uid):
+        for other in self.battlefield.unit_locations:
+            if unit_uid == other.uid:
+                return other
+
+    def find_active_by_uid(self, active_uid):
+        for unit in self.battlefield.unit_locations:
+            for other in unit.actives:
+                if active_uid == other.uid:
+                    return other

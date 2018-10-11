@@ -13,7 +13,7 @@ import time
 from exceptions import PydolonsException, CantAffordActiveException
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ClientOrderIssuedEvent import ClientOrderIssuedEvent
-
+import typing
 
 
 class DreamGame:
@@ -21,7 +21,7 @@ class DreamGame:
     def __init__(self, bf, rules=None, is_sim = False, is_server=True):
         self.battlefield :Battlefield = bf
         self.the_hero : bf_objs.Unit= None
-        self.fractions = {}
+        self.fractions : typing.Dict[bf_objs.Unit : Fractions] = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
         self.turns_manager = AtbTurnsManager()
@@ -260,7 +260,11 @@ class DreamGame:
     def order_action(self, unit, active, target):
         if self.is_server:
             assert self.turns_manager.get_next() is unit
-            ServerOrderIssuedEvent(unit.uid, active.uid, target)
+            if isinstance(target, Cell):
+                _target = target
+            else:
+                _target = target.uid
+            ServerOrderIssuedEvent(unit.uid, active.uid, _target)
             unit.activate(active, target)
             self.player_turn_lock = False
         else:

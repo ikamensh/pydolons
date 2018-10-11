@@ -4,10 +4,11 @@ from mechanics.events import EventsChannels
 class ServerOrderRecievedEvent(Event):
     channel = EventsChannels.ServerOrderRecievedChannel
 
-    def __init__(self, fraction, x, y):
+    def __init__(self, fraction,unit_uid, active_uid, target):
+        self.unit_uid = unit_uid
+        self.active_uid = active_uid
+        self.target = target
         self.fraction = fraction
-        self.x = x
-        self.y = y
         super().__init__()
 
     def check_conditions(self):
