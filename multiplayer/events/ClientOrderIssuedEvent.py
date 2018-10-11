@@ -17,4 +17,4 @@ class ClientOrderIssuedEvent(Event):
         pass
 
     def __repr__(self):
-        return f"order: unit:{self.unit_uid} active:{self.active_uid} target:{self.target} "
+        return f"COI order: unit:{self.unit_uid} active:{self.active_uid} target:{self.target} "

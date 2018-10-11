@@ -18,4 +18,5 @@ class ServerOrderRecievedEvent(Event):
         pass
 
     def __repr__(self):
-        return f"player {self.fraction} has clicked {(self.x, self.y)} "
+        return f"SOR player {self.fraction} gave order: unit:{self.unit_uid} active:{self.active_uid} target:{self.target}"
+

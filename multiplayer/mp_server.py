@@ -7,24 +7,23 @@ from battlefield import Cell
 from mechanics.events import Trigger
 from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
-
-from multiplayer.string_server import MyServer
+from multiplayer.socket_server import MyServer
 
 import my_context
 
+from threading import Thread
+import time
 
+from mechanics.fractions import Fractions
 
-def one_game():
+if __name__ == "__main__":
+
     character  = Character(demohero_basetype)
     game = DreamGame.start_dungeon(demo_dungeon, character.unit)
     game.character = character
     game.print_all_units()
-    game.loop()
 
-
-if __name__ == "__main__":
-
-    server = MyServer()
+    server = MyServer(set(game.fractions.values()) - {Fractions.ENEMY, Fractions.NEUTRALS})
 
     def order_recieved_cb(t, e:ServerOrderRecievedEvent):
         g:DreamGame = my_context.the_game
@@ -59,5 +58,14 @@ if __name__ == "__main__":
 
     order_issued_trigger()
     order_recieved_trigger()
-    one_game()
+
+    th = Thread(target=server.listen)
+    th.start()
+
+    while server.free_fractions:
+        print(f"Waiting for {server.free_fractions}")
+        time.sleep(1)
+
+    print("The game has started.")
+    game.loop()
 

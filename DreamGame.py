@@ -36,13 +36,13 @@ class DreamGame:
             rule()
 
     @classmethod
-    def start_dungeon(cls, dungeon, hero: bf_objs.Unit):
+    def start_dungeon(cls, dungeon, hero: bf_objs.Unit, is_server=True):
 
         unit_locations = dungeon.unit_locations
         unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
-        game = cls(bf)
+        game = cls(bf, is_server=is_server)
         if unit_locations:
             bf.place_many(unit_locations)
         game.the_hero = hero
@@ -258,17 +258,20 @@ class DreamGame:
 
 
     def order_action(self, unit, active, target):
+        if target is None:
+            _target = None
+        elif isinstance(target, Cell):
+            _target = target
+        else:
+            _target = target.uid
+
         if self.is_server:
             assert self.turns_manager.get_next() is unit
-            if isinstance(target, Cell):
-                _target = target
-            else:
-                _target = target.uid
             ServerOrderIssuedEvent(unit.uid, active.uid, _target)
             unit.activate(active, target)
             self.player_turn_lock = False
         else:
-            ClientOrderIssuedEvent(unit.uid, active.uid, target)
+            ClientOrderIssuedEvent(unit.uid, active.uid, _target)
 
 
     @staticmethod
