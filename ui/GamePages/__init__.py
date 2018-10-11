@@ -15,6 +15,7 @@ class GamePages(object):
         self.gameRoot = None
         # this is current page
         self.page = None
+        self.unit = None
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -86,3 +87,7 @@ class GamePages(object):
 
     def updateGui(self):
         self.gameMenu.updateGui()
+
+    def setHeroUnit(self, unit):
+        self.unit = unit
+        self.characterPage.unit = unit
