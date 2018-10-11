@@ -59,6 +59,7 @@ class TheUI(QtWidgets.QWidget):
         self.gamePages = GamePages()
         self.gameRoot.setGamePages(self.gamePages)
         self.gamePages.setUpPages()
+        self.gamePages.setHeroUnit(self.the_game.the_hero)
         self.view.resized.connect(self.gamePages.updateGui)
 
         self.view.controller = self.controller
