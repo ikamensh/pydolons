@@ -11,6 +11,7 @@ class CharacterPage(AbstractPage):
     def __init__(self):
         super(CharacterPage, self).__init__()
         self.character = None
+        self.unit = None
         self.w, self.h = 790, 590
         self.w_2 = int(self.w / 2)
         self.h_2 = int(self.h / 2)
@@ -20,6 +21,10 @@ class CharacterPage(AbstractPage):
         self.setUpWidgets()
 
     def pageUpdate(self):
+        if not self.unit is None:
+            self.bx_hp.updateValue(int(self.unit.health), self.unit.max_health)
+            self.bx_mana.updateValue(int(self.unit.mana), self.unit.max_mana)
+            self.bx_stamina.updateValue(int(self.unit.stamina), self.unit.max_stamina)
         self.update( self.x(), self.y(), self.w, self.h)
         self.widgetFactory.update()
 
@@ -76,7 +81,8 @@ class CharacterPage(AbstractPage):
         x, y = 35, 310
         n = 40
         painter.setBrush(QtCore.Qt.green)
-        painter.drawRect(self.x() + x, self.y() + 144, 128, 128)
+        # painter.drawRect(self.x() + x, self.y() + 144, 128, 128)
+        painter.drawPixmap(self.x() + x, self.y() + 144, 128, 128, self.gamePages.gameRoot.cfg.pix_maps[self.unit.icon])
         painter.drawText(self.x() + x, self.y() + y, 'HP:')
         self.bx_hp.paint(painter)
         painter.drawText(self.x() + x, self.y() + y + n, 'Manna:')
@@ -87,7 +93,8 @@ class CharacterPage(AbstractPage):
         x, y = 264, 18
         n = 40
         m = 150
-        painter.drawText(self.x() + x, self.y() + y, 'Free point: 11')
+        # Set free xp
+        painter.drawText(self.x() + x, self.y() + y, 'Free point: ' + str(self.unit.xp))
         # Debug text
 
         self.spn_bx1.paint(painter)
@@ -129,10 +136,6 @@ class CharacterPage(AbstractPage):
     def boundingRect(self):
         return QtCore.QRectF(self.x() , self.y(), self.w, self.h)
 
-    def onPressClose(self):
-        self.state = False
-        self.gamePages.page = None
-        self.scene().removeItem(self)
 
     def collisions(self, pos):
             self.widgetFactory.collisions(pos)
@@ -142,7 +145,11 @@ class CharacterPage(AbstractPage):
             self.widgetFactory.release()
             self.pageUpdate()
 
-
+    def onPressClose(self):
+        self.state = False
+        self.gamePages.page = None
+        self.scene().removeItem(self)
+        self.widgetFactory.release()
 
     def onPressCancel(self):
         # self.state = False
