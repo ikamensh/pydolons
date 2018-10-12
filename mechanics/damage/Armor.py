@@ -52,6 +52,9 @@ class Armor:
     def items(self):
         return self.armor_values.items()
 
+    def display_value(self):
+        return sum(self.values()) / len(self.values())
+
     def __repr__(self):
-        return f"{sum(self.values()) / len(self.values()) :.0f}"
+        return f"{self.display_value() :.0f}"
 
