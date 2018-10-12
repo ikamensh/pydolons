@@ -182,6 +182,10 @@ class Unit(BattlefieldObject):
         """
         DynamicParameter.reset(self)
 
+    @property
+    def tooltip_info(self):
+        return {"uid":str(self.uid)}
+
 
     def give_active(self, active):
         cpy = copy.deepcopy(active)
