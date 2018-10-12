@@ -4,12 +4,12 @@ from game_objects.attributes import Bonus, Attribute
 from game_objects.battlefield_objects import CharAttributes as ca
 
 from mechanics.buffs import Buff
-import random
+import my_context
 
 
 def battle_rage_callback(t,e:DamageEvent):
     chance = t.chance
-    if random.random() < chance:
+    if my_context.random.random() < chance:
         BuffAppliedEvent(
 
             Buff(8, bonuses=[Bonus(

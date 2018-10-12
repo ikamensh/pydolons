@@ -6,15 +6,19 @@ from DreamGame import DreamGame
 from contextlib import contextmanager
 import my_context
 import copy
+import random
 
 class SimGame(DreamGame):
 
     @contextmanager
     def temp_context(self):
         old_game = my_context.the_game
+        old_random = my_context.random
         my_context.the_game = self
+        my_context.random = random.Random()
         yield
         my_context.the_game = old_game
+        my_context.random = old_random
 
     @contextmanager
     def simulation(self):
@@ -174,4 +178,15 @@ class SimGame(DreamGame):
         for unit in self.battlefield.unit_locations:
             for other in unit.actives:
                 if active.uid == other.uid:
+                    return other
+
+    def find_unit_by_uid(self, unit_uid):
+        for other in self.battlefield.unit_locations:
+            if unit_uid == other.uid:
+                return other
+
+    def find_active_by_uid(self, active_uid):
+        for unit in self.battlefield.unit_locations:
+            for other in unit.actives:
+                if active_uid == other.uid:
                     return other

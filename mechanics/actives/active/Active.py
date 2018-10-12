@@ -1,6 +1,7 @@
 from mechanics.events import ActiveEvent
 from mechanics.actives import ActiveTags
 from battlefield import Cell
+from game_objects import battlefield_objects as bf_objs
 import copy
 from contextlib import contextmanager
 
@@ -30,7 +31,7 @@ class Active:
 
     def activate(self, targeting=None):
 
-        if self.targeting_cls is Cell:
+        if self.targeting_cls in [Cell, bf_objs.Unit, bf_objs.BattlefieldObject]:
             assert isinstance(targeting, self.targeting_cls)
         assert self.owner is not None
 

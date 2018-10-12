@@ -11,13 +11,17 @@ import copy
 import my_context
 import time
 from exceptions import PydolonsException, CantAffordActiveException
+from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
+from multiplayer.events.ClientOrderIssuedEvent import ClientOrderIssuedEvent
+import typing
+
 
 class DreamGame:
 
-    def __init__(self, bf, rules=None, is_sim = False):
+    def __init__(self, bf, rules=None, is_sim = False, is_server=True):
         self.battlefield :Battlefield = bf
         self.the_hero : bf_objs.Unit= None
-        self.fractions = {}
+        self.fractions : typing.Dict[bf_objs.Unit : Fractions] = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
         self.turns_manager = AtbTurnsManager()
@@ -26,18 +30,19 @@ class DreamGame:
         self.set_to_context()
         self.loop_state = True
         self.player_turn_lock = False
+        self.is_server = is_server
 
         for rule in (rules or [exp_rule, regen_rule]):
             rule()
 
     @classmethod
-    def start_dungeon(cls, dungeon, hero: bf_objs.Unit):
+    def start_dungeon(cls, dungeon, hero: bf_objs.Unit, is_server=True):
 
         unit_locations = dungeon.unit_locations
         unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
-        game = cls(bf)
+        game = cls(bf, is_server=is_server)
         if unit_locations:
             bf.place_many(unit_locations)
         game.the_hero = hero
@@ -96,7 +101,7 @@ class DreamGame:
                     active, target = self.enemy_ai.decide_step(active_unit)
                 except:
                     active, target = self.random_ai.decide_step(active_unit)
-                active_unit.activate(active, target)
+                self.order_action(active_unit, active, target)
 
 
 
@@ -127,27 +132,26 @@ class DreamGame:
     def ui_order(self, x, y):
         print(f"ordered: move to {x},{y}")
 
-
-
         if self.turns_manager.get_next() is self.the_hero:
             cell = Cell.from_complex(x + y* 1j)
             if cell in self.battlefield.units_at:
                 self.order_attack(self.the_hero, self.battlefield.units_at[cell])
             else:
                 self.order_move(self.the_hero, cell)
-            self.player_turn_lock = False
 
 
     def order_turn_cw(self):
         if self.turns_manager.get_next() is self.the_hero:
-            self.the_hero.turn_cw()
-            self.player_turn_lock = False
+            self._order_turn(ccw=False)
 
     def order_turn_ccw(self):
         if self.turns_manager.get_next() is self.the_hero:
-            self.the_hero.turn_ccw()
-            self.player_turn_lock = False
+            self._order_turn(ccw=True)
 
+
+    def _order_turn(self, ccw):
+        active = self.the_hero.turn_ccw_active if ccw else self.the_hero.turn_cw_active
+        self.order_action(self.the_hero, active, None)
 
 
     def _complain_missing(self, unit, actives, action):
@@ -186,7 +190,7 @@ class DreamGame:
 
         if valid_actives:
             chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
-            chosen_active.activate(target_cell)
+            self.order_action(unit, chosen_active, target_cell)
             return
         else:
             # We can't directly execute this order.
@@ -195,8 +199,9 @@ class DreamGame:
             else:
                 facing = self.battlefield.unit_facings[unit]
                 angle, ccw = Cell.angle_between(facing, target_cell.complex - cell_from.complex)
-                if angle >= 45:
-                    unit.turn_ccw() if ccw else unit.turn_cw()
+                if angle > 45:
+                    active = unit.turn_ccw_active if ccw else unit.turn_cw_active
+                    self.order_action(unit, active, None)
                     return
 
                 distance = self.battlefield.distance(unit, target_cell)
@@ -208,7 +213,6 @@ class DreamGame:
                     self.order_move(unit, closer_target)
                 else:
                     raise PydolonsException("None of the user movement actives can reach the target.")
-
 
 
     def order_attack(self, unit: bf_objs.Unit, _target: bf_objs.Unit, AI_assist=True):
@@ -231,7 +235,7 @@ class DreamGame:
 
         if valid_actives:
             chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
-            chosen_active.activate(unit_target)
+            self.order_action(unit, chosen_active, unit_target)
             return
         else:
             if not AI_assist:
@@ -242,8 +246,9 @@ class DreamGame:
 
                 facing = self.battlefield.unit_facings[unit]
                 angle, ccw = Cell.angle_between(facing, target_cell.complex -cell_from.complex)
-                if angle >= 45:
-                    unit.turn_ccw() if ccw else unit.turn_cw()
+                if angle > 45:
+                    active = unit.turn_ccw_active if ccw else unit.turn_cw_active
+                    self.order_action(unit, active, None)
                     return
 
                 distance = self.battlefield.distance(unit, target_cell)
@@ -253,8 +258,21 @@ class DreamGame:
                     raise PydolonsException("None of the user attack actives can reach the target.")
 
 
+    def order_action(self, unit, active, target):
+        if target is None:
+            _target = None
+        elif isinstance(target, Cell):
+            _target = target
+        else:
+            _target = target.uid
 
-
+        if self.is_server:
+            assert self.turns_manager.get_next() is unit
+            ServerOrderIssuedEvent(unit.uid, active.uid, _target)
+            unit.activate(active, target)
+            self.player_turn_lock = False
+        else:
+            ClientOrderIssuedEvent(unit.uid, active.uid, _target)
 
 
     @staticmethod
