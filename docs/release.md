@@ -1,3 +1,12 @@
+`@date:2018.10.12`
+`@autor:ikamensh`
+`@note_start:`
+>1. Добавил методы tooltip_info в Unit, Item, Active
+
+`@note_end`
+
+
+
 `@date:2018.10.11`
 `@autor:reef425`
 `@note_start:`
