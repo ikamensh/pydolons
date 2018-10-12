@@ -65,6 +65,10 @@ class Active:
         with self.simulate_callback(self, target):
             yield
 
+    @property
+    def tooltip_info(self):
+        return {"name":f"{self.name}"}
+
     # the hack is here because sometimes we want to calculate cost dynamically. setting property doesn't work -
     # deepcopy throws TypeError on properties. But it does not on lambdas. Therefore _cost is either a Cost
     # object, or a lambda self: -> Cost

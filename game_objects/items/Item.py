@@ -9,4 +9,6 @@ class Item:
         self.owner = None
         self.slot = None
 
-
+    @property
+    def tooltip_info(self):
+        return {"name": f"{self.name}"}
