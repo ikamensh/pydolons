@@ -3,9 +3,9 @@ from battlefield.Vision import Vision
 from battlefield.Facing import Facing
 
 
-def test_blocks(game):
+def test_blocks(game_hvsp):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
 
 
     vision = Vision(bf)
@@ -30,9 +30,9 @@ def test_blocks(game):
     assert blocks == True
 
 
-def test_symmetry(game):
+def test_symmetry(game_hvsp):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
     vision = Vision(bf)
     cells = []
     for x in range(4):
@@ -50,9 +50,9 @@ def test_symmetry(game):
                 assert result
 
 
-def test_visibility(game, hero, pirate):
+def test_visibility(game_hvsp, hero, pirate):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
     hero.prc_base += 100
     bf.move(hero, Cell(1,1))
     bf.unit_facings[hero] = Facing.SOUTH

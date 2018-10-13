@@ -57,7 +57,8 @@ class StarSearch(AStar):
         return list(path)
 
     @staticmethod
-    def build_transitions(unit, game):
+    def build_transitions(unit):
+        game = unit.game
         real_bf = game.battlefield
 
         bf = Battlefield(12, 12)

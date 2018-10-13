@@ -74,7 +74,6 @@ def test_uses_enabler_abilities(minigame, enabler):
 # @pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
 def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype):
     _game = SimGame(simple_battlefield)
-    _game.set_to_context()
     _game.add_unit(mud_golem, 3+3j, Fractions.ENEMY, 1j)
     _game.add_unit(hero, 3 + 4j, Fractions.PLAYER, 1+0j)
 

@@ -46,25 +46,36 @@ class DreamGame:
         unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
         game = cls(bf, is_server=is_server)
-        if unit_locations:
-            bf.place_many(unit_locations)
+
         game.the_hero = hero
 
-        game.fractions.update({unit:Fractions.ENEMY for unit in unit_locations if not unit.is_obstacle})
-        game.fractions[hero] = Fractions.PLAYER
+        fractions = {unit:Fractions.ENEMY for unit in unit_locations if not unit.is_obstacle}
+        fractions[hero] = Fractions.PLAYER
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
                                 if not unit.is_obstacle]
-        game.turns_manager = AtbTurnsManager(units_who_make_turns)
+        game.turns_manager = AtbTurnsManager(game, units_who_make_turns)
+
+        game.add_many(unit_locations.keys(), unit_locations, fractions)
 
 
         return game
+
+    def add_many(self, units, locations, fractions, facings = None):
+        facings = facings or {unit: 1j for unit in units}
+        for unit in units:
+            if unit.is_obstacle:
+                self.add_obstacle(unit, locations[unit])
+            else:
+                self.add_unit(unit, locations[unit], fractions[unit], facings.get(unit, 1j))
 
 
 
     def add_unit(self, unit: bf_objs.Unit, cell,  fraction, facing = None):
         assert unit.game is None
         unit.game = self
+        for a in unit.actives:
+            a.game = self
         self.fractions[unit] = fraction
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
@@ -273,11 +284,11 @@ class DreamGame:
 
         if self.is_server:
             assert self.turns_manager.get_next() is unit
-            ServerOrderIssuedEvent(unit.uid, active.uid, _target)
+            ServerOrderIssuedEvent(self, unit.uid, active.uid, _target)
             unit.activate(active, target)
             self.player_turn_lock = False
         else:
-            ClientOrderIssuedEvent(unit.uid, active.uid, _target)
+            ClientOrderIssuedEvent(self, unit.uid, active.uid, _target)
 
 
     @staticmethod

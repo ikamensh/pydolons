@@ -82,13 +82,9 @@ def pirate_band(pirate_basetype):
     return _pirate_band
 
 @pytest.fixture()
-def battlefield(pirate_band, hero):
+def battlefield8():
     bf = Battlefield(8, 8)
-    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
 
-    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
-    units_locations[hero] = Cell(1, 1)
-    bf.place_many(units_locations)
     return bf
 
 @pytest.fixture()
@@ -104,12 +100,21 @@ def empty_game(simple_battlefield):
     return _game
 
 @pytest.fixture()
-def game(battlefield, hero):
-    _game = DreamGame(battlefield)
-    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
-    _game.fractions[hero] = Fractions.PLAYER
-    for unit in battlefield.unit_locations:
-        _game.turns_manager.add_unit(unit)
+def game_hvsp(battlefield8, hero, pirate_band):
+    _game = DreamGame(battlefield8)
+
+    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
+    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
+
+    units_locations[hero] = Cell(1, 1)
+
+    fractions = {unit: Fractions.ENEMY for unit in units_locations if not unit.is_obstacle}
+    fractions[hero] = Fractions.PLAYER
+
+    _game.add_many(units_locations.keys(), units_locations, fractions)
+
+
+
     return _game
 
 

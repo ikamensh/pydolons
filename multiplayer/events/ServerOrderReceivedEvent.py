@@ -4,12 +4,12 @@ from mechanics.events import EventsChannels
 class ServerOrderRecievedEvent(Event):
     channel = EventsChannels.ServerOrderRecievedChannel
 
-    def __init__(self, fraction,unit_uid, active_uid, target):
+    def __init__(self, game, fraction,unit_uid, active_uid, target):
         self.unit_uid = unit_uid
         self.active_uid = active_uid
         self.target = target
         self.fraction = fraction
-        super().__init__()
+        super().__init__(game)
 
     def check_conditions(self):
         return True

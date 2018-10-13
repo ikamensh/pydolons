@@ -2,12 +2,12 @@ from cntent.items.std import std_items
 
 
 
-def test_takes_different_time(game, hero, mud_golem):
+def test_takes_different_time(game_hvsp, hero, mud_golem):
 
-    hero_pos = game.battlefield.unit_locations[hero]
-    hero_facing = game.battlefield.unit_facings[hero]
+    hero_pos = game_hvsp.battlefield.unit_locations[hero]
+    hero_facing = game_hvsp.battlefield.unit_facings[hero]
 
-    game.battlefield.place(mud_golem, hero_pos.complex + hero_facing)
+    game_hvsp.battlefield.place(mud_golem, hero_pos.complex + hero_facing)
 
     hero.equipment.equip_item(std_items.dagger_cheap)
     assert hero.get_melee_weapon() is std_items.dagger_cheap

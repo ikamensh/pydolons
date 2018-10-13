@@ -4,7 +4,7 @@ from mechanics.damage import DamageTypes, Damage
 
 
 
-def test_gain_xp_by_kill(game, hero, pirate_band):
+def test_gain_xp_by_kill(game_hvsp, hero, pirate_band):
 
     exp_rule()
 
@@ -20,7 +20,7 @@ def test_gain_xp_by_kill(game, hero, pirate_band):
     assert xp_after > xp_before
 
 
-def test_no_exp_weak_enemy(game, hero, pirate_band):
+def test_no_exp_weak_enemy(game_hvsp, hero, pirate_band):
 
     exp_rule()
 
@@ -36,7 +36,7 @@ def test_no_exp_weak_enemy(game, hero, pirate_band):
     assert xp_after == xp_before
 
 
-def test_no_xp_foreign_kill(game, hero, pirate_band):
+def test_no_xp_foreign_kill(game_hvsp, hero, pirate_band):
 
     exp_rule()
 

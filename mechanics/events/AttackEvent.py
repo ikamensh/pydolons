@@ -20,9 +20,9 @@ class AttackEvent(Event):
 
         precision, evasion = self.effective_precision_evasion()
 
-        impact = ImpactCalculator.roll_impact(self.weapon.chances, precision, evasion)
+        impact = ImpactCalculator.roll_impact(self.weapon.chances, precision, evasion, random=self.game.random)
         if impact is not ImpactFactor.MISS:
-            dmg_event = DamageEvent(self.weapon.damage, self.target, source=self.source, impact_factor = impact)
+            dmg_event = DamageEvent(self.game, self.weapon.damage, self.target, source=self.source, impact_factor = impact)
 
             if self.weapon and self.weapon.durability:
                 self.weapon.durability -= dmg_event.weapon_dur_dmg

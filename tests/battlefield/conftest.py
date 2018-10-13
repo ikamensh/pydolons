@@ -9,5 +9,6 @@ def battlefield(pirate_band, hero):
 
     units_locations = {pirate_band[i]: locations[i] for i in range(3)}
     units_locations[hero] = Cell(1, 1)
-    bf.place_many(units_locations)
+    for unit, cell in units_locations.items():
+        bf.place(unit, cell)
     yield bf

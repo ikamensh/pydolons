@@ -4,7 +4,7 @@ from mechanics.turns.AtbTurnsManager import AtbTurnsManager
 from game_objects.battlefield_objects import Unit
 
 
-def test_buff_applies(game, hero):
+def test_buff_applies(game_hvsp, hero):
 
     buff = Buff(1)
     BuffAppliedEvent(buff, hero)
@@ -12,9 +12,9 @@ def test_buff_applies(game, hero):
     assert buff in hero._buffs
 
 
-def test_buff_expires(game, hero):
+def test_buff_expires(game_hvsp, hero):
 
-    atm = game.turns_manager
+    atm = game_hvsp.turns_manager
 
     assert isinstance(atm, AtbTurnsManager)
 
@@ -22,21 +22,21 @@ def test_buff_expires(game, hero):
     BuffAppliedEvent(buff, hero)
 
     assert buff in hero._buffs
-    assert buff in game.turns_manager.managed
+    assert buff in game_hvsp.turns_manager.managed
 
     atm.pass_time(0.5)
 
     assert buff in hero._buffs
-    assert buff in game.turns_manager.managed
+    assert buff in game_hvsp.turns_manager.managed
 
     atm.pass_time(0.5)
 
     assert buff not in hero._buffs
-    assert buff not in game.turns_manager.managed
+    assert buff not in game_hvsp.turns_manager.managed
 
 
-def test_buffs_do_not_stop_units(game, hero):
-    atm = game.turns_manager
+def test_buffs_do_not_stop_units(game_hvsp, hero):
+    atm = game_hvsp.turns_manager
 
     assert isinstance(atm, AtbTurnsManager)
 

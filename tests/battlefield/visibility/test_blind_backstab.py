@@ -2,9 +2,9 @@ from mechanics.events import AttackEvent
 from battlefield.Cell import Cell
 from battlefield.Facing import Facing
 
-def test_backstab(game, hero, pirate):
+def test_backstab(game_hvsp, hero, pirate):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
 
     bf.move(hero, Cell(1,1))
     bf.place(pirate, Cell(1,2))

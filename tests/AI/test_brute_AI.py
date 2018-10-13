@@ -52,36 +52,36 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
     assert minigame.fractions[target] is not minigame.fractions[unit]
 
 # @pytest.mark.skip(reason="non-deterministic ai does not guarantee this.")
-def test_no_suicide(game):
+def test_no_suicide(sim_game):
     for i in range(10):
 
-        game.enemy_ai = BruteAI(game)
-        active_unit = game.turns_manager.get_next()
-        active, target = game.enemy_ai.decide_step(active_unit)
+        sim_game.enemy_ai = BruteAI(sim_game)
+        active_unit = sim_game.turns_manager.get_next()
+        active, target = sim_game.enemy_ai.decide_step(active_unit)
         if isinstance(target, Unit):
-            if game.fractions[target] is game.fractions[active_unit]:
+            if sim_game.fractions[target] is sim_game.fractions[active_unit]:
                 assert False
         active_unit.activate(active, target)
 
 
-def test_no_friendly_fire(game, hero, pirate):
-    for unit in game.battlefield.unit_locations:
-        ai = BruteAI(game)
+def test_no_friendly_fire(sim_game, hero, pirate):
+    for unit in sim_game.battlefield.unit_locations:
+        ai = BruteAI(sim_game)
         action, target = ai.decide_step(unit, epsilon=0)
-        choices = game.get_all_choices(unit)
+        choices = sim_game.get_all_choices(unit)
         actives = [c[0] for c in choices]
         attack_actives = [a for a in actives if ActiveTags.ATTACK in a.tags]
         if len(attack_actives)>0:
             assert action not in attack_actives
 
-def test_hits_take_prio(game, hero, pirate, no_chances):
-    for unit in game.battlefield.unit_locations:
-        bf = game.battlefield
+def test_hits_take_prio(sim_game, hero, pirate, no_chances):
+    for unit in sim_game.battlefield.unit_locations:
+        bf = sim_game.battlefield
         bf.move(hero, 5+5j)
         bf.unit_facings[hero] = -1j
-        ai = BruteAI(game)
+        ai = BruteAI(sim_game)
         action, target = ai.decide_step(unit, epsilon=0)
-        choices = game.get_all_choices(unit)
+        choices = sim_game.get_all_choices(unit)
         actives = [c[0] for c in choices]
         attack_actives = [a for a in actives if ActiveTags.ATTACK in a.tags]
         if len(attack_actives)>0:
@@ -165,16 +165,11 @@ import copy
 @pytest.fixture()
 def just_hero_game(simple_battlefield, pirate,  hero):
 
-
     _game = SimGame(simple_battlefield)
-
     _game.add_unit(hero, (3+3j), Fractions.PLAYER)
 
 
-    _game.set_to_context()
-
-
-    yield _game
+    return _game
 
 def test_attacks(just_hero_game, hero, pirate):
 

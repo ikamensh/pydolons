@@ -71,11 +71,6 @@ class Battlefield:
         if isinstance(unit, bf_objs.Unit):
             self.unit_facings[unit] = facing or Facing.NORTH
 
-    def place_many(self, unit_locations):
-        for char, p in unit_locations.items():
-            self.place(char, p)
-
-
     def remove(self, unit):
         assert unit in self.unit_locations
         p = self.unit_locations[unit]

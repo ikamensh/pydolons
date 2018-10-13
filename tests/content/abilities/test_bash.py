@@ -7,7 +7,7 @@ from mechanics.events import DamageEvent
 
 
 
-def test_bash(game, hero, pirate):
+def test_bash(game_hvsp, hero, pirate):
 
     hero.add_ability( bash(1)() )
 
@@ -18,7 +18,7 @@ def test_bash(game, hero, pirate):
     assert delta_rdy < 0
 
 
-def test_pirate_no_bash(game, hero, pirate):
+def test_pirate_no_bash(game_hvsp, hero, pirate):
 
     hero.add_ability( bash(1)() )
 
@@ -29,7 +29,7 @@ def test_pirate_no_bash(game, hero, pirate):
     assert delta_rdy == 0
 
 
-def test_no_bash_magic(game, hero, pirate):
+def test_no_bash_magic(game_hvsp, hero, pirate):
 
     hero.add_ability( bash(1)() )
 

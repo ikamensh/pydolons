@@ -8,7 +8,7 @@ from contextlib import contextmanager
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls, conditions, cost,*, game, callbacks, tags=None, name = "Mysterious", simulate = None, icon = "fire.jpg"):
+    def __init__(self, targeting_cls, conditions, cost,*, game=None, callbacks, tags=None, name = "Mysterious", simulate = None, icon = "fire.jpg"):
         self.name = name
         self.game = game
         self.targeting_cls = targeting_cls

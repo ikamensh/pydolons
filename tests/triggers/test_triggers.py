@@ -2,7 +2,7 @@ from cntent.triggers.damage_to_attacker import damage_to_attackers
 from mechanics.combat import Attack
 from mechanics.damage import Damage, DamageTypes
 
-def test_damage_to_attackers(game, hero, pirate_band):
+def test_damage_to_attackers(game_hvsp, hero, pirate_band):
     trig = damage_to_attackers(hero, hero, Damage(15, DamageTypes.FIRE))
     for pirate in pirate_band:
         Attack.attack(pirate, hero)
@@ -17,7 +17,7 @@ def test_damage_to_attackers(game, hero, pirate_band):
     assert [pirate.health for pirate in pirate_band] == health_before
 
 
-def test_interrupting_damage_to_attackers(game, hero, pirate_band, no_chances):
+def test_interrupting_damage_to_attackers(game_hvsp, hero, pirate_band, no_chances):
     trig = damage_to_attackers(hero, hero, Damage(1500, DamageTypes.LIGHTNING), interrupt=True)
     for pirate in pirate_band:
         Attack.attack(pirate, hero)

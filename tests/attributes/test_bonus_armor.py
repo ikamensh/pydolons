@@ -32,7 +32,7 @@ def special_armor():
     yield _special_armor
 
 
-def test_right_type_works(game, hero, special_armor):
+def test_right_type_works(game_hvsp, hero, special_armor):
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.ACID)
     DamageEvent(dmg, hero)
@@ -48,7 +48,7 @@ def test_right_type_works(game, hero, special_armor):
     assert dealt_no_armor > dealt_armor
 
 
-def test_wrong_type_useless(game, hero, special_armor):
+def test_wrong_type_useless(game_hvsp, hero, special_armor):
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.FIRE)
     DamageEvent(dmg, hero)
@@ -63,7 +63,7 @@ def test_wrong_type_useless(game, hero, special_armor):
 
     assert dealt_no_armor == dealt_armor
 
-def test_armor_reduces_damage(game, hero, total_armor):
+def test_armor_reduces_damage(game_hvsp, hero, total_armor):
 
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.FIRE)
@@ -80,7 +80,7 @@ def test_armor_reduces_damage(game, hero, total_armor):
     assert dealt_no_armor > dealt_armor
 
 
-def test_ability_stacks(game, hero, total_armor):
+def test_ability_stacks(game_hvsp, hero, total_armor):
 
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.FIRE)
@@ -97,7 +97,7 @@ def test_ability_stacks(game, hero, total_armor):
     assert dealt_armor1 > dealt_armor2
 
 
-def test_negative_armor(game, hero, broken_armor):
+def test_negative_armor(game_hvsp, hero, broken_armor):
 
     hp_before_dmg = hero.health
     armor = Armor(30)

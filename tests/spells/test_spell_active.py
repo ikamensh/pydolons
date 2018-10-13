@@ -1,5 +1,5 @@
 
-def test_lightning_depends_on_mastery(game, pirate_band, hero, lightning_active):
+def test_lightning_depends_on_mastery(game_hvsp, pirate_band, hero, lightning_active):
 
     hero.int_base += -50
     pirate = pirate_band[0]
@@ -31,7 +31,7 @@ def test_lightning_depends_on_mastery(game, pirate_band, hero, lightning_active)
     assert pirate.health < hp_before
 
 
-def test_lightning_depends_on_int(hero, game, pirate_band, lightning_active):
+def test_lightning_depends_on_int(hero, game_hvsp, pirate_band, lightning_active):
 
     hero.int_base += -50
     pirate = pirate_band[0]

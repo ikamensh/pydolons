@@ -2,9 +2,9 @@ from battlefield.Vision import Vision
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 
-def test_visibility(game, hero):
+def test_visibility(game_hvsp, hero):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
     bf.unit_locations = {}
     bf.units_at = {}
     bf.place(hero, Cell(1,1), Facing.SOUTH)
@@ -25,9 +25,9 @@ def test_visibility(game, hero):
     assert cell not in cells_seen
 
 
-def test_borders(game, hero):
+def test_borders(game_hvsp, hero):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
     bf.unit_facings[hero] = Facing.SOUTH
 
     bf.move(hero, Cell(1, 1))
@@ -41,9 +41,9 @@ def test_borders(game, hero):
     assert len(cells_seen_after) < len(cells_seen_before)
     assert Cell(8,8) not in cells_seen_after
 
-def test_direction(game, hero):
+def test_direction(game_hvsp, hero):
 
-    bf = game.battlefield
+    bf = game_hvsp.battlefield
     bf.unit_facings[hero] = Facing.SOUTH
 
 

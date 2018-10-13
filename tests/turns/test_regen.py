@@ -1,8 +1,8 @@
 
 
-def test_regen(game, hero):
-    assert hero in game.turns_manager.managed
-    assert hero in game.battlefield.unit_locations.keys()
+def test_regen(game_hvsp, hero):
+    assert hero in game_hvsp.turns_manager.managed
+    assert hero in game_hvsp.battlefield.unit_locations.keys()
 
 
     hero.health -= 100
@@ -14,16 +14,16 @@ def test_regen(game, hero):
     stamina_before = hero.stamina
 
 
-    game.turns_manager.pass_time(3)
+    game_hvsp.turns_manager.pass_time(3)
 
     assert hero.health > health_before
     assert hero.mana > mana_before
     assert hero.stamina > stamina_before
 
 
-def test_bleeding(game, hero):
-    assert hero in game.turns_manager.managed
-    assert hero in game.battlefield.unit_locations.keys()
+def test_bleeding(game_hvsp, hero):
+    assert hero in game_hvsp.turns_manager.managed
+    assert hero in game_hvsp.battlefield.unit_locations.keys()
 
 
     hero.health -= 0.75 * hero.health
@@ -31,7 +31,7 @@ def test_bleeding(game, hero):
     health_before = hero.health
 
 
-    game.turns_manager.pass_time(3)
+    game_hvsp.turns_manager.pass_time(3)
 
     assert hero.health < health_before
 
