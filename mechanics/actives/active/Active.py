@@ -8,8 +8,9 @@ from contextlib import contextmanager
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls, conditions, cost, callbacks, tags=None, name = "Mysterious", simulate = None, icon = "fire.jpg"):
+    def __init__(self, targeting_cls, conditions, cost,*, game, callbacks, tags=None, name = "Mysterious", simulate = None, icon = "fire.jpg"):
         self.name = name
+        self.game = game
         self.targeting_cls = targeting_cls
         self.conditions = conditions
         self._cost = cost
@@ -37,10 +38,10 @@ class Active:
 
         if self.owner_can_afford_activation() and self.check_target(targeting):
             cpy = copy.copy(self)
-            cpy._cost = copy.copy(cpy._cost)
-            cpy.spell = copy.copy(cpy.spell)
+            cpy._cost = copy.deepcopy(cpy._cost)
+            cpy.spell = copy.deepcopy(cpy.spell)
             self.owner.pay(self.cost)
-            ActiveEvent(cpy, targeting)
+            ActiveEvent(self.game, cpy, targeting)
 
     def owner_can_afford_activation(self):
         if self.spell:
@@ -53,9 +54,12 @@ class Active:
             callback(self, targeting)
 
     @staticmethod
-    def from_spell(spell):
+    def from_spell(spell, game):
         new_active = Active(spell.targeting_cls, [spell.targeting_cond],
-                            spell.cost, [spell.resolve_callback], [ActiveTags.MAGIC])
+                            spell.cost,
+                            game=game,
+                            callbacks=[spell.resolve_callback],
+                            tags=[ActiveTags.MAGIC])
         new_active.spell = spell
 
         return new_active

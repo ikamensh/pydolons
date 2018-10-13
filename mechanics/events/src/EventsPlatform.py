@@ -1,9 +1,9 @@
-from GameLog import gamelog
 from mechanics.events import ActiveEvent, EventsChannels, NextUnitEvent
 
 class EventsPlatform:
 
-    def __init__(self):
+    def __init__(self, gamelog):
+        self.gamelog = gamelog
         self.interrupts = { ch: set() for ch in EventsChannels }
         self.triggers = { ch: set() for ch in EventsChannels }
 
@@ -17,9 +17,9 @@ class EventsPlatform:
 
         if not event.interrupted and event.check_conditions():
             if not isinstance(event, ActiveEvent) and not isinstance(event, NextUnitEvent):
-                gamelog(event)
+                self.gamelog(event)
             event.resolve()
             for trigger in list(triggers):
                 trigger.try_on_event(event)
         else:
-            gamelog(repr(channel)+": INTERRUPTED")
+            self.gamelog(repr(channel)+": INTERRUPTED")

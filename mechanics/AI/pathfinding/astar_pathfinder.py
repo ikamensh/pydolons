@@ -1,8 +1,6 @@
 from collections import namedtuple
-import my_context
 from battlefield import Battlefield
 from mechanics.actives import ActiveTags
-from mechanics.actives import Cost
 
 
 Node = namedtuple("PathNode", "pos facing")
@@ -59,18 +57,18 @@ class StarSearch(AStar):
         return list(path)
 
     @staticmethod
-    def build_transitions(unit):
-        real_bf = my_context.the_game.battlefield
+    def build_transitions(unit, game):
+        real_bf = game.battlefield
 
         bf = Battlefield(12, 12)
-        my_context.the_game.battlefield = bf
+        game.battlefield = bf
         location = 5 + 5j
         bf.place(unit, location)
 
-        choices = my_context.the_game.get_all_choices(unit)
+        choices = game.get_all_choices(unit)
         move_choices = [c for c in choices if ActiveTags.MOVEMENT in c[0].tags]
 
-        my_context.the_game.battlefield = real_bf
+        game.battlefield = real_bf
 
         transitions = []
         for c in move_choices:

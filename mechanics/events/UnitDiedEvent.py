@@ -1,20 +1,20 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
-import my_context
 
 class UnitDiedEvent(Event):
     channel = EventsChannels.UnitDiedChannel
 
-    def __init__(self, unit):
+    def __init__(self, game, unit):
+        assert unit.game is game
         self.unit = unit
         self.killer = unit.last_damaged_by
-        super().__init__()
+        super().__init__(game)
 
     def check_conditions(self):
         return self.unit.alive
 
     def resolve(self):
-        my_context.the_game.unit_died(self.unit)
+        self.game.unit_died(self.unit)
 
     def __repr__(self):
         if self.killer:

@@ -1,7 +1,6 @@
 from mechanics.events.src.Trigger import Trigger
 from mechanics.events import UnitDiedEvent
 from mechanics.fractions import Fractions
-import my_context
 
 
 def compute_exp_gain(hero, monster):
@@ -15,15 +14,16 @@ def condition(t,e):
         return False
 
     return \
-        my_context.the_game.fractions[e.unit] is Fractions.ENEMY and \
-        my_context.the_game.fractions[e.killer] is Fractions.PLAYER
+        e.game.fractions[e.unit] is Fractions.ENEMY and \
+        e.game.fractions[e.killer] is Fractions.PLAYER
 
 def grant_xp_callback(t, e):
     e.killer.xp += compute_exp_gain(e.killer, e.unit)
 
 
-def exp_rule():
+def exp_rule(game):
     return Trigger(UnitDiedEvent,
+                   platform=game.events_platform,
                    conditions={condition},
                    callbacks=[grant_xp_callback])
 

@@ -100,7 +100,6 @@ def simple_battlefield():
 def empty_game(simple_battlefield):
 
     _game = DreamGame(simple_battlefield)
-    _game.set_to_context()
 
     return _game
 
@@ -111,7 +110,6 @@ def game(battlefield, hero):
     _game.fractions[hero] = Fractions.PLAYER
     for unit in battlefield.unit_locations:
         _game.turns_manager.add_unit(unit)
-    _game.set_to_context()
     return _game
 
 

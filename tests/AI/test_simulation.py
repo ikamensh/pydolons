@@ -5,17 +5,17 @@ from cntent.triggers.immortality import immortality
 def test_simulation_units_dont_rly_die(minigame):
     real_unit_count_before = len(minigame.battlefield.unit_locations)
 
-    with minigame.simulation() as sim:
-        assert sim is not minigame
+    sim = minigame.simulation()
+    assert sim is not minigame
 
-        sim_unit_count_before = len( sim.battlefield.unit_locations )
-        units = list(sim.battlefield.unit_locations.keys())
+    sim_unit_count_before = len( sim.battlefield.unit_locations )
+    units = list(sim.battlefield.unit_locations.keys())
 
-        units[0].health -= 99999
+    units[0].health -= 99999
 
-        sim_unit_count_after = len( sim.battlefield.unit_locations )
-        assert not units[0].alive
-        assert sim_unit_count_after < sim_unit_count_before
+    sim_unit_count_after = len( sim.battlefield.unit_locations )
+    assert not units[0].alive
+    assert sim_unit_count_after < sim_unit_count_before
 
     real_unit_count_after = len(minigame.battlefield.unit_locations)
     assert real_unit_count_after == real_unit_count_before
@@ -25,15 +25,15 @@ def test_simulation_units_dont_rly_move(minigame):
     real_unit = list(minigame.battlefield.unit_locations.keys())[0]
     real_location_before = minigame.battlefield.unit_locations[real_unit]
 
-    with minigame.simulation() as sim:
-        assert sim is not minigame
+    sim = minigame.simulation()
+    assert sim is not minigame
 
-        sim_unit = list(sim.battlefield.unit_locations.keys())[0]
-        sim_location_before = sim.battlefield.unit_locations[sim_unit]
+    sim_unit = list(sim.battlefield.unit_locations.keys())[0]
+    sim_location_before = sim.battlefield.unit_locations[sim_unit]
 
-        sim.battlefield.move(sim_unit, 0j)
+    sim.battlefield.move(sim_unit, 0j)
 
-        assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
+    assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
 
 
 
@@ -45,15 +45,15 @@ def test_events_work(minigame):
     real_unit = list(minigame.battlefield.unit_locations.keys())[0]
     real_location_before = minigame.battlefield.unit_locations[real_unit]
 
-    with minigame.simulation() as sim:
-        assert sim is not minigame
+    sim = minigame.simulation()
+    assert sim is not minigame
 
-        sim_unit = list(sim.battlefield.unit_locations.keys())[0]
-        sim_location_before = sim.battlefield.unit_locations[sim_unit]
+    sim_unit = list(sim.battlefield.unit_locations.keys())[0]
+    sim_location_before = sim.battlefield.unit_locations[sim_unit]
 
-        MovementEvent(sim_unit, 0j)
+    MovementEvent(sim, sim_unit, 0j)
 
-        assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
+    assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
 
     real_location_after = minigame.battlefield.unit_locations[real_unit]
 
@@ -61,14 +61,11 @@ def test_events_work(minigame):
 
 
 def test_triggers_only_in_sim(minigame, hero):
-
-
-    with minigame.simulation() as sim:
-
-        sim_hero = sim.find_unit(hero)
-        trig = immortality(sim_hero)
-        sim_hero.health -= 99999
-        assert sim_hero.alive
+    sim = minigame.simulation()
+    sim_hero = sim.find_unit(hero)
+    trig = immortality(sim_hero)
+    sim_hero.health -= 99999
+    assert sim_hero.alive
 
     assert hero.alive
     hero.health -= 99999
@@ -81,19 +78,18 @@ def test_triggers_present_in_sim(minigame, hero):
     hero.health -= 99999
     assert hero.alive
 
-    with minigame.simulation() as sim:
 
-        sim_hero = sim.find_unit(hero)
-        sim_hero.health -= 99999
-        assert sim_hero.alive
+    sim = minigame.simulation()
+    sim_hero = sim.find_unit(hero)
+    sim_hero.health -= 99999
+    assert sim_hero.alive
 
 def test_sim_persists(minigame):
-
-    with minigame.simulation() as sim:
-        assert sim is not minigame
-        pirate = list(sim.battlefield.unit_locations.keys())[0]
-        pirate.health -= 99999
-        assert not pirate.alive
+    sim = minigame.simulation()
+    assert sim is not minigame
+    pirate = list(sim.battlefield.unit_locations.keys())[0]
+    pirate.health -= 99999
+    assert not pirate.alive
 
     assert sim is not minigame
     assert not pirate.alive
@@ -104,12 +100,12 @@ def test_hp_transfered(minigame, hero):
     hero.health -= 200
     hero.mana -= 100
     hero.stamina -= 11
-    with minigame.simulation() as sim:
-        sim_hero = sim.find_unit(hero)
+    sim = minigame.simulation()
+    sim_hero = sim.find_unit(hero)
 
-        assert hero.health == sim_hero.health
-        assert hero.mana == sim_hero.mana
-        assert hero.stamina == sim_hero.stamina
+    assert hero.health == sim_hero.health
+    assert hero.mana == sim_hero.mana
+    assert hero.stamina == sim_hero.stamina
 
 
 

@@ -7,7 +7,7 @@ from ui.sounds import sound_maps
 
 class Obstacle(BattlefieldObject):
 
-    last_uid = 0
+
     sound_map = sound_maps.std_sound_map #TODO specific obstacle sound maps
 
     health = DynamicParameter("max_health", [ObstacleDestroyedEvent])

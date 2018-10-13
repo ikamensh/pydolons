@@ -4,11 +4,11 @@ from mechanics.events.src.Event import Event
 class HealingEvent(Event):
     channel = EventsChannels.HealingChannel
 
-    def __init__(self, healing_amount, target, *, source=None):
+    def __init__(self, game, healing_amount, target, *, source=None):
         self.source = source
         self.target = target
         self.healing_amount = healing_amount
-        super().__init__()
+        super().__init__(game)
 
     def check_conditions(self):
         return self.target.alive and self.healing_amount > 0

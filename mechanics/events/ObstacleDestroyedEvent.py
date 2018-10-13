@@ -1,21 +1,20 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
-import my_context
 
 class ObstacleDestroyedEvent(Event):
     channel = EventsChannels.ObstacleDestroyedChannel
 
-    def __init__(self, unit):
+    def __init__(self, game, unit):
         self.unit = unit
         self.killer = unit.last_damaged_by
-        super().__init__()
+        super().__init__(game)
 
     def check_conditions(self):
         return self.unit.alive
 
     def resolve(self):
         self.unit.alive = False
-        my_context.the_game.obstacle_destroyed(self.unit)
+        self.game.obstacle_destroyed(self.unit)
 
     def __repr__(self):
         if self.killer:

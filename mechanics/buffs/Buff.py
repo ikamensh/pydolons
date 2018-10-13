@@ -1,7 +1,6 @@
 from mechanics.buffs.Ability import Ability
 from game_objects.attributes import DynamicParameter
 from mechanics.events import BuffExpiredEvent
-import my_context
 
 class Buff(Ability):
     duration = DynamicParameter("max_duration", [BuffExpiredEvent])

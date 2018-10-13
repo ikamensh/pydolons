@@ -7,33 +7,36 @@ from mechanics.events import EventsPlatform, NextUnitEvent
 from ui.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 from mechanics.rpg.regen import regen_rule
-import copy
-import my_context
-import time
 from exceptions import PydolonsException, CantAffordActiveException
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ClientOrderIssuedEvent import ClientOrderIssuedEvent
+from GameLog import GameLog, LogTargets
+
+import copy
+import time
 import typing
+import random
 
 
 class DreamGame:
 
-    def __init__(self, bf, rules=None, is_sim = False, is_server=True):
-        self.battlefield :Battlefield = bf
+    def __init__(self, bf, rules=None, is_sim = False, is_server=True, seed = None):
+        self.random = random.Random(seed) if seed else random.Random()
+        self.battlefield : Battlefield = bf
         self.the_hero : bf_objs.Unit= None
         self.fractions : typing.Dict[bf_objs.Unit : Fractions] = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
-        self.turns_manager = AtbTurnsManager()
-        self.events_platform = EventsPlatform()
+        self.gamelog = GameLog(LogTargets.PRINT)
+        self.events_platform = EventsPlatform(self.gamelog)
+        self.turns_manager = AtbTurnsManager(self)
         self.is_sim = is_sim
-        self.set_to_context()
         self.loop_state = True
         self.player_turn_lock = False
         self.is_server = is_server
 
         for rule in (rules or [exp_rule, regen_rule]):
-            rule()
+            rule(self)
 
     @classmethod
     def start_dungeon(cls, dungeon, hero: bf_objs.Unit, is_server=True):
@@ -60,6 +63,8 @@ class DreamGame:
 
 
     def add_unit(self, unit: bf_objs.Unit, cell,  fraction, facing = None):
+        assert unit.game is None
+        unit.game = self
         self.fractions[unit] = fraction
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
@@ -96,7 +101,7 @@ class DreamGame:
                     time.sleep(0.02)
                 continue
             else:
-                NextUnitEvent(active_unit)
+                NextUnitEvent(self, active_unit)
                 try:
                     active, target = self.enemy_ai.decide_step(active_unit)
                 except:
@@ -153,8 +158,8 @@ class DreamGame:
         active = self.the_hero.turn_ccw_active if ccw else self.the_hero.turn_cw_active
         self.order_action(self.the_hero, active, None)
 
-
-    def _complain_missing(self, unit, actives, action):
+    @staticmethod
+    def _complain_missing(unit, actives, action):
         if unit.stamina < min([a.cost.stamina for a in actives]):
             missing = "stamina"
         elif unit.mana < min([a.cost.mana for a in actives]):
@@ -291,16 +296,12 @@ class DreamGame:
         return _
 
 
-    def set_to_context(self):
-        my_context.the_game = self
-
 
     @property
     def units(self):
         return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
 
     def get_location(self, unit: bf_objs.Unit):
-        assert unit in my_context.the_game.battlefield.unit_locations
         return self.battlefield.unit_locations[unit]
 
 

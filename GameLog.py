@@ -25,12 +25,8 @@ class GameLog:
         elif self.target == LogTargets.FILE:
             raise NotImplemented
 
-    @contextmanager
-    def muted(self):
-        old_value = self.target
+    def mute(self):
         self.target = LogTargets.SILENT
-        yield
-        self.target = old_value
 
-gamelog = GameLog(LogTargets.PRINT)
+# gamelog = GameLog(LogTargets.PRINT)
 # gamelog = GameLog(LogTargets.SILENT)

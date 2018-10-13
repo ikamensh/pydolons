@@ -19,7 +19,7 @@ class TheUI(QtWidgets.QWidget):
     def __init__(self, game):
         super().__init__()
         print('cfg ===> start init TheUI', datetime.now())
-        self.the_game = game
+        self.game = game
         self.gameTimer = QtCore.QTimer()
         self.gameTimer.timeout.connect(self.timerSlot)
         self.gameTimer.startTimer(int(1000 / 50))
@@ -28,6 +28,7 @@ class TheUI(QtWidgets.QWidget):
         self.setCursor(cursor)
 
         self.gameRoot: GameRootNode = GameRootNode()
+        self.gameRoot.game = self.game
 
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
@@ -44,12 +45,12 @@ class TheUI(QtWidgets.QWidget):
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtGui.QBrush(self.gameconfig.getPicFile('dungeon.jpg')))
 
-        self.controller = GameController(self.the_game)
+        self.controller = GameController(self.game)
         self.gameRoot.setGameController(self.controller)
 
         self.level = Level_demo_dungeon(self.gameconfig)
         self.gameRoot.setLevel(self.level)
-        self.level.setUpLevel(self.the_game, self.controller)
+        self.level.setUpLevel(self.game, self.controller)
 
         self.scene.addItem(self.level.world)
         self.scene.addItem(self.level.units)
@@ -59,8 +60,8 @@ class TheUI(QtWidgets.QWidget):
         self.gamePages = GamePages()
         self.gameRoot.setGamePages(self.gamePages)
         self.gamePages.setUpPages()
-        self.gamePages.setHeroUnit(self.the_game.the_hero)
-        self.gamePages.setCharacter(self.the_game.character)
+        self.gamePages.setHeroUnit(self.game.the_hero)
+        self.gamePages.setCharacter(self.game.character)
         self.view.resized.connect(self.gamePages.updateGui)
 
         self.view.controller = self.controller

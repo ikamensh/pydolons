@@ -5,7 +5,6 @@ from battlefield import Cell
 from game_objects.battlefield_objects import Unit
 
 
-import my_context
 
 def attack_callback(active  :Active, target :Unit):
     Attack.attack(source=active.owner, target=target)

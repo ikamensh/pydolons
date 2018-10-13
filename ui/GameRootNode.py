@@ -9,6 +9,7 @@ class GameRootNode(object):
         self.level = None
         self.levels = None
         self.gamePages = None
+        self.game = None
 
 
     def setView(self, view):

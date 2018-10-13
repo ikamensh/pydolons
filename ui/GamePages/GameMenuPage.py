@@ -1,19 +1,18 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from ui.gamecore.GameObject import GameObject
-from GameLog import gamelog
 
-import my_context
 
 class GuiConsole(QtWidgets.QPlainTextEdit):
-    def __init__(self, *args):
+    def __init__(self,gamelog, *args):
         super(GuiConsole, self).__init__(*args)
         self.last_msg = None
+        self.gamelog = gamelog
         self.setStyleSheet('color: green;')
 
     def timerEvent(self, e):
-        if self.last_msg != gamelog.msg:
-            self.last_msg = gamelog.msg
+        if self.last_msg != self.gamelog.msg:
+            self.last_msg = self.gamelog.msg
             self.appendPlainText(str(self.last_msg))
 
 class NotifyText(QtWidgets.QGraphicsTextItem):
@@ -92,7 +91,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
             i+=1
 
     def setUpConsole(self):
-        self.gui_console = GuiConsole()
+        self.gui_console = GuiConsole(self.gameRoot.game.gamelog)
         self.gui_console.startTimer(50)
         self.gui_console.setTabChangesFocus(False)
         self.gui_console.move(self.console_pos[0], self.console_pos[1])
@@ -107,7 +106,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
 
     def updateUnitStack(self):
-        units_stack = my_context.the_game.turns_manager.managed_units
+        units_stack = self.gameRoot.game.turns_manager.managed_units
         w = len(units_stack)
         self.unitStack.rect().setWidth(w * 64)
         i = 0

@@ -1,8 +1,7 @@
 import inspect
-import my_context
 
 class Trigger:
-    def __init__(self, target_event_cls, conditions = None,
+    def __init__(self, target_event_cls,*, platform, conditions = None,
                  source = None,
                  is_interrupt = False,
                  callbacks=None):
@@ -13,7 +12,7 @@ class Trigger:
         self.source = source
         self.is_interrupt = is_interrupt
         self.callbacks = callbacks
-        self.platform = my_context.the_game.events_platform
+        self.platform = platform
         self.activate()
 
     def activate(self):

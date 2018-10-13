@@ -4,7 +4,7 @@ from mechanics.events import EventsChannels
 class NextUnitEvent(Event):
     channel = EventsChannels.NextUnitChannel
 
-    def __init__(self, unit):
+    def __init__(self, game, unit):
         self.unit = unit
         super().__init__()
 

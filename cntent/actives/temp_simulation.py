@@ -4,17 +4,16 @@ from battlefield import Cell
 from game_objects.battlefield_objects import BattlefieldObject
 from contextlib import contextmanager
 import mechanics.AI.SimUtils as SimUtils
-import my_context
 
 @contextmanager
 def sim_move_on_target_cell(active: Active, target: Cell):
     unit = active.owner
-    location_before = my_context.the_game.battlefield.unit_locations[unit]
-    my_context.the_game.battlefield.move(unit, target)
+    location_before = active.game.battlefield.unit_locations[unit]
+    active.game.battlefield.move(unit, target)
     with SimUtils.virtual(unit):
         unit.pay(active.cost)
         yield
-    my_context.the_game.battlefield.move(unit, location_before)
+    active.game.battlefield.move(unit, location_before)
 
 
 @contextmanager
@@ -29,7 +28,7 @@ def sim_attack(active: Active, target: BattlefieldObject):
                 target.lose_health(expected_dmg)
                 yield
         else:
-            with SimUtils.simulate_death(my_context.the_game, target):
+            with SimUtils.simulate_death(active.game, target):
                 yield
 
 
@@ -43,12 +42,12 @@ def sim_turn(ccw):
     def _(active: Active, _):
 
         unit = active.owner
-        facing_before = my_context.the_game.battlefield.unit_facings[unit]
-        my_context.the_game.battlefield.unit_facings[unit] *= turn
+        facing_before = active.game.battlefield.unit_facings[unit]
+        active.game.battlefield.unit_facings[unit] *= turn
         with SimUtils.virtual(unit):
             unit.pay(active.cost)
             yield
-        my_context.the_game.battlefield.unit_facings[unit] = facing_before
+        active.game.battlefield.unit_facings[unit] = facing_before
 
     return _
 
