@@ -5,7 +5,8 @@ from mechanics.chances.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
 
 class AttackEvent(Event):
     channel = EventsChannels.AttackChannel
-    def __init__(self, game, source, target, weapon=None, fire=True):
+    def __init__(self, source, target, weapon=None, fire=True):
+        game = self.source.game
         self.source = source
         self.target = target
         self.weapon = weapon or source.get_melee_weapon()
@@ -22,7 +23,7 @@ class AttackEvent(Event):
 
         impact = ImpactCalculator.roll_impact(self.weapon.chances, precision, evasion, random=self.game.random)
         if impact is not ImpactFactor.MISS:
-            dmg_event = DamageEvent(self.game, self.weapon.damage, self.target, source=self.source, impact_factor = impact)
+            dmg_event = DamageEvent( self.weapon.damage, self.target, source=self.source, impact_factor = impact)
 
             if self.weapon and self.weapon.durability:
                 self.weapon.durability -= dmg_event.weapon_dur_dmg

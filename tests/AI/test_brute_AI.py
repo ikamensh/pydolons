@@ -163,10 +163,11 @@ import copy
 
 
 @pytest.fixture()
-def just_hero_game(simple_battlefield, pirate,  hero):
+def just_hero_game(simple_battlefield, hero):
 
     _game = SimGame(simple_battlefield)
     _game.add_unit(hero, (3+3j), Fractions.PLAYER)
+    _game.the_hero = hero
 
 
     return _game

@@ -7,7 +7,7 @@ from game_objects import battlefield_objects as bf_objs
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
 
-    def __init__(self, game, damage, target, *, source=None, impact_factor=ImpactFactor.HIT,fire=True):
+    def __init__(self, damage, target, *, source=None, impact_factor=ImpactFactor.HIT,fire=True):
         self.source: bf_objs.Unit = source
         self.target: bf_objs.Unit = target
         self.damage: Damage = damage
@@ -18,7 +18,7 @@ class DamageEvent(Event):
         _, _, self.weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target,
                                                                        self.impact_factor)
 
-        super().__init__(game, fire)
+        super().__init__(target.game, fire)
 
 
     @property
