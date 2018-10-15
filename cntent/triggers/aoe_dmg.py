@@ -3,8 +3,6 @@ from mechanics.events import DamageEvent
 from mechanics.damage import ImpactFactor
 
 
-
-
 def aoe_damage_callback(t,e:DamageEvent):
 
     bf = e.game.battlefield
@@ -17,10 +15,10 @@ def aoe_damage_callback(t,e:DamageEvent):
         new_e.fire()
 
 
-def aoe_damage(game, unit, radius, percentage):
+def aoe_damage(unit, radius, percentage):
     assert radius >= 0
     trig = Trigger(DamageEvent,
-                   platform=game.platform,
+                   platform=unit.game.platform,
                     conditions=[lambda t,e : e.impact_factor is ImpactFactor.CRIT and
                                              e.source.uid == unit.uid and
                                              not hasattr(e, "secondary")],
