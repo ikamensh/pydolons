@@ -184,7 +184,12 @@ class Unit(BattlefieldObject):
 
     @property
     def tooltip_info(self):
-        return {"uid":str(self.uid)}
+        return {'uid':str(self.uid), \
+                'hp':str(int(self.health)),\
+                'mana':str(self.mana),\
+                'stamina':str(int(self.stamina)),\
+                'attack':str(self.melee_precision),\
+                'defence':str(self.melee_evasion)}
 
 
     def give_active(self, active):
