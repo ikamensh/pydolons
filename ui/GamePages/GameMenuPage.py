@@ -1,46 +1,10 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from ui.gamecore.GameObject import GameObject
-from GameLog import gamelog
+from ui.GamePages.suwidgets.GuiConsole import GuiConsole
 
 import my_context
 
-class GuiConsole(QtWidgets.QPlainTextEdit):
-    def __init__(self, *args):
-        super(GuiConsole, self).__init__(*args)
-        self.last_msg = None
-        self.setStyleSheet('color: green;')
-
-    def timerEvent(self, e):
-        if self.last_msg != gamelog.msg:
-            self.last_msg = gamelog.msg
-            self.appendPlainText(str(self.last_msg))
-
-class NotifyText(QtWidgets.QGraphicsTextItem):
-    def __init__(self):
-        super(NotifyText, self).__init__()
-        self.w = 320
-        self.h = 240
-        # self.setOpacity(1.0)
-        self.setFont(QtGui.QFont("Times", 48, 10, False))
-        self.setDefaultTextColor(QtCore.Qt.blue)
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.timerSlot)
-        # Связать с gameconfig
-        self.setPos(300, 300)
-        self.setVisible(False)
-
-    def setText(self, value):
-        self.setOpacity(1.0)
-        self.setPlainText(str(value))
-        self.setVisible(True)
-        self.timer.start(500)
-
-    def timerSlot(self):
-        self.setOpacity(self.opacity() - 0.1)
-        if self.opacity() < 0.3:
-            self.setVisible(False)
-            self.timer.stop()
 
 class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     """docstring for ScreenMenu."""
@@ -48,7 +12,6 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         super(ScreenMenu, self).__init__(*arg)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gui_console = None
-        self.setUpNotify()
         self.gameRoot = None
 
     def setGameRoot(self, gameRoot):
@@ -56,18 +19,16 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.gameconfig = self.gameRoot.cfg
         self.setUpDefaultPosition()
 
-
-    def setUpNotify(self):
-        self.notify = NotifyText()
-        self.addToGroup(self.notify)
-
     def showNotify(self, text):
-        self.notify.setText(text)
+        self.notify.showText(text)
 
     def setUpDefaultPosition(self):
         self.console_pos = self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240
 
     def setUpGui(self):
+        self.notify = self.gameRoot.suwidgetFactory.getNotifyText(self.gameRoot)
+        self.addToGroup(self.notify)
+
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
         self.unitStack.setPos(0, 0)
@@ -124,13 +85,3 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
     def updateGui(self):
         self.gui_console.move(self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240)
-
-
-class MyCursor(QtWidgets.QGraphicsPixmapItem):
-    def __init__(self, *arg):
-        super(MyCursor, self).__init__()
-
-
-    def moveCursor(self, newPos):
-        self.setX(newPos.x())
-        self.setY(newPos.y())
