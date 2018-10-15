@@ -72,35 +72,19 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.unit_hptxts[unit.uid].setText(amount)
 
     def createToolTip(self):
-        self.tooltip = QtWidgets.QGraphicsRectItem()
-        self.tooltip.setBrush(QtGui.QBrush(QtCore.Qt.black))
-        self.tooltip.setRect(self.w / 2, - self.h / 2, self.w - 32 , self.h - 32)
-        self.tooltip.setOpacity(0.7)
-        self.toolText = QtWidgets.QGraphicsTextItem()
-        self.toolText.setDefaultTextColor(QtCore.Qt.white)
-        self.toolText.setFont(QtGui.QFont("Times", 12, 10, False))
-        self.toolText.setParentItem(self.tooltip)
-        self.toolText.setPos(self.w / 2, -self.h / 2)
-        self.tooltip.setVisible(False)
-        self.addToGroup(self.tooltip)
+        self.tool = self.level.gameRoot.suwidgetFactory.getToolTip(self.w, self.h)
+        self.addToGroup(self.tool)
 
     def showToolTip(self, cell, units_at, units_bf):
         if cell in [unit.worldPos for unit in units_at.values()]:
             if cell in units_bf.keys():
                 unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
-                self.tooltip.setPos(unit.pos())
-                txt = 'uid = ' + str(unit.uid)
-                txt += '\nhp = ' + str(units_bf[cell].health)
-                txt += '\nmana = ' + str(units_bf[cell].mana)
-                txt += '\nstamina = ' + str(units_bf[cell].stamina)
-
-                txt += '\nattack = ' + str(units_bf[cell].melee_precision)
-                txt += '\ndefence = ' + str(units_bf[cell].melee_evasion)
-
-                self.toolText.setPlainText(txt)
-                self.tooltip.setVisible(True)
+                self.tool.setPos(unit.pos())
+                self.tool.setDict(units_bf[cell].tooltip_info)
+                self.tool.setVisible(True)
         else:
-            self.tooltip.setVisible(False)
+            self.tool.setVisible(False)
+
 
     def removeUnitLayer(self, uid):
         self.removeFromGroup(self.unit_hps[uid])
