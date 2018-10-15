@@ -6,6 +6,8 @@ from ui.GameRootNode import GameRootNode
 
 from ui.GameAnimation import Animations
 from ui.GamePages import GamePages
+from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
+
 from ui.GameController import GameController
 from ui.levels import Level_demo_dungeon
 
@@ -35,6 +37,8 @@ class TheUI(QtWidgets.QWidget):
 
         self.view = GameView(self)
         self.gameRoot.setView(self.view)
+        self.gameRoot.suwidgetFactory = SuWidgetFactory
+
         self.gameconfig = self.view.gameconfig
         self.gameconfig.animations = Animations()
         self.gameRoot.setGameConfig(self.view.gameconfig)
