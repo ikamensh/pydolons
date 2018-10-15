@@ -9,7 +9,6 @@ from game_objects.battlefield_objects import Unit
 def test_attack_cell(pirate_basetype, no_chances):
     bf = Battlefield(3,3)
     game = DreamGame(bf)
-    game.set_to_context()
 
     unit1 = Unit(pirate_basetype)
     unit2 = Unit(pirate_basetype)
@@ -30,7 +29,6 @@ def test_attack_cell(pirate_basetype, no_chances):
 def test_attack_unit(pirate_basetype, no_chances):
     bf = Battlefield(3,3)
     game = DreamGame(bf)
-    game.set_to_context()
     # monkeypatch.setattr(game, 'unit_died', lambda x: None)
     unit1 = Unit(pirate_basetype)
     unit2 = Unit(pirate_basetype)

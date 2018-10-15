@@ -6,7 +6,7 @@ class ItemDestroyedEvent(Event):
 
     def __init__(self, item):
         self.item = item
-        super().__init__()
+        super().__init__(item.game)
 
     def check_conditions(self):
         return True

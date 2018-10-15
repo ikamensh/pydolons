@@ -1,7 +1,6 @@
 import random
-import my_context
 
-#TODO consider using the context game.
+
 class RandomAI:
     def __init__(self, game):
         self.game = game

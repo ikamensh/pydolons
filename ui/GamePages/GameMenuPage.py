@@ -3,8 +3,32 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from ui.gamecore.GameObject import GameObject
 from ui.GamePages.suwidgets.GuiConsole import GuiConsole
 
-import my_context
 
+class NotifyText(QtWidgets.QGraphicsTextItem):
+    def __init__(self):
+        super(NotifyText, self).__init__()
+        self.w = 320
+        self.h = 240
+        # self.setOpacity(1.0)
+        self.setFont(QtGui.QFont("Times", 48, 10, False))
+        self.setDefaultTextColor(QtCore.Qt.blue)
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.timerSlot)
+        # Связать с gameconfig
+        self.setPos(300, 300)
+        self.setVisible(False)
+
+    def setText(self, value):
+        self.setOpacity(1.0)
+        self.setPlainText(str(value))
+        self.setVisible(True)
+        self.timer.start(500)
+
+    def timerSlot(self):
+        self.setOpacity(self.opacity() - 0.1)
+        if self.opacity() < 0.3:
+            self.setVisible(False)
+            self.timer.stop()
 
 class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     """docstring for ScreenMenu."""
@@ -53,7 +77,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
             i+=1
 
     def setUpConsole(self):
-        self.gui_console = GuiConsole()
+        self.gui_console = GuiConsole(self.gameRoot.game.gamelog)
         self.gui_console.startTimer(50)
         self.gui_console.setTabChangesFocus(False)
         self.gui_console.move(self.console_pos[0], self.console_pos[1])
@@ -68,7 +92,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
 
     def updateUnitStack(self):
-        units_stack = my_context.the_game.turns_manager.managed_units
+        units_stack = self.gameRoot.game.turns_manager.managed_units
         w = len(units_stack)
         self.unitStack.rect().setWidth(w * 64)
         i = 0

@@ -13,10 +13,10 @@ zombie_fat = Monster(zombie_fat)
 
 
 
-def test_fat():
+def test_fat(empty_game):
 
-    z_norm = zombie_norm.create()
-    z_fat = zombie_fat.create()
+    z_norm = zombie_norm.create(empty_game)
+    z_fat = zombie_fat.create(empty_game)
 
     assert z_norm.health < z_fat.health
     assert z_norm.initiative > z_fat.initiative

@@ -6,7 +6,7 @@ class NextUnitEvent(Event):
 
     def __init__(self, unit):
         self.unit = unit
-        super().__init__()
+        super().__init__(unit.game)
 
     def check_conditions(self):
         return True

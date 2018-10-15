@@ -8,7 +8,6 @@ from game_objects import battlefield_objects as bf_objs
 
 from ui.levels.BaseLevel import BaseLevel
 
-import my_context
 
 
 class Level_demo_dungeon(BaseLevel):

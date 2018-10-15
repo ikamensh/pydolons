@@ -1,7 +1,6 @@
 import time
 from threading import Thread
 
-import my_context
 from battlefield import Cell
 from character_creation.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
@@ -11,11 +10,11 @@ from mechanics.events import Trigger
 from mechanics.fractions import Fractions
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
-from multiplayer.network.ServerSocket import MyServer
+from multiplayer.network.ServerSocket import PydolonsServer
 
 
 def order_recieved_cb(t, e: ServerOrderRecievedEvent):
-    g: DreamGame = my_context.the_game
+    g: DreamGame = e.game
     next_unit = g.turns_manager.get_next()
     fraction = g.fractions[next_unit]
     if e.fraction == fraction:
@@ -31,8 +30,9 @@ def order_recieved_cb(t, e: ServerOrderRecievedEvent):
         print(f"Order {e} was ignored. Active fraction is {fraction}")
 
 
-def order_recieved_trigger():
+def order_recieved_trigger(game):
     return Trigger(ServerOrderRecievedEvent,
+                   platform=game.events_platform,
                    conditions={},
                    callbacks=[order_recieved_cb])
 
@@ -41,9 +41,10 @@ def order_issued_cb(t, e):
     t.server.update_all(e)
 
 
-def order_issued_trigger(server):
+def order_issued_trigger(game, server):
     t = Trigger(ServerOrderIssuedEvent,
-                   conditions={},
+                platform=game.events_platform,
+                conditions={},
                    callbacks=[order_issued_cb])
     t.server = server
     return t
@@ -55,10 +56,10 @@ class GameServer:
         character  = Character(demohero_basetype)
         self.game = DreamGame.start_dungeon(demo_dungeon, character.unit)
         self.game.character = character
-        self.server = MyServer(set(self.game.fractions.values()) - {Fractions.ENEMY, Fractions.NEUTRALS})
+        self.server = PydolonsServer(set(self.game.fractions.values()) - {Fractions.ENEMY, Fractions.NEUTRALS})
 
-        order_issued_trigger(self.server)
-        order_recieved_trigger()
+        order_issued_trigger(self.game, self.server)
+        order_recieved_trigger(self.game)
 
     def listen(self):
         th = Thread(target=self.server.listen)

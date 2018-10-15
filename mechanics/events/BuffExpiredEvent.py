@@ -7,7 +7,7 @@ class BuffExpiredEvent(Event):
 
     def __init__(self, buff):
         self.buff = buff
-        super().__init__()
+        super().__init__(buff.bound_to.game)
 
     def check_conditions(self):
         return self.buff.duration <= 0

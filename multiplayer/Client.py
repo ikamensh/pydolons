@@ -3,7 +3,6 @@ from threading import Thread
 
 from PySide2 import QtWidgets
 
-import my_context
 from GameLoopThread import GameLoopThread, ProxyEmit
 from battlefield import Cell
 from character_creation.Character import Character
@@ -21,7 +20,7 @@ from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigge
 
 
 def order_recieved_cb(t, e: ClientOrderRecievedEvent):
-    g: DreamGame = my_context.the_game
+    g: DreamGame = e.game
     unit = g.find_unit_by_uid(e.unit_uid)
     active = g.find_active_by_uid(e.active_uid)
     if e.target is None:
@@ -34,28 +33,30 @@ def order_recieved_cb(t, e: ClientOrderRecievedEvent):
     assert g.turns_manager.get_next() is unit
 
     unit.activate(active, target)
-    NextUnitEvent(g.turns_manager.get_next())
+    NextUnitEvent(g, g.turns_manager.get_next())
     g.player_turn_lock = False
 
 
-def order_recieved_trigger():
+def order_recieved_trigger(game):
     return Trigger(ClientOrderRecievedEvent,
+                   platform=game.events_platform,
                    conditions={},
                    callbacks=[order_recieved_cb])
 
 def order_issued_cb(t, e):
     t.client.send(e)
 
-def order_issued_trigger(client):
+def order_issued_trigger(game, client):
     t = Trigger(ClientOrderIssuedEvent,
-                   conditions={},
+                platform=game.events_platform,
+                conditions={},
                    callbacks=[order_issued_cb])
     t.client = client
     return t
 
 
 
-class GameClient:
+class PydolonsClient:
 
     def __init__(self):
         self.client = ClientSocket()
@@ -64,8 +65,8 @@ class GameClient:
         self.game = DreamGame.start_dungeon(demo_dungeon, character.unit, is_server=False)
         self.game.character = character
 
-        order_issued_trigger(self.client)   # local actions cause sending orders to the server
-        order_recieved_trigger()            # orders from the server cause local actions
+        order_issued_trigger(self.game, self.client)   # local actions cause sending orders to the server
+        order_recieved_trigger(self.game)            # orders from the server cause local actions
 
     def start_sync(self):
         self.client.connect()
@@ -108,6 +109,6 @@ class GameClient:
         sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    c = GameClient()
+    c = PydolonsClient()
     c.start_sync()
     c.start_gui()

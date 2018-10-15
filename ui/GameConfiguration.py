@@ -1,7 +1,7 @@
 import os
 from PySide2 import QtGui, QtWidgets, QtMultimedia
 
-from my_context import pydolons_rootdir
+from config import pydolons_rootdir
 from mechanics.damage import DamageTypes
 
 from datetime import datetime

@@ -2,13 +2,14 @@ from game_objects.items import Item
 from game_objects.attributes import DynamicParameter
 from mechanics.events import ItemDestroyedEvent
 
+#Design: ensure item has game variable as soon as it enters any interactable containers.
 class WearableItem(Item):
 
     durability = DynamicParameter("max_durability", on_zero_callbacks=[ItemDestroyedEvent])
     energy = DynamicParameter("max_energy")
 
-    def __init__(self, name, item_type, *, blueprint=None, quality=None, material=None, max_durability=None):
-        super().__init__(name, item_type)
+    def __init__(self, name, item_type, *, blueprint=None, quality=None, material=None, max_durability=None, game=None):
+        super().__init__(name, item_type, game=game)
         assert isinstance(name, str)
         self.blueprint = blueprint
         self.quality = quality

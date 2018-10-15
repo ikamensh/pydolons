@@ -1,7 +1,6 @@
 from mechanics.buffs.Ability import Ability
 from game_objects.attributes import DynamicParameter
 from mechanics.events import BuffExpiredEvent
-import my_context
 
 class Buff(Ability):
     duration = DynamicParameter("max_duration", [BuffExpiredEvent])
@@ -15,6 +14,9 @@ class Buff(Ability):
         DynamicParameter.reset(self)
 
     def __repr__(self):
-        return f"Buff with {self.duration}/{self.max_duration} s duration"
+        if self.bound_to:
+            return f"Buff with {self.duration}/{self.max_duration} s duration"
+        else:
+            return "Abstract Buff..."
 
 

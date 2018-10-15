@@ -1,9 +1,8 @@
 from game_objects.items import Item, ItemTypes
-import my_context
 
 
 def proximity_condition(active, target):
-        return my_context.the_game.battlefield.distance(active.owner, target) <= active.spell.distance
+        return active.game.battlefield.distance(active.owner, target) <= active.spell.distance
 
 class Spell(Item):
     def __init__(self, runes, concept,

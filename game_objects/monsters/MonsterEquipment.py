@@ -1,4 +1,3 @@
-import my_context
 import copy
 
 class MonsterEquipment:
@@ -18,29 +17,30 @@ class MonsterEquipment:
                 corrected_seq.append(item)
 
         self.sequence = corrected_seq
+        self.random = None
 
-    def new_sequence(self):
-        return [copy.deepcopy( my_context.random.choice(group) ) for group in self.sequence]
+    def new_sequence(self, random):
+        return [copy.deepcopy( random.choice(group) ) for group in self.sequence]
 
     def __iter__(self):
-        return iter(self.new_sequence())
+        return iter(self.new_sequence(self.random))
 
-if __name__ == "__main__":
-    me = MonsterEquipment([[1,2,3], 'abc', [2,3,7] ])
-
-    for _ in range(5):
-        print(me.new_sequence())
-
-    me = MonsterEquipment([[1, 2, 3], 'abc', [2, 3, 7], 555])
-
-    for _ in range(5):
-        print(me.new_sequence())
-
-    me = MonsterEquipment([[1, 2, 3], 'abc', [2, 3, 7]])
-
-    for _ in range(5):
-        print(list(me))
-
-    for item in me:
-        print(item)
+# if __name__ == "__main__":
+#     me = MonsterEquipment([[1,2,3], 'abc', [2,3,7] ])
+#
+#     for _ in range(5):
+#         print(me.new_sequence())
+#
+#     me = MonsterEquipment([[1, 2, 3], 'abc', [2, 3, 7], 555])
+#
+#     for _ in range(5):
+#         print(me.new_sequence())
+#
+#     me = MonsterEquipment([[1, 2, 3], 'abc', [2, 3, 7]])
+#
+#     for _ in range(5):
+#         print(list(me))
+#
+#     for item in me:
+#         print(item)
 

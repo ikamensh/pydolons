@@ -41,6 +41,7 @@ class Equipment:
 
 
     def equip_item(self, item):
+        item.game = self.owner.game
 
         if not isinstance(item, WearableItem):
             return False

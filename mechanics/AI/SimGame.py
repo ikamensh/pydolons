@@ -1,42 +1,28 @@
 from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.AI import SearchNode
 from battlefield.Battlefield import Cell
-from GameLog import gamelog
 from DreamGame import DreamGame
-from contextlib import contextmanager
-import my_context
 import copy
-import random
 
 class SimGame(DreamGame):
 
-    @contextmanager
-    def temp_context(self):
-        old_game = my_context.the_game
-        old_random = my_context.random
-        my_context.the_game = self
-        my_context.random = random.Random()
-        yield
-        my_context.the_game = old_game
-        my_context.random = old_random
 
-    @contextmanager
     def simulation(self):
         sim = copy.deepcopy(self)
         sim.is_sim = True
-        with gamelog.muted(), sim.temp_context():
-            yield sim
+        sim.gamelog.mute()
+
+        return sim
 
 
     def get_all_neighbouring_states(self, _unit):
 
-        with self.temp_context():
-            unit = self.find_unit(_unit)
-            if unit is None:
-                return []
-            choices = self.get_all_choices(unit)
-            nodes = [self.get_neighbour(c) for c in choices]
-            return nodes
+        unit = self.find_unit(_unit)
+        if unit is None:
+            return []
+        choices = self.get_all_choices(unit)
+        nodes = [self.get_neighbour(c) for c in choices]
+        return nodes
 
     def get_neighbour(self, c):
 
@@ -50,19 +36,18 @@ class SimGame(DreamGame):
 
     def step_into_sim(self, active, target):
 
-        with self.simulation() as sim:
-            sim_active = sim.find_active(active)
-            sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
-            sim_active.activate(sim_target)
+        sim = self.simulation()
+        sim_active = sim.find_active(active)
+        sim_target = sim.find_unit(target) if isinstance(target, BattlefieldObject) else target
+        sim_active.activate(sim_target)
 
         return sim
 
 
     def fake_measure(self, choice, fraction, use_position=True):
         active, target = choice
-        with self.temp_context():
-            with active.simulate(target):
-                return self.utility(fraction, use_position=use_position)
+        with active.simulate(target):
+            return self.utility(fraction, use_position=use_position)
 
     def delta(self, choice, fraction = None):
         _fraction = fraction or self.fractions[choice[0].owner]

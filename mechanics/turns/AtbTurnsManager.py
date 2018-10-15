@@ -1,17 +1,16 @@
 from my_utils.utils import flatten
 
-from GameLog import gamelog
 from game_objects.battlefield_objects import Unit
 
 from mechanics.turns import TurnsManager
 from mechanics.buffs import Buff
 from mechanics.events import TimePassedEvent
 
-import my_context
 
 epsilon = 1e-6
 class AtbTurnsManager(TurnsManager):
-    def __init__(self, units=None):
+    def __init__(self, game, units=None):
+        self.game = game
         self.managed = []
         if units:
             for unit in units:
@@ -20,7 +19,7 @@ class AtbTurnsManager(TurnsManager):
             buffs = list(flatten([unit._buffs for unit in units]))
             self.managed += buffs
         self.time = 0
-        gamelog(f"Action turn based battle started. its {self.time} now")
+        game.gamelog(f"Action turn based battle started. its {self.time} now")
 
     @property
     def managed_units(self):
@@ -35,7 +34,7 @@ class AtbTurnsManager(TurnsManager):
                 m.duration -= time
 
         self.time += time
-        TimePassedEvent(time)
+        TimePassedEvent(self.game, time)
         # gamelog(f"{time:.3f} seconds passes. its {self.time:.3f} now")
 
     @staticmethod
@@ -79,7 +78,7 @@ class AtbTurnsManager(TurnsManager):
     def add_unit(self, unit):
         if unit not in self.managed:
             self.managed.append(unit)
-            unit.readiness = my_context.random.random() * 0.25
+            unit.readiness = self.game.random.random() * 0.25
 
     def remove_unit(self, unit):
         assert unit in self.managed

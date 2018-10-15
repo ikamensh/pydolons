@@ -9,10 +9,10 @@ def test_returns_actions(minigame):
     action, target = randomAI.decide_step(unit)
     assert isinstance(action, Active)
 
-def test_returns_targets_for_targeted_actions(game):
+def test_returns_targets_for_targeted_actions(minigame):
 
-    battlefield = game.battlefield
-    randomAI = RandomAI(game)
+    battlefield = minigame.battlefield
+    randomAI = RandomAI(minigame)
     unit = list(battlefield.unit_locations.keys())[1]
 
     for i in range(50):

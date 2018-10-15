@@ -12,7 +12,7 @@ class GameController:
         """
         last_point = Cell() -- последняя точка, на которую указывает игрок
         """
-        self.the_game = game
+        self.game = game
 
         self.gameRoot = None
         self.tr = QtGui.QTransform()
@@ -47,13 +47,13 @@ class GameController:
     def mousePressEvent(self, e):
         try:
             if self.gameRoot.gamePages.page is None:
-                self.the_game.ui_order(self.last_point.x, self.last_point.y)
+                self.game.ui_order(self.last_point.x, self.last_point.y)
                 self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
                 self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
             else:
                 self.gameRoot.gamePages.mousePressEvent(e.pos())
         except PydolonsException as exc:
-            UiErrorMessageEvent(repr(exc))
+            UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def mouseReleaseEvent(self, e):
         self.gameRoot.gamePages.mouseReleaseEvent()
@@ -62,7 +62,7 @@ class GameController:
         try:
             self.order_from_hotkey(e)
         except PydolonsException as exc:
-            UiErrorMessageEvent(repr(exc))
+            UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def wheelEvent(self, e):
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
@@ -146,11 +146,11 @@ class GameController:
     def order_from_hotkey(self, e):
 
         if e.key() == QtCore.Qt.Key_Q:
-            self.the_game.order_turn_ccw()
+            self.game.order_turn_ccw()
         elif e.key() == QtCore.Qt.Key_E:
-            self.the_game.order_turn_cw()
+            self.game.order_turn_cw()
         elif e.key() in GameController.orientations:
-            self.the_game.order_step(GameController.orientations[e.key()])
+            self.game.order_step(GameController.orientations[e.key()])
         elif e.key() == QtCore.Qt.Key_O:
             self.gameRoot.gamePages.showPage('CharacterPage')
         elif e.key() == QtCore.Qt.Key_Escape:

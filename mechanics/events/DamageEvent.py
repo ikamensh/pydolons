@@ -18,7 +18,7 @@ class DamageEvent(Event):
         _, _, self.weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target,
                                                                        self.impact_factor)
 
-        super().__init__(fire)
+        super().__init__(target.game, fire)
 
 
     @property

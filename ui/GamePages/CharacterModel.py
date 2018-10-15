@@ -1,3 +1,5 @@
+#TODO this class is not used? delete?
+
 class CharacterModel(object):
     """docstring for CharacterModel."""
     def __init__(self):

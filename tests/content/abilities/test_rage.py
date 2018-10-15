@@ -7,7 +7,7 @@ from mechanics.events import DamageEvent
 
 
 
-def test_rage(game, hero, pirate):
+def test_rage(game_hvsp, hero, pirate):
 
     hero.add_ability( battle_rage(1)() )
 
@@ -20,7 +20,7 @@ def test_rage(game, hero, pirate):
     assert hpmax_before < hero.max_health
     assert ini_before < hero.initiative
 
-def test_rage_expires(game, hero, pirate):
+def test_rage_expires(game_hvsp, hero, pirate):
 
     hero.add_ability( battle_rage(1)() )
 
@@ -29,14 +29,14 @@ def test_rage_expires(game, hero, pirate):
     ini_before = hero.initiative
     DamageEvent(damage=Damage(100, DamageTypes.CRUSH), target=hero, source=pirate)
 
-    game.turns_manager.pass_time(10)
+    game_hvsp.turns_manager.pass_time(10)
 
     assert str_before == hero.str
     assert hpmax_before == hero.max_health
     assert ini_before == hero.initiative
 
 
-def test_stacks(game, hero, pirate):
+def test_stacks(game_hvsp, hero, pirate):
 
     hero.add_ability( battle_rage(1)() )
 

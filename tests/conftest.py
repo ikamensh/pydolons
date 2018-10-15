@@ -23,7 +23,7 @@ def pirate_basetype():
 
 @pytest.fixture()
 def demohero_basetype():
-    _demohero_basetype = BaseType({'str':45, 'agi': 15,'prc': 15}, "Demo Hero")
+    _demohero_basetype = BaseType({'str':25, 'agi': 35,'prc': 15}, "Demo Hero")
     yield  _demohero_basetype
 
 @pytest.fixture()
@@ -44,7 +44,7 @@ def steel_wall():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall = lambda: Obstacle("Wall of steel!", 5000, resists=resists, armor=500, icon="wall.png")
+    _steel_wall = lambda g: Obstacle("Wall of steel!", 5000, game=g, resists=resists, armor=500, icon="wall.png")
     return _steel_wall
 
 
@@ -59,12 +59,12 @@ def demo_dungeon(pirate_band):
 @pytest.fixture()
 def walls_dungeon(pirate_basetype, steel_wall):
 
-    def create_locations():
+    def create_locations(g):
         unit_locations = {}
 
         wall_x = 4
         for wall_y in range(0, 6):
-            unit_locations[steel_wall()] =  Cell(wall_x, wall_y)
+            unit_locations[steel_wall(g)] =  Cell(wall_x, wall_y)
 
         unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
         return unit_locations
@@ -84,13 +84,9 @@ def pirate_band(pirate_basetype):
     return _pirate_band
 
 @pytest.fixture()
-def battlefield(pirate_band, hero):
+def battlefield8():
     bf = Battlefield(8, 8)
-    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
 
-    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
-    units_locations[hero] = Cell(1, 1)
-    bf.place_many(units_locations)
     return bf
 
 @pytest.fixture()
@@ -102,18 +98,34 @@ def simple_battlefield():
 def empty_game(simple_battlefield):
 
     _game = DreamGame(simple_battlefield)
-    _game.set_to_context()
 
     return _game
 
 @pytest.fixture()
-def game(battlefield, hero):
-    _game = DreamGame(battlefield)
-    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
-    _game.fractions[hero] = Fractions.PLAYER
-    for unit in battlefield.unit_locations:
-        _game.turns_manager.add_unit(unit)
-    _game.set_to_context()
+def hero_only_game(battlefield8, hero):
+
+    _game = DreamGame(battlefield8)
+    _game.add_unit(hero, 1+1j, Fractions.PLAYER)
+    _game.the_hero = hero
+
+    return _game
+
+@pytest.fixture()
+def game_hvsp(battlefield8, hero, pirate_band):
+    _game = DreamGame(battlefield8)
+
+    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
+    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
+
+    units_locations[hero] = Cell(1, 1)
+
+    fractions = {unit: Fractions.ENEMY for unit in units_locations if not unit.is_obstacle}
+    fractions[hero] = Fractions.PLAYER
+
+    _game.add_many(units_locations.keys(), units_locations, fractions)
+
+
+
     return _game
 
 

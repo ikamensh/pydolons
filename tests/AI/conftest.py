@@ -2,7 +2,7 @@ import pytest
 
 from DreamGame import Fractions
 from mechanics.AI.SimGame import SimGame
-from battlefield.Battlefield import Battlefield
+from battlefield import Cell, Battlefield
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
@@ -13,27 +13,28 @@ from game_objects.battlefield_objects import BattlefieldObject
 @pytest.fixture()
 def minigame(simple_battlefield, pirate,  hero):
 
-
     _game = SimGame(simple_battlefield)
-
     _game.add_unit(hero, (2+2j), Fractions.PLAYER)
-
     _game.add_unit(pirate, (4 + 4j), Fractions.ENEMY)
 
-    _game.set_to_context()
 
     return _game
 
 
 
 @pytest.fixture()
-def game(battlefield, hero):
-    _game = SimGame(battlefield)
-    _game.fractions.update({unit: Fractions.ENEMY for unit in battlefield.unit_locations if not unit.is_obstacle})
-    _game.fractions[hero] = Fractions.PLAYER
-    for unit in battlefield.unit_locations:
-        _game.turns_manager.add_unit(unit)
-    _game.set_to_context()
+def sim_game(battlefield8, hero, pirate_band):
+    _game = SimGame(battlefield8)
+
+    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
+    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
+
+    units_locations[hero] = Cell(1, 1)
+
+    fractions = {unit: Fractions.ENEMY for unit in units_locations if not unit.is_obstacle}
+    fractions[hero] = Fractions.PLAYER
+
+    _game.add_many(units_locations.keys(), units_locations, fractions)
     return _game
 
 @pytest.fixture()
@@ -49,9 +50,9 @@ def imba_ability():
     _imba_ability = Active(BattlefieldObject,
                                 [],
                                 Cost(readiness=0.1),
-                                [imba_dmg_callback],
-                                [ActiveTags.ATTACK],
-                           "imba")
+                            callbacks=[imba_dmg_callback],
+                            tags=[ActiveTags.ATTACK],
+                           name="imba")
 
     return _imba_ability
 
@@ -63,9 +64,9 @@ def tiny_imba_ability():
     _imba_ability = Active(BattlefieldObject,
                                 [],
                                 Cost(readiness=0.1),
-                                [imba_dmg_callback],
-                                [ActiveTags.ATTACK],
-                           "imba")
+                            callbacks=[imba_dmg_callback],
+                            tags=[ActiveTags.ATTACK],
+                           name="imba")
 
     return _imba_ability
 
@@ -77,9 +78,9 @@ def enabler(imba_ability):
     _enabler = Active(BattlefieldObject,
                                 [],
                                 Cost(readiness=0.1),
-                                [enabler_callback],
-                                [ActiveTags.ATTACK],
-                           "gives imba")
+                            callbacks=[enabler_callback],
+                            tags=[ActiveTags.ATTACK],
+                           name="gives imba")
 
     return _enabler
 
@@ -96,9 +97,10 @@ def increase_utility(minigame):
     _imba_ability = Active(BattlefieldObject,
                                 [],
                                 Cost(readiness=0.1),
-                                [increase_utility],
-                                [ActiveTags.ATTACK],
-                           "imba")
+                           game=minigame,
+                            callbacks=[increase_utility],
+                           tags=[ActiveTags.ATTACK],
+                           name="imba")
 
     return _imba_ability
 
@@ -107,15 +109,16 @@ def increase_utility(minigame):
 def take_punishment(minigame):
     minigame.utility = lambda: 0
 
-    def drugs_callback(a, unit):
+    def punishment_callback(a, unit):
         minigame.utility = lambda: -1e3
 
     _imba_ability = Active(BattlefieldObject,
                            [],
                            Cost(readiness=0.1),
-                           [drugs_callback],
-                           [ActiveTags.ATTACK],
-                           "imba")
+                           game=minigame,
+                           callbacks=[punishment_callback],
+                           tags=[ActiveTags.ATTACK],
+                           name="imba")
 
     return _imba_ability
 

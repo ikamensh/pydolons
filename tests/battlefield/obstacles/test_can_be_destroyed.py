@@ -6,9 +6,9 @@ from mechanics.combat.Attack import Attack
 import pytest
 
 @pytest.fixture()
-def obstacle(game):
-    obstacle = Obstacle("dummy", 500, 0, None, None)
-    game.add_obstacle(obstacle, Cell(1,2))
+def obstacle(game_hvsp):
+    obstacle = Obstacle("dummy", 500, game=game_hvsp)
+    game_hvsp.add_obstacle(obstacle, Cell(1, 2))
     return obstacle
 
 
@@ -22,13 +22,13 @@ def test_can_take_damage(obstacle):
     assert health_after < health_before
 
 
-def test_can_be_destroyed(obstacle, game):
+def test_can_be_destroyed(obstacle, game_hvsp):
 
-    assert obstacle in game.battlefield.unit_locations
+    assert obstacle in game_hvsp.battlefield.unit_locations
 
     obstacle.health -= 999999
 
-    assert obstacle not in game.battlefield.unit_locations
+    assert obstacle not in game_hvsp.battlefield.unit_locations
 
 
 def test_can_be_attacked(obstacle, hero, no_chances):

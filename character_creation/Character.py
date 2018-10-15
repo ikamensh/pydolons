@@ -90,7 +90,7 @@ class Character:
 
     @property
     def unit(self) -> Unit:
-        return Unit(self.base_type_prelim, self.temp_masteries or self.masteries)
+        return Unit(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
 
 
     def update(self, unit : Unit):

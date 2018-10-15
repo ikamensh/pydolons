@@ -1,7 +1,6 @@
 from mechanics.events.src.Trigger import Trigger
 from mechanics.events import TimePassedEvent
 from cntent.abilities.undying import undead_n_hits
-import my_context
 
 
 FULL_REGEN_PERIOD = 3600
@@ -10,7 +9,7 @@ FULL_STAMINA_REGEN_PERIOD = 120
 
 
 def regen_all_callback(t, e):
-    for unit in my_context.the_game.battlefield.unit_locations.keys():
+    for unit in e.game.battlefield.unit_locations.keys():
         if not unit.is_obstacle and unit.alive:
             is_undead = any([hasattr(a, undead_n_hits) for a in unit.abilities])
             if not is_undead:
@@ -20,7 +19,8 @@ def regen_all_callback(t, e):
             unit.stamina += unit.max_stamina * e.dt / FULL_STAMINA_REGEN_PERIOD
 
 
-def regen_rule():
+def regen_rule(game):
     return Trigger(TimePassedEvent,
+                   platform=game.events_platform,
                    conditions={},
                    callbacks=[regen_all_callback])

@@ -14,13 +14,14 @@ class ArmorBlueprint(Blueprint):
         super().__init__(name, target_item_type, rarity, durability, material_type=material_type_from_armor_type[target_item_type], material_count=material_count)
         self.armor = armor or Armor(rarity * ArmorBlueprint.armor_per_rarity)
 
-    def to_item(self, material, quality):
+    def to_item(self, material, quality, *, game=None):
         assert material.material_type is self.material_type
         total_rarity = material.rarity * quality.rarity *self.rarity
         armor = Armor(armor_dict={t: v*total_rarity for t, v in self.armor.items()} )
         durability = self.item_durability(total_rarity)
         full_name = f"{quality.name} {self.name} of {material}"
-        return BodyArmor(full_name, armor, durability, blueprint=self, material=material, quality=quality)
+        return BodyArmor(full_name, armor, durability, blueprint=self,
+                         material=material, quality=quality, game=game)
 
     def __repr__(self):
         return f"{self.name} blueprint"

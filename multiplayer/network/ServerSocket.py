@@ -8,7 +8,7 @@ from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
 from multiplayer.network.config import host, port
 
 
-class MyServer:
+class PydolonsServer:
     def __init__(self, fractions_for_players):
 
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,7 +33,7 @@ class MyServer:
             sock.send(bytes(str(fraction), encoding="utf-8"))
 
             self.free_fractions.remove(fraction)
-            ct = Thread(target=MyServer.client_thread, args=(self,sock))
+            ct = Thread(target=PydolonsServer.client_thread, args=(self, sock))
             ct.start()
 
     def update_all(self, data):

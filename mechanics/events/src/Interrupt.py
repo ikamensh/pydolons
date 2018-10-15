@@ -5,20 +5,20 @@ def interrupt_modifier(_, event):
 
 
 class PermanentInterrupt(Trigger):
-    def __init__(self, target_event_cls, conditions, interrupt_event = True, callbacks=None):
+    def __init__(self, target_event_cls, conditions, interrupt_event = True, callbacks=None, *, platform):
 
         callbacks = callbacks or []
         if interrupt_event:
             callbacks.append(interrupt_modifier)
 
 
-        super().__init__(target_event_cls, conditions, is_interrupt=True,
-                         callbacks=callbacks)
+        super().__init__(target_event_cls, conditions=conditions, is_interrupt=True,
+                         callbacks=callbacks, platform=platform)
 
 
 class CounteredInterrupt(PermanentInterrupt):
     def __init__(self, target_event_cls, conditions, interrupt_event = True, callbacks=None,
-                 n_counters=1):
+                 n_counters=1, *, platform):
 
         self.n_counters = n_counters
 
@@ -27,7 +27,7 @@ class CounteredInterrupt(PermanentInterrupt):
 
 
         super().__init__(target_event_cls, conditions, interrupt_event,
-                         callbacks=callbacks)
+                         callbacks=callbacks, platform=platform)
 
     @staticmethod
     def count_down(self, _):

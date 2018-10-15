@@ -3,7 +3,6 @@ from cntent.base_types.demo_hero import demohero_basetype
 from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from game_objects.battlefield_objects import Unit
 import sys
-import my_context
 
 def get_size(obj, seen=None):
     """Recursively finds size of objects"""
@@ -26,7 +25,6 @@ def get_size(obj, seen=None):
     return size
 
 game = DreamGame.start_dungeon(walls_dungeon, Unit(demohero_basetype))
-print(my_context.the_game is game)
 
 sims = []
 for i in range(1000):
@@ -38,5 +36,3 @@ print(len(sims))
 print( get_size(sims) )
 
 print( get_size(game) )
-
-print(my_context.the_game is game)

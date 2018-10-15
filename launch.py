@@ -45,14 +45,14 @@ def one_game():
 
     # NEW TRIGGER ADD THIS |
     #
-    levelstatus_trigger(),
-    ui_error_message_trigger(),
-    nexunit_anim_trigger(),
-    turn_anim_trigger(),
-    perish_anim_trigger(),
-    attack_anin_trigger(),
-    damage_anim_trigger(),
-    move_anim_trigger()
+    levelstatus_trigger(game),
+    ui_error_message_trigger(game),
+    nexunit_anim_trigger(game),
+    turn_anim_trigger(game),
+    perish_anim_trigger(game),
+    attack_anin_trigger(game),
+    damage_anim_trigger(game),
+    move_anim_trigger(game)
 
 
     # debug print

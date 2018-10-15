@@ -37,17 +37,17 @@ class Unit(BattlefieldObject):
 
 
 
-    health = DynamicParameter("max_health", [events.UnitDiedEvent])
+    health = DynamicParameter("max_health", [lambda u : events.UnitDiedEvent(u)])
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
     is_obstacle = False
 
-    last_uid = 0
 
-    def __init__(self, base_type: BaseType, masteries = None):
+    def __init__(self, base_type: BaseType, *, game=None,  masteries = None,):
         Unit.last_uid += 1
         self.uid = Unit.last_uid
+        self.game = game
 
         self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
         self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
@@ -200,6 +200,7 @@ class Unit(BattlefieldObject):
 
     def give_active(self, active):
         cpy = copy.deepcopy(active)
+        cpy.game = self.game
         self.actives.add(cpy)
         cpy.owner = self
         cpy.uid = int(cpy.uid * 1e7 + self.uid)
@@ -222,7 +223,7 @@ class Unit(BattlefieldObject):
 
     def get_unarmed_weapon(self):
         dmg = Damage(amount=self.str * UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
-        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, mastery=MasteriesEnum.UNARMED)
+        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, mastery=MasteriesEnum.UNARMED, game=self.game)
 
 
     def get_melee_weapon(self):

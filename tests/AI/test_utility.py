@@ -8,54 +8,54 @@ def test_unit_util_positive(hero, pirate):
     assert utility(hero) > 0
     assert utility(pirate) > 0
 
-def test_more_hp_is_better(game, hero):
+def test_more_hp_is_better(minigame, hero):
 
-    utility_initial = game.utility(game.fractions[hero])
+    utility_initial = minigame.utility(minigame.fractions[hero])
     hero.max_health += 100
-    assert utility_initial < game.utility(game.fractions[hero])
+    assert utility_initial < minigame.utility(minigame.fractions[hero])
 
-def test_invertion(game, hero):
-    pirate = [unit for unit in game.battlefield.unit_locations if unit is not hero][0]
+def test_invertion(minigame, hero):
+    pirate = [unit for unit in minigame.battlefield.unit_locations if unit is not hero][0]
 
-    utility_initial = game.utility(game.fractions[pirate])
+    utility_initial = minigame.utility(minigame.fractions[pirate])
     hero.max_health += 100
-    assert utility_initial > game.utility(game.fractions[pirate])
+    assert utility_initial > minigame.utility(minigame.fractions[pirate])
 
-def test_less_hp_is_worse(game, hero):
+def test_less_hp_is_worse(minigame, hero):
 
-    utility_initial = game.utility(game.fractions[hero])
+    utility_initial = minigame.utility(minigame.fractions[hero])
     hero.max_health -= 100
-    assert utility_initial > game.utility(game.fractions[hero])
+    assert utility_initial > minigame.utility(minigame.fractions[hero])
 
-def test_double_inversion(game, hero):
+def test_double_inversion(minigame, hero):
 
-    pirate = [unit for unit in game.battlefield.unit_locations if unit is not hero][0]
-    utility_initial = game.utility(game.fractions[pirate])
+    pirate = [unit for unit in minigame.battlefield.unit_locations if unit is not hero][0]
+    utility_initial = minigame.utility(minigame.fractions[pirate])
     hero.max_health -= 100
-    assert utility_initial < game.utility(game.fractions[pirate])
+    assert utility_initial < minigame.utility(minigame.fractions[pirate])
 
 @pytest.mark.skip(reason="not supported")
-def test_more_mana_is_better(game, hero):
-    utility_initial = game.utility(game.fractions[hero])
+def test_more_mana_is_better(minigame, hero):
+    utility_initial = minigame.utility(minigame.fractions[hero])
     hero.max_mana += 100
-    assert utility_initial < game.utility(game.fractions[hero])
+    assert utility_initial < minigame.utility(minigame.fractions[hero])
 
 @pytest.mark.skip(reason="not supported")
-def test_more_stamina_is_better(game, hero):
-    utility_initial = game.utility(game.fractions[hero])
+def test_more_stamina_is_better(minigame, hero):
+    utility_initial = minigame.utility(minigame.fractions[hero])
     hero.max_stamina += 100
-    assert utility_initial < game.utility(game.fractions[hero])
+    assert utility_initial < minigame.utility(minigame.fractions[hero])
 
 @pytest.mark.skip(reason="not supported")
-def test_more_readiness_is_better(game, hero):
-    utility_initial = game.utility(game.fractions[hero])
+def test_more_readiness_is_better(minigame, hero):
+    utility_initial = minigame.utility(minigame.fractions[hero])
     hero.readiness += 100
-    assert utility_initial < game.utility(game.fractions[hero])
+    assert utility_initial < minigame.utility(minigame.fractions[hero])
 
 
 
 
-def test_hurt_negative_delta(game, hero, no_chances, imba_ability):
+def test_hurt_negative_delta(minigame, hero, no_chances, imba_ability):
 
     old_abilities = set(hero.actives)
 
@@ -64,11 +64,11 @@ def test_hurt_negative_delta(game, hero, no_chances, imba_ability):
 
     ability = list(set(hero.actives)-old_abilities)[0]
     choice = ability, hero
-    delta = game.delta(choice)
+    delta = minigame.delta(choice)
 
     assert delta < 0
 
-def test_small_hurt_negative_delta(game, hero, no_chances, tiny_imba_ability):
+def test_small_hurt_negative_delta(minigame, hero, no_chances, tiny_imba_ability):
 
     old_abilities = set(hero.actives)
 
@@ -77,7 +77,7 @@ def test_small_hurt_negative_delta(game, hero, no_chances, tiny_imba_ability):
 
     ability = list(set(hero.actives)-old_abilities)[0]
     choice = ability, hero
-    delta = game.delta( choice )
+    delta = minigame.delta(choice)
 
     assert delta < 0
 
@@ -110,18 +110,18 @@ def test_pirates_cry_too_a_little(minigame, pirate, no_chances, tiny_imba_abilit
     assert delta < 0
 
 @pytest.mark.skip(reason="not supported")
-def test_positions_can_go_out_of_utility(game):
+def test_positions_can_go_out_of_utility(minigame):
     n_checked = 0
 
-    for unit in game.battlefield.unit_locations:
-        choices = game.get_all_choices(unit)
+    for unit in minigame.battlefield.unit_locations:
+        choices = minigame.get_all_choices(unit)
 
         for c in choices:
             active, target = c
             if ActiveTags.MOVEMENT in active.tags:
                 n_checked += 1
 
-                delta = game.delta(c)
+                delta = minigame.delta(c)
                 assert delta == 0
 
 

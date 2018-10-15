@@ -16,10 +16,10 @@ class Monster:
         self.masteries = masteries
 
 
-    def create(self) -> Unit:
-        unit = Unit(self.base_type)
-
+    def create(self, game) -> Unit:
+        unit = Unit(self.base_type, game=game)
         if self.items:
+            self.items.random = game.random
             for item in self.items:
                 unit.equipment.equip_item(item)
 

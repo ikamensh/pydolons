@@ -1,16 +1,15 @@
 from cntent.monsters.undead import skeleton, zombie
 
 
-
-def test_undying(game):
-    z = zombie.create()
-    game.add_unit(z, 6+6j, None)
+def test_undying(game_hvsp):
+    z = zombie.create(game_hvsp)
+    game_hvsp.add_unit(z, 6 + 6j, None)
 
     z.health -= 99999
     assert z.alive
 
-    s = skeleton.create()
-    game.add_unit(s, 6 + 7j, None)
+    s = skeleton.create(game_hvsp)
+    game_hvsp.add_unit(s, 6 + 7j, None)
 
     s.health -= 99999
     assert s.alive

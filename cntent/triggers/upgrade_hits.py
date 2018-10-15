@@ -8,6 +8,7 @@ def upgrade_hits(unit, n_hits):
         damage_event.impact_factor = ImpactFactor.CRIT
 
     trig = CounteredInterrupt(DamageEvent,
+                              platform=unit.game.events_platform,
                               conditions={lambda t,e : e.source is unit and e.impact_factor is ImpactFactor.HIT},
                               n_counters=n_hits,
                               interrupt_event=False,
