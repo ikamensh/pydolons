@@ -46,11 +46,11 @@ def test_refraction(game_hvsp, hero, n):
     dmg = Damage(200, DamageTypes.FROST)
 
     for _ in range(n):
-        DamageEvent(dmg, hero)
+        DamageEvent( dmg, hero)
 
     assert hero.health == hero.max_health
 
-    DamageEvent(dmg, hero)
+    DamageEvent( dmg, hero)
     assert hero.health < hero.max_health
 
 

@@ -100,6 +100,15 @@ def empty_game(simple_battlefield):
     return _game
 
 @pytest.fixture()
+def hero_only_game(battlefield8, hero):
+
+    _game = DreamGame(battlefield8)
+    _game.add_unit(hero, 1+1j, Fractions.PLAYER)
+    _game.the_hero = hero
+
+    return _game
+
+@pytest.fixture()
 def game_hvsp(battlefield8, hero, pirate_band):
     _game = DreamGame(battlefield8)
 
