@@ -4,9 +4,9 @@ from mechanics.events import EventsChannels
 class LevelStatusEvent(Event):
     channel = EventsChannels.LevelStatus
 
-    def __init__(self, status):
+    def __init__(self, game, status):
         self.status = status
-        super().__init__()
+        super().__init__(game)
 
     def check_conditions(self):
         return True

@@ -9,7 +9,7 @@ def aoe_damage_callback(t,e:DamageEvent):
     target_cell = bf.unit_locations[e.target]
     recipients = bf.get_units_within_radius(center=target_cell, radius=t.radius)
     for unit in recipients:
-        new_e = DamageEvent(e.game, e.damage*t.percentage, unit,
+        new_e = DamageEvent(e.damage*t.percentage, unit,
                     source=e.source, impact_factor=ImpactFactor.GRAZE, fire=False)
         new_e.secondary = True
         new_e.fire()
@@ -18,7 +18,7 @@ def aoe_damage_callback(t,e:DamageEvent):
 def aoe_damage(unit, radius, percentage):
     assert radius >= 0
     trig = Trigger(DamageEvent,
-                   platform=unit.game.platform,
+                   platform=unit.game.events_platform,
                     conditions=[lambda t,e : e.impact_factor is ImpactFactor.CRIT and
                                              e.source.uid == unit.uid and
                                              not hasattr(e, "secondary")],

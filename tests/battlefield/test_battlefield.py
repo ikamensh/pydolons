@@ -18,12 +18,15 @@ def test_units_block_movement(game_hvsp, hero):
     game_hvsp.order_move(hero, Cell(4, 4))
     assert location_before == game_hvsp.get_location(hero)
 
-def test_valid_placement(battlefield8):
+def test_valid_placement(game_hvsp):
+    battlefield8 = game_hvsp.battlefield
     assert len(battlefield8.unit_locations) == 4
     for pirate in battlefield8.unit_locations:
         assert pirate in battlefield8.units_at.values()
 
-def test_distance_unit_to_point(battlefield8):
+def test_distance_unit_to_point(game_hvsp):
+    battlefield8 = game_hvsp.battlefield
+
     hero = battlefield8.get_unit_at(Cell(1, 1))
     assert battlefield8.distance(hero, Cell(1, 4)) == 3
 

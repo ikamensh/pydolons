@@ -15,6 +15,8 @@ from typing import Set
 import copy
 from functools import lru_cache
 
+import random
+
 class Unit(BattlefieldObject):
 
 
@@ -35,7 +37,7 @@ class Unit(BattlefieldObject):
 
 
 
-    health = DynamicParameter("max_health", [lambda u : events.UnitDiedEvent(u.game, u)])
+    health = DynamicParameter("max_health", [lambda u : events.UnitDiedEvent(u)])
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
@@ -81,7 +83,11 @@ class Unit(BattlefieldObject):
         self.alive = True
         self.last_damaged_by = None
 
-        self.icon = base_type.icon
+        if isinstance(base_type.icon, str):
+            self.icon = base_type.icon
+        else:
+            self.icon = random.choice(base_type.icon)
+
         self.sound_map = base_type.sound_map
 
         self.turn_ccw_active = self.give_active(turn_ccw)
@@ -212,7 +218,7 @@ class Unit(BattlefieldObject):
 
     def get_unarmed_weapon(self):
         dmg = Damage(amount=self.str * UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
-        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, mastery=MasteriesEnum.UNARMED)
+        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, mastery=MasteriesEnum.UNARMED, game=self.game)
 
 
     def get_melee_weapon(self):

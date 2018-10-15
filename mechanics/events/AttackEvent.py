@@ -6,7 +6,7 @@ from mechanics.chances.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
 class AttackEvent(Event):
     channel = EventsChannels.AttackChannel
     def __init__(self, source, target, weapon=None, fire=True):
-        game = self.source.game
+        game = source.game
         self.source = source
         self.target = target
         self.weapon = weapon or source.get_melee_weapon()

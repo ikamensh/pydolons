@@ -4,9 +4,9 @@ from mechanics.events import EventsChannels
 class BuffDetachedEvent(Event):
     channel = EventsChannels.BuffDetachedChannel
 
-    def __init__(self, game, buff):
+    def __init__(self, buff):
         self.buff = buff
-        super().__init__(game)
+        super().__init__(buff.bound_to.game)
 
     def check_conditions(self):
         return True

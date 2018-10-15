@@ -41,11 +41,13 @@ class DreamGame:
     @classmethod
     def start_dungeon(cls, dungeon, hero: bf_objs.Unit, is_server=True):
 
-        unit_locations = dungeon.unit_locations
-        unit_locations = copy.deepcopy(unit_locations)
-        unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
         game = cls(bf, is_server=is_server)
+
+
+        unit_locations = dungeon.unit_locations(game)
+        unit_locations = copy.deepcopy(unit_locations)
+        unit_locations[hero] = dungeon.hero_entrance
 
         game.the_hero = hero
 
@@ -71,8 +73,7 @@ class DreamGame:
 
 
 
-    def add_unit(self, unit: bf_objs.Unit, cell,  fraction, facing = None):
-        assert unit.game is None
+    def add_unit(self, unit: bf_objs.Unit, cell,  fraction=Fractions.NEUTRALS, facing = None):
         unit.game = self
         for a in unit.actives:
             a.game = self
@@ -112,7 +113,7 @@ class DreamGame:
                     time.sleep(0.02)
                 continue
             else:
-                NextUnitEvent(self, active_unit)
+                NextUnitEvent(active_unit)
                 try:
                     active, target = self.enemy_ai.decide_step(active_unit)
                 except:
@@ -126,10 +127,10 @@ class DreamGame:
         enemy_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.ENEMY and unit.alive]
 
         if len(own_units) == 0:
-            LevelStatusEvent("DEFEAT")
+            LevelStatusEvent(self, "DEFEAT")
             return "DEFEAT"
         elif len(enemy_units) == 0:
-            LevelStatusEvent("VICTORY")
+            LevelStatusEvent(self, "VICTORY")
             return "VICTORY"
         else:
             return None

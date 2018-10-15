@@ -2,8 +2,6 @@ from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, M
 from ui.events import UiErrorMessageEvent, LevelStatusEvent
 from ui.triggers.no_sim_condition import no_sim_condition
 from GameLoopThread import ProxyEmit
-import my_context
-from ui.TheUI import TheUI
 
 ########### MOVE #################
 
@@ -14,8 +12,9 @@ def play_movement_anim(t, e):
     # TheUI.singleton.gameRoot.level.unitMoveSlot({'unit':e.unit,"cell_to":e.cell_to})
 
 
-def move_anim_trigger():
+def move_anim_trigger(game):
     return Trigger(MovementEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[play_movement_anim])
 
@@ -27,8 +26,9 @@ def maybe_play_damage_anim(t, e):
 def maybe_play_hit_anim(t, e):
     ProxyEmit.maybe_play_hit_anim.emit({'sound':e.target.sound_map.hit})
 
-def damage_anim_trigger():
+def damage_anim_trigger(game):
     return Trigger(DamageEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[maybe_play_damage_anim, maybe_play_hit_anim])
 ########### ATTACK #################
@@ -38,8 +38,9 @@ def play_attack_anim(t, e):
     ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.attack})
     pass
 
-def attack_anin_trigger():
+def attack_anin_trigger(game):
     return Trigger(AttackEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[play_attack_anim])
 
@@ -50,8 +51,9 @@ def play_perish_anim(t, e):
     ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'sound':e.unit.sound_map.perish})
     pass
 
-def perish_anim_trigger():
+def perish_anim_trigger(game):
     return Trigger(UnitDiedEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[play_perish_anim])
 
@@ -60,10 +62,11 @@ def perish_anim_trigger():
 
 
 def play_trun_anim(t, e):
-    ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.battlefield.unit_facings[e.unit]})
+    ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.game.battlefield.unit_facings[e.unit]})
 
-def turn_anim_trigger():
+def turn_anim_trigger(game):
     return Trigger(TurnEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[play_trun_anim])
 
@@ -73,8 +76,9 @@ def turn_anim_trigger():
 def play_nextunit_anim(t, e):
     ProxyEmit.play_nextunit_anim.emit()
 
-def nexunit_anim_trigger():
+def nexunit_anim_trigger(game):
     return Trigger(NextUnitEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[play_nextunit_anim])
 
@@ -84,8 +88,9 @@ def nexunit_anim_trigger():
 def play_levelstatus(t, e):
     ProxyEmit.play_levelstatus.emit(e.status)
 
-def levelstatus_trigger():
+def levelstatus_trigger(game):
     return Trigger(LevelStatusEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[play_levelstatus])
 
@@ -95,7 +100,8 @@ def levelstatus_trigger():
 def display_ui_error(t, e):
     ProxyEmit.play_levelstatus.emit(e.message)
 
-def ui_error_message_trigger():
+def ui_error_message_trigger(game):
     return Trigger(UiErrorMessageEvent,
+                   platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[display_ui_error])

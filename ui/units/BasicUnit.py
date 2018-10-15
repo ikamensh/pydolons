@@ -1,8 +1,11 @@
 from PySide2 import QtWidgets, QtCore
 
 from ui.gamecore import GameObject
+from ui.GameAnimation import Direction
+
 
 from battlefield.Facing import Facing
+
 
 
 class BasicUnit(GameObject):
@@ -11,7 +14,6 @@ class BasicUnit(GameObject):
         super(BasicUnit, self).__init__(*arg)
         self.uid = 0
         self.gameconfig = gameconfig
-        self.directionPix = self.gameconfig.getPicFile('DIRECTION POINTER.png')
         self.setUpDirections()
         self.activate = False
         self.hp = 100
@@ -20,47 +22,42 @@ class BasicUnit(GameObject):
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
         """
-        self.direction = QtWidgets.QGraphicsPixmapItem(self)
+        self.direction = Direction()
         self.direction.setParentItem(self)
-        self.direction.setPixmap(self.directionPix)
-        self.direction.setTransformOriginPoint(self.directionPix.width()/2, - self.h/2 + self.directionPix.height())
-        dirY = self.h - self.directionPix.height()
-        dirX = (self.w / 2) - (self.directionPix.width() / 2)
-        self.direction.setX(dirX)
-        self.direction.setY(dirY)
-        self.direction.setVisible(True)
-        # self.scene().addItem(self.direction)
-        self.timer = QtCore.QTimeLine(2000)
-        self.timer.setFrameRange(0, 100)
-        self.animation = QtWidgets.QGraphicsItemAnimation()
-        self.animation.setItem(self.direction)
-        self.animation.setTimeLine(self.timer)
+        self.direction.setPixmap(self.gameconfig.getPicFile('DIRECTION POINTER.png'))
+        self.direction.setTransformOriginPoint(self.direction.boundingRect().width()/2, - self.h/2 + self.direction.boundingRect().height())
+        dirY = self.h - self.direction.boundingRect().height()
+        dirX = (self.w / 2) - (self.direction.boundingRect().width() / 2)
+        self.direction.setPos(dirX, dirY)
+        self.dirAni = self.gameconfig.animations.getDirectionAnim(self.direction)
+
 
     def setDirection(self, turn):
         if turn == Facing.SOUTH:
-            self.timer.start()
-            # self.direction.setRotation(0)
-            self.animation.setRotationAt(0.1, 0);
-            # self.animation.setRotationAt(1, 0);
-            self.dir_angle = 0
+            self.dirAni.setStartValue(self.direction.rotation())
+            angel = 0.0
+            if self.direction.rotation() == 270.0:
+                angel = 360.0
+            self.dirAni.setEndValue(angel)
+            self.dirAni.start()
         elif turn == Facing.NORTH:
-            # self.direction.setRotation(180)
-            self.timer.start()
-            # self.direction.setRotation(0)
-            self.animation.setRotationAt(0.1, 180);
-            self.dir_angle = 180
+            self.dirAni.setStartValue(self.direction.rotation())
+            self.dirAni.setEndValue(180.0)
+            self.dirAni.start()
         if turn == Facing.EAST:
-            self.timer.start()
-            # self.direction.setRotation(0)
-            self.animation.setRotationAt(0.1, -90);
-            # self.direction.setRotation(-90)
-            self.dir_angle = -90
+            angel = self.direction.rotation()
+            if self.direction.rotation() == 0.0:
+                angel = 360.0
+            self.dirAni.setStartValue(angel)
+            self.dirAni.setEndValue(270.0)
+            self.dirAni.start()
         elif turn == Facing.WEST:
-            self.timer.start()
-            # self.direction.setRotation(0)
-            self.animation.setRotationAt(0.1, 90);
-            # self.direction.setRotation(90)
-            self.dir_angle = 90
+            angel = self.direction.rotation()
+            if self.direction.rotation() == 360.0:
+                angel = 0.0
+            self.dirAni.setStartValue(angel)
+            self.dirAni.setEndValue(90.0)
+            self.dirAni.start()
 
 
     def __eq__(self, other):

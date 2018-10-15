@@ -10,11 +10,12 @@ class Obstacle(BattlefieldObject):
 
     sound_map = sound_maps.std_sound_map #TODO specific obstacle sound maps
 
-    health = DynamicParameter("max_health", [ObstacleDestroyedEvent])
+    health = DynamicParameter("max_health", [lambda u : ObstacleDestroyedEvent(u)])
 
-    def __init__(self, name, max_health, armor, resists, icon):
+    def __init__(self, name, max_health, *, game=None, armor=0, resists=None, icon="wall.png"):
         Obstacle.last_uid += 1
         self.uid = Obstacle.last_uid
+        self.game = game
 
         self.name = name
         self.max_health = max_health

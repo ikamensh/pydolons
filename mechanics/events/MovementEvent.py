@@ -5,7 +5,8 @@ from battlefield import Cell
 class MovementEvent(Event):
     channel = EventsChannels.MovementChannel
 
-    def __init__(self, game, unit, cell_to):
+    def __init__(self, unit, cell_to):
+        game = unit.game
         self.battlefield = game.battlefield
         self.unit = unit
         self.cell_from = self.battlefield.unit_locations[unit]

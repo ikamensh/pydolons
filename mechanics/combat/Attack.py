@@ -8,9 +8,9 @@ from mechanics.events import AttackEvent
 class Attack:
 
     @staticmethod
-    def attack(game, source, target):
+    def attack(source, target):
         weapon = source.get_melee_weapon()
-        return AttackEvent(game, source, target, weapon)
+        return AttackEvent(source, target, weapon)
 
 
     @staticmethod

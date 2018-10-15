@@ -14,6 +14,9 @@ class Buff(Ability):
         DynamicParameter.reset(self)
 
     def __repr__(self):
-        return f"Buff with {self.duration}/{self.max_duration} s duration"
+        if self.bound_to:
+            return f"Buff with {self.duration}/{self.max_duration} s duration"
+        else:
+            return "Abstract Buff..."
 
 

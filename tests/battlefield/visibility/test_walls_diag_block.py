@@ -36,8 +36,8 @@ def test_walls_diag_block(hero, game_hvsp, steel_wall):
     assert Cell(2, 2) in cells_seen
 
 
-    bf.place(steel_wall(), Cell(1, 2))
-    bf.place(steel_wall(), Cell(2, 1))
+    bf.place(steel_wall(game_hvsp), Cell(1, 2))
+    bf.place(steel_wall(game_hvsp), Cell(2, 1))
 
     cells_seen = vision.std_seen_cells(hero)
 

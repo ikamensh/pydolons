@@ -23,7 +23,7 @@ def pirate_basetype():
 
 @pytest.fixture()
 def demohero_basetype():
-    _demohero_basetype = BaseType({'str':45, 'agi': 15,'prc': 15}, "Demo Hero")
+    _demohero_basetype = BaseType({'str':25, 'agi': 35,'prc': 15}, "Demo Hero")
     yield  _demohero_basetype
 
 @pytest.fixture()
@@ -44,7 +44,7 @@ def steel_wall():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall = lambda: Obstacle("Wall of steel!", 5000, resists=resists, armor=500, icon="wall.png")
+    _steel_wall = lambda g: Obstacle("Wall of steel!", 5000, game=g, resists=resists, armor=500, icon="wall.png")
     return _steel_wall
 
 
@@ -59,14 +59,16 @@ def demo_dungeon(pirate_band):
 @pytest.fixture()
 def walls_dungeon(pirate_basetype, steel_wall):
 
-    unit_locations = {}
+    def create_locations(g):
+        unit_locations = {}
 
-    wall_x = 4
-    for wall_y in range(0, 6):
-        unit_locations[steel_wall()] =  Cell(wall_x, wall_y)
+        wall_x = 4
+        for wall_y in range(0, 6):
+            unit_locations[steel_wall(g)] =  Cell(wall_x, wall_y)
 
-    unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
-    _walls_dungeon = Dungeon(unit_locations, 12, 12, hero_entrance=Cell(0, 0))
+        unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
+        return unit_locations
+    _walls_dungeon = Dungeon(create_locations, 12, 12, hero_entrance=Cell(0, 0))
 
     yield  _walls_dungeon
 

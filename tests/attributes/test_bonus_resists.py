@@ -9,11 +9,13 @@ from mechanics.buffs import Ability
 
 @pytest.fixture()
 def total_resist():
-    resists = Resistances({dt:0.5 for dt in DamageTypes})
-    bonus = Bonus({CharAttributes.RESISTANCES: resists})
-    _total_resist = Ability([bonus])
+    def _():
+        resists = Resistances({dt:0.5 for dt in DamageTypes})
+        bonus = Bonus({CharAttributes.RESISTANCES: resists})
+        _total_resist = Ability([bonus])
 
-    yield _total_resist
+        return _total_resist
+    return _
 
 @pytest.fixture()
 def special_resist():
@@ -21,7 +23,7 @@ def special_resist():
     bonus = Bonus({CharAttributes.RESISTANCES: resist})
     _special_resist = Ability([bonus])
 
-    yield _special_resist
+    return _special_resist
 
 @pytest.fixture()
 def vulnerability():
@@ -29,7 +31,7 @@ def vulnerability():
     bonus = Bonus({CharAttributes.RESISTANCES: resists})
     _vulnerability = Ability([bonus])
 
-    yield _vulnerability
+    return _vulnerability
 
 
 def test_right_type_works(game_hvsp, hero, special_resist):
@@ -72,7 +74,7 @@ def test_armor_reduces_damage(game_hvsp, hero, total_resist):
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
-    hero.add_ability(total_resist)
+    hero.add_ability(total_resist())
 
     DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
@@ -85,13 +87,13 @@ def test_ability_stacks(game_hvsp, hero, total_resist):
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.FIRE)
 
-    hero.add_ability(total_resist)
+    hero.add_ability(total_resist())
     DamageEvent(dmg, hero)
     dealt_armor1 = hp_before_dmg - hero.health
 
     hp_before_dmg = hero.health
     import copy
-    hero.add_ability(copy.deepcopy(total_resist))
+    hero.add_ability(total_resist())
     DamageEvent(dmg, hero)
     dealt_armor2 = hp_before_dmg - hero.health
 

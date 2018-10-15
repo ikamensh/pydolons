@@ -9,9 +9,27 @@ from game_objects.battlefield_objects import BaseType
 from game_objects.monsters.Monster import Monster
 
 
+class goblin_sound_map:
+    move = "SftStep3.wav"
+    hit = "c_goblin_hit2.wav"
+    attack = "ATTACK_WOLF_2.wav"
+    perish = "c_goblin_death.wav"
+
+class orc_sound_map:
+    move = "SftStep3.wav"
+    hit = "c_goblin_hit2.wav"
+    attack = "ATTACK_WOLF_2.wav"
+    perish = "c_goblin_death.wav"
+
+class ogre_sound_map:
+    move = "SftStep3.wav"
+    hit = "c_goblin_hit2.wav"
+    attack = "ATTACK_WOLF_2.wav"
+    perish = "c_goblin_death.wav"
+
 
 goblin_bt = BaseType({'str':8, 'end':7, 'prc':15, 'agi':15, 'int':12, 'cha':7},
-                     "Goblin", abilities=[battle_rage(1)], icon="goblin.png")
+                     "Goblin", abilities=[battle_rage(1)], icon="goblin.png", sound_map=goblin_sound_map)
 
 goblin = Monster(goblin_bt,
                       [
@@ -21,7 +39,7 @@ goblin = Monster(goblin_bt,
 
 
 orc_bt = BaseType({'str':14, 'end':14, 'prc':12, 'agi':12, 'int':6, 'cha':6},
-                     "Orc", abilities=[bash(0.33), fat, battle_rage(1)], icon="orc.png")
+                     "Orc", abilities=[bash(0.33), fat, battle_rage(1)], icon="orc.png", sound_map=orc_sound_map)
 
 orc = Monster(orc_bt,
                       [
@@ -29,10 +47,9 @@ orc = Monster(orc_bt,
                           [si.jacket_trollhide, si.scalemail_inferior, si.jacket_usual, si.cuirass_usual]
                       ])
 
-ogre_bt = BaseType({'str':22, 'end':25, 'prc':14, 'agi':9, 'int':10, 'cha':4},
-                     "Orc", abilities=[bash(0.5), fat, battle_rage(1), aoe_damage(radius=2,percentage=0.5)], icon="ogre.png")
+ogre_bt = BaseType({'str':22, 'end':25, 'prc':14, 'agi':9, 'int':10, 'cha':4},"Ogre", sound_map=ogre_sound_map,
+                   abilities=[bash(0.5), fat, battle_rage(1), aoe_damage(radius=2,percentage=0.5)], icon="ogre.png")
 
-# TODO test ogre and aoe_damage ability
 ogre = Monster(ogre_bt,
                       [
                           [si.smiths_hammer, si.hammer_superior, si.axe_superior, si.axe_ancient],

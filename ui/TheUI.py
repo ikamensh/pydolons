@@ -4,6 +4,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 from ui.GameRootNode import GameRootNode
 
+from ui.GameAnimation import Animations
 from ui.GamePages import GamePages
 from ui.GameController import GameController
 from ui.levels import Level_demo_dungeon
@@ -36,6 +37,7 @@ class TheUI(QtWidgets.QWidget):
         self.view = GameView(self)
         self.gameRoot.setView(self.view)
         self.gameconfig = self.view.gameconfig
+        self.gameconfig.animations = Animations()
         self.gameRoot.setGameConfig(self.view.gameconfig)
         self.layout.addWidget(self.view)
         self.layout.setMargin(2)

@@ -41,7 +41,7 @@ class Active:
             cpy._cost = copy.deepcopy(cpy._cost)
             cpy.spell = copy.deepcopy(cpy.spell)
             self.owner.pay(self.cost)
-            ActiveEvent(self.game, cpy, targeting)
+            ActiveEvent(cpy, targeting)
 
     def owner_can_afford_activation(self):
         if self.spell:
@@ -54,7 +54,7 @@ class Active:
             callback(self, targeting)
 
     @staticmethod
-    def from_spell(spell, game):
+    def from_spell(spell, game=None):
         new_active = Active(spell.targeting_cls, [spell.targeting_cond],
                             spell.cost,
                             game=game,

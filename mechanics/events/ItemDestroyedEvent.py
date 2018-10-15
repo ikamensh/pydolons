@@ -4,9 +4,9 @@ from mechanics.events import EventsChannels
 class ItemDestroyedEvent(Event):
     channel = EventsChannels.ItemDestroyedChannel
 
-    def __init__(self, game, item):
+    def __init__(self, item):
         self.item = item
-        super().__init__(game)
+        super().__init__(item.game)
 
     def check_conditions(self):
         return True

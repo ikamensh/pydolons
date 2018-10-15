@@ -2,12 +2,13 @@ from mechanics.events import AttackEvent
 from battlefield.Cell import Cell
 from battlefield.Facing import Facing
 
-def test_backstab(game_hvsp, hero, pirate):
+def test_backstab(empty_game, hero, pirate):
 
-    bf = game_hvsp.battlefield
+    bf = empty_game.battlefield
+    empty_game.add_unit(hero, Cell(1,1))
+    empty_game.add_unit(pirate, Cell(1,2))
 
-    bf.move(hero, Cell(1,1))
-    bf.place(pirate, Cell(1,2))
+
     bf.unit_facings[hero] = Facing.SOUTH
     bf.unit_facings[pirate] = Facing.SOUTH
 

@@ -4,9 +4,9 @@ from mechanics.events import EventsChannels
 class NextUnitEvent(Event):
     channel = EventsChannels.NextUnitChannel
 
-    def __init__(self, game, unit):
+    def __init__(self, unit):
         self.unit = unit
-        super().__init__()
+        super().__init__(unit.game)
 
     def check_conditions(self):
         return True

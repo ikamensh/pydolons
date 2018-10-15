@@ -1,11 +1,13 @@
 from battlefield.Battlefield import Cell
 from battlefield.Facing import Facing
+from exceptions.PydolonsException import PydolonsException
 import pytest
 
 def test_move(game_hvsp, hero):
     initial_location = game_hvsp.get_location(hero)
 
     target_location = Cell(1, 2)
+    hero.readiness = 1.09
     game_hvsp.order_move(hero, target_location)
     assert initial_location != game_hvsp.get_location(hero)
     assert target_location == game_hvsp.get_location(hero)
@@ -16,10 +18,11 @@ def test_facing_no_problem(game_hvsp, hero):
     game_hvsp.battlefield.unit_facings[hero] = Facing.NORTH
 
     target_location = Cell(1, 2)
+    hero.readiness = 1.09
     try:
         for _ in range(10):
             game_hvsp.order_move(hero, target_location)
-    except:
+    except PydolonsException as e:
         pass
 
     assert initial_location != game_hvsp.get_location(hero)
@@ -32,12 +35,12 @@ def test_can_make_multiple_steps(game_hvsp, hero):
     game_hvsp.battlefield.unit_facings[hero] = Facing.NORTH
 
     target_location = Cell(0, 6)
+    hero.readiness=1.09
     try:
         for _ in range(20):
             game_hvsp.order_move(hero, target_location)
-            hero.readiness = 1
-    except Exception as e:
-        print(e)
+            hero.readiness = 1.09
+    except PydolonsException as e:
         pass
 
     assert initial_location != game_hvsp.get_location(hero)
@@ -48,6 +51,7 @@ def test_can_use_diag_step(game_hvsp, hero):
     game_hvsp.battlefield.unit_facings[hero] = Facing.SOUTH
 
     target_location = Cell(2, 2)
+    hero.readiness = 1.09
     game_hvsp.order_move(hero, target_location)
 
     assert initial_location != game_hvsp.get_location(hero)

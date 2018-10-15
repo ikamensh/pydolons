@@ -4,10 +4,10 @@ from mechanics.events import EventsChannels
 class ObstacleDestroyedEvent(Event):
     channel = EventsChannels.ObstacleDestroyedChannel
 
-    def __init__(self, game, unit):
+    def __init__(self, unit):
         self.unit = unit
         self.killer = unit.last_damaged_by
-        super().__init__(game)
+        super().__init__(unit.game)
 
     def check_conditions(self):
         return self.unit.alive

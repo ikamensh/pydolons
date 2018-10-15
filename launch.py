@@ -6,6 +6,9 @@ from cntent.base_types.demo_hero import demohero_basetype
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from cntent.dungeons.pirate_lair import pirate_lair
+from cntent.dungeons.small_graveyard import small_graveyard
+from cntent.dungeons.small_orc_cave import small_orc_cave
+
 from ui.TheUI import TheUI
 # import triggers
 from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
@@ -32,7 +35,7 @@ def one_game():
     # Logical engine initialization, the_hero create from character
     print('cfg ===> start init DreamGame', datetime.now())
     # game = DreamGame.start_dungeon(walls_dungeon, character.unit)
-    game = DreamGame.start_dungeon(walls_dungeon, character.unit)
+    game = DreamGame.start_dungeon(small_orc_cave, character.unit)
     print('cfg ===> init DreamGame', datetime.now())
     # add character field for game
     game.character = character
@@ -42,14 +45,14 @@ def one_game():
 
     # NEW TRIGGER ADD THIS |
     #
-    levelstatus_trigger(),
-    ui_error_message_trigger(),
-    nexunit_anim_trigger(),
-    turn_anim_trigger(),
-    perish_anim_trigger(),
-    attack_anin_trigger(),
-    damage_anim_trigger(),
-    move_anim_trigger()
+    levelstatus_trigger(game),
+    ui_error_message_trigger(game),
+    nexunit_anim_trigger(game),
+    turn_anim_trigger(game),
+    perish_anim_trigger(game),
+    attack_anin_trigger(game),
+    damage_anim_trigger(game),
+    move_anim_trigger(game)
 
 
     # debug print

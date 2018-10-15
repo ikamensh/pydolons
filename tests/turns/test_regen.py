@@ -39,7 +39,7 @@ def test_bleeding(game_hvsp, hero):
 from cntent.monsters.undead import zombie
 
 def test_undead_no_regen(empty_game):
-    zomb = zombie.create()
+    zomb = zombie.create(empty_game)
     empty_game.add_unit(zomb, 1+1j, None)
 
     zomb.health -= 100

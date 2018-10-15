@@ -71,7 +71,7 @@ def test_uses_enabler_abilities(minigame, enabler):
 
     assert action is ingame_imba
 
-# @pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
+@pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
 def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype):
     _game = SimGame(simple_battlefield)
     _game.add_unit(mud_golem, 3+3j, Fractions.ENEMY, 1j)

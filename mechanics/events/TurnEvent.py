@@ -4,10 +4,10 @@ from mechanics.events import EventsChannels
 class TurnEvent(Event):
     channel = EventsChannels.TurnChannel
 
-    def __init__(self, game, unit, ccw):
+    def __init__(self, unit, ccw):
         self.unit = unit
         self.ccw = ccw
-        super().__init__(game)
+        super().__init__(unit.game)
 
     def check_conditions(self):
         return True

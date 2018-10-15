@@ -16,7 +16,7 @@ class WeaponBlueprint(Blueprint):
         self.weapon_type = weapon_type
 
 
-    def to_item(self, material, quality):
+    def to_item(self, material, quality, *, game=None):
         assert material.material_type is self.material_type
         total_rarity = material.rarity * quality.rarity
 
@@ -32,7 +32,7 @@ class WeaponBlueprint(Blueprint):
                       max_durability=durability,
                       mastery=self.weapon_type.mastery,
                       blueprint=self, material=material,
-                      quality=quality)
+                      quality=quality, game=game)
 
     def __repr__(self):
         return f"{self.name} blueprint"

@@ -7,7 +7,7 @@ import pytest
 
 @pytest.fixture()
 def obstacle(game_hvsp):
-    obstacle = Obstacle("dummy", 500, 0, None, None)
+    obstacle = Obstacle("dummy", 500, game=game_hvsp)
     game_hvsp.add_obstacle(obstacle, Cell(1, 2))
     return obstacle
 

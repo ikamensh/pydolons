@@ -51,7 +51,7 @@ def test_events_work(minigame):
     sim_unit = list(sim.battlefield.unit_locations.keys())[0]
     sim_location_before = sim.battlefield.unit_locations[sim_unit]
 
-    MovementEvent(sim, sim_unit, 0j)
+    MovementEvent(sim_unit, 0j)
 
     assert sim_location_before != sim.battlefield.unit_locations[sim_unit]
 

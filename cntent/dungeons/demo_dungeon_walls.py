@@ -4,17 +4,18 @@ from cntent.monsters.pirates import pirate_basetype
 from game_objects.battlefield_objects import Unit
 from game_objects.dungeon.Dungeon import Dungeon
 
-pirate_band = [Unit(pirate_basetype) for i in range(3)]
-locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
+def create_units(g):
+    pirate_band = [Unit(pirate_basetype) for i in range(3)]
+    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
 
-unit_locations = {pirate_band[i]: locations[i] for i in range(3)}
+    unit_locations = {pirate_band[i]: locations[i] for i in range(3)}
 
-wall_x = 8
-for wall_y in range(0,9):
-    unit_locations[mud_wall()] = Cell(wall_x, wall_y)
+    wall_x = 8
+    for wall_y in range(0,9):
+        unit_locations[mud_wall()] = Cell(wall_x, wall_y)
 
-unit_locations[Unit(mud_golem_basetype)] = Cell(11, 0)
+    unit_locations[Unit(mud_golem_basetype)] = Cell(11, 0)
 
 
-walls_dungeon = Dungeon(unit_locations, 12, 12, hero_entrance=Cell(3, 4))
+walls_dungeon = Dungeon(create_units, 12, 12, hero_entrance=Cell(3, 4))
 

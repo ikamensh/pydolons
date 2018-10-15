@@ -94,6 +94,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
                 txt += '\nmana = ' + str(units_bf[cell].mana)
                 txt += '\nstamina = ' + str(units_bf[cell].stamina)
 
+                txt += '\ninitiative = ' + str(units_bf[cell].initiative)
                 txt += '\nattack = ' + str(units_bf[cell].melee_precision)
                 txt += '\ndefence = ' + str(units_bf[cell].melee_evasion)
 

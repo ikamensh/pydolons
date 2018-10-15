@@ -4,11 +4,10 @@ from mechanics.events import EventsChannels
 class UnitDiedEvent(Event):
     channel = EventsChannels.UnitDiedChannel
 
-    def __init__(self, game, unit):
-        assert unit.game is game
+    def __init__(self, unit):
         self.unit = unit
         self.killer = unit.last_damaged_by
-        super().__init__(game)
+        super().__init__(unit.game)
 
     def check_conditions(self):
         return self.unit.alive

@@ -7,7 +7,7 @@ def test_takes_different_time(game_hvsp, hero, mud_golem):
     hero_pos = game_hvsp.battlefield.unit_locations[hero]
     hero_facing = game_hvsp.battlefield.unit_facings[hero]
 
-    game_hvsp.battlefield.place(mud_golem, hero_pos.complex + hero_facing)
+    game_hvsp.add_unit(mud_golem, hero_pos.complex + hero_facing)
 
     hero.equipment.equip_item(std_items.dagger_cheap)
     assert hero.get_melee_weapon() is std_items.dagger_cheap
