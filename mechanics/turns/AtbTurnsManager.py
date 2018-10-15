@@ -24,7 +24,7 @@ class AtbTurnsManager(TurnsManager):
 
     @property
     def managed_units(self):
-        return [elem for elem in self.managed if elem.alive]
+        return [elem for elem in self.managed if isinstance(elem, Unit)]
 
     def pass_time(self, time):
 

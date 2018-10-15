@@ -38,11 +38,14 @@ class DreamGame:
     @classmethod
     def start_dungeon(cls, dungeon, hero: bf_objs.Unit, is_server=True):
 
-        unit_locations = dungeon.unit_locations
-        unit_locations = copy.deepcopy(unit_locations)
-        unit_locations[hero] = dungeon.hero_entrance
         bf = Battlefield(dungeon.h, dungeon.w)
         game = cls(bf, is_server=is_server)
+
+
+        unit_locations = dungeon.unit_locations()
+        unit_locations = copy.deepcopy(unit_locations)
+        unit_locations[hero] = dungeon.hero_entrance
+
         if unit_locations:
             bf.place_many(unit_locations)
         game.the_hero = hero

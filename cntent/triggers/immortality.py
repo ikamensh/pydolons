@@ -7,9 +7,13 @@ def immortality(unit):
                               conditions={lambda t,e : e.unit.uid == unit.uid})
     return trig
 
+def give_1_hp_cb(t,e):
+    e.unit.health += 1
+
 def undead_n_hits(unit, n_hits):
     trig = CounteredInterrupt(UnitDiedEvent,
                               conditions={lambda t,e : e.unit.uid == unit.uid},
+                              callbacks=[give_1_hp_cb],
                               n_counters=n_hits)
     return trig
 

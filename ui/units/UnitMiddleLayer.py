@@ -79,9 +79,24 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         if cell in [unit.worldPos for unit in units_at.values()]:
             if cell in units_bf.keys():
                 unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
+<<<<<<< HEAD
                 self.tool.setPos(unit.pos())
                 self.tool.setDict(units_bf[cell].tooltip_info)
                 self.tool.setVisible(True)
+=======
+                self.tooltip.setPos(unit.pos())
+                txt = 'uid = ' + str(unit.uid)
+                txt += '\nhp = ' + str(units_bf[cell].health)
+                txt += '\nmana = ' + str(units_bf[cell].mana)
+                txt += '\nstamina = ' + str(units_bf[cell].stamina)
+
+                txt += '\ninitiative = ' + str(units_bf[cell].initiative)
+                txt += '\nattack = ' + str(units_bf[cell].melee_precision)
+                txt += '\ndefence = ' + str(units_bf[cell].melee_evasion)
+
+                self.toolText.setPlainText(txt)
+                self.tooltip.setVisible(True)
+>>>>>>> b865cf52579f7e0dfde2f2fb6da3e311a3a7affc
         else:
             self.tool.setVisible(False)
 
