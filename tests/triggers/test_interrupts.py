@@ -24,9 +24,10 @@ def test_undead_n_hits(game, hero, n):
 
     dmg = Damage(200, DamageTypes.ACID)
 
-    while hero.health > 0:
+    while hero.health >= dmg.amount:
         DamageEvent(dmg, hero)
 
+    DamageEvent(dmg, hero)
     assert hero.alive
 
     n_left = n-1

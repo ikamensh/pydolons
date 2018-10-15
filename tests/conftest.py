@@ -59,14 +59,16 @@ def demo_dungeon(pirate_band):
 @pytest.fixture()
 def walls_dungeon(pirate_basetype, steel_wall):
 
-    unit_locations = {}
+    def create_locations():
+        unit_locations = {}
 
-    wall_x = 4
-    for wall_y in range(0, 6):
-        unit_locations[steel_wall()] =  Cell(wall_x, wall_y)
+        wall_x = 4
+        for wall_y in range(0, 6):
+            unit_locations[steel_wall()] =  Cell(wall_x, wall_y)
 
-    unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
-    _walls_dungeon = Dungeon(unit_locations, 12, 12, hero_entrance=Cell(0, 0))
+        unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
+        return unit_locations
+    _walls_dungeon = Dungeon(create_locations, 12, 12, hero_entrance=Cell(0, 0))
 
     yield  _walls_dungeon
 

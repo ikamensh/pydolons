@@ -18,6 +18,7 @@ def test_facing_no_problem(game, hero):
     target_location = Cell(1, 2)
     try:
         for _ in range(10):
+            hero.readiness = 1
             game.order_move(hero, target_location)
     except:
         pass
@@ -48,6 +49,7 @@ def test_can_use_diag_step(game, hero):
     game.battlefield.unit_facings[hero] = Facing.SOUTH
 
     target_location = Cell(2, 2)
+    hero.readiness = 1.01
     game.order_move(hero, target_location)
 
     assert initial_location != game.get_location(hero)

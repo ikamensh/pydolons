@@ -101,7 +101,10 @@ class GameConfiguration:
         return: QtGui.QPixmap
         Объект QPixmap из словаря GameConfiguration.pix_maps
         """
-        assert self.pix_maps.get(filename) is not None
+        print(filename)
+        if self.pix_maps.get(filename) is None:
+            print(f"{filename} image was not found. using default.")
+            return self.pix_maps.get("default.png")
         return self.pix_maps.get(filename)
 
     def setUpSounds(self):

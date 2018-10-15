@@ -15,6 +15,8 @@ from typing import Set
 import copy
 from functools import lru_cache
 
+import random
+
 class Unit(BattlefieldObject):
 
 
@@ -81,7 +83,11 @@ class Unit(BattlefieldObject):
         self.alive = True
         self.last_damaged_by = None
 
-        self.icon = base_type.icon
+        if isinstance(base_type.icon, str):
+            self.icon = base_type.icon
+        else:
+            self.icon = random.choice(base_type.icon)
+
         self.sound_map = base_type.sound_map
 
         self.turn_ccw_active = self.give_active(turn_ccw)
