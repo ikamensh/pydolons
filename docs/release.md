@@ -1,3 +1,11 @@
+`@date:2018.10.15`
+`@autor:reef425`
+`@note_start:`
+>1. Добавил пакет GameAnimation, module Animations.py, animation object Direction.py
+>2. Анимации стрелки работает корректно
+
+`@note_end`
+
 `@date:2018.10.12`
 `@autor:ikamensh`
 `@note_start:`
