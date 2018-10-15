@@ -3,6 +3,9 @@
 `@note_start:`
 >1. Добавил пакет GameAnimation, module Animations.py, animation object Direction.py
 >2. Анимации стрелки работает корректно
+>3. Тултипы вынесены в отдельный модуль ui/GamePages/suwidgets/ToolTip.py
+>4. Генраци тултипа производится с помощью ui/GamePages/suwidgets/SuWidgetFactory.py
+
 
 `@note_end`
 
