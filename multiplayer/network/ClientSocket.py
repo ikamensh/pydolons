@@ -9,7 +9,8 @@ from multiplayer.network.config import host, port
 
 
 class ClientSocket:
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.name = None
         self.next_order = 1
@@ -33,7 +34,7 @@ class ClientSocket:
             if self.next_order != e.uid:
                 self.orders_stored[e.uid] = e
             else:
-                ClientOrderRecievedEvent(e.unit_uid, e.active_uid, e.target)
+                ClientOrderRecievedEvent(self.game, e.unit_uid, e.active_uid, e.target)
                 self.next_order += 1
                 while self.next_order in self.orders_stored:
                     e = self.orders_stored[self.next_order]
@@ -42,6 +43,7 @@ class ClientSocket:
 
 
     def send(self, e : ClientOrderRecievedEvent):
+        e.game = None
         data_string = pickle.dumps(e)
         self.socket.send(data_string)
 

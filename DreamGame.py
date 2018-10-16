@@ -21,7 +21,7 @@ import random
 class DreamGame:
 
     def __init__(self, bf, rules=None, is_sim = False, is_server=True, seed = None):
-        self.random = random.Random(seed) if seed else random.Random()
+        self.random = random.Random(seed) if seed else random.Random(100)
         self.battlefield : Battlefield = bf
         self.the_hero : bf_objs.Unit= None
         self.fractions : typing.Dict[bf_objs.Unit : Fractions] = {}
@@ -46,7 +46,6 @@ class DreamGame:
 
 
         unit_locations = dungeon.unit_locations(game)
-        unit_locations = copy.deepcopy(unit_locations)
         unit_locations[hero] = dungeon.hero_entrance
 
         game.the_hero = hero

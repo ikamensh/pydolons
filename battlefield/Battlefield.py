@@ -9,7 +9,7 @@ class Battlefield:
         self.w = w
         self.h = h
         self.units_at = {}              #cell -> unit
-        self.unit_locations: typing.Dict[bf_objs.BattlefieldObject:Cell] = {}        #unit -> cell
+        self.unit_locations: typing.Dict[bf_objs.BattlefieldObject,Cell] = {}        #unit -> cell
         self.unit_facings :typing.Dict[bf_objs.Unit:complex] = {}          #unit -> direction
         self.vision = Vision(self)
 

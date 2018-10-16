@@ -15,9 +15,9 @@ if TYPE_CHECKING:
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls: ClassVar, conditions: List[Callable], cost: Cost,*, game: DreamGame=None,
-                 callbacks: List[Callable], tags: List[ActiveTags]=None, name: str = "Mysterious",
-                 simulate = None, icon: str = "fire.jpg"):
+    def __init__(self, targeting_cls: ClassVar, conditions: List[Callable], cost: Union[Cost, Callable],*,
+                 game: DreamGame=None, callbacks: List[Callable], tags: List[ActiveTags]=None,
+                 name: str = "nameless active",simulate = None, icon: str = "fire.jpg"):
         self.name = name
         self.game = game
         self.targeting_cls = targeting_cls
