@@ -1,8 +1,8 @@
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
-import game_objects.battlefield_objects as bf_objs
 import typing
+import game_objects.battlefield_objects as bf_objs
 
 class Battlefield:
     def __init__(self, w, h):

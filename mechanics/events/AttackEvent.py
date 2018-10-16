@@ -1,11 +1,16 @@
+from __future__ import annotations
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels, DamageEvent
 from mechanics.chances.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
+from typing import TYPE_CHECKING, Tuple
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit, Obstacle, BattlefieldObject
+    from game_objects.items import Weapon
 
 
 class AttackEvent(Event):
     channel = EventsChannels.AttackChannel
-    def __init__(self, source, target, weapon=None, fire=True):
+    def __init__(self, source: Unit, target: BattlefieldObject, weapon : Weapon=None, fire: bool=True):
         game = source.game
         self.source = source
         self.target = target
@@ -14,10 +19,10 @@ class AttackEvent(Event):
         self.is_blind = not game.battlefield.x_sees_y(source, target)
         super().__init__(game,fire)
 
-    def check_conditions(self):
+    def check_conditions(self) -> bool:
         return all( (self.source, self.source.alive, self.target, self.target.alive, self.weapon, self.weapon.durability is None or self.weapon.durability > 0) )
 
-    def resolve(self):
+    def resolve(self) -> None:
 
         precision, evasion = self.effective_precision_evasion()
 
@@ -32,12 +37,12 @@ class AttackEvent(Event):
 
 
 
-    def calculate_chances(self):
+    def calculate_chances(self) -> Tuple[float, float, float]:
         p, e = self.effective_precision_evasion()
         return ImpactCalculator.calc_chances(self.source.unarmed_chances, p, e)
 
 
-    def effective_precision_evasion(self):
+    def effective_precision_evasion(self)-> Tuple[float, float]:
         effective_precision = self.source.melee_precision
         if self.is_blind:
             effective_precision *= 0.25

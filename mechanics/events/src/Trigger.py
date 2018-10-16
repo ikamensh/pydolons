@@ -1,10 +1,15 @@
+from __future__ import annotations
 import inspect
+from typing import TYPE_CHECKING, ClassVar, List, Callable
+if TYPE_CHECKING:
+    from mechanics.events import EventsPlatform
+    from game_objects.battlefield_objects import Unit
 
 class Trigger:
-    def __init__(self, target_event_cls,*, platform, conditions = None,
-                 source = None,
-                 is_interrupt = False,
-                 callbacks=None):
+    def __init__(self, target_event_cls: ClassVar,*, platform: EventsPlatform, conditions: List[Callable] = None,
+                 source: Unit = None,
+                 is_interrupt: bool = False,
+                 callbacks: List[Callable] = None):
 
         assert inspect.isclass(target_event_cls)
         self.channel = target_event_cls.channel

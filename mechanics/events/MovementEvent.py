@@ -1,11 +1,15 @@
+from __future__ import annotations
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 from battlefield import Cell
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
 
 class MovementEvent(Event):
     channel = EventsChannels.MovementChannel
 
-    def __init__(self, unit, cell_to):
+    def __init__(self, unit: Unit, cell_to: Cell):
         game = unit.game
         self.battlefield = game.battlefield
         self.unit = unit

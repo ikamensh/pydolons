@@ -12,6 +12,8 @@ class Obstacle(BattlefieldObject):
 
     health = DynamicParameter("max_health", [lambda u : ObstacleDestroyedEvent(u)])
 
+    is_obstacle = True
+
     def __init__(self, name, max_health, *, game=None, armor=0, resists=None, icon="wall.png"):
         Obstacle.last_uid += 1
         self.uid = Obstacle.last_uid
@@ -25,7 +27,6 @@ class Obstacle(BattlefieldObject):
         self.icon = icon
         self.alive = True
         self.last_damaged_by = None
-        self.is_obstacle = True
 
 
     def lose_health(self, dmg_amount, source=None):

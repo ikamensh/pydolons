@@ -1,10 +1,14 @@
+from __future__ import annotations
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
 
 class TimePassedEvent(Event):
     channel = EventsChannels.TimePassedChannel
 
-    def __init__(self, game, dt):
+    def __init__(self, game: DreamGame, dt: float):
         self.dt = dt
         super().__init__(game)
 

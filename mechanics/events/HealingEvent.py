@@ -1,10 +1,14 @@
+from __future__ import annotations
 from mechanics.events import EventsChannels
 from mechanics.events.src.Event import Event
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit, BattlefieldObject
 
 class HealingEvent(Event):
     channel = EventsChannels.HealingChannel
 
-    def __init__(self, healing_amount, target, *, source=None):
+    def __init__(self, healing_amount: float, target: BattlefieldObject, *, source: Unit=None):
         self.source = source
         self.target = target
         self.healing_amount = healing_amount

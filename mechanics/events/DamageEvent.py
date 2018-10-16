@@ -1,17 +1,23 @@
+from __future__ import annotations
 from mechanics.events import EventsChannels
 from mechanics.events.src.Event import Event
-from mechanics.damage import Damage
 from mechanics.chances import ImpactFactor
-from game_objects import battlefield_objects as bf_objs
+from mechanics.damage import Damage
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import BattlefieldObject, Unit
+
+
 
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
 
-    def __init__(self, damage, target, *, source=None, impact_factor=ImpactFactor.HIT,fire=True):
-        self.source: bf_objs.Unit = source
-        self.target: bf_objs.Unit = target
-        self.damage: Damage = damage
-        self.impact_factor: ImpactFactor = impact_factor
+    def __init__(self, damage: Damage, target: BattlefieldObject, *, source: Unit=None, impact_factor=ImpactFactor.HIT, fire=True):
+        self.source = source
+        self.target = target
+        self.damage = damage
+        self.impact_factor = impact_factor
 
         self.weapon_dur_dmg = 0
 

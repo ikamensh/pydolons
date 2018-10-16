@@ -1,5 +1,9 @@
+from __future__ import annotations
 from mechanics.events import Event
 from mechanics.events import EventsChannels
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from mechanics.buffs import Buff
 
 class BuffDetachedEvent(Event):
     channel = EventsChannels.BuffDetachedChannel

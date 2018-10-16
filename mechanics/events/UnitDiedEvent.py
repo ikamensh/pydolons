@@ -1,12 +1,16 @@
+from __future__ import annotations
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
 
 class UnitDiedEvent(Event):
     channel = EventsChannels.UnitDiedChannel
 
-    def __init__(self, unit):
+    def __init__(self, unit: Unit):
         self.unit = unit
-        self.killer = unit.last_damaged_by
+        self.killer: Unit = unit.last_damaged_by
         super().__init__(unit.game)
 
     def check_conditions(self):

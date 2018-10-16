@@ -1,10 +1,14 @@
+from __future__ import annotations
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.items import WearableItem
 
 class ItemDestroyedEvent(Event):
     channel = EventsChannels.ItemDestroyedChannel
 
-    def __init__(self, item):
+    def __init__(self, item: WearableItem):
         self.item = item
         super().__init__(item.game)
 

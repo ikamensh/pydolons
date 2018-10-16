@@ -1,5 +1,4 @@
 from mechanics.events import ActiveEvent, EventsChannels, NextUnitEvent
-from threading import Lock
 
 class EventsPlatform:
 
