@@ -11,7 +11,7 @@ from mechanics.buffs import Ability
 def total_armor():
     armor = Armor(10)
     bonus = Bonus({CharAttributes.ARMOR: armor})
-    _total_armor = Ability([bonus])
+    _total_armor = Ability(bonus)
 
     yield _total_armor
 
@@ -19,7 +19,7 @@ def total_armor():
 def broken_armor():
     armor = Armor(-10)
     bonus = Bonus({CharAttributes.ARMOR: armor})
-    _total_armor = Ability([bonus])
+    _total_armor = Ability(bonus)
 
     yield _total_armor
 
@@ -27,7 +27,7 @@ def broken_armor():
 def special_armor():
     armor = Armor(armor_dict={DamageTypes.ACID:100})
     bonus = Bonus({CharAttributes.ARMOR: armor})
-    _special_armor = Ability([bonus])
+    _special_armor = Ability(bonus)
 
     yield _special_armor
 

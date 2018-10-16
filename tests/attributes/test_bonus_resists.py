@@ -12,7 +12,7 @@ def total_resist():
     def _():
         resists = Resistances({dt:0.5 for dt in DamageTypes})
         bonus = Bonus({CharAttributes.RESISTANCES: resists})
-        _total_resist = Ability([bonus])
+        _total_resist = Ability(bonus)
 
         return _total_resist
     return _
@@ -21,7 +21,7 @@ def total_resist():
 def special_resist():
     resist = Resistances({DamageTypes.ACID:100})
     bonus = Bonus({CharAttributes.RESISTANCES: resist})
-    _special_resist = Ability([bonus])
+    _special_resist = Ability(bonus)
 
     return _special_resist
 
@@ -29,7 +29,7 @@ def special_resist():
 def vulnerability():
     resists = Resistances({dt:-0.5 for dt in DamageTypes})
     bonus = Bonus({CharAttributes.RESISTANCES: resists})
-    _vulnerability = Ability([bonus])
+    _vulnerability = Ability(bonus)
 
     return _vulnerability
 

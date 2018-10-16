@@ -1,8 +1,11 @@
+from __future__ import annotations
 from mechanics.combat import Attack
-from mechanics.actives import Active
 from mechanics.events import MovementEvent, TurnEvent
-from battlefield import Cell
-from game_objects.battlefield_objects import Unit
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from battlefield import Cell
+    from mechanics.actives import Active
+    from game_objects.battlefield_objects import Unit
 
 
 

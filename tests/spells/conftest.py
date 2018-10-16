@@ -37,7 +37,7 @@ def lightning_concept(lightning_bolt_callback):
     concept = SpellConcept(name="lightning bolt",
                            school=MasteriesEnum.LIGHTNING,
                            targeting_cls=BattlefieldObject,
-                           complexity=30,
+                           complexity=200,
                            cost=Cost(4, 40, 0, readiness=1),
                            amount=60, duration=None, precision_factor=1,
                            distance=5, radius=None,

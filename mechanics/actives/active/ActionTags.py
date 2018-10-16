@@ -1,6 +1,12 @@
-class ActiveTags:
-    MOVEMENT = "movement",
-    ATTACK = "attack",
-    MAGIC = "magic",
-    TURNING = "turning"
+from enum import Enum, auto
+
+class ActiveTags(Enum):
+    MOVEMENT = auto()
+    ATTACK = auto()
+    MAGIC = auto()
+    TURNING = auto()
+
+    REST = auto()
+    WAIT = auto()
+    DEFEND = auto()
 

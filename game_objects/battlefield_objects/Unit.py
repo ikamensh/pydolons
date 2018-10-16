@@ -35,6 +35,10 @@ class Unit(BattlefieldObject):
     armor = AttributeWithBonuses("armor_base", ca.ARMOR)
     resists = AttributeWithBonuses("resists_base", ca.RESISTANCES)
 
+    melee_precision = AttributeWithBonuses("melee_precision_base", ca.PRECISION)
+    melee_evasion = AttributeWithBonuses("melee_evasion_base", ca.EVASION)
+
+
 
 
     health = DynamicParameter("max_health", [lambda u : events.UnitDiedEvent(u)])
@@ -124,10 +128,10 @@ class Unit(BattlefieldObject):
         self.recalc()
 
     def recalc(self):
-        bonus_lists = [ability.bonuses for ability in self.abilities if ability.bonuses]
-        bonus_lists += [buff.bonuses for buff in self._buffs if buff.bonuses]
+        bonus_lists = [ability.bonus for ability in self.abilities if ability.bonus]
+        bonus_lists += [buff.bonus for buff in self._buffs if buff.bonus]
         bonus_lists += self.equipment.bonuses
-        self.bonuses = frozenset(flatten(bonus_lists))
+        self.bonuses = frozenset(bonus_lists)
 
     @property
     def sight_range(self):
@@ -155,11 +159,12 @@ class Unit(BattlefieldObject):
 
     @property
     def initiative_base(self):
-        return self.__initiative_formula(self.agi, self.stamina)
+        return self.__initiative_formula(self.agi, self.int, self.stamina)
 
-    @lru_cache(maxsize=16)
-    def __initiative_formula(self, agi, stamina):
-        return Attribute(10 * ((0.4 + agi / 14) ** (3 / 5)) * ((stamina / 100) ** (1 / 3)), 100, 0)
+    @staticmethod
+    @lru_cache()
+    def __initiative_formula(agi, intel, stamina):
+        return Attribute(1 + 9 * ((0.4 + agi / 25 + intel / 25) ** (3 / 5)) * ((stamina / (10*STAMINA_PER_END)) ** (1 / 3)), 100, 0)
 
     @property
     def initiative(self):
@@ -174,13 +179,15 @@ class Unit(BattlefieldObject):
         return weapon.mastery or MasteriesEnum.UNARMED
 
     @property
-    def melee_precision(self):
+    def melee_precision_base(self):
         mastery = self.masteries[self.melee_mastery]
-        return self.str + self.agi + mastery
+        return Attribute(self.str + self.prc + mastery, 100, 0)
+
 
     @property
-    def melee_evasion(self):
-        return self.prc*2 + self.agi*3
+    def melee_evasion_base(self):
+        return Attribute(self.prc*2 + self.agi*3, 100, 0)
+
 
     def reset(self):
         """
@@ -194,6 +201,12 @@ class Unit(BattlefieldObject):
                 'hp':str(int(self.health)),
                 'mana':str(self.mana),
                 'stamina':str(int(self.stamina)),
+
+                'initiative': str(int(self.initiative)),
+
+                'damage': str(int(self.get_melee_weapon().damage.amount)),
+                'armor': repr(self.armor),
+
                 'attack':str(self.melee_precision),
                 'defence':str(self.melee_evasion)}
 

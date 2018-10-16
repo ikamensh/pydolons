@@ -1,21 +1,30 @@
+from __future__ import annotations
 from mechanics.events import ActiveEvent
 from mechanics.actives import ActiveTags
 from battlefield import Cell
 from game_objects import battlefield_objects as bf_objs
 import copy
 from contextlib import contextmanager
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
+    from typing import ClassVar, List, Callable, Union
+    from mechanics.actives import Cost
+    from DreamGame import DreamGame
 
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls, conditions, cost,*, game=None, callbacks, tags=None, name = "Mysterious", simulate = None, icon = "fire.jpg"):
+    def __init__(self, targeting_cls: ClassVar, conditions: List[Callable], cost: Cost,*, game: DreamGame=None,
+                 callbacks: List[Callable], tags: List[ActiveTags]=None, name: str = "Mysterious",
+                 simulate = None, icon: str = "fire.jpg"):
         self.name = name
         self.game = game
         self.targeting_cls = targeting_cls
         self.conditions = conditions
         self._cost = cost
         self.callbacks = callbacks
-        self.owner = None
+        self.owner: Unit = None
         self.spell = None
         self.tags = tags or []
         self.simulate_callback = simulate

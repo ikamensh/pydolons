@@ -12,7 +12,7 @@ def trig_factory( ability: Ability):
 
 def undying(n):
     def _():
-        a = Ability(bonuses=[Bonus({ca.STAMINA: Attribute(10,200,0), ca.INITIATIVE: Attribute(0,-25,0)})],
+        a = Ability(bonus=Bonus({ca.STAMINA: Attribute(10, 200, 0), ca.INITIATIVE: Attribute(0, -25, 0)}),
                     triggers=[trig_factory])
         setattr(a, undead_n_hits, n)
         return a

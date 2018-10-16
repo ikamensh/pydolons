@@ -1,3 +1,4 @@
+from __future__ import annotations
 from mechanics.events.src.Trigger import Trigger
 
 from typing import List, Callable
@@ -8,9 +9,9 @@ if TYPE_CHECKING:
 
 
 class Ability:
-    def __init__(self, bonuses = None, triggers: List[Callable] = None):
-        self.bonuses: List[Bonus] = bonuses
-        self.triggers: List[Callable] = triggers # callable( Ability ) -> Trigger
+    def __init__(self, bonus: Bonus = None, triggers: List[Callable] = None):
+        self.bonus = bonus
+        self.triggers = triggers            # callable( Ability ) -> Trigger
         self.to_deactivate: List[Trigger] = []
         self.bound_to: Unit = None
 

@@ -11,7 +11,6 @@
   "abilities/test_abilities.py::test_str_helps[BonusAttributes.STR]": true,
   "combat/abilities/test_abilities.py::test_str_helps[armor]": true,
   "combat/abilities/test_abilities.py::test_str_helps[resistances]": true,
-  "combat/test_actions.py::test_can_make_multiple_steps": true,
   "spells/test_spell_active.py::test_attack_cell": true,
   "test_items.py::test_equip[BodyArmor]": true,
   "test_items.py::test_equip[Weapon]": true,

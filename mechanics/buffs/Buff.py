@@ -8,8 +8,8 @@ class Buff(Ability):
     duration = DynamicParameter("max_duration", [BuffExpiredEvent])
 
 
-    def __init__(self,duration: float, bonuses = None, triggers = None):
-        super().__init__(bonuses, triggers)
+    def __init__(self, duration: float, bonus = None, triggers = None):
+        super().__init__(bonus, triggers)
         self.max_duration = duration
 
     def reset(self):

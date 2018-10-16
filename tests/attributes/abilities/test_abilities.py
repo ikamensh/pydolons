@@ -13,7 +13,7 @@ def attrib(request):
 def inner_power(attrib):
     bonus = Attribute(2, 100, 0)
     inner_power_bonus = Bonus({attrib: bonus})
-    inner_power = Ability([inner_power_bonus])
+    inner_power = Ability(inner_power_bonus)
 
     yield inner_power
 
@@ -21,7 +21,7 @@ def inner_power(attrib):
 def bonus_str():
     bonus = Attribute(0, 0, 50)
     bonus_hp = Bonus({CharAttributes.HEALTH: bonus})
-    abil_hp = Ability([bonus_hp])
+    abil_hp = Ability(bonus_hp)
 
     yield abil_hp
 
@@ -50,7 +50,7 @@ def test_multiplier(hero, pirate):
 
     bonus = Attribute(0, 50, 0)
     bonus_hp = Bonus({CharAttributes.HEALTH: bonus})
-    abil_hp = Ability([bonus_hp])
+    abil_hp = Ability(bonus_hp)
 
     hp_before = hero.health
     hero.add_ability(abil_hp)
@@ -66,7 +66,7 @@ def test_bonus(hero, pirate):
 
     bonus = Attribute(0, 0, 50)
     bonus_hp = Bonus({CharAttributes.HEALTH: bonus})
-    abil_hp = Ability([bonus_hp])
+    abil_hp = Ability(bonus_hp)
 
     hp_before = hero.health
     hero.add_ability(abil_hp)
