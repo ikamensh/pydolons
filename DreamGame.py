@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 from battlefield.Battlefield import Battlefield, Cell
-import game_objects.battlefield_objects as bf_objs
 from mechanics.turns import AtbTurnsManager
 from mechanics.fractions import Fractions
-from mechanics.AI import BruteAI, RandomAI, BroadAI
+from mechanics.AI import BruteAI, RandomAI
 from mechanics.events import EventsPlatform, NextUnitEvent
 from ui.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
@@ -14,8 +15,12 @@ from GameLog import GameLog, LogTargets
 
 import copy
 import time
-import typing
 import random
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Dict
+    from game_objects.battlefield_objects import Unit, Obstacle
 
 
 class DreamGame:
@@ -23,8 +28,8 @@ class DreamGame:
     def __init__(self, bf, rules=None, is_sim = False, is_server=True, seed = None):
         self.random = random.Random(seed) if seed else random.Random()
         self.battlefield : Battlefield = bf
-        self.the_hero : bf_objs.Unit= None
-        self.fractions : typing.Dict[bf_objs.Unit : Fractions] = {}
+        self.the_hero : Unit= None
+        self.fractions : Dict[Unit,Fractions] = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
         self.gamelog = GameLog(LogTargets.PRINT)
@@ -39,7 +44,7 @@ class DreamGame:
             rule(self)
 
     @classmethod
-    def start_dungeon(cls, dungeon, hero: bf_objs.Unit, is_server=True):
+    def start_dungeon(cls, dungeon, hero: Unit, is_server=True):
 
         bf = Battlefield(dungeon.h, dungeon.w)
         game = cls(bf, is_server=is_server)
@@ -73,7 +78,7 @@ class DreamGame:
 
 
 
-    def add_unit(self, unit: bf_objs.Unit, cell,  fraction=Fractions.NEUTRALS, facing = None):
+    def add_unit(self, unit: Unit, cell,  fraction=Fractions.NEUTRALS, facing = None):
         unit.game = self
         for a in unit.actives:
             a.game = self
@@ -83,14 +88,15 @@ class DreamGame:
         unit.alive = True
 
 
-    def unit_died(self, unit: bf_objs.Unit):
+    def unit_died(self, unit: Unit):
         self.battlefield.remove(unit)
         self.turns_manager.remove_unit(unit)
         unit.alive = False
 
 
-    def obstacle_destroyed(self, obstacle):
+    def obstacle_destroyed(self, obstacle: Obstacle):
         self.battlefield.remove(obstacle)
+        obstacle.alive = False
 
 
     def add_obstacle(self, obstacle, cell):
@@ -152,7 +158,7 @@ class DreamGame:
         if self.turns_manager.get_next() is self.the_hero:
             cell = Cell.from_complex(x + y* 1j)
             if cell in self.battlefield.units_at:
-                self.order_attack(self.the_hero, self.battlefield.units_at[cell])
+                self.order_attack(self.the_hero, random.choice(self.battlefield.units_at[cell]))
             else:
                 self.order_move(self.the_hero, cell)
 
@@ -182,7 +188,7 @@ class DreamGame:
 
         raise CantAffordActiveException(action, missing)
 
-    def order_move(self, unit: bf_objs.Unit, target_cell: Cell, AI_assist=True):
+    def order_move(self, unit: Unit, target_cell: Cell, AI_assist=True):
 
 
         if not 0 <= target_cell.x < self.battlefield.w or not 0 <= target_cell.y < self.battlefield.h:
@@ -232,7 +238,7 @@ class DreamGame:
                     raise PydolonsException("None of the user movement actives can reach the target.")
 
 
-    def order_attack(self, unit: bf_objs.Unit, _target: bf_objs.Unit, AI_assist=True):
+    def order_attack(self, unit: Unit, _target: Unit, AI_assist=True):
         unit_target = _target
         actives = unit.attack_actives
         if len(actives) == 0:
@@ -293,7 +299,7 @@ class DreamGame:
 
 
     @staticmethod
-    def cost_heuristic(unit: bf_objs.Unit, factors = None):
+    def cost_heuristic(unit: Unit, factors = None):
         _factors = factors or {}
 
         def _(active):
@@ -313,7 +319,7 @@ class DreamGame:
     def units(self):
         return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
 
-    def get_location(self, unit: bf_objs.Unit):
+    def get_location(self, unit: Unit):
         return self.battlefield.unit_locations[unit]
 
 

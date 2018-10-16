@@ -1,6 +1,8 @@
+from __future__ import annotations
 from cmath import phase, pi
 import functools
 from math import hypot
+from typing import Union
 
 class Cell:
     def __init__(self, x, y):
@@ -8,15 +10,15 @@ class Cell:
         self.y = y
 
     @property
-    def complex(self):
+    def complex(self) -> complex:
         return self.x + self.y * 1j
 
     @staticmethod
-    def from_complex(c):
+    def from_complex(c: complex) -> Cell:
         return Cell( int(c.real + 0.5), int(c.imag+ 0.5)  )
 
     @staticmethod
-    def maybe_complex(cell_or_complex):
+    def maybe_complex(cell_or_complex: Union[Cell, complex]) -> Cell:
         c_or_c = cell_or_complex
         return Cell(int(c_or_c.real), int(c_or_c.imag)) if isinstance(c_or_c, complex) else c_or_c
 
