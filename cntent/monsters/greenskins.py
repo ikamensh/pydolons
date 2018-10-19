@@ -11,9 +11,9 @@ from game_objects.monsters.Monster import Monster
 
 class goblin_sound_map:
     move = "SftStep3.wav"
-    hit = "c_goblin_hit2.wav"
-    attack = "ATTACK_WOLF_2.wav"
-    perish = "c_goblin_death.wav"
+    hit = "c_ogre_hit1.mp3"
+    attack = "c_ogre_atk2.wav"
+    perish = "c_ogre_death.WAV"
 
 class orc_sound_map:
     move = "SftStep3.wav"

@@ -4,12 +4,12 @@ from game_objects.monsters.Monster import Monster
 
 class pirate_sound_map:
     move = "SftStep3.wav"
-    hit = "c_goblin_hit2.wav"
-    attack = "ATTACK_WOLF_2.wav"
-    perish = "c_goblin_death.wav"
+    hit = "fat_1_male_hit_4.wav"
+    attack = "fat_1_male_attack_1.wav"
+    perish = "male_1_death_3.wav"
 
 
-pirate_basetype = BaseType({'int':11, 'cha':7}, "Pirate Scum", icon=["pirate.png", "female-vampire.png"], sound_map=pirate_sound_map)
+pirate_basetype = BaseType({'int':11, 'cha':7}, "Pirate Scum", icon=["pirate.png", "pirate female.png"], sound_map=pirate_sound_map)
 pirate_scum = Monster(pirate_basetype,
                       [
                           [std_items.sword_cheap, std_items.dagger_cheap, std_items.axe_cheap],
