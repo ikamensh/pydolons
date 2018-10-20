@@ -2,7 +2,6 @@ from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
 import typing
-import game_objects.battlefield_objects as bf_objs
 
 class Battlefield:
     def __init__(self, w, h):
@@ -22,6 +21,7 @@ class Battlefield:
 
 
     def distance(self, one, another):
+        import game_objects.battlefield_objects as bf_objs
         if isinstance(one, bf_objs.BattlefieldObject):
             one = self.unit_locations[one]
         if isinstance(another, bf_objs.BattlefieldObject):

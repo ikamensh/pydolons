@@ -16,6 +16,7 @@ class AbstactWidget(QtCore.QObject):
         self.data = {'name':name}
         self.last_brush = None
 
+    @abstractmethod
     def setPos(self, x, y):
         """метод для установки текущей позиции виджета self.x, self.y
         """
@@ -29,6 +30,7 @@ class AbstactWidget(QtCore.QObject):
     def update(self):
         if not self.page is None:
             self.x, self.y = self.page.x() + self.p_x, self.page.y() + self.p_y
+
 
     def setSize(self, w, h):
         """метод для установки текущего размера виджета self.w, self.h

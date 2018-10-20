@@ -3,33 +3,6 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from ui.gamecore.GameObject import GameObject
 from ui.GamePages.suwidgets.GuiConsole import GuiConsole
 
-
-class NotifyText(QtWidgets.QGraphicsTextItem):
-    def __init__(self):
-        super(NotifyText, self).__init__()
-        self.w = 320
-        self.h = 240
-        # self.setOpacity(1.0)
-        self.setFont(QtGui.QFont("Times", 48, 10, False))
-        self.setDefaultTextColor(QtCore.Qt.blue)
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.timerSlot)
-        # Связать с gameconfig
-        self.setPos(300, 300)
-        self.setVisible(False)
-
-    def setText(self, value):
-        self.setOpacity(1.0)
-        self.setPlainText(str(value))
-        self.setVisible(True)
-        self.timer.start(500)
-
-    def timerSlot(self):
-        self.setOpacity(self.opacity() - 0.1)
-        if self.opacity() < 0.3:
-            self.setVisible(False)
-            self.timer.stop()
-
 class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     """docstring for ScreenMenu."""
     def __init__(self, *arg):

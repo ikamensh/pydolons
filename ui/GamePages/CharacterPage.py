@@ -1,7 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
-
-from character_creation.Character import Character
-from game_objects.battlefield_objects.BaseType import BaseType
+from PySide2 import QtCore
 
 from ui.GamePages.widgets import WidgetFactory
 from ui.GamePages import AbstractPage
