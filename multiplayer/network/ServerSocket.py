@@ -8,8 +8,9 @@ from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
 from multiplayer.network.config import host, port
 
 
-class PydolonsServer:
-    def __init__(self, fractions_for_players):
+class ServerSocket:
+    def __init__(self, game, fractions_for_players):
+        self.game = game
 
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.serversocket.bind((host, port))
@@ -33,11 +34,12 @@ class PydolonsServer:
             sock.send(bytes(str(fraction), encoding="utf-8"))
 
             self.free_fractions.remove(fraction)
-            ct = Thread(target=PydolonsServer.client_thread, args=(self, sock))
+            ct = Thread(target=ServerSocket.client_thread, args=(self, sock))
             ct.start()
 
-    def update_all(self, data):
-        data_string = pickle.dumps(data)
+    def update_all(self, event):
+        event.game = None
+        data_string = pickle.dumps(event)
         for sock in list(self.active_clients):
             try:
                 sock.send(data_string)
@@ -53,7 +55,7 @@ class PydolonsServer:
             print("bytes actually recieved: ", sys.getsizeof(data))
             e = pickle.loads(data)
             assert isinstance(e, ClientOrderIssuedEvent)
-            ServerOrderRecievedEvent(self.socket_fractions[clientsocket],
+            ServerOrderRecievedEvent(self.game, self.socket_fractions[clientsocket],
                                      e.unit_uid, e.active_uid, e.target)
 
 

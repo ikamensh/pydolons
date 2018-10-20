@@ -1,12 +1,12 @@
 from __future__ import annotations
 import inspect
-from typing import TYPE_CHECKING, ClassVar, List, Callable
+from typing import TYPE_CHECKING, ClassVar, List, Callable, Collection
 if TYPE_CHECKING:
     from mechanics.events import EventsPlatform
     from game_objects.battlefield_objects import Unit
 
 class Trigger:
-    def __init__(self, target_event_cls: ClassVar,*, platform: EventsPlatform, conditions: List[Callable] = None,
+    def __init__(self, target_event_cls: ClassVar,*, platform: EventsPlatform, conditions: Collection[Callable] = None,
                  source: Unit = None,
                  is_interrupt: bool = False,
                  callbacks: List[Callable] = None):

@@ -33,7 +33,7 @@ def order_recieved_cb(t, e: ClientOrderRecievedEvent):
     assert g.turns_manager.get_next() is unit
 
     unit.activate(active, target)
-    NextUnitEvent(g, g.turns_manager.get_next())
+    NextUnitEvent(g.turns_manager.get_next())
     g.player_turn_lock = False
 
 
@@ -59,11 +59,11 @@ def order_issued_trigger(game, client):
 class PydolonsClient:
 
     def __init__(self):
-        self.client = ClientSocket()
 
         character = Character(demohero_basetype)
         self.game = DreamGame.start_dungeon(demo_dungeon, character.unit, is_server=False)
         self.game.character = character
+        self.client = ClientSocket(self.game)
 
         order_issued_trigger(self.game, self.client)   # local actions cause sending orders to the server
         order_recieved_trigger(self.game)            # orders from the server cause local actions
@@ -82,14 +82,14 @@ class PydolonsClient:
         window = TheUI(self.game)
         TheUI.singleton = window
 
-        levelstatus_trigger(),
-        ui_error_message_trigger(),
-        nexunit_anim_trigger(),
-        turn_anim_trigger(),
-        perish_anim_trigger(),
-        attack_anin_trigger(),
-        damage_anim_trigger(),
-        move_anim_trigger()
+        levelstatus_trigger(self.game),
+        ui_error_message_trigger(self.game),
+        nexunit_anim_trigger(self.game),
+        turn_anim_trigger(self.game),
+        perish_anim_trigger(self.game),
+        attack_anin_trigger(self.game),
+        damage_anim_trigger(self.game),
+        move_anim_trigger(self.game)
 
         loop = GameLoopThread()
 

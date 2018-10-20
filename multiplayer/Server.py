@@ -10,7 +10,7 @@ from mechanics.events import Trigger
 from mechanics.fractions import Fractions
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
-from multiplayer.network.ServerSocket import PydolonsServer
+from multiplayer.network.ServerSocket import ServerSocket
 
 
 def order_recieved_cb(t, e: ServerOrderRecievedEvent):
@@ -50,30 +50,43 @@ def order_issued_trigger(game, server):
     return t
 
 
-class GameServer:
+class PydolonsServer:
 
     def __init__(self):
         character  = Character(demohero_basetype)
         self.game = DreamGame.start_dungeon(demo_dungeon, character.unit)
         self.game.character = character
-        self.server = PydolonsServer(set(self.game.fractions.values()) - {Fractions.ENEMY, Fractions.NEUTRALS})
+        self.server_socket = ServerSocket(self.game, set(self.game.fractions.values()) - {Fractions.ENEMY,
+                                                                                          Fractions.NEUTRALS})
 
-        order_issued_trigger(self.game, self.server)
+        order_issued_trigger(self.game, self.server_socket)
         order_recieved_trigger(self.game)
 
     def listen(self):
-        th = Thread(target=self.server.listen)
+        th = Thread(target=self.server_socket.listen)
         th.start()
 
     def start_when_ready(self):
-        while self.server.free_fractions:
-            print(f"Waiting for {self.server.free_fractions}")
-            time.sleep(1)
+        def wait_into_game_loop():
+            while self.server_socket.free_fractions:
+                print(f"Waiting for {self.server_socket.free_fractions}")
+                time.sleep(1)
 
-        print("The game has started.")
-        self.game.loop()
+            print("The game has started.")
+            self.game.loop()
+
+        th = Thread(target=wait_into_game_loop)
+        th.start()
+
+    def __enter__(self):
+        self.listen()
+        self.start_when_ready()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.server_socket.serversocket.close()
 
 if __name__ == "__main__":
-    s = GameServer()
+    s = PydolonsServer()
     s.listen()
     s.start_when_ready()

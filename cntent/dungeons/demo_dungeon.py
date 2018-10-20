@@ -10,6 +10,7 @@ def create_location(g):
     unit_locations = {pirate_band[i]: locations[i] for i in range(3)}
 
     unit_locations[Unit(mud_golem_basetype)] = Cell(3, 3)
+    return unit_locations
 
 
 demo_dungeon = Dungeon(create_location, 8, 8, hero_entrance=Cell(3, 4))
