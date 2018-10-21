@@ -1,5 +1,9 @@
 from PySide2 import QtGui, QtWidgets, QtCore
 from ui.units import HealthBar, HealthText
+from ui.units.Target import Target
+
+from battlefield import Cell
+
 
 class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def __init__(self, gameconfig):
@@ -14,6 +18,9 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def setLevel(self, level):
         self.level =  level
         self.level.middleLayer = self
+
+    def setUp(self):
+        self.level.gameRoot.pages.gameMenu.actives.setTargets.connect(self.getTargets)
 
 
     def setUpSelectItem(self):
@@ -91,3 +98,23 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         del self.unit_hps[uid]
         self.removeFromGroup(self.unit_hptxts[uid])
         del self.unit_hptxts[uid]
+
+    def getTargets(self, targets):
+        # print(targets)
+        self.targets = []
+        for item in targets:
+            if isinstance(item, Cell):
+                self.addTarget(item)
+        pass
+
+    def addTarget(self, item):
+        target = Target()
+        target.w = self.w
+        target.h =self.h
+        target.setWorldPos(item.x, item.y )
+        self.targets.append(target)
+        self.addToGroup(target)
+        pass
+
+    def removeTarget(self):
+        pass
