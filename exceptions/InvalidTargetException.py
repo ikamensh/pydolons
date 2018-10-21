@@ -7,4 +7,4 @@ class InvalidTargetException(PydolonsException):
         self.order = order
 
     def __repr__(self):
-        return f"Target {self.target} is invalid for the order {self.order}"
+        return f"Target.py {self.target} is invalid for the order {self.order}"
