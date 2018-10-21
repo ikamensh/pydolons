@@ -2,6 +2,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 from ui.gamecore.GameObject import GameObject
 from ui.GamePages.suwidgets.GuiConsole import GuiConsole
+from ui.GamePages.suwidgets.Actives import Actives
 
 class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     """docstring for ScreenMenu."""
@@ -10,6 +11,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gui_console = None
         self.gameRoot = None
+
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -23,6 +25,9 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.console_pos = self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240
 
     def setUpGui(self):
+        self.actives = Actives(self)
+        self.actives.setUp()
+        self.actives.setTargets.connect(self.gameRoot.level.middleLayer.getTargets)
         self.notify = self.gameRoot.suwidgetFactory.getNotifyText(self.gameRoot)
         self.addToGroup(self.notify)
 
@@ -36,6 +41,8 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         if not self.gameRoot.level is None:
             self.createUnitStack()
             self.updateUnitStack()
+
+        self.proxyActives = self.gameRoot.scene.addWidget(self.actives.scrollArea)
 
     def createUnitStack(self):
         self.unitStack.items = {}
@@ -82,3 +89,14 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
     def updateGui(self):
         self.gui_console.move(self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240)
+        self.actives.updatePos(self.gameconfig.dev_size)
+
+    def checkFocus(self, pos):
+        if pos.y() > self.actives.y and pos.x() > self.actives.x and pos.x() < self.actives.x + self.actives.w:
+            return True
+        else:
+            return False
+
+    @property
+    def focus(self):
+        return  self.actives.scrollArea.hasFocus()
