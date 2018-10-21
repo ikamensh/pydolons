@@ -19,7 +19,7 @@ class GameConfiguration:
         # Словарь путей к изображениям, ключ название файла
         self.pic_file_paths = {}
         # Форматы звуков
-        self.sound_format = ('wav')
+        self.sound_format = ('wav', 'mp3')
         # Словарь путей к звукам, ключ название файла
         self.sound_file_paths = {}
         self.setUpScreen()
