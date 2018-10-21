@@ -21,18 +21,23 @@ class GameView(QtWidgets.QGraphicsView):
         self.timer.start(50)
 
     def wheelEvent(self, e):
+        super().wheelEvent(e)
         self.controller.wheelEvent(e)
 
     def keyPressEvent(self, e):
+        super(GameView, self).keyPressEvent(e)
         self.controller.keyPressEvent(e)
 
     def mouseMoveEvent(self, e):
+        super(GameView, self).mouseMoveEvent(e)
         self.controller.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
+        super(GameView, self).mousePressEvent(e)
         self.controller.mousePressEvent(e)
 
     def mouseReleaseEvent(self, e):
+        super(GameView, self).mouseReleaseEvent(e)
         self.controller.mouseReleaseEvent(e)
 
     def resizeEvent(self, e):
