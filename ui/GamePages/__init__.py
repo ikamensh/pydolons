@@ -16,6 +16,8 @@ class GamePages(object):
         # this is current page
         self.page = None
         self.unit = None
+        self.focus = False
+
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -94,3 +96,10 @@ class GamePages(object):
 
     def setCharacter(self, character):
         self.characterPage.character = character
+
+    def checkFocus(self, pos):
+        self.focus = self.gameMenu.checkFocus(pos)
+
+    # @property
+    # def focus(self):
+    #     return self.gameMenu.focus
