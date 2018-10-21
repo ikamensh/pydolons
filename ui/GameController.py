@@ -13,7 +13,6 @@ class GameController:
         last_point = Cell() -- последняя точка, на которую указывает игрок
         """
         self.game = game
-
         self.gameRoot = None
         self.tr = QtGui.QTransform()
 
@@ -40,16 +39,18 @@ class GameController:
     def mouseMoveEvent(self, e):
         """ Метод перехватывает событие движение мыши
         """
-        newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
-        self.moveCursor(newPos)
-        self.itemSelect(newPos)
+        self.gameRoot.gamePages.checkFocus(e.pos())
+        if not self.gameRoot.gamePages.focus:
+            newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
+            self.moveCursor(newPos)
+            self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
         try:
-            if self.gameRoot.gamePages.page is None:
-                self.game.ui_order(self.last_point.x, self.last_point.y)
-                self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            if self.gameRoot.gamePages.page is None and not self.gameRoot.gamePages.focus:
+                    self.game.ui_order(self.last_point.x, self.last_point.y)
+                    self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                    self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
             else:
                 self.gameRoot.gamePages.mousePressEvent(e.pos())
         except PydolonsException as exc:
@@ -68,10 +69,11 @@ class GameController:
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
         скролл меньше нуля зумм -
         """
-        if e.delta() > 0.0:
-            self.zoomIn()
-        elif e.delta() < 0.0:
-            self.zoomOut()
+        if not self.gameRoot.gamePages.focus:
+            if e.delta() > 0.0:
+                self.zoomIn()
+            elif e.delta() < 0.0:
+                self.zoomOut()
         pass
 
     def zoomIn(self):
@@ -123,7 +125,7 @@ class GameController:
 
         y = int((newPos.y() / self.tr.m11()) / self.gameRoot.cfg.unit_size[1])
         if newPos.y() < 0:
-             y -= 1
+            y -= 1
 
         world_x, world_y = self.gameRoot.cfg.world_size
         if 0 <= x < world_x and  0 <= y < world_y:
