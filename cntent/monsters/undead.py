@@ -14,9 +14,9 @@ class zombie_sound_map:
 
 class skeleton_sound_map:
     move = "SftStep3.wav"
-    hit = "c_skeleton_hit2.wav"
-    attack = "c_skeleton_atk2.wav"
-    perish = "c_skeleton_death.wav"
+    hit = "c_skeleton_hit2.mp3"
+    attack = "c_skeleton_atk2.mp3"
+    perish = "c_skeleton_death.mp3"
 
 zombie_bt = BaseType({'str':11, 'end':9, 'prc':5, 'agi':5, 'int':3, 'cha':3},
                      "Zombie", abilities=[undying(3), fat], icon="zombie.png", sound_map=zombie_sound_map)
