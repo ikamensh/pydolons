@@ -40,6 +40,7 @@ class GameController:
         """ Метод перехватывает событие движение мыши
         """
         self.gameRoot.gamePages.checkFocus(e.pos())
+        self.gameRoot.gamePages.collision(e.pos())
         if not self.gameRoot.gamePages.focus:
             newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
             self.moveCursor(newPos)
