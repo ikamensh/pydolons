@@ -25,8 +25,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.console_pos = self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240
 
     def setUpGui(self):
-        self.actives = Actives(self)
-        self.actives.setUp()
+        self.actives = Actives(self, columns = 6)
         self.actives.setTargets.connect(self.gameRoot.level.middleLayer.getTargets)
         self.notify = self.gameRoot.suwidgetFactory.getNotifyText(self.gameRoot)
         self.addToGroup(self.notify)
@@ -41,8 +40,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         if not self.gameRoot.level is None:
             self.createUnitStack()
             self.updateUnitStack()
-
-        self.proxyActives = self.gameRoot.scene.addWidget(self.actives.scrollArea)
+        self.actives.setScene(self.gameRoot.scene)
 
     def createUnitStack(self):
         self.unitStack.items = {}
@@ -100,3 +98,6 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     @property
     def focus(self):
         return  self.actives.scrollArea.hasFocus()
+
+    def collision(self, pos):
+        self.actives.collisioon(pos)
