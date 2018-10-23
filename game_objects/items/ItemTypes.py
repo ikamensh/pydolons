@@ -14,4 +14,6 @@ class ItemTypes(NameEnum):
     SPELL_CONCEPT = auto()
     SPELL = auto()
 
+    CHARGED = auto()
+
 

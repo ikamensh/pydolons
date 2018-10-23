@@ -15,6 +15,7 @@ class BaseType:
                  armor_dict=None,
                  armor_base=0,
                  inventory_capacity = 20,
+                 quick_items = 3,
                  actives=None,
                  abilities = None,
                  icon="default.png",
@@ -42,6 +43,7 @@ class BaseType:
         self.resists = resists or {}
         self.armor_dict = armor_dict or {}
         self.inventory_capacity = inventory_capacity
+        self.quick_items = quick_items
         self.armor_base = armor_base
         self.icon = icon
         self.sound_map = sound_map or sound_maps.std_sound_map

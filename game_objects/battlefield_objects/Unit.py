@@ -1,7 +1,7 @@
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 from game_objects.battlefield_objects.CharAttributes import HP_PER_STR, MANA_PER_INT, STAMINA_PER_END, UNARMED_DAMAGE_PER_STR
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.items import Inventory, Equipment, Weapon
+from game_objects.items import Inventory, Equipment, Weapon, QuickItems
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics import events
@@ -73,6 +73,7 @@ class Unit(BattlefieldObject):
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
+        self.quick_items = QuickItems(base_type.quick_items, self)
         self.equipment :Equipment = Equipment(self)
 
         self.bonuses = frozenset()
@@ -218,6 +219,12 @@ class Unit(BattlefieldObject):
         cpy.owner = self
         cpy.uid = int(cpy.uid * 1e7 + self.uid)
         return cpy
+
+    def remove_active(self, active):
+        searched_uid = int(active.uid * 1e7 + self.uid)
+        active = [a for a in self.actives if a.uid == searched_uid][0]
+        self.actives.remove(active)
+
 
     #TODO create target method that prompts the game to get right kind of targeting from the user
     def activate(self, active, user_targeting = None):
