@@ -14,6 +14,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.unit_hps = {}
         self.setUpSelectItem()
         self.level = None
+        self.targeted = False
 
     def setLevel(self, level):
         self.level =  level
@@ -41,10 +42,13 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.selected_item.setX(x * self.w)
         self.selected_item.setY(y * self.h)
         self.selected_item.setVisible(True)
+        if self.targeted:
+            self.removeTargets()
 
     def selectItem(self, x, y):
         self.select_item.setX(x * self.w)
         self.select_item.setY(y * self.h)
+
 
     def createHPBar(self, unit):
         hp = HealthBar()
@@ -100,21 +104,27 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         del self.unit_hptxts[uid]
 
     def getTargets(self, targets):
-        # print(targets)
         self.targets = []
         for item in targets:
             if isinstance(item, Cell):
                 self.addTarget(item)
-        pass
+            else:
+                self.addTarget(self.level.game.battlefield.unit_locations[item])
+
 
     def addTarget(self, item):
         target = Target()
-        target.w = self.w
-        target.h =self.h
+        target.setBrush(QtCore.Qt.green)
+        target.w =  self.w *  self.transform().m11()
+        target.h = self.h * self.transform().m11()
+        target.setRect(0, 0, target.w , target.h)
         target.setWorldPos(item.x, item.y )
         self.targets.append(target)
         self.addToGroup(target)
-        pass
+        self.targeted = True
 
-    def removeTarget(self):
-        pass
+    def removeTargets(self):
+        for item in self.targets:
+            self.removeFromGroup(item)
+        self.targets = []
+        self.targeted = False
