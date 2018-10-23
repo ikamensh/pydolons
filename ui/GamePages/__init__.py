@@ -75,9 +75,10 @@ class GamePages(object):
             self.page = None
             self.characterPage.state = False
 
-    # def mouseMoveEvent(self, pos):
-    #     if not self.page is None:
-    #         self.page.widgetFactory.collisions(pos)
+    def collision(self, pos):
+        self.gameMenu.collision(pos)
+        if not self.page is None:
+            self.page.widgetFactory.collisions(pos)
 
     def mousePressEvent(self, pos):
         if not self.page is None:
