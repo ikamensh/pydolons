@@ -21,7 +21,6 @@ class GameView(QtWidgets.QGraphicsView):
         self.timer.start(50)
 
     def wheelEvent(self, e):
-        super().wheelEvent(e)
         self.controller.wheelEvent(e)
 
     def keyPressEvent(self, e):
