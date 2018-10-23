@@ -3,12 +3,10 @@ from PySide2 import QtCore, QtGui,QtWidgets
 from battlefield import Cell
 
 
-class Target(QtWidgets.QGraphicsItem):
+class Target(QtWidgets.QGraphicsRectItem):
 
     def __init__(self, *arg):
         super(Target, self).__init__(*arg)
-        self.pen = QtGui.QPen(QtCore.Qt.red)
-        self.pen.setWidth(10)
         self.setOpacity(0.3)
         self.w, self.h = 1, 1
         self.worldPos = Cell(0, 0)
@@ -17,8 +15,8 @@ class Target(QtWidgets.QGraphicsItem):
         self.worldPos.x = x
         self.setX(x * self.w)
 
-    def boundingRect(self):
-        return  QtCore.QRectF(self.x(), self.y(), self.w, self.h)
+    # def boundingRect(self):
+    #     return  QtCore.QRectF(self.x(), self.y(), self.w, self.h)
 
     def setWorldY(self, y):
         self.worldPos.y = y
@@ -30,9 +28,9 @@ class Target(QtWidgets.QGraphicsItem):
         self.setWorldY(y)
 
 
-    def paint(self, painter, option = None, widget = None):
-        tempPen = painter.pen()
-        painter.setPen(self.pen)
-        painter.drawLine(self.x() + self.w / 2 , self.y(), self.x()+ self.w/2, self.y()+ self.h)
-        painter.drawLine(self.x()  , self.y() + self.h/ 2, self.x()+ self.w, self.y()+ self.h/2)
-        painter.setPen(tempPen)
+    # def paint(self, painter, option = None, widget = None):
+    #     tempPen = painter.pen()
+    #     painter.setPen(self.pen)
+    #     painter.drawLine(self.x() + self.w / 2 , self.y(), self.x()+ self.w/2, self.y()+ self.h)
+    #     painter.drawLine(self.x()  , self.y() + self.h/ 2, self.x()+ self.w, self.y()+ self.h/2)
+    #     painter.setPen(tempPen)
