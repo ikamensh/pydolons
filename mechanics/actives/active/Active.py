@@ -15,14 +15,14 @@ if TYPE_CHECKING:
 class Active:
     last_uid = 0
 
-    def __init__(self, targeting_cls: ClassVar, conditions: List[Callable], cost: Union[Cost, Callable],*,
+    def __init__(self, targeting_cls: ClassVar = None, conditions: List[Callable] = None, cost: Union[Cost, Callable] = None,*,
                  game: DreamGame=None, callbacks: List[Callable], tags: List[ActiveTags]=None,
                  name: str = "nameless active",simulate = None, icon: str = "fire.jpg"):
         self.name = name
         self.game = game
         self.targeting_cls = targeting_cls
-        self.conditions = conditions
-        self._cost = cost
+        self.conditions = conditions or []
+        self._cost = cost or Cost()
         self.callbacks = callbacks
         self.owner: Unit = None
         self.spell = None

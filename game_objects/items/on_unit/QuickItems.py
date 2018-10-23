@@ -1,13 +1,13 @@
-from game_objects.items import Slot
+from game_objects.items import Slot, ItemTypes
 
-class Inventory:
+class QuickItems:
 
     @staticmethod
     def slot_name_at(i):
-        return "inventory_{0:00d}".format(i)
+        return "Quick item {0:0d}".format(i)
 
     def __init__(self, max_capacity, owner):
-        self.all = [Slot(Inventory.slot_name_at(i), owner=owner) for i in range(max_capacity)]
+        self.all = [Slot(self.slot_name_at(i), item_type=ItemTypes.CHARGED, owner=owner) for i in range(max_capacity)]
         self.owner = owner
 
     def __setitem__(self, slot_num, item):

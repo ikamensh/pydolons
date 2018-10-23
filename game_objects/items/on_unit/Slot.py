@@ -24,15 +24,30 @@ class Slot:
         item.slot = self
         item.owner = self.owner
 
+        if self.owner:
+            item.game = self.owner.game
+            if hasattr(item, "on_equip"):
+                item.on_equip(self)
+
 
 
     def swap_item(self, other_slot):
-        self._content, other_slot._content = other_slot.content, self.content
+        self._content, other_slot._content = other_slot.pop_item(), self.pop_item()
 
     def pop_item(self):
+        if self.content is None:
+            return
+
         item = self.content
         self._content = None
+        if self.owner:
+            if hasattr(item, "on_unequip"):
+                item.on_unequip(self)
+        item.owner = None
         return item
+
+    def __repr__(self):
+        return f"{self.owner}'s {self.name} slot with {self.content}"
 
 
 class StandardSlots:

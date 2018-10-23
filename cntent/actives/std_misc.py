@@ -28,12 +28,12 @@ onguard_active = Active(None,
 fixed_rest_cost = lambda self: Cost(readiness=1) * ( self.owner.initiative / 10)
 
 rest_active = Active(None,
-                            [],
-                            fixed_rest_cost,
-                            game=None,
-                            callbacks=[rest_callback],
-                            tags=[ActiveTags.REST],
-                            name="Rest")
+                     [],
+                     fixed_rest_cost,
+                     game=None,
+                     callbacks=[rest_callback],
+                     tags=[ActiveTags.RESTORATION],
+                     name="Rest")
 
 
 
