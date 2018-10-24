@@ -11,25 +11,25 @@ from game_objects.monsters.Monster import Monster
 
 class goblin_sound_map:
     move = "SftStep3.wav"
-    hit = "c_ogre_hit1.mp3"
+    hit = "c_goblin_hit2.wav"
     attack = "c_ogre_atk2.wav"
     perish = "c_ogre_death.WAV"
 
 class orc_sound_map:
     move = "SftStep3.wav"
-    hit = "c_goblin_hit2.wav"
-    attack = "ATTACK_WOLF_2.wav"
-    perish = "c_goblin_death.wav"
+    hit = "c_koraboros_hit1.mp3"
+    attack = "c_koraboros_atk1.mp3"
+    perish = "c_koraboros_death.mp3"
 
 class ogre_sound_map:
     move = "SftStep3.wav"
-    hit = "c_goblin_hit2.wav"
-    attack = "ATTACK_WOLF_2.wav"
-    perish = "c_goblin_death.wav"
+    hit = "c_ogre_hit1.wav"
+    attack = "c_ogre_atk1.wav"
+    perish = "c_ogre_death.wav"
 
 
 goblin_bt = BaseType({'str':8, 'end':7, 'prc':15, 'agi':15, 'int':12, 'cha':7},
-                     "Goblin", abilities=[battle_rage(1)], icon="goblin.png", sound_map=goblin_sound_map)
+                     "Goblin", abilities=[battle_rage(1)], icon=["gobl.jpg","goblin.jpg" ,"oblin Ambusher.png","Goblin Crew-Leader.png","Goblin Poacher.png","Goblin Scout.png","Goblin Watchman.png","Goblin Skirmisher.png"], sound_map=goblin_sound_map)
 
 goblin = Monster(goblin_bt,
                       [
@@ -39,7 +39,7 @@ goblin = Monster(goblin_bt,
 
 
 orc_bt = BaseType({'str':14, 'end':14, 'prc':12, 'agi':12, 'int':6, 'cha':6},
-                     "Orc", abilities=[bash(0.33), fat, battle_rage(1)], icon="orc.png", sound_map=orc_sound_map)
+                     "Orc", abilities=[bash(0.33), fat, battle_rage(1)], icon=["orc.jpg", "Ork2.jpg",  "orces khan.jpg","Ork Brute.jpg", "Ork.jpg", "Ork Rager.jpg"], sound_map=orc_sound_map)
 
 orc = Monster(orc_bt,
                       [
@@ -48,7 +48,7 @@ orc = Monster(orc_bt,
                       ])
 
 ogre_bt = BaseType({'str':22, 'end':25, 'prc':14, 'agi':9, 'int':10, 'cha':4},"Ogre", sound_map=ogre_sound_map,
-                   abilities=[bash(0.5), fat, battle_rage(1), aoe_damage(radius=2,percentage=0.5)], icon="ogre.png")
+                   abilities=[bash(0.5), fat, battle_rage(1), aoe_damage(radius=2,percentage=0.5)], icon=["troll.png","ogre.png","ogrs.jpg"])
 
 ogre = Monster(ogre_bt,
                       [

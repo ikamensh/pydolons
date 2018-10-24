@@ -8,9 +8,9 @@ from game_objects.monsters.Monster import Monster
 
 class zombie_sound_map:
     move = "SftStep3.wav"
-    hit = "c_ghast_hit2.wav"
-    attack = "c_ghast_atk1.wav"
-    perish = "c_ghast_death.wav"
+    hit = "c_ghast_hit2.mp3"
+    attack = "c_ghast_atk1.mp3"
+    perish = "c_ghast_death.mp3"
 
 class skeleton_sound_map:
     move = "SftStep3.wav"
@@ -19,7 +19,7 @@ class skeleton_sound_map:
     perish = "c_skeleton_death.mp3"
 
 zombie_bt = BaseType({'str':11, 'end':9, 'prc':5, 'agi':5, 'int':3, 'cha':3},
-                     "Zombie", abilities=[undying(3), fat], icon="zombie.png", sound_map=zombie_sound_map)
+                     "Zombie", abilities=[undying(3), fat], icon=["zombie.png","zombie3.png","zombie2.jpg"   ], sound_map=zombie_sound_map)
 
 zombie = Monster(zombie_bt,
                       [
@@ -28,7 +28,7 @@ zombie = Monster(zombie_bt,
                       ])
 
 skeleton_bt = BaseType({'str':8, 'end':6, 'prc':5, 'agi':25, 'int':3, 'cha':3},
-                     "Skeleton", abilities=[undying(1)], icon="skeleton.png", sound_map=skeleton_sound_map)
+                     "Skeleton", abilities=[undying(1)], icon=["skeleton.png","kosti2.jpg","kosti.jpg","kost.jpg"], sound_map=skeleton_sound_map)
 
 skeleton = Monster(skeleton_bt,
                       [
