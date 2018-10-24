@@ -60,14 +60,15 @@ class GameLoopThread(QtCore.QThread):
         self.setConnection()
 
     def setConnection(self):
-        self.play_movement_anim.connect(self.the_ui.gameRoot.level.unitMoveSlot)
-        self.maybe_play_damage_anim.connect(self.the_ui.gameRoot.level.targetDamageSlot)
-        self.maybe_play_hit_anim.connect(self.the_ui.gameRoot.level.targetDamageHitSlot)
-        self.play_attack_anim.connect(self.the_ui.gameRoot.level.attackSlot)
+        self.play_movement_anim.connect(self.the_ui.gameRoot.level.units.unitMoveSlot)
+        self.maybe_play_damage_anim.connect(self.the_ui.gameRoot.level.units.targetDamageSlot)
+        self.maybe_play_hit_anim.connect(self.the_ui.gameRoot.level.units.targetDamageHitSlot)
+        self.play_attack_anim.connect(self.the_ui.gameRoot.level.units.attackSlot)
         self.play_perish_anim.connect(self.the_ui.gameRoot.level.units.unitDiedSlot)
-        self.play_trun_anim.connect(self.the_ui.gameRoot.level.unitTurnSlot)
+        self.play_trun_anim.connect(self.the_ui.gameRoot.level.units.unitTurnSlot)
         self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.updateUnitStack)
         self.play_levelstatus.connect(self.the_ui.gameRoot.level.setStatus)
 
     def run(self):
         self.game.loop()
+
