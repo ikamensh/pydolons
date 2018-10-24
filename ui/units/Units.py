@@ -8,15 +8,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.units_at = {}
         self.level = None
 
-# set slots
-
-    def unitDiedSlot(self, msg):
-        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
-        self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
-        self.level.middleLayer.removeUnitLayer(msg.get('unit').uid)
-        self.unitDied(msg.get('unit'))
-
-
     def setLevel(self, level):
         self.level =  level
         self.level.units = self
@@ -31,6 +22,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.units_at[unit.uid].setWorldPos(x, y)
 
     def unitDied(self, unit):
+        print('diead')
         unit = self.units_at[unit.uid]
         self.removeFromGroup(unit)
         del self.units_at[unit.uid]
@@ -50,3 +42,32 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def setActiveUnit(self, unit):
         self.active_unit = self.units_at[unit.uid]
+
+    def unitMoveSlot(self, msg):
+        self.level.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
+        self.moveUnit(msg.get('unit'), msg.get('cell_to'))
+        self.level.middleLayer.moveSupport(self.units_at[msg.get('unit').uid])
+
+    def unitTurnSlot(self, msg):
+        self.turnUnit(msg.get('uid'), msg.get('turn'))
+
+    def targetDamageSlot(self, msg):
+        # Требуется рефакторинг метод срабатывает после смерти юнита
+        if msg.get('target').uid in self.units_at.keys():
+            self.level.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+            self.level.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
+            # print('debug -> damage_type', msg.get('damage_type'))
+        pass
+
+    def targetDamageHitSlot(self, msg):
+        self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+
+    def attackSlot(self, msg):
+        # self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
+        self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+
+    def unitDiedSlot(self, msg):
+        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
+        self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
+        self.level.middleLayer.removeUnitLayer(msg.get('unit').uid)
+        self.unitDied(msg.get('unit'))
