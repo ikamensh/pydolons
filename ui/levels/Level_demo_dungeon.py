@@ -1,5 +1,3 @@
-from PySide2 import QtCore
-
 from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from cntent.dungeons.demo_dungeon import demo_dungeon
@@ -17,34 +15,6 @@ class Level_demo_dungeon(BaseLevel):
         self.gameconfig = gameconfig
         self.z_values = [ i for i in range(demo_dungeon.w)]
 
-    def unitActiveSlot(self, msg):
-        pass
-
-    def unitMoveSlot(self, msg):
-        self.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
-        self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
-        self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
-
-    def unitTurnSlot(self, msg):
-        self.units.turnUnit(msg.get('uid'), msg.get('turn'))
-        # print(msg)
-
-    def targetDamageSlot(self, msg):
-        # Требуется рефакторинг метод срабатывает после смерти юнита
-        if msg.get('target').uid in self.units.units_at.keys():
-            self.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
-            self.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
-            # print('debug -> damage_type', msg.get('damage_type'))
-        pass
-
-    def targetDamageHitSlot(self, msg):
-        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
-
-    def attackSlot(self, msg):
-        # self.gameRoot.gamePages.gameMenu.showNotify(msg.get('msg'))
-        self.gameRoot.cfg.sound_maps[msg.get('sound')].play()
-
-
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
         self.world.setWorldSize(demo_dungeon.w, demo_dungeon.h)
@@ -54,6 +24,7 @@ class Level_demo_dungeon(BaseLevel):
         self.game = game
 
         self.setUpUnits(self.game.battlefield)
+        self.units.middleLayer = self.middleLayer
         self.gameconfig.setWorld(self.world)
         controller.setUp(self.world, self.units, self.middleLayer)
 
