@@ -89,10 +89,10 @@ class GameConfiguration:
             if item[2] != [] and not item[0] in self.ignore_path:
                 # Получаем спискок фйалов
                 for name in item[2]:
-                    if name[-3:] in self.pic_format:
-                        self.pic_file_paths[name] = os.path.join(item[0], name)
-                    elif name[-3:] in self.sound_format:
-                        self.sound_file_paths[name] = os.path.join(item[0], name)
+                    if name[-3:].lower() in self.pic_format:
+                        self.pic_file_paths[name.lower()] = os.path.join(item[0], name)
+                    elif name[-3:].lower() in self.sound_format:
+                        self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
 
     def getPicFile(self, filename):
         """
@@ -102,10 +102,10 @@ class GameConfiguration:
         Объект QPixmap из словаря GameConfiguration.pix_maps
         """
         print(filename)
-        if self.pix_maps.get(filename) is None:
+        if self.pix_maps.get(filename.lower()) is None:
             print(f"{filename} image was not found. using default.")
             return self.pix_maps.get("default.png")
-        return self.pix_maps.get(filename)
+        return self.pix_maps.get(filename.lower())
 
     def setUpSounds(self):
         self.sound_maps = {}

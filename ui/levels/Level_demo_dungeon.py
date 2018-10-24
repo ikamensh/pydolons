@@ -21,7 +21,7 @@ class Level_demo_dungeon(BaseLevel):
         pass
 
     def unitMoveSlot(self, msg):
-        self.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
+        self.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move.lower()].play()
         self.units.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.middleLayer.moveSupport(self.units.units_at[msg.get('unit').uid])
 

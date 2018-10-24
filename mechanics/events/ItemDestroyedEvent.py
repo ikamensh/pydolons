@@ -19,7 +19,7 @@ class ItemDestroyedEvent(Event):
         if self.item.owner and self.item.blueprint and self.item.material:
             self.item.owner.inventory.add(self.item.blueprint)
             self.item.owner.inventory.add(self.item.material.to_pieces(self.item.blueprint.material_count))
-            
+
         if self.item.slot:
             self.item.slot.pop_item()
 
