@@ -1,4 +1,5 @@
 
+
 class BaseLevel(object):
     def __init__(self):
         super(BaseLevel, self).__init__()
@@ -6,6 +7,7 @@ class BaseLevel(object):
         self.middleLayer = None
         self.world = None
         self.units = None
+        self.game = None
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
