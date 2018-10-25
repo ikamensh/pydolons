@@ -34,6 +34,12 @@ class GameRootNode(object):
         self.level = level
         self.level.setGameRoot(self)
 
+    def setLevelFactory(self, factory):
+        self.levelFactory = factory
+        self.levelFactory.setGameRoot(self)
+
+
+
     def setGamePages(self, gamePages):
         self.gamePages = gamePages
         self.gamePages.gameRoot = self
