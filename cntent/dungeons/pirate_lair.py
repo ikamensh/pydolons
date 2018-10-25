@@ -52,9 +52,10 @@ def create_units(g):
     unit_locations[pirate_boatswain.create(g)] = Cell(13,12)
 
     unit_locations[pirate_captain.create(g)] = Cell(14,4)
+    return unit_locations
 
 
-pirate_lair = Dungeon(create_units, 16, 16, hero_entrance=Cell(2, 0))
+pirate_lair = Dungeon("Pirate headquaters", 16, 16, unit_locations=create_units, hero_entrance=Cell(2, 0), icon="pirates_3.jpg")
 
 
 

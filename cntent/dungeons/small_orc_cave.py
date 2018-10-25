@@ -10,4 +10,4 @@ def build_unit_locations(g):
     return unit_locations
 
 
-small_orc_cave = Dungeon(build_unit_locations, 8, 8, hero_entrance=Cell(3, 4))
+small_orc_cave = Dungeon("Greenskin's Cave", 8, 8, unit_locations=build_unit_locations, hero_entrance=Cell(3, 4), icon="greenskins.png")

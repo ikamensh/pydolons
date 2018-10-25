@@ -2,4 +2,3 @@ astar
 pytest
 numpy
 PySide2
-pygame

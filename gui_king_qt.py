@@ -1,10 +1,16 @@
 import sys
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QFormLayout, QComboBox, QLineEdit, QLabel
+    QVBoxLayout, QFormLayout, QComboBox, QLineEdit, QLabel, QGraphicsLinearLayout, QFrame
+
 from PySide2 import QtWidgets
 from PySide2 import QtGui
 from cntent.dungeons.small_orc_cave import small_orc_cave
+from cntent.dungeons.pirate_lair import pirate_lair
+from cntent.dungeons.demo_dungeon import demo_dungeon
+from cntent.dungeons.demo_dungeon_walls import walls_dungeon
+from cntent.dungeons.small_graveyard import small_graveyard
+
 from DreamGame import DreamGame
 
 from ui.GameConfiguration import GameConfiguration
@@ -17,25 +23,28 @@ qt_app = QApplication(sys.argv)
 
 gc = GameConfiguration()
 
-class DungeonWidget(QWidget):
+class DungeonWidget(QFrame):
     def __init__(self, dungeon, parent = None):
-        QWidget.__init__(self, parent)
+        QFrame.__init__(self, parent)
+        self.setFrameShadow(QFrame.Raised)
+        self.setStyleSheet("border: 2px solid black")
         self.dungeon = dungeon
 
         # Create the form layout that manages the labeled controls
         self.form_layout = QFormLayout()
 
-        self.icon = QtWidgets.QGraphicsPixmapItem()
+        icon = QLabel()
+        icon.setPixmap(gc.getPicFile(dungeon.icon))
+        self.form_layout.addRow(icon)
 
-        pixmap = QtGui.QPixmap(dungeon.icon)
-        self.icon.setPixmap()
+        self.form_layout.addRow(QLabel(dungeon.name))
 
         locs = dungeon.unit_locations(DreamGame())
 
-        self.n_units_label = QLabel(f'{len(locs.keys())}', self)
+        self.n_units_label = QLabel(f'{len([u for u in locs.keys() if not u.is_obstacle])}', self)
         self.form_layout.addRow('Units in the dungeon:', self.n_units_label)
 
-        self.max_xp_label = QLabel(f'{max([u.xp for u in locs.keys()])}', self)
+        self.max_xp_label = QLabel(f'{max([u.xp for u in locs.keys() if not u.is_obstacle])}', self)
         self.form_layout.addRow('Strongest enemy XP: ', self.max_xp_label)
 
         self.setLayout(self.form_layout)
@@ -48,9 +57,25 @@ class DungeonWidget(QWidget):
 
 
 
+class ManyDungeonsWidget(QWidget):
+    def __init__(self, dung_list, parent=None):
+        QWidget.__init__(self, parent)
+
+        layout = QtWidgets.QGridLayout()
+        for i, d in enumerate(dung_list):
+            dung_widg = DungeonWidget(d)
+            layout.addWidget(dung_widg, i // 2, i%2)
+
+        self.setLayout(layout)
+
+    def run(self):
+        # Show the form
+        self.show()
+        # Run the qt application
+        qt_app.exec_()
 
 
 
 # Create an instance of the application window and run it
-app = DungeonWidget(small_orc_cave)
+app = ManyDungeonsWidget([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
 app.run()

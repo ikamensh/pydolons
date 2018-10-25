@@ -13,4 +13,4 @@ def create_location(g):
     return unit_locations
 
 
-demo_dungeon = Dungeon(create_location, 8, 8, hero_entrance=Cell(3, 4))
+demo_dungeon = Dungeon("Pirate Bar",8,8, unit_locations=create_location, hero_entrance=Cell(3, 4), icon="pirates_1.jpg")
