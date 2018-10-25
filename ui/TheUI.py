@@ -1,4 +1,6 @@
 import sys
+from datetime import datetime
+
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
@@ -9,9 +11,14 @@ from ui.GamePages import GamePages
 from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
 
 from ui.GameController import GameController
-from ui.levels import Level_demo_dungeon
+from ui.levels import Level_demo_dungeon, LevelFactory
 
 from ui.GameView import GameView
+
+from LEngine import LEngine
+from GameLoopThread import GameLoopThread, ProxyEmit
+
+
 
 from datetime import datetime
 
@@ -19,10 +26,22 @@ class TheUI(QtWidgets.QWidget):
     view = None
     singleton = None
 
-    def __init__(self, game):
+    def __init__(self, lengine:LEngine, game = None):
         super().__init__()
         print('cfg ===> start init TheUI', datetime.now())
-        self.game = game
+        # work level
+        # game = lengine.getGame('demo_level')
+        self.lengine = lengine
+        self.game = lengine.getGame('small_graveyard_level')
+        # game = lengine.getGame('small_orc_cave_level')
+        # level not work
+        # game = lengine.getGame('pirate_level')
+        # game = lengine.getGame('walls_level')
+        print('cfg ===> start init DreamGame', datetime.now())
+
+        print('cfg ===> init DreamGame', datetime.now())
+
+
         self.gameTimer = QtCore.QTimer()
         self.gameTimer.timeout.connect(self.timerSlot)
         self.gameTimer.startTimer(int(1000 / 50))
@@ -54,13 +73,10 @@ class TheUI(QtWidgets.QWidget):
         self.controller = GameController(self.game)
         self.gameRoot.setGameController(self.controller)
 
-        self.level = Level_demo_dungeon(self.gameconfig)
-        self.gameRoot.setLevel(self.level)
-        self.level.setUpLevel(self.game, self.controller)
+        self.levelFactory = LevelFactory(self.lengine)
+        self.gameRoot.setLevelFactory(self.levelFactory)
+        self.initLevel()
 
-        self.scene.addItem(self.level.world)
-        self.scene.addItem(self.level.units)
-        self.scene.addItem(self.level.middleLayer)
         self.scene.addItem(self.controller.cursor)
 
         self.gamePages = GamePages()
@@ -85,10 +101,46 @@ class TheUI(QtWidgets.QWidget):
                           self.gameconfig.ava_size[0],
                           self.gameconfig.ava_size[1])
 
+    def initLevel(self, level_name = None):
+        self.level = self.levelFactory.getLevel(level_name)
+        self.levelFactory.addLevelToScene(self.scene)
+
+    def destroyLevel(self):
+        self.levelFactory.removeLevelFromScene(self.scene)
 
     def timerSlot(self):
         print('timerSlot')
 
+    def close_app(self):
+        self.stopGame()
+
+
+    def startGame(self):
+        # debug print
+        # self.game.print_all_units()
+        # game_loop thread initialization
+        self.loop = GameLoopThread()
+        # set game and ui engine
+        self.loop.game = self.game
+        self.loop.the_ui = self
+        # Qt signal initialization
+        self.loop.setSiganls(self.proxyEmit)
+        # if the game_loop completes work then thread will completes its work
+        self.loop.start()
+
+    def stopGame(self):
+        # game.loop stop condition
+        self.game.loop_state = False
+        # thread call quit, exit from thread
+        self.loop.quit()
+        # application waiting for shutdown thread
+        self.loop.wait()
+
+    def pauseGame(self):
+        pass
+
+    def resumeGame(self):
+        pass
 
     @staticmethod
     def launch(game):
