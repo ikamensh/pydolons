@@ -71,13 +71,13 @@ class Actives(QtCore.QObject):
             widget.pressed.connect(self.selectActive)
             widget.setProperty('status', active.owner_can_afford_activation())
             widget.setProperty('active', active)
-            widget.setStyleSheet('QPushButton[status = "true"]{' \
-                                         'background-color:green;}' \
-                                         'QPushButton[status = "false"]{' \
-                                         'background-color:gray;}' \
-                                         'QPushButton:pressed {' \
-                                         'background-color: white;' \
-                                         'color:black}')
+        widget.setStyleSheet('QPushButton[status = "true"]{'
+                             'background-color:green;}'
+                             'QPushButton[status = "false"]{'
+                             'background-color:gray;}'
+                             'QPushButton:pressed {'
+                             'background-color: white;'
+                             'color:black}')
 
 
     def setNames(self):
