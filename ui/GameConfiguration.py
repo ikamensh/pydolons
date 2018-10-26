@@ -19,7 +19,7 @@ class GameConfiguration:
         # Словарь путей к изображениям, ключ название файла
         self.pic_file_paths = {}
         # Форматы звуков
-        self.sound_format = ('wav', 'mp3')
+        self.sound_format = ('wav', 'mp3', 'WAV')
         # Словарь путей к звукам, ключ название файла
         self.sound_file_paths = {}
         self.setUpScreen()
@@ -112,6 +112,7 @@ class GameConfiguration:
         for filename, path in self.sound_file_paths.items():
             sound = None
             try:
+                print('load ', filename)
                 sound = QtMultimedia.QSound(path)
                 self.sound_maps[filename] = sound
             except Exception as e:
