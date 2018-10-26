@@ -1,11 +1,22 @@
+`@date:2018.10.26`
+`@autor:reef425`
+`@note_start:`
+>1. Добавил модуль `ui/levels/LevelFactory.py`, `/ui/levels/Level_demo_dungeon.py` можно удалять.
+`LevelFactory` может генерироать уровни и удалять их.
+>2. Добален новый класс `ObstacleUnit` для отображения припятсвий. Модуль `GameWorld` будет переделан в пакет
+>3. Обычный тултип не отображается поверх виджетов, будет добален  новый тултип для виджетов.
+>4. Переработан `TheUi` добавлена возможность запуска цикла уровня, остановки, планируется добавить возможность паузы, и возобновления.
+>5. Все уровни в из `/cntent/dungeons` загружаются корректно.
+
+`@note_end`
+
 `@date:2018.10.15`
 `@autor:reef425`
 `@note_start:`
->1. Добавил пакет GameAnimation, module Animations.py, animation object Direction.py
+>1. Добавил пакет `GameAnimation, module Animations.py, animation object Direction.py`
 >2. Анимации стрелки работает корректно
->3. Тултипы вынесены в отдельный модуль ui/GamePages/suwidgets/ToolTip.py
->4. Генраци тултипа производится с помощью ui/GamePages/suwidgets/SuWidgetFactory.py
-
+>3. Тултипы вынесены в отдельный модуль `ui/GamePages/suwidgets/ToolTip.py`
+>4. Генраци тултипа производится с помощью `ui/GamePages/suwidgets/SuWidgetFactory.py`
 
 `@note_end`
 
