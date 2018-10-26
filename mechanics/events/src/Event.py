@@ -12,7 +12,8 @@ class Event:
             self.fire()
 
     def fire(self) -> None:
-        self.game.events_platform.process_event(self)
+        if not self.game is None:
+            self.game.events_platform.process_event(self)
 
     @abstractmethod
     def resolve(self) -> None:
