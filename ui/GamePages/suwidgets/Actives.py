@@ -115,7 +115,6 @@ class Actives(QtCore.QObject):
         self.y = size[1] - self.h - 5
         self.scrollArea.move(self.x , self.y )
         if self.widgets!= {}:
-            print('ad dfsf')
             for widget in self.widgets.values():
                 widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
 
@@ -125,8 +124,7 @@ class Actives(QtCore.QObject):
         if not targets is None:
             if targets:
                 self.setTargets.emit(targets)
-        else:
-            print(None)
+
 
     def showToolTip(self, widget, pos):
         self.toolTip.move(pos.x(), pos.y() - 64)
