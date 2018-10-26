@@ -1,5 +1,3 @@
-from PySide2 import QtWidgets, QtCore
-
 from ui.gamecore import GameObject
 from ui.GameAnimation import Direction
 
