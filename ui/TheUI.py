@@ -1,5 +1,4 @@
 import sys
-from datetime import datetime
 
 
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -11,7 +10,7 @@ from ui.GamePages import GamePages
 from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
 
 from ui.GameController import GameController
-from ui.levels import Level_demo_dungeon, LevelFactory
+from ui.levels import LevelFactory
 
 from ui.GameView import GameView
 
@@ -31,12 +30,16 @@ class TheUI(QtWidgets.QWidget):
         print('cfg ===> start init TheUI', datetime.now())
         # work level
         self.lengine = lengine
-        self.game = lengine.getGame('demo_level')
+        ####################################################
+        #                                                  #
+        #  change level this                               #
+        #                vvvvvvvvvvvvvvvvvvv               #
+        ####################################################
+        # self.game = lengine.getGame('demo_level')
         # self.game = lengine.getGame('small_graveyard_level')
-        # game = lengine.getGame('small_orc_cave_level')
-        # level not work
-        # game = lengine.getGame('pirate_level')
-        # game = lengine.getGame('walls_level')
+        # self.game = lengine.getGame('small_orc_cave_level')
+        # self.game = lengine.getGame('walls_level')
+        self.game = lengine.getGame('pirate_level')
         print('cfg ===> start init DreamGame', datetime.now())
 
         print('cfg ===> init DreamGame', datetime.now())
