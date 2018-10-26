@@ -22,7 +22,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.units_at[unit.uid].setWorldPos(x, y)
 
     def unitDied(self, unit):
-        print('diead')
         unit = self.units_at[unit.uid]
         self.removeFromGroup(unit)
         del self.units_at[unit.uid]
@@ -56,7 +55,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         if msg.get('target').uid in self.units_at.keys():
             self.level.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
             self.level.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
-            # print('debug -> damage_type', msg.get('damage_type'))
         pass
 
     def targetDamageHitSlot(self, msg):
