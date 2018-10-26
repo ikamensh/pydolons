@@ -1,10 +1,11 @@
-from ui.GameWorld import GameWorld
+from ui.GameWorld import GameWorld, ObstacleUnit
 from ui.units import UnitMiddleLayer
 from ui.units import Units, BasicUnit
+from ui.levels.BaseLevel import BaseLevel
+
 from game_objects.dungeon.Dungeon import Dungeon
 from game_objects import battlefield_objects as bf_objs
-
-from ui.levels.BaseLevel import BaseLevel
+from game_objects.battlefield_objects import Unit, Obstacle
 
 
 class LevelFactory:
@@ -54,17 +55,24 @@ class LevelFactory:
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
         for unit, unit_pos in battlefield.unit_locations.items():
-            gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg)
-            if unit.icon == 'hero.png':
-                self.active_unit = True
-            gameUnit.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
             if isinstance(unit, bf_objs.Unit):
+                gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg)
+                if unit.icon == 'hero.png':
+                    self.active_unit = True
+                gameUnit.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
                 gameUnit.setDirection(battlefield.unit_facings[unit])
-            gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
-            gameUnit.uid = unit.uid
-            self.level.units.addToGroup(gameUnit)
-            # добавили gameunit
-            self.level.units.units_at[unit.uid] = gameUnit
+                gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
+                gameUnit.uid = unit.uid
+                self.level.units.addToGroup(gameUnit)
+                # добавили gameunit
+                self.level.units.units_at[unit.uid] = gameUnit
+            elif isinstance(unit, Obstacle):
+                obstacle:ObstacleUnit = ObstacleUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1])
+                obstacle.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
+                obstacle.setWorldPos(unit_pos.x, unit_pos.y)
+                obstacle.uid = unit.uid
+                self.level.world.addToGroup(obstacle)
+                self.level.world.obstacles[unit.uid] = obstacle
 
         self.level.units.active_unit = self.level.units.units_at[self.level.game.turns_manager.get_next().uid]
         self.level.middleLayer.createSuppot(self.level.units.units_at)
