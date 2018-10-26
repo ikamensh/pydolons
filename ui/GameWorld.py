@@ -1,5 +1,26 @@
 from PySide2 import QtWidgets
+
 from ui.gamecore import GameObject
+
+class ObstacleUnit(GameObject):
+    """docstring for BasicUnit."""
+    def __init__(self, *args):
+        super(ObstacleUnit, self).__init__(*args)
+        self.uid = 0
+        self.activate = False
+        self.hp = 100
+
+    def __eq__(self, other):
+        if self is other: return True
+        if other is None: return False
+        if self.__class__ != other.__class__: return False
+        return self.worldPos == other.worldPos.x
+
+    def __hash__(self):
+        return hash(self.worldPos) * 5
+
+    def __repr__(self):
+        return f"{self.worldPos} -> ObstacleUnit {self.uid} "
 
 class GameWorld(QtWidgets.QGraphicsItemGroup):
     def __init__(self, gameconfig):
@@ -8,6 +29,7 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         self.worldSize = (1, 1)
         self.worldHalfSize = (1, 1)
         self.level = None
+        self.obstacles = {}
 
     def setLevel(self, level):
         self.level =  level
