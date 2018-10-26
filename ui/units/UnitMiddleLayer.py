@@ -91,8 +91,13 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
             if cell in units_bf.keys():
                 unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
                 self.tool.setPos(unit.pos())
-                self.tool.setDict(units_bf[cell].tooltip_info)
-                self.tool.setVisible(True)
+                try:
+                    self.tool.setDict(units_bf[cell].tooltip_info)
+                except Exception as e:
+                    self.tool.setVisible(False)
+                else:
+                    self.tool.setVisible(True)
+
         else:
             self.tool.setVisible(False)
 
