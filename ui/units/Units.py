@@ -44,7 +44,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.active_unit = self.units_at[unit.uid]
 
     def unitMoveSlot(self, msg):
-        self.level.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move].play()
+        self.level.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move.lower()].play()
         self.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.level.middleLayer.moveSupport(self.units_at[msg.get('unit').uid])
 
