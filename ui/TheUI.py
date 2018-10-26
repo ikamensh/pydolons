@@ -30,9 +30,9 @@ class TheUI(QtWidgets.QWidget):
         super().__init__()
         print('cfg ===> start init TheUI', datetime.now())
         # work level
-        # game = lengine.getGame('demo_level')
         self.lengine = lengine
-        self.game = lengine.getGame('small_graveyard_level')
+        self.game = lengine.getGame('demo_level')
+        # self.game = lengine.getGame('small_graveyard_level')
         # game = lengine.getGame('small_orc_cave_level')
         # level not work
         # game = lengine.getGame('pirate_level')
