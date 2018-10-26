@@ -15,6 +15,9 @@ def create_units(g):
         unit_locations[mud_wall()] = Cell(wall_x, wall_y)
 
     unit_locations[Unit(mud_golem_basetype)] = Cell(11, 0)
+    return unit_locations
+
+
 
 
 walls_dungeon = Dungeon(create_units, 12, 12, hero_entrance=Cell(3, 4))
