@@ -5,7 +5,7 @@ from typing import Union, List, Callable
 
 class DynamicParameter:
     """
-    Dynamic parameter defines a property that has maximum value, that might change.
+    Dynamic parameter defines a property that has maximum value, which might change.
     In case of such change, percentage of current value to maximum value is preserved.
     Dynamic parameter value always stays within 0 <= :value <= max_value.
 

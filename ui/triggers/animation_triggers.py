@@ -24,7 +24,7 @@ def maybe_play_damage_anim(t, e):
     ProxyEmit.maybe_play_damage_anim.emit({'amount':e.amount,'target':e.target, 'damage_type':e.damage.type})
 
 def maybe_play_hit_anim(t, e):
-    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.target.sound_map.hit})
+    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.target.sound_map.hit.lower()})
 
 def damage_anim_trigger(game):
     return Trigger(DamageEvent,
@@ -35,7 +35,7 @@ def damage_anim_trigger(game):
 
 def play_attack_anim(t, e):
     # print('e dir :\n',dir(e))
-    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.attack})
+    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.attack.lower()})
     pass
 
 def attack_anin_trigger(game):
@@ -48,7 +48,7 @@ def attack_anin_trigger(game):
 
 
 def play_perish_anim(t, e):
-    ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'sound':e.unit.sound_map.perish})
+    ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'sound':e.unit.sound_map.perish.lower()})
     pass
 
 def perish_anim_trigger(game):
