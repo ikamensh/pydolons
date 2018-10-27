@@ -1,7 +1,7 @@
 import sys
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QFormLayout, QComboBox, QLineEdit, QLabel, QGraphicsLinearLayout, QFrame
+    QVBoxLayout, QFormLayout, QLabel, QFrame, QGroupBox, QRadioButton
 
 from PySide2 import QtWidgets
 from PySide2 import QtGui
@@ -23,11 +23,12 @@ qt_app = QApplication(sys.argv)
 
 gc = GameConfiguration()
 
-class DungeonWidget(QFrame):
+class DungeonWidget(QRadioButton):
     def __init__(self, dungeon, parent = None):
-        QFrame.__init__(self, parent)
-        self.setFrameShadow(QFrame.Raised)
-        self.setStyleSheet("border: 2px solid black")
+        QRadioButton.__init__(self, parent)
+        # self.setFrameShadow(QFrame.Raised)
+        self.setObjectName("DungeonFrame")
+        self.setStyleSheet("#DungeonFrame {border: 2px solid black}")
         self.dungeon = dungeon
 
         # Create the form layout that manages the labeled controls
@@ -57,9 +58,9 @@ class DungeonWidget(QFrame):
 
 
 
-class ManyDungeonsWidget(QWidget):
+class ManyDungeonsWidget(QGroupBox):
     def __init__(self, dung_list, parent=None):
-        QWidget.__init__(self, parent)
+        QGroupBox.__init__(self, parent)
 
         layout = QtWidgets.QGridLayout()
         for i, d in enumerate(dung_list):
