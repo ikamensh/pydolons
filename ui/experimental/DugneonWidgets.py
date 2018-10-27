@@ -23,9 +23,12 @@ qt_app = QApplication(sys.argv)
 
 gc = GameConfiguration()
 
-class DungeonWidget(QRadioButton):
+class DungeonWidget(QFrame):
     def __init__(self, dungeon, parent = None):
-        QRadioButton.__init__(self, parent)
+        QFrame.__init__(self, parent)
+
+        self.rbutton = QRadioButton(self)
+
         # self.setFrameShadow(QFrame.Raised)
         self.setObjectName("DungeonFrame")
         self.setStyleSheet("#DungeonFrame {border: 2px solid black}")
@@ -47,6 +50,7 @@ class DungeonWidget(QRadioButton):
 
         self.max_xp_label = QLabel(f'{max([u.xp for u in locs.keys() if not u.is_obstacle])}', self)
         self.form_layout.addRow('Strongest enemy XP: ', self.max_xp_label)
+        self.form_layout.addWidget(self.rbutton)
 
         self.setLayout(self.form_layout)
 
@@ -78,5 +82,6 @@ class ManyDungeonsWidget(QGroupBox):
 
 
 # Create an instance of the application window and run it
-app = ManyDungeonsWidget([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
-app.run()
+if __name__ == "__main__":
+    app = ManyDungeonsWidget([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
+    app.run()
