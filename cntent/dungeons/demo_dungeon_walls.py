@@ -19,6 +19,8 @@ def create_units(g):
 
 
 
+    return unit_locations
 
-walls_dungeon = Dungeon(create_units, 12, 12, hero_entrance=Cell(3, 4))
+
+walls_dungeon = Dungeon("Great Wall", 12, 12, unit_locations=create_units, hero_entrance=Cell(3, 4), icon="pirates_2.jpg")
 

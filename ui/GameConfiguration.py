@@ -10,25 +10,29 @@ class GameConfiguration:
     """docstring for GameConfiguration.
     Установка конфигурации игровых объектов, настроек экрана и системы
     """
-    def __init__(self):
+    def __init__(self, lazy = True):
         print('cfg ===> start init', datetime.now())
-        # Игнорируемые папки
-        self.ignore_path = ('resources/assets/sprites/axe', )
-        # Форматы изображений
-        self.pic_format = ('png', 'jpg')
-        # Словарь путей к изображениям, ключ название файла
+        self.ignore_path = ('resources/assets/sprites/axe', )         # Игнорируемые папки
+
+
+        self.pic_formats = ('png', 'jpg')
         self.pic_file_paths = {}
-        # Форматы звуков
-        self.sound_format = ('wav', 'mp3', 'WAV')
-        # Словарь путей к звукам, ключ название файла
+        self.pix_maps = {}
+
+
+        self.sound_formats = ('wav', 'mp3')
         self.sound_file_paths = {}
+        self.sound_maps = {}
+
         self.setUpScreen()
         print('cfg ===> setUpScreen', datetime.now())
         self.setUpUnits()
         self.loadFilesPath()
         print('cfg ===> loadFilesPath', datetime.now())
-        self.setUpPixmaps()
-        print('cfg ===> setUpPixmaps', datetime.now())
+        self.lazy = lazy
+        if not lazy:
+            self.setUpPixmaps()
+            print('cfg ===> setUpPixmaps', datetime.now())
         self.setUpSounds()
         print('cfg ===> setUpSounds', datetime.now())
         self.gameRoot = None
@@ -89,9 +93,9 @@ class GameConfiguration:
             if item[2] != [] and not item[0] in self.ignore_path:
                 # Получаем спискок фйалов
                 for name in item[2]:
-                    if name[-3:].lower() in self.pic_format:
+                    if name[-3:].lower() in self.pic_formats:
                         self.pic_file_paths[name.lower()] = os.path.join(item[0], name)
-                    elif name[-3:].lower() in self.sound_format:
+                    elif name[-3:].lower() in self.sound_formats:
                         self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
 
     def getPicFile(self, filename):
@@ -101,14 +105,22 @@ class GameConfiguration:
         return: QtGui.QPixmap
         Объект QPixmap из словаря GameConfiguration.pix_maps
         """
+        search_name = filename.lower()
         print(filename)
-        if self.pix_maps.get(filename.lower()) is None:
+
+        try:
+            return self.pix_maps[search_name]
+        except KeyError:
+            if self.lazy and search_name in self.pic_file_paths:
+                    path = self.pic_file_paths[search_name]
+                    pixmap = QtGui.QPixmap(path)
+                    self.pix_maps[search_name] = pixmap
+                    return pixmap
+
             print(f"{filename} image was not found. using default.")
             return self.pix_maps.get("default.png")
-        return self.pix_maps.get(filename.lower())
 
     def setUpSounds(self):
-        self.sound_maps = {}
         for filename, path in self.sound_file_paths.items():
             sound = None
             try:
@@ -133,7 +145,6 @@ class GameConfiguration:
         которы добавляется в словарь GameConfiguration.pix_maps
         {filename: QtGui.QPixmap()}
         """
-        self.pix_maps = {}
         for filename, path in self.pic_file_paths.items():
             pixmap = None
             try:

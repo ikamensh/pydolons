@@ -20,9 +20,9 @@ import random
 
 class DreamGame:
 
-    def __init__(self, bf, rules=None, is_sim = False, is_server=True, seed = None):
+    def __init__(self, bf=None, rules=None, is_sim = False, is_server=True, seed = None):
         self.random = random.Random(seed) if seed else random.Random(100)
-        self.battlefield : Battlefield = bf
+        self.battlefield : Battlefield = bf or Battlefield(8,8)
         self.the_hero : bf_objs.Unit= None
         self.fractions : typing.Dict[bf_objs.Unit : Fractions] = {}
         self.enemy_ai = BruteAI(self)
