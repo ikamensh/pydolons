@@ -17,7 +17,7 @@ class Level_demo_dungeon(BaseLevel):
 
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
-        self.world.setWorldSize(demo_dungeon.w, demo_dungeon.h)
+        self.world.setWorldSize(game.battlefield.w, game.battlefield.h)
         self.world.setFloor(self.gameconfig.getPicFile('floor.png'))
 
         self.setMiddleLayer(UnitMiddleLayer(self.gameconfig))

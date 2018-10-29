@@ -2,7 +2,6 @@ from __future__ import annotations
 from mechanics.events import ActiveEvent
 from mechanics.actives import ActiveTags
 from battlefield import Cell
-from game_objects import battlefield_objects as bf_objs
 import copy
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
@@ -40,6 +39,7 @@ class Active:
         return all((cond(self, targeting) for cond in self.conditions))
 
     def activate(self, targeting=None):
+        from game_objects import battlefield_objects as bf_objs
 
         if self.targeting_cls in [Cell, bf_objs.Unit, bf_objs.BattlefieldObject]:
             assert isinstance(targeting, self.targeting_cls)
