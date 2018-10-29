@@ -19,18 +19,24 @@ class GamePages(object):
         self.focus = False
 
 
+
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
         self.gameRoot.gamePages = self
 
     def setUpPages(self):
-        self.setUpStartPage()
         self.setUpCharecterPage()
         self.setUpGameMenu()
 
-    def setUpStartPage(self):
-        self.startPage = StartPage()
-        self.startPage.arg = 213
+    def setGame(self, game):
+        self.game = game
+
+    def setUpStartPage(self, ui):
+        self.startPage = StartPage(self)
+        self.page = self.startPage
+        self.startPage.start.widget().pressed.connect(ui.startGame)
+        self.startPage.start.widget().pressed.connect(self.startPage.startSlot)
+
 
     def setUpGameMenu(self):
         self.gameMenu = ScreenMenu()
@@ -58,16 +64,23 @@ class GamePages(object):
         x, y = (420 - 50) / 4, (320 - 50) / 4
         """
         assert isinstance(pageName, str)
-        if pageName == 'CharacterPage' and not self.characterPage.state:
-            x, y = 0, 0
-            self.gameRoot.scene.addItem(self.characterPage)
-            self.page = self.characterPage
-            if self.gameRoot.cfg.dev_size[0] > 800:
-                x = (self.gameRoot.cfg.dev_size[0] - self.characterPage.w) / 4
-                y = (self.gameRoot.cfg.dev_size[1] - self.characterPage.h) / 4
-            self.characterPage.setPos(int(x), int(y))
-            self.characterPage.pageUpdate()
-            self.characterPage.state = True
+        if pageName == 'CharacterPage' :
+            if not self.characterPage.state:
+                x, y = 0, 0
+                self.gameRoot.scene.addItem(self.characterPage)
+                self.page = self.characterPage
+                if self.gameRoot.cfg.dev_size[0] > 800:
+                    x = (self.gameRoot.cfg.dev_size[0] - self.characterPage.w) / 4
+                    y = (self.gameRoot.cfg.dev_size[1] - self.characterPage.h) / 4
+                self.characterPage.setPos(int(x), int(y))
+                self.characterPage.pageUpdate()
+                self.characterPage.state = True
+            else:
+                self.gameRoot.scene.removeItem(self.characterPage)
+                self.page = None
+                self.characterPage.state = False
+        if pageName == 'StartPage':
+            self.startPage.showPage()
 
     def close(self):
         if self.characterPage.state:
@@ -76,20 +89,26 @@ class GamePages(object):
             self.characterPage.state = False
 
     def collision(self, pos):
-        self.gameMenu.collision(pos)
-        if not self.page is None:
-            self.page.widgetFactory.collisions(pos)
+        # if not self.page is None:
+        #     self.page.widgetFactory.collisions(pos)
+        pass
+
+    def mouseMoveEvent(self, pos):
+        # self.gameMenu.mouseMoveEvent(pos)
+        pass
 
     def mousePressEvent(self, pos):
-        if not self.page is None:
-            self.page.collisions(pos)
+        # if not self.page is None:
+        #     self.page.collisions(pos)
+        pass
 
     def mouseReleaseEvent(self):
-        if not self.page is None:
-            self.page.release()
+        # if not self.page is None:
+        #     self.page.release()
+        pass
 
-    def updateGui(self):
-        self.gameMenu.updateGui()
+    def resized(self):
+        self.page.resized()
 
     def setHeroUnit(self, unit):
         self.unit = unit
