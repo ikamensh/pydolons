@@ -7,32 +7,20 @@ from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigge
 
 import sys
 
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets, QtGui
 from LEngine import LEngine
 
 
 def one_game():
     # Qt application initialization
     app = QtWidgets.QApplication(sys.argv)
+    app.setOverrideCursor(QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'), hotX =1, hotY= 1))
     # Logical engine initialization
     lengine = LEngine()
     # Ui engine initialization
     window = TheUI(lengine)
-    game = window.game
-    TheUI.singleton = window
-    # NEW TRIGGER ADD THIS |
-    #
-    levelstatus_trigger(game),
-    ui_error_message_trigger(game),
-    nexunit_anim_trigger(game),
-    turn_anim_trigger(game),
-    perish_anim_trigger(game),
-    attack_anin_trigger(game),
-    damage_anim_trigger(game),
-    move_anim_trigger(game)
-
     window.proxyEmit = ProxyEmit
-    window.startGame()
+    # window.startGame()
     app.aboutToQuit.connect(window.close_app)
     sys.exit(app.exec_())
 
