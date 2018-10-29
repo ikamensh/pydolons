@@ -27,19 +27,23 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     def setUpGui(self):
         self.actives = Actives(self, columns = 6)
         self.actives.setTargets.connect(self.gameRoot.level.middleLayer.getTargets)
+
         self.notify = self.gameRoot.suwidgetFactory.getNotifyText(self.gameRoot)
         self.addToGroup(self.notify)
 
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
         self.unitStack.setPos(0, 0)
+
         self.active_select = GameObject()
         self.active_select.setPixmap(self.gameconfig.getPicFile('active select 96.png').scaled(64, 64))
         self.active_select.setParentItem(self.unitStack)
         self.active_select.setPos(self.unitStack.x(), self.unitStack.y())
+
         if not self.gameRoot.level is None:
             self.createUnitStack()
             self.updateUnitStack()
+
         self.actives.setScene(self.gameRoot.scene)
 
     def createUnitStack(self):
@@ -85,7 +89,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
         self.setX(pos.x())
         self.setY(pos.y())
 
-    def updateGui(self):
+    def resized(self):
         self.gui_console.move(self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240)
         self.actives.updatePos(self.gameconfig.dev_size)
 
@@ -99,5 +103,13 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
     def focus(self):
         return  self.actives.scrollArea.hasFocus()
 
-    def collision(self, pos):
-        self.actives.collisioon(pos)
+
+    def mouseMoveEvent(self, e):
+        self.actives.mouseMoveEvent(e)
+
+    def mousePressEvent(self, e):
+        self.actives.mousePressEvent(e)
+
+    def mouseRealeseEvent(self, e):
+        self.actives.mouseRealeseEvent(e)
+        pass
