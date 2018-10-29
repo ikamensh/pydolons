@@ -48,7 +48,7 @@ class GameController:
     def mousePressEvent(self, e):
         try:
             if self.gameRoot.gamePages.page is None and not self.gameRoot.gamePages.focus:
-                    self.game.ui_order(self.last_point.x, self.last_point.y)
+                    self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
                     self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
                     self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
             else:
