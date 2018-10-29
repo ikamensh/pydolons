@@ -13,8 +13,9 @@ class GameView(QtWidgets.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         #
         self.gameconfig = GameConfiguration()
+        self.controller = QtWidgets.QWidget()
         self.setMouseTracking(True)
-        self.controller = None
+        # self.controller = None
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.slotAlarmTimer)
