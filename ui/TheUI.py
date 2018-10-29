@@ -30,20 +30,7 @@ class TheUI(QtWidgets.QWidget):
         print('cfg ===> start init TheUI', datetime.now())
         # work level
         self.lengine = lengine
-        ####################################################
-        #                                                  #
-        #  change level this                               #
-        #                vvvvvvvvvvvvvvvvvvv               #
-        ####################################################
-        # self.game = lengine.getGame('demo_level')
-        # self.game = lengine.getGame('small_graveyard_level')
-        # self.game = lengine.getGame('small_orc_cave_level')
-        # self.game = lengine.getGame('walls_level')
-        self.game = lengine.getGame('pirate_level')
-        print('cfg ===> start init DreamGame', datetime.now())
-
-        print('cfg ===> init DreamGame', datetime.now())
-
+        self.loop = None
 
         self.gameTimer = QtCore.QTimer()
         self.gameTimer.timeout.connect(self.timerSlot)
@@ -53,7 +40,7 @@ class TheUI(QtWidgets.QWidget):
         self.setCursor(cursor)
 
         self.gameRoot: GameRootNode = GameRootNode()
-        self.gameRoot.game = self.game
+        self.gameRoot.lengine = self.lengine
 
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
@@ -73,23 +60,17 @@ class TheUI(QtWidgets.QWidget):
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtGui.QBrush(self.gameconfig.getPicFile('dungeon.jpg')))
 
-        self.controller = GameController(self.game)
+        self.controller = GameController()
         self.gameRoot.setGameController(self.controller)
 
         self.levelFactory = LevelFactory(self.lengine)
         self.gameRoot.setLevelFactory(self.levelFactory)
-        self.initLevel()
-
-        self.scene.addItem(self.controller.cursor)
 
         self.gamePages = GamePages()
         self.gameRoot.setGamePages(self.gamePages)
-        self.gamePages.setUpPages()
-        self.gamePages.setHeroUnit(self.game.the_hero)
-        self.gamePages.setCharacter(self.game.character)
-        self.view.resized.connect(self.gamePages.updateGui)
+        self.gamePages.setUpStartPage(self)
 
-        self.view.controller = self.controller
+        self.view.resized.connect(self.gamePages.resized)
         self.view.setScene(self.scene)
 
         self.showMaximized()
@@ -115,10 +96,12 @@ class TheUI(QtWidgets.QWidget):
         print('timerSlot')
 
     def close_app(self):
-        self.stopGame()
+        if not self.loop is None:
+            self.stopGame()
 
 
     def startGame(self):
+        self.loadGame()
         # debug print
         # self.game.print_all_units()
         # game_loop thread initialization
@@ -130,6 +113,26 @@ class TheUI(QtWidgets.QWidget):
         self.loop.setSiganls(self.proxyEmit)
         # if the game_loop completes work then thread will completes its work
         self.loop.start()
+
+    def loadGame(self):
+        ####################################################
+        #                                                  #
+        #  change level this                               #
+        #                vvvvvvvvvvvvvvvvvvv               #
+        ####################################################
+        self.game = self.lengine.getGame('demo_level')
+        # self.game = lengine.getGame('small_graveyard_level')
+        # self.game = lengine.getGame('small_orc_cave_level')
+        # self.game = lengine.getGame('walls_level')
+        # self.game = lengine.getGame('pirate_level')
+        self.gameRoot.game = self.game
+        self.initLevel()
+        self.gamePages.setUpPages()
+        self.gamePages.setHeroUnit(self.game.the_hero)
+        self.gamePages.setCharacter(self.game.character)
+        self.view.controller = self.controller
+
+
 
     def stopGame(self):
         # game.loop stop condition
