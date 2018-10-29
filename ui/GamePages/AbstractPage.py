@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtWidgets
 
 
 class AbstractPage(QtWidgets.QGraphicsItemGroup):
@@ -8,6 +8,7 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
         super(AbstractPage, self).__init__()
         self.gamePages = None
         self.state = False
+
         
     @abstractmethod
     def setUp(self, arg):
@@ -30,4 +31,13 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
 
     @abstractmethod
     def addButton(self, arg):
+        pass
+
+    def resizeEvent(self):
+        pass
+
+    def release(self):
+        pass
+
+    def collisions(self, pos):
         pass
