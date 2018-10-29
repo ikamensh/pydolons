@@ -8,11 +8,10 @@ from exceptions import PydolonsException
 
 
 class GameController:
-    def __init__(self,  game):
+    def __init__(self):
         """
         last_point = Cell() -- последняя точка, на которую указывает игрок
         """
-        self.game = game
         self.gameRoot = None
         self.tr = QtGui.QTransform()
 
@@ -40,7 +39,7 @@ class GameController:
         """ Метод перехватывает событие движение мыши
         """
         self.gameRoot.gamePages.checkFocus(e.pos())
-        self.gameRoot.gamePages.collision(e.pos())
+        self.gameRoot.gamePages.mouseMoveEvent(e.pos())
         if not self.gameRoot.gamePages.focus:
             newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
             self.moveCursor(newPos)
@@ -70,11 +69,11 @@ class GameController:
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
         скролл меньше нуля зумм -
         """
-        if not self.gameRoot.gamePages.focus:
-            if e.delta() > 0.0:
-                self.zoomIn()
-            elif e.delta() < 0.0:
-                self.zoomOut()
+        # if not self.gameRoot.gamePages.focus:
+        if e.delta() > 0.0:
+            self.zoomIn()
+        elif e.delta() < 0.0:
+            self.zoomOut()
         pass
 
     def zoomIn(self):
@@ -149,12 +148,12 @@ class GameController:
     def order_from_hotkey(self, e):
 
         if e.key() == QtCore.Qt.Key_Q:
-            self.game.order_turn_ccw()
+            self.gameRoot.game.order_turn_ccw()
         elif e.key() == QtCore.Qt.Key_E:
-            self.game.order_turn_cw()
+            self.gameRoot.game.order_turn_cw()
         elif e.key() in GameController.orientations:
-            self.game.order_step(GameController.orientations[e.key()])
+            self.gameRoot.game.order_step(GameController.orientations[e.key()])
         elif e.key() == QtCore.Qt.Key_O:
             self.gameRoot.gamePages.showPage('CharacterPage')
         elif e.key() == QtCore.Qt.Key_Escape:
-            self.gameRoot.gamePages.close()
+            self.gameRoot.gamePages.showPage('StartPage')
