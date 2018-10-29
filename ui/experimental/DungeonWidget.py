@@ -4,16 +4,13 @@ from PySide2.QtWidgets import QFormLayout, QLabel, QFrame, QRadioButton
 
 from DreamGame import DreamGame
 
-from ui.GameConfiguration import GameConfiguration
-
-gc = GameConfiguration()
 
 class DungeonWidget(QFrame):
 
     selected = Signal(object)
     deselected = Signal()
 
-    def __init__(self, dungeon, parent = None):
+    def __init__(self, dungeon, parent = None, gc=None):
         QFrame.__init__(self, parent)
 
 

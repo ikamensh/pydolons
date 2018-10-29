@@ -1,44 +1,28 @@
 from __future__ import annotations
 import sys
 from PySide2.QtCore import Slot, Signal
-from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, \
-    QVBoxLayout, QFormLayout, QLabel, QFrame, QGroupBox, QRadioButton
+from PySide2.QtWidgets import QApplication, QPushButton, QGroupBox
 
 from PySide2 import QtWidgets
-from PySide2 import QtGui
 from cntent.dungeons.small_orc_cave import small_orc_cave
 from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from cntent.dungeons.small_graveyard import small_graveyard
 
-from DreamGame import DreamGame
-
-from ui.GameConfiguration import GameConfiguration
-
-
-# Every Qt application must have one and only one QApplication object;
-# it receives the command line arguments passed to the script, as they
-# can be used to customize the application's appearance and behavior
-qt_app = QApplication(sys.argv)
+from ui.experimental.DungeonWidget import DungeonWidget
 
 
 
-
-
-
-
-
-
-class ManyDungeonsWidget(QGroupBox):
-    def __init__(self, dung_list, parent=None):
+class DungeonChoice(QGroupBox):
+    def __init__(self, dung_list, parent=None, gc=None):
         QGroupBox.__init__(self, parent)
 
         self.dungeon_widgets = []
 
         layout = QtWidgets.QGridLayout()
         for i, d in enumerate(dung_list):
-            dung_widg = DungeonWidget(d)
+            dung_widg = DungeonWidget(d, gc=gc)
             layout.addWidget(dung_widg, i // 2, i%2)
             self.dungeon_widgets.append(dung_widg)
 
@@ -79,15 +63,15 @@ class ManyDungeonsWidget(QGroupBox):
                 dw.rbutton.setChecked(False)
         self.start_button.setEnabled(True)
 
-    def run(self):
-        self.show()
-        qt_app.exec_()
 
 
 
-
-
-# Create an instance of the application window and run it
 if __name__ == "__main__":
-    app = ManyDungeonsWidget([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
-    app.run()
+    from ui.GameConfiguration import GameConfiguration
+
+    qt_app = QApplication(sys.argv)
+    gc = GameConfiguration()
+
+    app = DungeonChoice([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon], gc=gc)
+    app.show()
+    qt_app.exec_()
