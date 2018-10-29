@@ -101,7 +101,6 @@ class GameConfiguration:
         return: QtGui.QPixmap
         Объект QPixmap из словаря GameConfiguration.pix_maps
         """
-        print(filename)
         if self.pix_maps.get(filename.lower()) is None:
             print(f"{filename} image was not found. using default.")
             return self.pix_maps.get("default.png")
@@ -112,7 +111,6 @@ class GameConfiguration:
         for filename, path in self.sound_file_paths.items():
             sound = None
             try:
-                print('load ', filename)
                 sound = QtMultimedia.QSound(path)
                 self.sound_maps[filename] = sound
             except Exception as e:
