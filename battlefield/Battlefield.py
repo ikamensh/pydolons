@@ -45,7 +45,7 @@ class Battlefield:
         if cell in self.units_at:
             return self.units_at[cell]
         else:
-            return []
+            return None
 
     def neighbours_exclude_center(self, cell, distance=1):
         neighbours = set(self.get_cells_within_dist(cell, distance))
@@ -109,6 +109,7 @@ class Battlefield:
         cells_with_units = set(self.units_at.keys()).intersection(set(cells))
         return list(flatten(self.units_at[c] for c in cells_with_units))
 
+    #optimize: use dirty bit
     @property
     def units_at(self) -> Dict[Cell, List[Unit]]:
         result = {}

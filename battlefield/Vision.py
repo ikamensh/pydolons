@@ -17,7 +17,7 @@ class Vision:
         obstacles = {cell for cell in self.battlefield.units_at if cell in visible_cells}
         obstacles -= {cell_from}
         walls = frozenset({cell for cell in self.battlefield.units_at if cell in visible_cells and
-                 self.battlefield.units_at[cell].is_obstacle})
+                 self.battlefield.units_at[cell][0].is_obstacle})
         diag_wall_blockers = self.merge_walls(walls)
         obstacles |= diag_wall_blockers
         for obstacle in obstacles:

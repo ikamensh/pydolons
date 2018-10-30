@@ -25,7 +25,7 @@ class StarSearch(AStar):
             vector, rotation, cost = t
             pos, facing = node.pos + vector * node.facing, node.facing * rotation
             if 0 <= pos.real < self.w and 0 <= pos.imag < self.h:
-                if self.game.battlefield.get_unit_at(pos) is not None:
+                if self.game.battlefield.get_units_at(pos) is not None:
                     continue
                 new_node = Node(pos, facing)
                 _neighbors.append(new_node)

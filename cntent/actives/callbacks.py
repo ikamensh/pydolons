@@ -14,8 +14,10 @@ def attack_callback(active  :Active, target :Unit):
 
 def attack_on_cell_callback(active  :Active, target  :Cell):
 
-    unit_on_target_cell = active.game.get_unit_at(target)
-    Attack.attack(source=active.owner, target=unit_on_target_cell)
+    units_on_target_cell = active.game.get_units_at(target)
+    if units_on_target_cell:
+        chosen_target = active.game.random.choice(units_on_target_cell)
+        Attack.attack(source=active.owner, target=chosen_target)
 
 def move_on_target_cell(active: Active, target: Cell):
     MovementEvent(active.owner, target)

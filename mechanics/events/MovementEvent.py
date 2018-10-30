@@ -18,7 +18,7 @@ class MovementEvent(Event):
         super().__init__(game)
 
     def check_conditions(self):
-        return self.battlefield.get_unit_at(self.cell_to) is None
+        return self.battlefield.get_units_at(self.cell_to) is None
 
     def resolve(self):
         self.battlefield.move(self.unit, self.cell_to)

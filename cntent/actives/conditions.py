@@ -27,4 +27,4 @@ def between_angles(ang_min, ang_max):
     return _
 
 def target_cell_empty(active, cell):
-    return active.game.battlefield.get_unit_at(cell) is None
+    return active.game.get_units_at(cell) is None

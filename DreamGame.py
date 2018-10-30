@@ -239,15 +239,17 @@ class DreamGame:
 
 
     def order_attack(self, unit: Unit, _target: Unit, AI_assist=True):
-        unit_target = _target
         actives = unit.attack_actives
         if len(actives) == 0:
             raise PydolonsException("The unit has no attack actives.")
 
-        if isinstance(unit_target, Cell):
-            unit_target = self.battlefield.units_at.get(unit_target, None)
-            if unit_target is None:
+        if isinstance(_target, Cell):
+            units = self.get_units_at(_target)
+            if units is None:
                 raise PydolonsException("Can't attack an empty cell.")
+            unit_target = random.choice(units)
+        else:
+            unit_target = _target
 
         affordable_actives = [a for a in actives if a.owner_can_afford_activation()]
 
@@ -323,8 +325,8 @@ class DreamGame:
         return self.battlefield.unit_locations[unit]
 
 
-    def get_unit_at(self, coord):
-        return self.battlefield.units_at[coord]
+    def get_units_at(self, coord):
+        return self.battlefield.get_units_at(coord)
 
 
     def get_units_distances_from(self, p):
