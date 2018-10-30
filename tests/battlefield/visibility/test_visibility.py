@@ -6,7 +6,6 @@ def test_visibility(game_hvsp, hero):
 
     bf = game_hvsp.battlefield
     bf.unit_locations = {}
-    bf.units_at = {}
     bf.place(hero, Cell(1,1), Facing.SOUTH)
 
     vision = Vision(bf)
@@ -49,7 +48,6 @@ def test_direction(game_hvsp, hero):
 
     vision = Vision(bf)
     bf.unit_locations = {}
-    bf.units_at = {}
     bf.place(hero, Cell(4, 4))
     cells_seen_before = vision.std_seen_cells(hero)
 
