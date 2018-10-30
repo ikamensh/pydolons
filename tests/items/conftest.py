@@ -51,3 +51,13 @@ def armor(empty_game):
 def diff_item(request, empty_game):
     item = request.param(empty_game)
     yield item
+
+from cntent.items.std.std_ranged import black_bow, cadamba_crossbow
+
+@pytest.fixture()
+def bow():
+    return black_bow
+
+@pytest.fixture()
+def crossbow():
+    return cadamba_crossbow

@@ -15,7 +15,7 @@ bow_shot_active = Active(BattlefieldObject,
                          std_ranged_cost,
                          game=None,
                          callbacks=[ranged_attack_cb],
-                         tags=[ActiveTags.ATTACK],
+                         tags=[ActiveTags.RANGED, ActiveTags.ATTACK],
                          name="Bow shot")
 
 crossbow_shot_active = Active(BattlefieldObject,
@@ -23,7 +23,7 @@ crossbow_shot_active = Active(BattlefieldObject,
                               std_ranged_cost,
                               game=None,
                               callbacks=[ranged_attack_cb],
-                              tags=[ActiveTags.ATTACK],
+                              tags=[ActiveTags.RANGED, ActiveTags.ATTACK],
                               name="Crossbow shot")
 
 

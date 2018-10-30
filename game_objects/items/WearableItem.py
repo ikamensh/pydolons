@@ -47,7 +47,7 @@ class WearableItem(Item):
     def on_unequip(self, slot):
         if slot.item_type == self.item_type:
             for active in self.actives:
-                self.owner.give_active(active)
+                self.owner.remove_active(active)
 
 
 

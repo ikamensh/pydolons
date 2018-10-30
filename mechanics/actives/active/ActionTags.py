@@ -5,6 +5,7 @@ class ActiveTags(Enum):
     TURNING = auto()
 
     ATTACK = auto()
+    RANGED = auto()
     MAGIC = auto()
 
     RESTORATION = auto()

@@ -15,5 +15,15 @@ primordial_great_axe = WeaponBlueprint("primordial axe", weapon_type=WeaponTypes
 
 from cntent.actives.std_ranged_attack import bow_shot_active, crossbow_shot_active
 
-bow = WeaponBlueprint("bow", weapon_type=WeaponTypes.BOW, material_type=MaterialTypes.METAL, rarity=0.75, actives=[bow_shot_active])
-crossbow = WeaponBlueprint("crossbow", weapon_type=WeaponTypes.CROSSBOW, material_type=MaterialTypes.METAL, rarity=0.75, actives=[crossbow_shot_active])
+bow = WeaponBlueprint("bow",
+                      weapon_type=WeaponTypes.BOW,
+                      material_type=MaterialTypes.WOOD,
+                      rarity=0.75,
+                      actives=[bow_shot_active],
+                      is_ranged=True)
+
+crossbow = WeaponBlueprint("crossbow",
+                           weapon_type=WeaponTypes.CROSSBOW,
+                           material_type=MaterialTypes.WOOD,
+                           rarity=0.75,
+                           actives=[crossbow_shot_active], is_ranged=True)
