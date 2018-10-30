@@ -34,8 +34,8 @@ class GamePages(object):
     def setUpStartPage(self, ui):
         self.startPage = StartPage(self)
         self.page = self.startPage
-        self.startPage.start.widget().pressed.connect(ui.startGame)
-        self.startPage.start.widget().pressed.connect(self.startPage.startSlot)
+        self.startPage.start.pressed.connect(ui.startGame)
+        self.startPage.start.pressed.connect(self.startPage.startSlot)
 
 
     def setUpGameMenu(self):
@@ -93,13 +93,13 @@ class GamePages(object):
         #     self.page.widgetFactory.collisions(pos)
         pass
 
-    def mouseMoveEvent(self, pos):
-        # self.gameMenu.mouseMoveEvent(pos)
+    def mouseMoveEvent(self, e):
+        self.checkFocus(e.pos())
+        self.page.mouseMoveEvent(e)
         pass
 
-    def mousePressEvent(self, pos):
-        # if not self.page is None:
-        #     self.page.collisions(pos)
+    def mousePressEvent(self, e):
+        # self.page.mousePressEvent(e)
         pass
 
     def mouseReleaseEvent(self):
@@ -118,7 +118,7 @@ class GamePages(object):
         self.characterPage.character = character
 
     def checkFocus(self, pos):
-        self.focus = self.gameMenu.checkFocus(pos)
+        self.focus = self.page.checkFocus(pos)
 
     # @property
     # def focus(self):
