@@ -44,6 +44,7 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
             self.createUnitStack()
             self.updateUnitStack()
 
+        self.createToolTip()
         self.actives.setScene(self.gameRoot.scene)
 
     def createUnitStack(self):
@@ -57,6 +58,19 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
             item.stackBefore(self.active_select)
             self.unitStack.items[unit.uid] = item
             i+=1
+
+    def createToolTip(self):
+        self.tool:QtWidgets.QGraphicsItem = self.gameRoot.suwidgetFactory.getToolTip(128, 128)
+        self.tool.setVisible(False)
+        self.gameRoot.scene.addItem(self.tool)
+
+    def showToolTip(self, text, x, y):
+        self.tool.setText(text)
+        self.tool.setTextPos(x, y)
+        self.tool.setVisible(True)
+
+    def hideToolTip(self):
+        self.tool.setVisible(False)
 
     def setUpConsole(self):
         self.gui_console = GuiConsole(self.gameRoot.game.gamelog)
@@ -91,25 +105,14 @@ class ScreenMenu(QtWidgets.QGraphicsItemGroup):
 
     def resized(self):
         self.gui_console.move(self.gameconfig.dev_size[0] - 320, self.gameconfig.dev_size[1] - 240)
-        self.actives.updatePos(self.gameconfig.dev_size)
+        self.actives.resized()
 
     def checkFocus(self, pos):
-        if pos.y() > self.actives.y and pos.x() > self.actives.x and pos.x() < self.actives.x + self.actives.w:
-            return True
-        else:
-            return False
+        return self.actives.rect.contains(pos)
 
     @property
     def focus(self):
         return  self.actives.scrollArea.hasFocus()
 
-
     def mouseMoveEvent(self, e):
         self.actives.mouseMoveEvent(e)
-
-    def mousePressEvent(self, e):
-        self.actives.mousePressEvent(e)
-
-    def mouseRealeseEvent(self, e):
-        self.actives.mouseRealeseEvent(e)
-        pass
