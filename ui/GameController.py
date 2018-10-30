@@ -5,8 +5,6 @@ from battlefield.Facing import Facing
 from ui.events import UiErrorMessageEvent
 from exceptions import PydolonsException
 
-
-
 class GameController:
     def __init__(self):
         """
@@ -23,7 +21,7 @@ class GameController:
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
-        self.gameRoot.cfg = self
+        self.gameRoot.controller = self
 
 
     def setUp(self, world, units, middleLayer):
@@ -38,8 +36,7 @@ class GameController:
     def mouseMoveEvent(self, e):
         """ Метод перехватывает событие движение мыши
         """
-        self.gameRoot.gamePages.checkFocus(e.pos())
-        self.gameRoot.gamePages.mouseMoveEvent(e.pos())
+        self.gameRoot.gamePages.mouseMoveEvent(e)
         if not self.gameRoot.gamePages.focus:
             newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
             self.moveCursor(newPos)
@@ -47,12 +44,12 @@ class GameController:
 
     def mousePressEvent(self, e):
         try:
-            if self.gameRoot.gamePages.page is None and not self.gameRoot.gamePages.focus:
-                    self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
-                    self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                    self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            if not self.gameRoot.gamePages.focus:
+                self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
             else:
-                self.gameRoot.gamePages.mousePressEvent(e.pos())
+                self.gameRoot.gamePages.mousePressEvent(e)
         except PydolonsException as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
@@ -69,7 +66,6 @@ class GameController:
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
         скролл меньше нуля зумм -
         """
-        # if not self.gameRoot.gamePages.focus:
         if e.delta() > 0.0:
             self.zoomIn()
         elif e.delta() < 0.0:
@@ -146,7 +142,6 @@ class GameController:
     }
 
     def order_from_hotkey(self, e):
-
         if e.key() == QtCore.Qt.Key_Q:
             self.gameRoot.game.order_turn_ccw()
         elif e.key() == QtCore.Qt.Key_E:
