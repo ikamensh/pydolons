@@ -243,15 +243,21 @@ class Unit(BattlefieldObject):
 
     def get_unarmed_weapon(self):
         dmg = Damage(amount=self.str * UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
-        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, mastery=MasteriesEnum.UNARMED, game=self.game)
+        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, is_ranged=False,
+                      mastery=MasteriesEnum.UNARMED, game=self.game)
 
 
     def get_melee_weapon(self):
         weapon = self.equipment["hands"]
-        if weapon:
+        if weapon and not weapon.is_ranged:
             return weapon
         else:
             return self.get_unarmed_weapon()
+
+    def get_ranged_weapon(self):
+        weapon = self.equipment["hands"]
+        if weapon and weapon.is_ranged:
+            return weapon
 
     def can_pay(self, cost):
         return not any( [

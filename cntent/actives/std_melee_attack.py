@@ -4,8 +4,8 @@ from game_objects.battlefield_objects import BattlefieldObject
 from battlefield import Cell
 
 
-from cntent.actives.callbacks import attack_callback, attack_on_cell_callback
-from cntent.actives.conditions import proximity_condition, within_angle
+from cntent.actives.callbacks.callbacks import attack_callback, attack_on_cell_callback
+from cntent.actives.conditions.conditions import proximity_condition, within_angle
 
 
 std_attack_cost = lambda  self: Cost(stamina=1)*self.owner.get_melee_weapon().atb_factor

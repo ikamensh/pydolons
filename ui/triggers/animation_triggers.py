@@ -35,7 +35,7 @@ def damage_anim_trigger(game):
 
 def play_attack_anim(t, e):
     # print('e dir :\n',dir(e))
-    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.attack.lower()})
+    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.melee_attack.lower()})
     pass
 
 def attack_anin_trigger(game):

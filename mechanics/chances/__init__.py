@@ -1,2 +1,2 @@
 from mechanics.chances.ChanceCalculator import ChanceCalculator
-from mechanics.chances.CritHitGrazeMiss import ImpactFactor, ImpactChances, ImpactCalculator
+from mechanics.chances.CritHitGrazeMiss import ImpactFactor, ImpactChances

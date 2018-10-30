@@ -1,20 +1,21 @@
 from __future__ import annotations
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels, DamageEvent
-from mechanics.chances.CritHitGrazeMiss import ImpactCalculator, ImpactFactor
+from mechanics.chances.CritHitGrazeMiss import ImpactFactor
 from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import Unit, Obstacle, BattlefieldObject
+    from game_objects.battlefield_objects import Unit, BattlefieldObject
     from game_objects.items import Weapon
+    from mechanics.chances.CritHitGrazeMiss import ImpactChances
 
 
-class AttackEvent(Event):
-    channel = EventsChannels.AttackChannel
-    def __init__(self, source: Unit, target: BattlefieldObject, weapon : Weapon=None, fire: bool=True):
+class RangedAttackEvent(Event):
+    channel = EventsChannels.RangedAttackChannel
+    def __init__(self, source: Unit, target: BattlefieldObject, weapon : Weapon, fire: bool=True):
         game = source.game
         self.source = source
         self.target = target
-        self.weapon = weapon or source.get_melee_weapon()
+        self.weapon = weapon
         self.is_backstab = not target.is_obstacle and not game.battlefield.x_sees_y(target, source)
         self.is_blind = not game.battlefield.x_sees_y(source, target)
         super().__init__(game,fire)
@@ -26,7 +27,7 @@ class AttackEvent(Event):
 
         precision, evasion = self.effective_precision_evasion()
 
-        impact = ImpactCalculator.roll_impact(self.weapon.chances, precision, evasion, random=self.game.random)
+        impact = self.weapon.chances.actual(precision, evasion).roll_impact(random=self.game.random)
         if impact is not ImpactFactor.MISS:
             dmg_event = DamageEvent( self.weapon.damage, self.target, source=self.source, impact_factor = impact)
 
@@ -37,9 +38,9 @@ class AttackEvent(Event):
 
 
 
-    def calculate_chances(self) -> Tuple[float, float, float]:
+    def calculate_chances(self) -> ImpactChances:
         p, e = self.effective_precision_evasion()
-        return ImpactCalculator.calc_chances(self.source.unarmed_chances, p, e)
+        return self.source.unarmed_chances.actual(p, e)
 
 
     def effective_precision_evasion(self)-> Tuple[float, float]:

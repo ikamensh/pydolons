@@ -68,7 +68,7 @@ def walls_dungeon(pirate_basetype, steel_wall):
 
         unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
         return unit_locations
-    _walls_dungeon = Dungeon(create_locations, 12, 12, hero_entrance=Cell(0, 0))
+    _walls_dungeon = Dungeon("test_walls_dung", 12, 12, unit_locations=create_locations, hero_entrance=Cell(0, 0))
 
     yield  _walls_dungeon
 

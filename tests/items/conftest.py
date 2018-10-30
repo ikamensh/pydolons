@@ -36,12 +36,12 @@ def my_cuirass_blueprint():
 
 @pytest.fixture()
 def weapon(empty_game):
-    return Weapon("test axe1", Damage(50, DamageTypes.SLASH), max_durability=50, game=empty_game)
+    return Weapon("test axe1", Damage(50, DamageTypes.SLASH), max_durability=50, game=empty_game, is_ranged=False)
 
 @pytest.fixture()
 def real_weapon(my_sword_blueprint, bronze, usual, empty_game):
     return Weapon("test axe1", Damage(50, DamageTypes.SLASH), max_durability=50,
-                  blueprint=my_sword_blueprint, material=bronze, quality=usual, game=empty_game)
+                  blueprint=my_sword_blueprint, material=bronze, quality=usual, game=empty_game, is_ranged=False)
 
 @pytest.fixture()
 def armor(empty_game):

@@ -1,4 +1,4 @@
-from mechanics.chances.CritHitGrazeMiss import ImpactFactor
+from mechanics.chances.CritHitGrazeMiss import ImpactFactor, ImpactChances
 
 class Damage:
     protection_coef = {
@@ -24,17 +24,13 @@ class Damage:
         return Damage(self.amount * other, self.type)
 
     @staticmethod
-    def calculate_expected_damage(chances, damage, target):
+    def expected(chances: ImpactChances, damage, target):
 
         result = 0
-        chance_crit, chance_hit, chance_graze = chances
-        running_chance = 1
 
-        result += Damage.calculate_damage(damage, target, ImpactFactor.CRIT)[0] * chance_crit
-        running_chance *= (1-chance_crit)
-        result += Damage.calculate_damage(damage, target, ImpactFactor.HIT)[0] * chance_hit
-        running_chance *= (1-chance_hit)
-        result += Damage.calculate_damage(damage, target, ImpactFactor.GRAZE)[0] * chance_graze
+        result += Damage.calculate_damage(damage, target, ImpactFactor.CRIT)[0] * chances.crit
+        result += Damage.calculate_damage(damage, target, ImpactFactor.HIT)[0] * chances.sequential_hit_chance
+        result += Damage.calculate_damage(damage, target, ImpactFactor.GRAZE)[0] * chances.sequential_graze_chance
 
         return result
 
