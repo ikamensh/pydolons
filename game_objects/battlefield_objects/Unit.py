@@ -49,10 +49,10 @@ class Unit(BattlefieldObject):
     is_obstacle = False
 
 
-    def __init__(self, base_type: BaseType, *, game: DreamGame=None,  masteries: Masteries = None,):
+    def __init__(self, base_type: BaseType, *, game=None,  masteries: Masteries = None,):
         Unit.last_uid += 1
         self.uid = Unit.last_uid
-        self.game = game
+        self.game: DreamGame = game
 
         self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
         self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
