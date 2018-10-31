@@ -5,8 +5,7 @@ from ui.GamePages import AbstractPage
 class StartPage(AbstractPage):
     """docstring for StartPage."""
     def __init__(self, gamePages):
-        super().__init__()
-        self.gamePages = gamePages
+        super().__init__(gamePages)
         self.state = True
         self.w = 240
         self.h = 300
@@ -44,15 +43,19 @@ class StartPage(AbstractPage):
 
     def showPage(self):
         if self.state:
-            self.state = False
-            self.gamePages.page = None
-            self.gamePages.gameRoot.scene.removeItem(self)
-            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+            if not self.gamePages.gameRoot.loop is None:
+                self.state = False
+                self.gamePages.page = None
+                self.gamePages.visiblePage = False
+                self.gamePages.gameRoot.scene.removeItem(self)
+                self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
-            self.state = True
-            self.gamePages.page = self
-            self.gamePages.gameRoot.scene.addItem(self)
-            self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+                self.state = True
+                self.setFocus()
+                self.gamePages.page = self
+                self.gamePages.visiblePage = True
+                self.gamePages.gameRoot.scene.addItem(self)
+                self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
     def resized(self):
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
@@ -67,9 +70,19 @@ class StartPage(AbstractPage):
         self.gamePages.page = self.gamePages.gameMenu
 
     def stopSlot(self):
-        print('stop')
+        pass
+        # print('stop')
+
+    def checkFocus(self, pos):
+        return self.background.boundingRect().contains(pos)
+
+    @property
+    def focus(self):
+        return  self.actives.scrollArea.hasFocus()
 
 
-
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.showPage()
 
 
