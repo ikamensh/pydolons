@@ -8,9 +8,10 @@ from mechanics import events
 from mechanics.actives import ActiveTags, Active
 from cntent.actives.std_movements import std_movements, turn_ccw, turn_cw
 from cntent.actives.std_melee_attack import std_attacks
-from my_utils.utils import flatten
 from character_creation.Masteries import Masteries, MasteriesEnum
-from typing import Set
+from typing import Set, TYPE_CHECKING
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
 
 import copy
 from functools import lru_cache
@@ -48,7 +49,7 @@ class Unit(BattlefieldObject):
     is_obstacle = False
 
 
-    def __init__(self, base_type: BaseType, *, game=None,  masteries = None,):
+    def __init__(self, base_type: BaseType, *, game: DreamGame=None,  masteries: Masteries = None,):
         Unit.last_uid += 1
         self.uid = Unit.last_uid
         self.game = game

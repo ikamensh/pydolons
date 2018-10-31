@@ -36,10 +36,10 @@ def test_push(empty_game, hero, pirate, monkeypatch):
         MovementEvent(hero, 2+2j)
 
 
-def test_mass_push(empty_game, hero, pirate, monkeypatch):
+def test_mass_push(empty_game, hero, pirate):
     empty_game.add_unit(hero, 1+1j)
 
-    for _ in range(50):
+    for _ in range(10):
         empty_game.add_unit(copy.copy(pirate), 2+2j)
 
     MovementEvent(hero, 2+2j)

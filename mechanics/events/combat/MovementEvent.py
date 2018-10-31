@@ -19,7 +19,7 @@ class MovementEvent(Event):
             super().__init__(game)
 
     def check_conditions(self):
-        return self.unit.alive
+        return self.unit.alive and not [u for u in self.battlefield.get_units_at(self.cell_to) if u.is_obstacle]
 
     def resolve(self):
         self.battlefield.move(self.unit, self.cell_to)

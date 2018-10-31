@@ -25,27 +25,27 @@ class PushEvent(Event):
         return self.unit.alive
 
     def resolve(self):
-        pushed_to = self.game.random.choice(self.battlefield.get_cells_within_dist(self.cell_to, 1))
-        success = roll(0.6, self.unit.str * 2, self.push_against.str * 2, self.game.random)
 
         dmg_factor = 0.05
         damage = Damage( (self.unit.max_health + self.push_against.max_health)* dmg_factor, type=DamageTypes.CRUSH)
         events.DamageEvent(damage, self.push_against, source=self.unit)
         events.DamageEvent(damage, self.unit, source=self.push_against)
 
-        if success:
-            victor, loser = self.unit, self.push_against
-        else:
-            victor, loser = self.push_against, self.unit
+        if self.unit.alive and self.push_against.alive:
+            pushed_to = self.game.random.choice(self.battlefield.get_cells_within_dist(self.cell_to, 1))
+            success = roll(0.6, self.unit.str * 2, self.push_against.str * 2, self.game.random)
 
-        events.MovementEvent(loser, pushed_to)
+            if success:
+                victor, loser = self.unit, self.push_against
+            else:
+                victor, loser = self.push_against, self.unit
 
-        pusher_atb_cost = 0.4
-        pushed_atb_cost = 0.7
-        loser.readiness -= pushed_atb_cost
-        victor.readiness -= pusher_atb_cost
+            events.MovementEvent(loser, pushed_to)
 
-
+            pusher_atb_cost = 0.4
+            pushed_atb_cost = 0.7
+            loser.readiness -= pushed_atb_cost
+            victor.readiness -= pusher_atb_cost
 
 
 
