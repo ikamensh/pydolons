@@ -5,7 +5,7 @@ class Actives(QtCore.QObject):
     def __init__(self, page, parent = None, widget_size = (64, 64), margin = 10, columns = 3):
         super(Actives, self).__init__(parent)
         self.x, self.y = 0, 0
-        self.rect = QtCore.QRect(self.x, self.y, 1, 1)
+        self.rect = QtCore.QRectF(self.x, self.y, 1, 1)
         self.page = page
         self.hero = None
         self.names = None
@@ -69,7 +69,7 @@ class Actives(QtCore.QObject):
         self.widgets[name] = widget
 
     def addActiveButtons(self):
-        self.hero = self.page.gameRoot.game.the_hero
+        self.hero = self.page.gamePages.gameRoot.game.the_hero
         for active in self.hero.actives:
             self.addWidget(active.name)
             widget = self.widgets[active.name]
@@ -114,7 +114,7 @@ class Actives(QtCore.QObject):
         self.scrollArea.setWidget(self.frame)
 
     def resized(self, size = None):
-        size = self.page.gameRoot.cfg.dev_size
+        size = self.page.gamePages.gameRoot.cfg.dev_size
         self.x = size[0] / 2 - self.w /2
         self.y = size[1] - self.h - 5
         self.scrollArea.move(self.x , self.y )
@@ -125,7 +125,7 @@ class Actives(QtCore.QObject):
 
     def selectActive(self):
         active = self.frame.focusWidget().property('active')
-        targets = self.page.gameRoot.game.get_possible_targets(active)
+        targets = self.page.gamePages.gameRoot.game.get_possible_targets(active)
         if not targets is None:
             if targets:
                 self.setTargets.emit(targets)
