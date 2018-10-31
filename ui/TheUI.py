@@ -106,6 +106,7 @@ class TheUI(QtWidgets.QWidget):
         # self.game.print_all_units()
         # game_loop thread initialization
         self.loop = GameLoopThread()
+        self.gameRoot.loop = self.loop
         # set game and ui engine
         self.loop.game = self.game
         self.loop.the_ui = self
@@ -128,19 +129,23 @@ class TheUI(QtWidgets.QWidget):
         self.gameRoot.game = self.game
         self.initLevel()
         self.gamePages.setUpPages()
-        self.gamePages.setHeroUnit(self.game.the_hero)
-        self.gamePages.setCharacter(self.game.character)
+        # self.gamePages.setHeroUnit(self.game.the_hero)
+        # self.gamePages.setCharacter(self.game.character)
         self.view.controller = self.controller
 
 
-
     def stopGame(self):
-        # game.loop stop condition
-        self.game.loop_state = False
-        # thread call quit, exit from thread
-        self.loop.quit()
-        # application waiting for shutdown thread
-        self.loop.wait()
+        if not self.loop is None:
+            # game.loop stop condition
+            self.game.loop_state = False
+            self.destroyLevel()
+            self.gamePages.destroyPages()
+            # thread call quit, exit from thread
+            self.loop.quit()
+            # application waiting for shutdown thread
+            self.loop.wait()
+            self.loop = None
+            self.gameRoot.loop = None
 
     def pauseGame(self):
         pass
