@@ -32,7 +32,7 @@ def damage_sounds_trig():
 ########### ATTACK #################
 
 def play_attack_sound(t, e):
-    sound = e.source.sound_map.attack
+    sound = e.source.sound_map.melee_attack
     sound.play()
 
 def attack_sounds_trig():

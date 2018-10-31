@@ -7,6 +7,7 @@ class EventsChannels(NameEnum):
     MovementChannel = auto()
     TurnChannel = auto()
     AttackChannel = auto()
+    RangedAttackChannel = auto()
 
     ActiveChannel = auto()
 

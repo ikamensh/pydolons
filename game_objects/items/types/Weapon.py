@@ -6,9 +6,12 @@ import copy
 
 class Weapon(WearableItem):
     def __init__(self, name, damage, chances=None, atb_factor=1., *,max_durability=None,
-                 mastery=None, blueprint=None, material=None,quality=None, game):
-        super().__init__(name, item_type=ItemTypes.WEAPON, blueprint=blueprint, quality=quality,
-                         material=material, max_durability=max_durability, game=game)
+                 mastery=None, blueprint=None, material=None,quality=None, actives=None,
+                 is_ranged,
+                 game):
+        super().__init__(name, ItemTypes.WEAPON, blueprint=blueprint, quality=quality,
+                         material=material, max_durability=max_durability, actives = actives,
+                         game=game)
         assert isinstance(damage, Damage)
         if chances:
             assert isinstance(chances, ImpactChances)
@@ -17,6 +20,7 @@ class Weapon(WearableItem):
         self.chances = chances or ImpactChances(0.05, 0.4, 0.5)
         self.atb_factor = atb_factor
         self.mastery = mastery
+        self.is_ranged = is_ranged
 
     @property
     def damage(self):

@@ -1,15 +1,20 @@
+from __future__ import annotations
+from typing import Dict, Collection, List, TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit, BattlefieldObject
+
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
 from battlefield.Vision import Vision
-import typing
+from my_utils.utils import flatten
+
 
 class Battlefield:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.units_at = {}              #cell -> unit
-        self.unit_locations: typing.Dict[bf_objs.BattlefieldObject,Cell] = {}        #unit -> cell
-        self.unit_facings :typing.Dict[bf_objs.Unit:complex] = {}          #unit -> direction
+        self.unit_locations: Dict[BattlefieldObject:Cell] = {}
+        self.unit_facings :Dict[Unit, complex] = {}
         self.vision = Vision(self)
 
     def x_sees_y(self, x, y):
@@ -21,10 +26,9 @@ class Battlefield:
 
 
     def distance(self, one, another):
-        import game_objects.battlefield_objects as bf_objs
-        if isinstance(one, bf_objs.BattlefieldObject):
+        if hasattr(one, "alive"):
             one = self.unit_locations[one]
-        if isinstance(another, bf_objs.BattlefieldObject):
+        if hasattr(another, "alive"):
             another = self.unit_locations[another]
         return Cell._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
 
@@ -36,7 +40,7 @@ class Battlefield:
     def get_units_within_radius(self, center, radius):
         return [ u for u in self.unit_locations if self.distance(center, u) <= radius]
 
-    def get_unit_at(self, _cell):
+    def get_units_at(self, _cell):
         cell = Cell.maybe_complex(_cell)
         if cell in self.units_at:
             return self.units_at[cell]
@@ -58,23 +62,17 @@ class Battlefield:
 
 
     def place(self, unit, _p, facing=None):
-        import game_objects.battlefield_objects as bf_objs
-
         p = Cell.maybe_complex(_p)
 
         assert 0 <= p.x < self.w
         assert 0 <= p.y < self.h
-        assert p not in self.units_at
 
-        self.units_at[p] = unit
         self.unit_locations[unit] = p
-        if isinstance(unit, bf_objs.Unit):
+        if not unit.is_obstacle:
             self.unit_facings[unit] = facing or Facing.NORTH
 
     def remove(self, unit):
         assert unit in self.unit_locations
-        p = self.unit_locations[unit]
-        del self.units_at[p]
         del self.unit_locations[unit]
         if not unit.is_obstacle:
             del self.unit_facings[unit]
@@ -107,9 +105,21 @@ class Battlefield:
         return result
 
 
-    def units_in_area(self, cells : typing.Collection[Cell]):
+    def units_in_area(self, cells : Collection[Cell]) -> List[Unit]:
         cells_with_units = set(self.units_at.keys()).intersection(set(cells))
-        return [self.units_at[c] for c in cells_with_units]
+        return list(flatten(self.units_at[c] for c in cells_with_units))
+
+    #optimize: use dirty bit
+    @property
+    def units_at(self) -> Dict[Cell, List[Unit]]:
+        result = {}
+        for unit, cell in self.unit_locations.items():
+            if cell not in result:
+                result[cell] = [unit]
+            else:
+                result[cell].append(unit)
+
+        return result
 
 
     def __iter__(self):

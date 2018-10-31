@@ -6,6 +6,12 @@ def proximity_condition(max_distance):
         return active.game.battlefield.distance(active.owner, target) <= max_distance
     return _
 
+def range_condition(min_dist, max_dist):
+
+    def _(active, target):
+        return min_dist <= active.game.battlefield.distance(active.owner, target) <= max_dist
+    return _
+
 def __get_angle(active, target):
     bf = active.game.battlefield
     target_cell = target if isinstance(target, Cell) else bf.unit_locations[target]
@@ -27,4 +33,4 @@ def between_angles(ang_min, ang_max):
     return _
 
 def target_cell_empty(active, cell):
-    return active.game.battlefield.get_unit_at(cell) is None
+    return active.game.get_units_at(cell) is None

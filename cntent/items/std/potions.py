@@ -1,5 +1,5 @@
-from cntent.actives.callbacks_consumables import healing_potion_cb, mana_potion_cb, stamina_potion_cb
-from game_objects.items import ChargedItem, ItemTypes
+from cntent.actives.callbacks.callbacks_consumables import healing_potion_cb, mana_potion_cb, stamina_potion_cb
+from game_objects.items import ChargedItem
 from mechanics.actives import ActiveTags
 
 minor_healing_potion = ChargedItem("minor healing potion", use_callbacks=[healing_potion_cb(175)], tags=[ActiveTags.RESTORATION])

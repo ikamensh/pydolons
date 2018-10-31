@@ -7,7 +7,6 @@ def test_units_no_diag_block(hero, game_hvsp, pirate_band):
 
     bf = game_hvsp.battlefield
     bf.unit_locations = {}
-    bf.units_at = {}
     bf.place(hero, Cell(1, 1))
     bf.unit_facings[hero] = Facing.SOUTH
 
@@ -26,7 +25,6 @@ def test_walls_diag_block(hero, game_hvsp, steel_wall):
 
     bf = game_hvsp.battlefield
     bf.unit_locations = {}
-    bf.units_at = {}
     bf.place(hero, Cell(1, 1))
     bf.unit_facings[hero] = Facing.SOUTH
 

@@ -1,5 +1,5 @@
 from mechanics.rpg.experience import exp_rule
-from mechanics.events.DamageEvent import DamageEvent
+from mechanics.events.combat.DamageEvent import DamageEvent
 from mechanics.damage import DamageTypes, Damage
 
 

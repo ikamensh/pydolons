@@ -1,10 +1,7 @@
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
-from game_objects.battlefield_objects import BattlefieldObject
-from battlefield import Cell
 
-
-from cntent.actives.callbacks_misc import onguard_callback, rest_callback
+from cntent.actives.callbacks.callbacks_misc import onguard_callback, rest_callback
 
 
 

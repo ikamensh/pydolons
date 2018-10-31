@@ -1,5 +1,5 @@
 from __future__ import annotations
-from mechanics.combat import Attack
+from mechanics.combat import Attack, RangedAttack
 from mechanics.events import MovementEvent, TurnEvent
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -10,12 +10,18 @@ if TYPE_CHECKING:
 
 
 def attack_callback(active  :Active, target :Unit):
-    Attack.attack(source=active.owner, target=target)
+    Attack.melee_attack(source=active.owner, target=target)
 
 def attack_on_cell_callback(active  :Active, target  :Cell):
 
-    unit_on_target_cell = active.game.get_unit_at(target)
-    Attack.attack(source=active.owner, target=unit_on_target_cell)
+    units_on_target_cell = active.game.get_units_at(target)
+    if units_on_target_cell:
+        chosen_target = active.game.random.choice(units_on_target_cell)
+        Attack.melee_attack(source=active.owner, target=chosen_target)
+
+def ranged_attack_cb(active  :Active, target :Unit):
+    RangedAttack.ranged_attack(source=active.owner, target=target)
+
 
 def move_on_target_cell(active: Active, target: Cell):
     MovementEvent(active.owner, target)

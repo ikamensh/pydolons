@@ -34,7 +34,7 @@ def test_can_be_destroyed(obstacle, game_hvsp):
 def test_can_be_attacked(obstacle, hero, no_chances):
     health_before = obstacle.health
 
-    Attack.attack(hero, obstacle)
+    Attack.melee_attack(hero, obstacle)
 
     health_after = obstacle.health
 

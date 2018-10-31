@@ -1,4 +1,4 @@
-from mechanics.damage.DamageTypes import DamageTypes
+from mechanics.damage.DamageTypes import DamageTypes, DamageTypeGroups
 
 class Armor:
     MIN_ARMOR = 0
@@ -54,6 +54,14 @@ class Armor:
 
     def display_value(self):
         return sum(self.values()) / len(self.values())
+
+    def physical(self):
+        types = DamageTypeGroups.physical
+        return sum([self[dt] for dt in types])/len(types)
+
+    def elemental(self):
+        types = DamageTypeGroups.elemental
+        return sum([self[dt] for dt in types])/len(types)
 
     def __repr__(self):
         return f"{self.display_value() :.0f}"
