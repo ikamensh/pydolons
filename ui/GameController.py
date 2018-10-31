@@ -5,8 +5,13 @@ from battlefield.Facing import Facing
 from ui.events import UiErrorMessageEvent
 from exceptions import PydolonsException
 
-class GameController:
+class GameController(QtCore.QObject):
+    keyPress = QtCore.Signal(QtCore.QEvent)
+    mouseRelease = QtCore.Signal()
+    mousePress = QtCore.Signal(QtCore.QEvent)
+    # mouseMove = QtCore.Signal(QtCore.QEvent)
     def __init__(self):
+        super(GameController, self).__init__()
         """
         last_point = Cell() -- последняя точка, на которую указывает игрок
         """
@@ -36,27 +41,29 @@ class GameController:
     def mouseMoveEvent(self, e):
         """ Метод перехватывает событие движение мыши
         """
-        self.gameRoot.gamePages.mouseMoveEvent(e)
-        if not self.gameRoot.gamePages.focus:
-            newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
+        if not self.gameRoot.gamePages.visiblePage:
+            # newPos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
+            newPos = e.pos()
             self.moveCursor(newPos)
             self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
+        self.mousePress.emit(e)
         try:
-            if not self.gameRoot.gamePages.focus:
+            if not self.gameRoot.gamePages.visiblePage:
                 self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
                 self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
                 self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
-            else:
-                self.gameRoot.gamePages.mousePressEvent(e)
+            # else:
+            #     self.gameRoot.gamePages.mousePressEvent(e)
         except PydolonsException as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def mouseReleaseEvent(self, e):
-        self.gameRoot.gamePages.mouseReleaseEvent()
+        self.mouseRelease.emit()
 
     def keyPressEvent(self, e):
+        self.keyPress.emit(e)
         try:
             self.order_from_hotkey(e)
         except PydolonsException as exc:
@@ -148,7 +155,4 @@ class GameController:
             self.gameRoot.game.order_turn_cw()
         elif e.key() in GameController.orientations:
             self.gameRoot.game.order_step(GameController.orientations[e.key()])
-        elif e.key() == QtCore.Qt.Key_O:
-            self.gameRoot.gamePages.showPage('CharacterPage')
-        elif e.key() == QtCore.Qt.Key_Escape:
-            self.gameRoot.gamePages.showPage('StartPage')
+
