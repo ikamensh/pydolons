@@ -26,6 +26,7 @@ from mechanics.events.combat.RangedAttackEvent import RangedAttackEvent
 
 from mechanics.events.TimePassedEvent import TimePassedEvent
 
+from mechanics.events.combat.PushEvent import PushEvent
 from mechanics.events.combat.MovementEvent import MovementEvent
 from mechanics.events.TurnEvent import TurnEvent
 from mechanics.events.NextUnitEvent import NextUnitEvent

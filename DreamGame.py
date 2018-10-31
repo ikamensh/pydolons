@@ -8,6 +8,8 @@ from mechanics.events import EventsPlatform, NextUnitEvent
 from ui.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 from mechanics.rpg.regen import regen_rule
+from mechanics.rpg.push import push_rule
+
 from exceptions import PydolonsException, CantAffordActiveException
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ClientOrderIssuedEvent import ClientOrderIssuedEvent
@@ -40,7 +42,7 @@ class DreamGame:
         self.player_turn_lock = False
         self.is_server = is_server
 
-        for rule in (rules or [exp_rule, regen_rule]):
+        for rule in (rules or [exp_rule, regen_rule, push_rule]):
             rule(self)
 
     @classmethod

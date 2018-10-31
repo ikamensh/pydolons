@@ -75,6 +75,7 @@ class Cell:
     def __eq__(self, other):
         if self is other: return True
         if other is None: return False
+        if isinstance(other, complex): return self.x == other.real and self.y == other.imag
         if self.__class__ != other.__class__: return False
         return self.x == other.x and self.y == other.y
 

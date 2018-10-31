@@ -10,6 +10,11 @@ from my_utils.utils import flatten
 
 
 class Battlefield:
+
+    space_per_cell = 10
+    space_per_unit = 3
+    space_per_obstacle = 10
+
     def __init__(self, w, h):
         self.w = w
         self.h = h
@@ -78,13 +83,26 @@ class Battlefield:
             del self.unit_facings[unit]
 
     def move(self, unit, new_position):
-        unit_facing = self.unit_facings[unit]
-        self.remove(unit)
-        self.place(unit, new_position, unit_facing)
+        self.unit_locations[unit] = Cell.maybe_complex(new_position)
+
+
+    def space_free(self, cell):
+        units = self.get_units_at(cell)
+        if not units:
+            return self.space_per_cell
+        space_taken = sum([self.space_per_obstacle for u in units if u.is_obstacle] +
+                          [self.space_per_unit for u in units if not u.is_obstacle])
+        return self.space_per_cell - space_taken
 
 
     def angle_to(self, unit, target):
-        target_cell = target if isinstance(target, Cell) else self.unit_locations[target]
+        if isinstance(target, complex):
+            target_cell = Cell.from_complex(target)
+        elif isinstance(target, Cell):
+            target_cell = target
+        else:
+            target_cell = self.unit_locations[target]
+
         facing = self.unit_facings[unit]
         location = self.unit_locations[unit]
         vector_to_target = target_cell.complex - location.complex
