@@ -17,3 +17,8 @@ class Perk:
     @property
     def abils(self):
         return self.level_to_abils.get(self.current_level, list())
+
+    def __repr__(self):
+        if self.current_level == 0:
+            return f"learn {self.name[self.current_level+1]}"
+        return f"{self.name[self.current_level]}"

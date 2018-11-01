@@ -1,4 +1,4 @@
-from character_creation.Masteries.Masteries import Masteries
+from character_creation.masteries.Masteries import Masteries
 from game_objects.battlefield_objects import BaseType, Unit
 from game_objects.monsters.MonsterEquipment import MonsterEquipment
 import copy

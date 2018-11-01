@@ -31,6 +31,7 @@ class Equipment:
     def __getitem__(self, slot_name):
         return self.map[slot_name].content
 
+
     def unequip_item(self, item):
         for slot in self.contents:
             if slot.content is item:

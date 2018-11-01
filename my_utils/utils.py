@@ -1,5 +1,5 @@
 import collections
-from typing import Union, Any, Iterable, Iterator
+from typing import Union, Any, Iterable, Iterator, List
 
 epsilon = 1e-4
 
@@ -11,12 +11,15 @@ def clamp(n, minn, maxn):
     else:
         return n
 
-def flatten(l: Iterable[Union[Any, Iterable[Any]]]) -> Iterator[Any]:
-    for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, (str, bytes)):
-            yield from flatten(el)
-        else:
-            yield el
+def flatten(l: Iterable[Union[Any, Iterable[Any]]]) -> List[Any]:
+    def gen():
+        for el in l:
+            if isinstance(el, collections.Iterable) and not isinstance(el, (str, bytes)):
+                yield from flatten(el)
+            else:
+                yield el
+
+    return list(gen())
 
 class MicroMock(object):
     def __init__(self, **kwargs):

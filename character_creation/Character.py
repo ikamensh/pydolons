@@ -1,9 +1,10 @@
 import copy
 
 from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
-from character_creation.Masteries.Masteries import Masteries
-from character_creation.Masteries.MasteriesEnumSimple import MasteriesEnum
+from character_creation.masteries.Masteries import Masteries
+from character_creation.masteries.MasteriesEnumSimple import MasteriesEnum
 
+from character_creation.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
 class Character:
     def __init__(self, base_type : BaseType):
@@ -13,6 +14,8 @@ class Character:
 
         self.temp_attributes = None
         self.temp_masteries = None
+
+        self.perk_trees = [everymans_perks()]
 
     @property
     def masteries_can_go_up(self):
@@ -91,6 +94,9 @@ class Character:
     @property
     def unit(self) -> Unit:
         self._unit.update(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
+        for pt in self.perk_trees:
+            for a in pt.all_abils:
+                self._unit.add_ability(a)
         return self._unit
 
     @property

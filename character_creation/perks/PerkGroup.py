@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Dict, List
-from character_creation.Perks import Perk
+from character_creation.perks import Perk
 
 
 class PerkGroup:
@@ -11,7 +11,7 @@ class PerkGroup:
     def requirements_matched(self):
         if not self.requirements:
             return True
-        return all([k.total_level >= v for k, v in self.requirements])
+        return all([k.total_level >= v for k, v in self.requirements.items()])
 
     @property
     def total_level(self):

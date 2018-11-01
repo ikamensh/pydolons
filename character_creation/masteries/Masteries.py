@@ -1,4 +1,4 @@
-from character_creation.Masteries import MasteriesEnum, MasteriesGroups
+from character_creation.masteries import MasteriesEnum, MasteriesGroups
 # from character_creation.MasteriesEnumSimple import MasteriesEnum
 from functools import lru_cache
 
@@ -84,10 +84,10 @@ class Masteries:
 
 if __name__ == "__main__":
     # for i in range(512):
-    #     print(i, Masteries.increment_cost(i))
+    #     print(i, masteries.increment_cost(i))
     #
     # for m in MasteriesEnum:
-    #     print(m, Masteries.requirements(m,100))
+    #     print(m, masteries.requirements(m,100))
 
 
     masteries = Masteries()

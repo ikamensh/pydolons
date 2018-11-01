@@ -8,7 +8,7 @@ from mechanics import events
 from mechanics.actives import ActiveTags, Active
 from cntent.actives.std_movements import std_movements, turn_ccw, turn_cw
 from cntent.actives.std_melee_attack import std_attacks
-from character_creation.Masteries.Masteries import Masteries, MasteriesEnum
+from character_creation.masteries.Masteries import Masteries, MasteriesEnum
 from typing import Set, TYPE_CHECKING
 if TYPE_CHECKING:
     from DreamGame import DreamGame
@@ -87,6 +87,10 @@ class Unit(BattlefieldObject):
         self.unarmed_chances = base_type.unarmed_chances
         self.resists_base = Resistances(base_type.resists)
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
+
+        if hasattr(self, "_abilities"):
+            for a in self._abilities:
+                self.remove_ability(a)
 
         self._abilities = []
         for abil in base_type.abilities:
@@ -231,9 +235,7 @@ class Unit(BattlefieldObject):
         self.actives.remove(active)
 
 
-    #TODO create target method that prompts the game to get right kind of targeting from the user
     def activate(self, active, user_targeting = None):
-        # assert active in self.actives
         active.owner = self
         active.activate(user_targeting)
 

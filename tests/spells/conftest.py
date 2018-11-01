@@ -2,7 +2,7 @@ from mechanics.damage import Damage, DamageTypes
 from mechanics.events import DamageEvent
 from cntent.spells import runes
 from game_objects.spells import  SpellConcept
-from character_creation.Masteries import MasteriesEnum
+from character_creation.masteries import MasteriesEnum
 from mechanics.actives import Cost, Active
 from game_objects.spells import Rune, SpellAttributes
 from game_objects.attributes import Bonus, Attribute
