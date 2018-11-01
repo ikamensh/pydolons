@@ -49,7 +49,7 @@ class Unit(BattlefieldObject):
     is_obstacle = False
 
 
-    def __init__(self, base_type: BaseType, *, game=None,  masteries: Masteries = None,):
+    def __init__(self, base_type: BaseType, *, game=None,  masteries: Masteries = None):
         Unit.last_uid += 1
         self.uid = Unit.last_uid
         self.game: DreamGame = game
@@ -84,8 +84,6 @@ class Unit(BattlefieldObject):
             self.add_ability(abil())
 
 
-
-
         self.alive = True
         self.last_damaged_by = None
 
@@ -101,6 +99,47 @@ class Unit(BattlefieldObject):
 
         self.turn_cw_active = self.give_active(turn_cw)
         self.turn_cw = lambda : self.activate(self.turn_cw_active)
+
+        for active in std_attacks:
+            self.give_active(active)
+
+        for active in std_movements:
+            self.give_active(active)
+
+
+    def update(self, base_type, masteries):
+        self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
+        self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
+        self.prc_base = Attribute.attribute_or_none(base_type.attributes[ca.PERCEPTION])
+        self.agi_base = Attribute.attribute_or_none(base_type.attributes[ca.AGILITY])
+        self.int_base = Attribute.attribute_or_none(base_type.attributes[ca.INTELLIGENCE])
+        self.cha_base = Attribute.attribute_or_none(base_type.attributes[ca.CHARISMA])
+        self.masteries = masteries
+
+        self.type_name = base_type.type_name
+        self.actives: Set[Active] = set(base_type.actives)
+
+        self.unarmed_damage_type = base_type.unarmed_damage_type
+        self.unarmed_chances = base_type.unarmed_chances
+        self.resists_base = Resistances(base_type.resists)
+        self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
+
+        self._abilities = []
+        for abil in base_type.abilities:
+            self.add_ability(abil())
+
+        if isinstance(base_type.icon, str):
+            self.icon = base_type.icon
+        else:
+            self.icon = random.choice(base_type.icon)
+
+        self.sound_map = base_type.sound_map
+
+        self.turn_ccw_active = self.give_active(turn_ccw)
+        self.turn_ccw = lambda: self.activate(self.turn_ccw_active)
+
+        self.turn_cw_active = self.give_active(turn_cw)
+        self.turn_cw = lambda: self.activate(self.turn_cw_active)
 
         for active in std_attacks:
             self.give_active(active)
