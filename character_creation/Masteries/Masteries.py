@@ -1,4 +1,4 @@
-from character_creation.Masteries.MasteriesEnum import MasteriesEnum, MasteriesGroups
+from character_creation.Masteries import MasteriesEnum, MasteriesGroups
 # from character_creation.MasteriesEnumSimple import MasteriesEnum
 from functools import lru_cache
 
