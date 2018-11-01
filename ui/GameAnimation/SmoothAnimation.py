@@ -21,15 +21,15 @@ class SmoothAnimation:
         self.anim = anim
 
 
-        self.sequence = deque()
+        self.queue = deque()
 
     def _keep_playing(self, state):
-        print(state, self.sequence)
+        print(state, self.queue)
 
         if state == QtCore.QAbstractAnimation.Stopped:
-            if self.sequence:
-                start, end = self.sequence.popleft()
-                self.anim.setDuration(self.basic_duration / (2 + len(self.sequence)))
+            if self.queue:
+                start, end = self.queue.popleft()
+                self.anim.setDuration(self.basic_duration / (2 + len(self.queue)))
                 self.anim.setStartValue(start)
                 self.anim.setEndValue(end)
                 self.anim.start()
@@ -42,5 +42,5 @@ class SmoothAnimation:
             self.anim.setEndValue(end)
             self.anim.start()
         else:
-            self.sequence.append((start, end))
-            self.anim.setDuration( self.basic_duration / (2+len(self.sequence)))
+            self.queue.append((start, end))
+            self.anim.setDuration(self.basic_duration / (2 + len(self.queue)))

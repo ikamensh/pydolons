@@ -7,7 +7,7 @@ FULL_REGEN_PERIOD = 3600
 FULL_MANA_REGEN_PERIOD = 120
 FULL_STAMINA_REGEN_PERIOD = 120
 
-
+# no bleeding?
 def regen_all_callback(t, e):
     for unit in list(e.game.battlefield.unit_locations.keys()):
         if not unit.is_obstacle and unit.alive:

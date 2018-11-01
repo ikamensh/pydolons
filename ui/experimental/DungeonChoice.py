@@ -4,6 +4,7 @@ from PySide2.QtCore import Slot, Signal
 from PySide2.QtWidgets import QApplication, QPushButton, QGroupBox
 
 from PySide2 import QtWidgets
+
 from cntent.dungeons.small_orc_cave import small_orc_cave
 from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.demo_dungeon import demo_dungeon

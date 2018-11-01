@@ -4,7 +4,7 @@ from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.small_graveyard import small_graveyard
 from cntent.dungeons.small_orc_cave import small_orc_cave
 
-from mechanics.AI.SimGame import SimGame as DreamGame
+from mechanics.AI.SimGame import SimGame as SimGame
 from character_creation.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 
@@ -23,6 +23,7 @@ class LEngine:
         self.dungeons['pirate_level'] = pirate_lair
         self.dungeons['small_graveyard_level'] = small_graveyard
         self.dungeons['small_orc_cave_level'] = small_orc_cave
+
         self.character:Character = None
         self.the_hero  = None
         self.game = None
@@ -38,16 +39,13 @@ class LEngine:
             self.character = Character(demohero_basetype)
             self.the_hero = self.character.unit
             self.dungeon = self.getDungeon(levelName)
-            self.game = DreamGame.start_dungeon(self.dungeon, self.the_hero)
-            self.setUpTriggers(self.game)
-            self.game.character = self.character
-            return  self.game
-        else:
-            self.dungeon = self.getDungeon(levelName)
-            self.game = DreamGame.start_dungeon(self.getDungeon(levelName), self.the_hero)
-            self.setUpTriggers(self.game)
-            self.game.character = self.character
-            return self.game
+
+        self.game = SimGame.start_dungeon(self.dungeon, self.the_hero)
+        self.setUpTriggers(self.game)
+        self.game.character = self.character
+        return self.game
+
+
 
     def setUpTriggers(self, game):
         levelstatus_trigger(game),

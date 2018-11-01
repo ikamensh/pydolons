@@ -202,6 +202,7 @@ class DreamGame:
 
         raise CantAffordActiveException(action, missing)
 
+    # refactor?
     def order_move(self, unit: Unit, target_cell: Cell, AI_assist=True):
 
 
