@@ -87,14 +87,15 @@ class SimGame(DreamGame):
                 total += distance_util
 
                 # we want to face towards opponents
-                own_facing_util = 1e9 * (1/dist) * ( 6 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
-                assert own_facing_util >= 0
-                total += own_facing_util
+                if dist > 0:
+                    own_facing_util = 1e9 * (1/dist) * ( 6 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
+                    assert own_facing_util >= 0
+                    total += own_facing_util
 
-                #its best for opponents to face away from us
-                opponent_facing_away_util = (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * importance
-                assert opponent_facing_away_util >= 0
-                total += opponent_facing_away_util
+                    #its best for opponents to face away from us
+                    opponent_facing_away_util = (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * importance
+                    assert opponent_facing_away_util >= 0
+                    total += opponent_facing_away_util
 
         # DELTA SPLIT!
         # for unit in own:

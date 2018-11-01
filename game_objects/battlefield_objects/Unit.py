@@ -229,8 +229,8 @@ class Unit(BattlefieldObject):
 
     #TODO create target method that prompts the game to get right kind of targeting from the user
     def activate(self, active, user_targeting = None):
-        assert active in self.actives
-        assert active.owner is self
+        # assert active in self.actives
+        active.owner = self
         active.activate(user_targeting)
 
     @property

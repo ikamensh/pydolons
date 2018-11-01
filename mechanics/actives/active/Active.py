@@ -49,6 +49,7 @@ class Active:
             cpy = copy.copy(self)
             cpy._cost = copy.deepcopy(cpy._cost)
             cpy.spell = copy.deepcopy(cpy.spell)
+            cpy.game = self.owner.game
             self.owner.pay(self.cost)
             ActiveEvent(cpy, targeting)
 
