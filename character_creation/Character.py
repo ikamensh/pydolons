@@ -1,7 +1,9 @@
 import copy
 
 from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
-from character_creation.Masteries import Masteries, MasteriesEnum
+from game_objects.items import Inventory, Equipment, QuickItems
+from character_creation.Masteries.Masteries import Masteries
+from character_creation.Masteries.MasteriesEnumSimple import MasteriesEnum
 
 
 class Character:
@@ -9,6 +11,10 @@ class Character:
         self.base_type = base_type
         self.masteries = Masteries()
         self.xp = base_type.xp
+
+        self.inventory = Inventory(base_type.inventory_capacity, self)
+        self.quick_items = QuickItems(base_type.quick_items, self)
+        self.equipment :Equipment = Equipment(self)
 
 
         self.temp_attributes = None
@@ -90,7 +96,11 @@ class Character:
 
     @property
     def unit(self) -> Unit:
-        return Unit(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
+        u =  Unit(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
+        u.inventory = self.inventory
+        u.equipment = self.equipment
+        u.quick_items = self.quick_items
+        return u
 
 
     def update(self, unit : Unit):

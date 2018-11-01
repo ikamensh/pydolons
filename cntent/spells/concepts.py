@@ -1,6 +1,6 @@
 from game_objects.spells import  SpellConcept
 from game_objects.battlefield_objects import Unit
-from character_creation.MasteriesEnum import MasteriesEnum
+from character_creation.Masteries.MasteriesEnum import MasteriesEnum
 from mechanics.actives import Cost
 from cntent.spells.callbacks import healing_callback, lightning_bolt_callback
 
