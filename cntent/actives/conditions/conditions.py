@@ -1,4 +1,6 @@
 from battlefield import Cell
+from mechanics.events import MovementEvent
+
 
 def proximity_condition(max_distance):
 
@@ -32,5 +34,6 @@ def between_angles(ang_min, ang_max):
 
     return _
 
-def target_cell_empty(active, cell):
-    return active.game.get_units_at(cell) is None
+def can_move_to_target_cell(active, cell):
+    e = MovementEvent(active.owner, cell, fire=False)
+    return e.check_conditions()

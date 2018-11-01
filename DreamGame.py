@@ -104,27 +104,40 @@ class DreamGame:
         self.battlefield.place(obstacle, cell)
 
 
-    def loop(self):
+    def loop(self, turns = None):
+        n_turns = 0
+        player_in_game = not bool(self.game_over())
+
         while self.loop_state:
-            game_over = self.game_over()
-            if game_over:
-                print(game_over)
-                return self.turns_manager.time
+            n_turns += 1
+            if turns and n_turns > turns:
+                break
+
+            if player_in_game:
+                game_over = self.game_over()
+                if game_over:
+                    print(game_over)
+                    return self.turns_manager.time
 
 
             active_unit = self.turns_manager.get_next()
             if self.fractions[active_unit] == Fractions.PLAYER:
                 self.player_turn_lock = True
-                # don't stop game loop
+
                 while self.player_turn_lock and self.loop_state :
                     time.sleep(0.02)
                 continue
             else:
                 NextUnitEvent(active_unit)
-                try:
-                    active, target = self.enemy_ai.decide_step(active_unit)
-                except:
-                    active, target = self.random_ai.decide_step(active_unit)
+
+                active, target = self.enemy_ai.decide_step(active_unit)
+
+                # try:
+                #     active, target = self.enemy_ai.decide_step(active_unit)
+                # except Exception as e:
+                #     print(e)
+                #     active, target = self.random_ai.decide_step(active_unit)
+
                 self.order_action(active_unit, active, target)
 
 

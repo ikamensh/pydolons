@@ -9,7 +9,7 @@ FULL_STAMINA_REGEN_PERIOD = 120
 
 
 def regen_all_callback(t, e):
-    for unit in e.game.battlefield.unit_locations.keys():
+    for unit in list(e.game.battlefield.unit_locations.keys()):
         if not unit.is_obstacle and unit.alive:
             is_undead = any([hasattr(a, undead_n_hits) for a in unit.abilities])
             if not is_undead:

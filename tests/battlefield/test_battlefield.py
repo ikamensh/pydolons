@@ -9,11 +9,21 @@ def test_movement_preserves_facing(game_hvsp, hero):
         assert game_hvsp.battlefield.unit_facings[hero] == facing
 
 
-def test_units_block_movement(game_hvsp, hero):
+def test_units_dont_block_movement(game_hvsp, hero):
     location_before = Cell(3, 4)
     game_hvsp.battlefield.move(hero, location_before)
 
     assert game_hvsp.battlefield.units_at[Cell(4, 4)] is not None  # expecting a pirate from conftest
+
+    game_hvsp.order_move(hero, Cell(4, 4))
+    assert location_before != game_hvsp.get_location(hero)
+
+def test_obstacles_block_movement(game_hvsp, hero):
+    location_before = Cell(3, 4)
+    game_hvsp.battlefield.move(hero, location_before)
+
+    assert game_hvsp.battlefield.units_at[Cell(4, 4)] is not None  # expecting a pirate from conftest
+    game_hvsp.battlefield.units_at[Cell(4, 4)][0].is_obstacle = True
 
     game_hvsp.order_move(hero, Cell(4, 4))
     assert location_before == game_hvsp.get_location(hero)

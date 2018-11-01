@@ -9,17 +9,21 @@ if TYPE_CHECKING:
 class MovementEvent(Event):
     channel = EventsChannels.MovementChannel
 
-    def __init__(self, unit: Unit, cell_to: Union[Cell, complex]):
+    def __init__(self, unit: Unit, cell_to: Union[Cell, complex], fire=True):
         self.unit = unit
-        if self.check_conditions():
-            game = unit.game
-            self.battlefield = game.battlefield
-            self.cell_from = self.battlefield.unit_locations[unit]
-            self.cell_to = Cell.maybe_complex(cell_to)
-            super().__init__(game)
+        game = unit.game
+        self.battlefield = game.battlefield
+        self.cell_from = self.battlefield.unit_locations[unit]
+        self.cell_to = Cell.maybe_complex(cell_to)
+        super().__init__(game, fire=fire)
 
     def check_conditions(self):
-        return self.unit.alive
+        units_on_target_cell = self.battlefield.get_units_at(self.cell_to)
+        if units_on_target_cell:
+            wall = bool([u for u in self.battlefield.get_units_at(self.cell_to) if u.is_obstacle])
+        else:
+            wall = False
+        return self.unit.alive and not wall
 
     def resolve(self):
         self.battlefield.move(self.unit, self.cell_to)
