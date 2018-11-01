@@ -5,8 +5,8 @@ from ui.GamePages import AbstractPage
 
 class CharacterPage(AbstractPage):
     """docstring for CharacterPage."""
-    def __init__(self):
-        super(CharacterPage, self).__init__()
+    def __init__(self, gamePages):
+        super(CharacterPage, self).__init__(gamePages)
         self.character = None
         self.unit = None
         self.w, self.h = 790, 590
@@ -16,6 +16,7 @@ class CharacterPage(AbstractPage):
 
     def setUpGui(self):
         self.setUpWidgets()
+        self.resized()
 
     def pageUpdate(self):
         if not self.unit is None:
@@ -24,6 +25,10 @@ class CharacterPage(AbstractPage):
             self.bx_stamina.updateValue(int(self.unit.stamina), self.unit.max_stamina)
         self.update( self.x(), self.y(), self.w, self.h)
         self.widgetFactory.update()
+
+    def release(self):
+        self.widgetFactory.release()
+        self.pageUpdate()
 
     def setUpWidgets(self):
         x, y = 264, 18
@@ -134,18 +139,11 @@ class CharacterPage(AbstractPage):
         return QtCore.QRectF(self.x() , self.y(), self.w, self.h)
 
 
-    def collisions(self, pos):
-            self.widgetFactory.collisions(pos)
-            self.pageUpdate()
-
-    def release(self):
-            self.widgetFactory.release()
-            self.pageUpdate()
 
     def onPressClose(self):
         self.state = False
         self.gamePages.page = None
-        self.scene().removeItem(self)
+        self.gamePages.gameRoot.scene.removeItem(self)
         self.widgetFactory.release()
 
     def onPressCancel(self):
@@ -157,3 +155,37 @@ class CharacterPage(AbstractPage):
         # self.state = False
         # self.scene().removeItem(self)
         pass
+
+    def resized(self):
+        x, y = 0, 0
+        if self.gamePages.gameRoot.cfg.dev_size[0] > 800:
+            x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 4
+            y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 4
+        self.setPos(int(x), int(y))
+        self.pageUpdate()
+
+    def showPage(self):
+        if self.state:
+            self.state = False
+            self.gamePages.page = None
+            self.gamePages.visiblePage = False
+            self.gamePages.gameRoot.scene.removeItem(self)
+        else:
+            self.state = True
+            self.gamePages.page = self
+            self.gamePages.visiblePage = True
+            self.gamePages.gameRoot.scene.addItem(self)
+
+
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_O:
+            self.showPage()
+
+    def mousePressEvent(self, e):
+        if self.isVisible():
+            self.widgetFactory.collisions(e.pos())
+
+    def destroy(self):
+        self.widgetFactory.destroy()
+        self.widgetFactory.page = None
+        self.widgetFactory = None

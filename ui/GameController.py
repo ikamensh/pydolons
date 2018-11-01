@@ -5,10 +5,13 @@ from battlefield.Facing import Facing
 from ui.events import UiErrorMessageEvent
 from exceptions import PydolonsException
 
-
-
-class GameController:
+class GameController(QtCore.QObject):
+    keyPress = QtCore.Signal(QtCore.QEvent)
+    mouseRelease = QtCore.Signal()
+    mousePress = QtCore.Signal(QtCore.QEvent)
+    # mouseMove = QtCore.Signal(QtCore.QEvent)
     def __init__(self):
+        super(GameController, self).__init__()
         """
         last_point = Cell() -- последняя точка, на которую указывает игрок
         """
@@ -23,7 +26,7 @@ class GameController:
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
-        self.gameRoot.cfg = self
+        self.gameRoot.controller = self
 
 
     def setUp(self, world, units, middleLayer):
@@ -38,28 +41,29 @@ class GameController:
     def mouseMoveEvent(self, e):
         """ Метод перехватывает событие движение мыши
         """
-        self.gameRoot.gamePages.checkFocus(e.pos())
-        self.gameRoot.gamePages.mouseMoveEvent(e.pos())
-        if not self.gameRoot.gamePages.focus:
-            newPos = self.gameRoot.view.mapToScene(e.x(), e.y())
+        if not self.gameRoot.gamePages.visiblePage:
+            # newPos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
+            newPos = e.pos()
             self.moveCursor(newPos)
             self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
+        self.mousePress.emit(e)
         try:
-            if self.gameRoot.gamePages.page is None and not self.gameRoot.gamePages.focus:
-                    self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
-                    self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                    self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
-            else:
-                self.gameRoot.gamePages.mousePressEvent(e.pos())
+            if not self.gameRoot.gamePages.visiblePage:
+                self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            # else:
+            #     self.gameRoot.gamePages.mousePressEvent(e)
         except PydolonsException as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def mouseReleaseEvent(self, e):
-        self.gameRoot.gamePages.mouseReleaseEvent()
+        self.mouseRelease.emit()
 
     def keyPressEvent(self, e):
+        self.keyPress.emit(e)
         try:
             self.order_from_hotkey(e)
         except PydolonsException as exc:
@@ -69,7 +73,6 @@ class GameController:
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
         скролл меньше нуля зумм -
         """
-        # if not self.gameRoot.gamePages.focus:
         if e.delta() > 0.0:
             self.zoomIn()
         elif e.delta() < 0.0:
@@ -146,14 +149,10 @@ class GameController:
     }
 
     def order_from_hotkey(self, e):
-
         if e.key() == QtCore.Qt.Key_Q:
             self.gameRoot.game.order_turn_ccw()
         elif e.key() == QtCore.Qt.Key_E:
             self.gameRoot.game.order_turn_cw()
         elif e.key() in GameController.orientations:
             self.gameRoot.game.order_step(GameController.orientations[e.key()])
-        elif e.key() == QtCore.Qt.Key_O:
-            self.gameRoot.gamePages.showPage('CharacterPage')
-        elif e.key() == QtCore.Qt.Key_Escape:
-            self.gameRoot.gamePages.showPage('StartPage')
+

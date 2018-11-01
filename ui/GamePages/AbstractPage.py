@@ -4,9 +4,9 @@ from PySide2 import QtWidgets
 
 class AbstractPage(QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
-    def __init__(self):
+    def __init__(self, gamePages):
         super(AbstractPage, self).__init__()
-        self.gamePages = None
+        self.gamePages = gamePages
         self.state = False
 
         
@@ -33,7 +33,10 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
     def addButton(self, arg):
         pass
 
-    def resizeEvent(self):
+    def checkFocus(self, pos):
+        pass
+
+    def resized(self):
         pass
 
     def release(self):
@@ -41,3 +44,17 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
 
     def collisions(self, pos):
         pass
+
+    def setUpGui(self):
+        pass
+
+    def destroy(self):
+        pass
+
+    def mouseMoveEvent(self, e):
+        self.sceneEvent(e)
+        # super().mouseMoveEvent()
+
+    def keyPressEvent(self, e):
+        pass
+

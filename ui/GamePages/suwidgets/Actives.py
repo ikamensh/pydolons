@@ -1,17 +1,17 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 class Actives(QtCore.QObject):
     setTargets = QtCore.Signal(list)
     def __init__(self, page, parent = None, widget_size = (64, 64), margin = 10, columns = 3):
         super(Actives, self).__init__(parent)
         self.x, self.y = 0, 0
+        self.rect = QtCore.QRectF(self.x, self.y, 1, 1)
         self.page = page
         self.hero = None
         self.names = None
-        self.mWidget = None
+        self.frame = None
         self.scrollArea = None
         self.widget_size = widget_size
-        self.toolTip= None
         self.widgets = {}
         self.margin = margin
         self.n = 1
@@ -27,10 +27,14 @@ class Actives(QtCore.QObject):
         self.setNames()
         self.setUp()
         self.addActiveButtons()
+        self.resized()
 
     def setActivesSize(self):
         self.w = self.frame_size[0] + 16
         self.h = self.widget_size[1] + 2 * self.margin
+        # self.rect.(self.x, self.y, self.w, self.h)
+        self.rect.setWidth(self.w)
+        self.rect.setHeight(self.h)
         if not self.scrollArea is None:
             step = self.h - int(self.margin / 2)
             self.scrollArea.verticalScrollBar().setSingleStep(step)
@@ -41,8 +45,8 @@ class Actives(QtCore.QObject):
         w = size[0] * col + self.margin * (col + 2)
         h = size[1] * row + self.margin * (row + 2)
         self.frame_size = (w, h)
-        if not self.mWidget is None:
-            self.mWidget.setMinimumSize(self.frame_size[0], self.frame_size[1])
+        if not self.frame is None:
+            self.frame.setMinimumSize(self.frame_size[0], self.frame_size[1])
 
 
 
@@ -61,11 +65,11 @@ class Actives(QtCore.QObject):
         self.n += 1
         self.setFrameSize(self.widget_size,  self.columns, self.rows)
         self.setActivesSize()
-        # widget.ajGeometry = QtCore.QRect(self.x + widget.x, self.y + widget.y, self.widget_size[0], self.widget_size[1])
+        widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
         self.widgets[name] = widget
 
     def addActiveButtons(self):
-        self.hero = self.page.gameRoot.game.the_hero
+        self.hero = self.page.gamePages.gameRoot.game.the_hero
         for active in self.hero.actives:
             self.addWidget(active.name)
             widget = self.widgets[active.name]
@@ -92,42 +96,39 @@ class Actives(QtCore.QObject):
 
     def setUp(self):
         margin = QtCore.QMargins(0, 0, 0, 0)
-        self.layout = QtWidgets.QGridLayout()
-        self.layout.setContentsMargins(margin)
-        self.layout.setMargin(0)
+
+
         self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setStyleSheet('background-color:black;' \
                                       'color:white;')
         self.scrollArea.setMinimumSize(self.w, self.h)
         self.scrollArea.setFixedSize(self.w, self.h)
         self.scrollArea.setSizePolicy(self.sizePolicy)
-        self.mWidget = QtWidgets.QWidget()
-        self.mWidget.setMinimumSize(self.frame_size[0], self.frame_size[1])
-        self.mWidget.setLayout(self.layout)
-        self.scrollArea.setWidget(self.mWidget)
-        self.toolTip = QtWidgets.QLabel()
-        self.toolTip.setFixedSize(128, 64)
-        self.toolTip.setVisible(False)
-        self.toolTip.setStyleSheet('background-color:black;'\
-                                   'color:white;')
 
-    def updatePos(self, size):
+        self.layout = QtWidgets.QGridLayout(self.scrollArea)
+        self.layout.setContentsMargins(margin)
+        self.layout.setMargin(0)
+        self.frame = QtWidgets.QWidget(self.scrollArea)
+        self.frame.setMinimumSize(self.frame_size[0], self.frame_size[1])
+        self.frame.setLayout(self.layout)
+        self.scrollArea.setWidget(self.frame)
+
+    def resized(self, size = None):
+        size = self.page.gamePages.gameRoot.cfg.dev_size
         self.x = size[0] / 2 - self.w /2
         self.y = size[1] - self.h - 5
-        # self.scrollArea.move(self.x , self.y )
-        self.prxScrollArea.setPos(self.x , self.y)
-        if self.widgets!= {}:
-            for widget in self.widgets.values():
-                widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
+        self.scrollArea.move(self.x , self.y )
+        self.rect.moveTo(self.x, self.y)
+        # if self.widgets!= {}:
+        #     for widget in self.widgets.values():
+        #         widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
 
     def selectActive(self):
-        active = self.mWidget.focusWidget().property('active')
-        targets = self.page.gameRoot.game.get_possible_targets(active)
+        active = self.frame.focusWidget().property('active')
+        targets = self.page.gamePages.gameRoot.game.get_possible_targets(active)
         if not targets is None:
             if targets:
                 self.setTargets.emit(targets)
-
-
 
     def showPrxToolTip(self, widget, pos):
         self.prxToolTip.setPos(pos.x(), pos.y() - 64)
@@ -136,47 +137,18 @@ class Actives(QtCore.QObject):
 
     def setScene(self, scene):
         self.prxScrollArea = scene.addWidget(self.scrollArea)
-        self.page.addToGroup(self.prxScrollArea)
-        self.prxToolTip = scene.addWidget(self.toolTip)
-
-        self.page.addToGroup(self.prxToolTip)
-        self.prxToolTip.setOpacity(0.8)
-
-    def mousePressEvent(self, e):
-        if self.prxScrollArea.geometry().contains(e.pos()):
-            if isinstance( self.prxScrollArea.widget().focusWidget(), QtWidgets.QPushButton):
-                self.prxScrollArea.widget().focusWidget().pressed.emit()
-                self.prxScrollArea.widget().focusWidget().setDown(True)
-            else:
-                print('scroll')
-                print(self.prxScrollArea.widget().verticalScrollBar().geometry())
-                self.prxScrollArea.widget().verticalScrollBar().setSliderPosition(86)
-                # self.prxScrollArea.widget().verticalScrollBar().setSliderPosition(-3)
-            self.prxScrollArea.mousePressEvent(e)
-        pass
-
-
-    def mouseRealeseEvent(self, e):
-        self.prxScrollArea.mouseRealeseEvent(e)
-        pass
 
     def mouseMoveEvent(self, e):
-        self.prxScrollArea.mouseMoveEvent(e)
-        pass
-
-    def hoverMoveEvent(self, e):
         if self.prxScrollArea.geometry().contains(e.pos()):
-            self.prxScrollArea.widget().setFocus()
-            self.collisioon(e.pos())
+            self.collision(e.pos())
 
-
-
-    def collisioon(self, pos):
+    def collision(self, pos):
         for widget in self.widgets.values():
-            qr = QtCore.QRect(self.x + self.mWidget.x() + widget.x(), self.y + self.mWidget.y() + widget.y(), self.widget_size[0], self.widget_size[1])
+            qr = QtCore.QRect(self.x + self.frame.x() + widget.x(), self.y + self.frame.y() + widget.y(), self.widget_size[0], self.widget_size[1])
             if qr.contains(pos.x(), pos.y()):
+            # if widget.ajGeometry.contains(pos):
                 widget.setFocus()
-                self.showPrxToolTip(widget, pos)
+                self.page.showToolTip(widget.text(), pos.x() + 20, pos.y() - 20)
                 break
             else:
-                self.prxToolTip.setVisible(False)
+                self.page.hideToolTip()

@@ -44,3 +44,9 @@ class WidgetFactory(object):
     def update(self):
         for widget in self.widgets.values():
             widget.update()
+
+    def destroy(self):
+        widgets = list(self.widgets.values())
+        for widget in widgets:
+            widget.page = None
+        widgets = {}
