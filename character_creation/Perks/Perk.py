@@ -8,9 +8,11 @@ class Perk:
 
     abilities = {}
 
-    def __init__(self, level_to_abils: Dict[int, Ability]):
+    def __init__(self, name, level_to_abils: Dict[int, Ability], cost_factor=1):
+        self.name = name
         self.current_level = 0
         self.level_to_abils = level_to_abils
+        self.cost_factor = cost_factor
 
     @property
     def abils(self):

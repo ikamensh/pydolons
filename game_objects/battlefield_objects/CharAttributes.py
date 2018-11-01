@@ -33,11 +33,11 @@ def get_attrib_by_enum(unit, enum):
     name = enum_to_abbrev[enum]
     return getattr(unit, name)
 
-
-HP_PER_STR = 25
-STAMINA_PER_END = 5
-MANA_PER_INT = 10
-UNARMED_DAMAGE_PER_STR = 5
+class Constants:
+    HP_PER_STR = 25
+    STAMINA_PER_END = 5
+    MANA_PER_INT = 10
+    UNARMED_DAMAGE_PER_STR = 3
 
 c = CharAttributes
 std_bonus = Attribute(1, 0.05, 2)

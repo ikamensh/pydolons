@@ -9,6 +9,8 @@ class PerkGroup:
         self.requirements = requirements
 
     def requirements_matched(self):
+        if not self.requirements:
+            return True
         return all([k.total_level >= v for k, v in self.requirements])
 
     @property

@@ -1,5 +1,5 @@
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
-from game_objects.battlefield_objects.CharAttributes import HP_PER_STR, MANA_PER_INT, STAMINA_PER_END, UNARMED_DAMAGE_PER_STR
+from game_objects.battlefield_objects.CharAttributes import Constants
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
 from game_objects.items import Inventory, Equipment, Weapon, QuickItems
 from mechanics.damage import Damage
@@ -53,58 +53,22 @@ class Unit(BattlefieldObject):
         Unit.last_uid += 1
         self.uid = Unit.last_uid
         self.game: DreamGame = game
-
-        self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
-        self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
-        self.prc_base = Attribute.attribute_or_none(base_type.attributes[ca.PERCEPTION])
-        self.agi_base = Attribute.attribute_or_none(base_type.attributes[ca.AGILITY])
-        self.int_base = Attribute.attribute_or_none(base_type.attributes[ca.INTELLIGENCE])
-        self.cha_base = Attribute.attribute_or_none(base_type.attributes[ca.CHARISMA])
         self.readiness = 0
         self.disabled = False
-        self.masteries = masteries or Masteries(base_type.xp)
-        self.xp = base_type.xp
+        self.alive = True
+        self.last_damaged_by = None
 
-        self.type_name = base_type.type_name
-        self.actives : Set[Active]= set(base_type.actives)
-
-        self.unarmed_damage_type = base_type.unarmed_damage_type
-        self.unarmed_chances = base_type.unarmed_chances
-        self.resists_base = Resistances(base_type.resists)
-        self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
+        self.bonuses = frozenset()
+        self._buffs = []
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.quick_items = QuickItems(base_type.quick_items, self)
         self.equipment :Equipment = Equipment(self)
+        self.xp = base_type.xp
 
-        self.bonuses = frozenset()
-        self._buffs = []
-        self._abilities = []
-        for abil in base_type.abilities:
-            self.add_ability(abil())
+        masteries = masteries or Masteries(base_type.xp)
 
-
-        self.alive = True
-        self.last_damaged_by = None
-
-        if isinstance(base_type.icon, str):
-            self.icon = base_type.icon
-        else:
-            self.icon = random.choice(base_type.icon)
-
-        self.sound_map = base_type.sound_map
-
-        self.turn_ccw_active = self.give_active(turn_ccw)
-        self.turn_ccw = lambda : self.activate(self.turn_ccw_active)
-
-        self.turn_cw_active = self.give_active(turn_cw)
-        self.turn_cw = lambda : self.activate(self.turn_cw_active)
-
-        for active in std_attacks:
-            self.give_active(active)
-
-        for active in std_movements:
-            self.give_active(active)
+        self.update(base_type, masteries)
 
 
     def update(self, base_type, masteries):
@@ -188,15 +152,15 @@ class Unit(BattlefieldObject):
 
     @property
     def max_health_base(self):
-        return Attribute(self.str * HP_PER_STR, 100, 0)
+        return Attribute(self.str * Constants.HP_PER_STR, 100, 0)
 
     @property
     def max_mana_base(self):
-        return Attribute(self.int * MANA_PER_INT, 100, 0)
+        return Attribute(self.int * Constants.MANA_PER_INT, 100, 0)
 
     @property
     def max_stamina_base(self):
-        return Attribute(self.end * STAMINA_PER_END, 100, 0)
+        return Attribute(self.end * Constants.STAMINA_PER_END, 100, 0)
 
     @property
     def initiative_base(self):
@@ -205,7 +169,8 @@ class Unit(BattlefieldObject):
     @staticmethod
     @lru_cache()
     def __initiative_formula(agi, intel, stamina):
-        return Attribute(1 + 9 * ((0.4 + agi / 25 + intel / 25) ** (3 / 5)) * ((stamina / (10*STAMINA_PER_END)) ** (1 / 3)), 100, 0)
+        return Attribute(1 + 9 * ((0.4 + agi / 25 + intel / 25) ** (3 / 5)) * ((stamina / (
+                10*Constants.STAMINA_PER_END)) ** (1 / 4)), 100, 0)
 
     @property
     def initiative(self):
@@ -282,7 +247,7 @@ class Unit(BattlefieldObject):
 
 
     def get_unarmed_weapon(self):
-        dmg = Damage(amount=self.str * UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
+        dmg = Damage(amount=self.str * Constants.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
         return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, is_ranged=False,
                       mastery=MasteriesEnum.UNARMED, game=self.game)
 
