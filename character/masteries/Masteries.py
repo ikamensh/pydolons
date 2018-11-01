@@ -1,5 +1,5 @@
-from character_creation.masteries import MasteriesEnum, MasteriesGroups
-# from character_creation.MasteriesEnumSimple import MasteriesEnum
+from character.masteries import MasteriesEnum, MasteriesGroups
+# from character.MasteriesEnumSimple import MasteriesEnum
 from functools import lru_cache
 
 class Masteries:

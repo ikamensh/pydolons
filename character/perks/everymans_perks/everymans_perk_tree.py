@@ -1,7 +1,7 @@
-from character_creation.perks.PerkTree import PerkTree
+from character.perks.PerkTree import PerkTree
 
-from character_creation.perks.everymans_perks.group_attrib import pg_attributes
-from character_creation.perks.everymans_perks.group_param import pg_params
+from character.perks.everymans_perks.group_attrib import pg_attributes
+from character.perks.everymans_perks.group_param import pg_params
 
 import copy
 

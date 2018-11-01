@@ -1,7 +1,7 @@
 
 from typing import List
 
-from character_creation.perks import PerkGroup, Perk
+from character.perks import PerkGroup, Perk
 
 from my_utils.utils import flatten
 

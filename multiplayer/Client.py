@@ -5,7 +5,7 @@ from PySide2 import QtWidgets
 
 from GameLoopThread import GameLoopThread, ProxyEmit
 from battlefield import Cell
-from character_creation.Character import Character
+from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from mechanics.AI.SimGame import SimGame as DreamGame

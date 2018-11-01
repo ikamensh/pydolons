@@ -1,5 +1,5 @@
 from mechanics.damage import DamageTypes
-from character_creation.masteries import MasteriesEnum
+from character.masteries import MasteriesEnum
 
 from mechanics.chances.CritHitGrazeMiss import ImpactChances
 

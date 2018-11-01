@@ -5,7 +5,7 @@ from cntent.dungeons.small_graveyard import small_graveyard
 from cntent.dungeons.small_orc_cave import small_orc_cave
 
 from mechanics.AI.SimGame import SimGame as SimGame
-from character_creation.Character import Character
+from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 
 # import triggers

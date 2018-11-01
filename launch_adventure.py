@@ -1,6 +1,6 @@
 # import game_loop object and ProxyEmit
 from GameLoopThread import GameLoopThread, ProxyEmit
-from character_creation.Character import Character
+from character.Character import Character
 from mechanics.AI.SimGame import SimGame as DreamGame
 from cntent.base_types.demo_hero import demohero_basetype
 from cntent.dungeons.demo_dungeon import demo_dungeon

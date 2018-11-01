@@ -1,4 +1,4 @@
-from character_creation.Character import Character
+from character.Character import Character
 from mechanics.AI.SimGame import SimGame
 from game_objects.battlefield_objects import Unit
 from single_player.Shop import Shop

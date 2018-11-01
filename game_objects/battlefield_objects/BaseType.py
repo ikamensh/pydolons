@@ -2,7 +2,7 @@ from game_objects.battlefield_objects.CharAttributes import CharAttributes, abbr
 from mechanics.chances.CritHitGrazeMiss import ImpactChances
 from mechanics.damage import DamageTypes
 
-from character_creation.masteries.Masteries import Masteries
+from character.masteries.Masteries import Masteries
 from ui.sounds import sound_maps
 
 class BaseType:

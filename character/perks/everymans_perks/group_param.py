@@ -2,10 +2,10 @@ from mechanics.buffs import Ability
 #TODO packaging makes no sense?
 from game_objects.battlefield_objects.CharAttributes import CharAttributes as ca, Constants as c
 from game_objects.attributes import Bonus, Attribute
-from character_creation.perks import Perk
-from character_creation.perks import PerkGroup
+from character.perks import Perk
+from character.perks import PerkGroup
 
-from character_creation.perks.everymans_perks.group_attrib import pg_attributes
+from character.perks.everymans_perks.group_attrib import pg_attributes
 
 
 

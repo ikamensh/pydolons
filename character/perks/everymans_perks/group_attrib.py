@@ -2,8 +2,8 @@ from mechanics.buffs import Ability
 #TODO packaging makes no sense?
 from game_objects.battlefield_objects import CharAttributes
 from game_objects.attributes import Bonus, Attribute
-from character_creation.perks import Perk
-from character_creation.perks import PerkGroup
+from character.perks import Perk
+from character.perks import PerkGroup
 
 def attr_bonus_abilities(attr):
     b1 = Bonus({attr: Attribute(1, 10, 1)})
