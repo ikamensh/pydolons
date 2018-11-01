@@ -49,8 +49,8 @@ value_norms = {
     c.PERCEPTION: std_bonus*1,
     c.INTELLIGENCE: std_bonus*1,
     c.CHARISMA: std_bonus*1,
-    c.HEALTH : std_bonus*2*HP_PER_STR,
-    c.MANA: std_bonus*2*MANA_PER_INT,
-    c.STAMINA: std_bonus*2*STAMINA_PER_END,
+    c.HEALTH : std_bonus*2*Constants.HP_PER_STR,
+    c.MANA: std_bonus*2*Constants.MANA_PER_INT,
+    c.STAMINA: std_bonus*2*Constants.STAMINA_PER_END,
     c.INITIATIVE : std_bonus*0.2
 }
