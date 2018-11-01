@@ -9,13 +9,13 @@ if TYPE_CHECKING:
 class MovementEvent(Event):
     channel = EventsChannels.MovementChannel
 
-    def __init__(self, unit: Unit, cell_to: Union[Cell, complex]):
+    def __init__(self, unit: Unit, cell_to: Union[Cell, complex], fire=True):
         self.unit = unit
         game = unit.game
         self.battlefield = game.battlefield
         self.cell_from = self.battlefield.unit_locations[unit]
         self.cell_to = Cell.maybe_complex(cell_to)
-        super().__init__(game)
+        super().__init__(game, fire=fire)
 
     def check_conditions(self):
         units_on_target_cell = self.battlefield.get_units_at(self.cell_to)
