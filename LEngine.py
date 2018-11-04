@@ -25,7 +25,6 @@ class LEngine:
         self.dungeons['small_orc_cave_level'] = small_orc_cave
         self.character:Character = None
         self.the_hero  = None
-        self.game = None
         self.dungeon = None
 
     def getDungeon(self, levelName):
@@ -38,16 +37,16 @@ class LEngine:
             self.character = Character(demohero_basetype)
             self.the_hero = self.character.unit
             self.dungeon = self.getDungeon(levelName)
-            self.game = DreamGame.start_dungeon(self.dungeon, self.the_hero)
-            self.setUpTriggers(self.game)
-            self.game.character = self.character
-            return  self.game
+            game = DreamGame.start_dungeon(self.dungeon, self.the_hero)
+            self.setUpTriggers(game)
+            game.character = self.character
+            return  game
         else:
             self.dungeon = self.getDungeon(levelName)
-            self.game = DreamGame.start_dungeon(self.getDungeon(levelName), self.the_hero)
-            self.setUpTriggers(self.game)
-            self.game.character = self.character
-            return self.game
+            game = DreamGame.start_dungeon(self.getDungeon(levelName), self.the_hero)
+            self.setUpTriggers(game)
+            game.character = self.character
+            return game
 
     def setUpTriggers(self, game):
         levelstatus_trigger(game),

@@ -50,13 +50,10 @@ class GamePages(object):
         self.characterPage = None
 
 
-
-    def setGame(self, game):
-        self.game = game
-
     def setUpStartPage(self, ui):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
+        self.startPage.start.pressed.connect(ui.setDefaultGame)
         self.startPage.start.pressed.connect(ui.startGame)
         self.startPage.start.pressed.connect(self.startPage.startSlot)
         self.startPage.stop.pressed.connect(ui.stopGame)

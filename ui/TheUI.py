@@ -99,16 +99,21 @@ class TheUI(QtWidgets.QWidget):
         if not self.loop is None:
             self.stopGame()
 
+    def setDefaultGame(self):
+        self.gameRoot.game = self.lengine.getGame('demo_level')
+        # self.game = lengine.getGame('small_graveyard_level')
+        # self.game = lengine.getGame('small_orc_cave_level')
+        # self.game = lengine.getGame('walls_level')
+        # self.game = lengine.getGame('pirate_level')
+
 
     def startGame(self):
         self.loadGame()
-        # debug print
-        # self.game.print_all_units()
         # game_loop thread initialization
         self.loop = GameLoopThread()
         self.gameRoot.loop = self.loop
         # set game and ui engine
-        self.loop.game = self.game
+        self.loop.game = self.gameRoot.game
         self.loop.the_ui = self
         # Qt signal initialization
         self.loop.setSiganls(self.proxyEmit)
@@ -116,17 +121,6 @@ class TheUI(QtWidgets.QWidget):
         self.loop.start()
 
     def loadGame(self):
-        ####################################################
-        #                                                  #
-        #  change level this                               #
-        #                vvvvvvvvvvvvvvvvvvv               #
-        ####################################################
-        self.game = self.lengine.getGame('demo_level')
-        # self.game = lengine.getGame('small_graveyard_level')
-        # self.game = lengine.getGame('small_orc_cave_level')
-        # self.game = lengine.getGame('walls_level')
-        # self.game = lengine.getGame('pirate_level')
-        self.gameRoot.game = self.game
         self.initLevel()
         self.gamePages.setUpPages()
         # self.gamePages.setHeroUnit(self.game.the_hero)
@@ -137,7 +131,7 @@ class TheUI(QtWidgets.QWidget):
     def stopGame(self):
         if not self.loop is None:
             # game.loop stop condition
-            self.game.loop_state = False
+            self.gameRoot.game.loop_state = False
             self.destroyLevel()
             self.gamePages.destroyPages()
             # thread call quit, exit from thread
@@ -146,6 +140,7 @@ class TheUI(QtWidgets.QWidget):
             self.loop.wait()
             self.loop = None
             self.gameRoot.loop = None
+            self.gameRoot.game = None
 
     def pauseGame(self):
         pass

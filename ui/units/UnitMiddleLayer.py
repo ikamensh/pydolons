@@ -114,7 +114,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
             if isinstance(item, Cell):
                 self.addTarget(item)
             else:
-                self.addTarget(self.level.game.battlefield.unit_locations[item])
+                self.addTarget(self.level.gameRoot.game.battlefield.unit_locations[item])
 
 
     def addTarget(self, item):

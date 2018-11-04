@@ -11,6 +11,7 @@ class StartPage(AbstractPage):
         self.h = 300
         self.gamePages.gameRoot.scene.addItem(self)
         self.setUpWidgets()
+        self.defaultGame = True
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])

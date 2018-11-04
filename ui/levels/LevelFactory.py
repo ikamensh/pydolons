@@ -31,7 +31,7 @@ class LevelFactory:
         self.level = BaseLevel()
         self.gameRoot.setLevel(self.level)
         self.z_values = [i for i in range(self.dungeon.w)]
-        self.setUpLevel(self.LEngine.game)
+        self.setUpLevel()
 
 
     def removeLevel(self):
@@ -40,15 +40,14 @@ class LevelFactory:
     def saveLevelState(self):
         pass
 
-    def setUpLevel(self, game):
+    def setUpLevel(self):
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
         self.level.world.setWorldSize(self.dungeon.w, self.dungeon.h)
         self.level.world.setFloor(self.gameRoot.cfg.getPicFile('floor.png'))
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
-        self.level.game = game
 
-        self.setUpUnits(self.level.game.battlefield)
+        self.setUpUnits(self.gameRoot.game.battlefield)
         self.level.gameRoot.cfg.setWorld(self.level.world)
         self.level.gameRoot.controller.setUp(self.level.world, self.level.units, self.level.middleLayer)
 
@@ -74,7 +73,7 @@ class LevelFactory:
                 self.level.world.addToGroup(obstacle)
                 self.level.world.obstacles[unit.uid] = obstacle
 
-        self.level.units.active_unit = self.level.units.units_at[self.level.game.turns_manager.get_next().uid]
+        self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
         self.level.middleLayer.createSuppot(self.level.units.units_at)
 
     def addLevelToScene(self, scene):
