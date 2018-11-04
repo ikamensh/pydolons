@@ -69,7 +69,7 @@ class GameMenuPage(AbstractPage):
 
     def setUpConsole(self):
         self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
-        self.gui_console.startTimer(50)
+        self.gui_console.id = self.gui_console.startTimer(50)
         self.gui_console.setTabChangesFocus(False)
         self.gui_console.setEnabled(False)
         self.gui_console.resize(320, 240)
@@ -106,7 +106,10 @@ class GameMenuPage(AbstractPage):
         self.actives.mouseMoveEvent(e)
 
     def destroy(self):
-        self.gamePages.gameRoot.scene.removeItem(self.actives.prxScrollArea)
+        self.actives.destroy()
+        del self.actives
+        self.gui_console.killTimer(self.gui_console.id)
         self.gamePages.gameRoot.scene.removeItem(self.p_gui_console )
-
+        del self.p_gui_console
+        # self.notify
 
