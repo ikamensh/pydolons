@@ -50,12 +50,12 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.select_item.setY(y * self.h)
 
 
-    def createHPBar(self, unit):
+    def createHPBar(self, unit, unit_bf):
         hp = HealthBar()
         hp.setBrush(QtCore.Qt.cyan)
         hp.setRect(0, self.h , self.w, 32)
         hp.setPos(unit.pos())
-        hp.setHP(100)
+        hp.setHP(self.getHPprec(unit_bf))
         self.unit_hps[unit.uid] = hp
         self.addToGroup(self.unit_hps[unit.uid])
 
@@ -65,13 +65,14 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.unit_hptxts[unit.uid] = hpText
         self.addToGroup(self.unit_hptxts[unit.uid])
 
-    def getHPprec(self, unit = None):
+    def getHPprec(self, unit):
         return (unit.health * 100)/unit.max_health
 
-    def createSuppot(self, units_at):
+    def createSuppot(self, units_at, units_bf):
+        #TODO Refactoring for unit list
         self.createToolTip()
         for unit in units_at.values():
-            self.createHPBar(unit)
+            self.createHPBar(unit, units_bf[unit.worldPos][0])
             self.createHPText(unit)
 
     def moveSupport(self, unit):
