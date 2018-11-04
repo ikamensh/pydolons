@@ -1,5 +1,3 @@
-from GameLoopThread import ProxyEmit
-
 from ui.TheUI import TheUI
 import sys
 
@@ -13,8 +11,6 @@ def one_game():
     app.setOverrideCursor(QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'), hotX =1, hotY= 1))
     lengine = LEngine()
     window = TheUI(lengine)
-    window.proxyEmit = ProxyEmit
-    # window.startGame()
     app.aboutToQuit.connect(window.close_app)
     sys.exit(app.exec_())
 
