@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Dict, List
-from character_creation.perks import Perk
+from character.perks import Perk
 
 
 class PerkGroup:

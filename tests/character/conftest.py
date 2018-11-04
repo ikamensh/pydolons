@@ -1,5 +1,5 @@
 import pytest
-from character_creation.Character import Character
+from character.Character import Character
 from cntent.base_types import pirate_basetype
 
 @pytest.fixture()

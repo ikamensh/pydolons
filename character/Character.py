@@ -1,10 +1,10 @@
 import copy
 
 from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
-from character_creation.masteries.Masteries import Masteries
-from character_creation.masteries.MasteriesEnumSimple import MasteriesEnum
+from character.masteries.Masteries import Masteries
+from character.masteries.MasteriesEnumSimple import MasteriesEnum
 
-from character_creation.perks.everymans_perks.everymans_perk_tree import everymans_perks
+from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
 class Character:
     def __init__(self, base_type : BaseType):

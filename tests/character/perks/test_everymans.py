@@ -1,4 +1,4 @@
-from character_creation.perks.everymans_perks.everymans_perk_tree import everymans_perks
+from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
 def test_cost_grows():
     ep = everymans_perks()
