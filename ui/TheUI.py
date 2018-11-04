@@ -32,10 +32,6 @@ class TheUI(QtWidgets.QWidget):
         self.lengine = lengine
         self.loop = None
 
-        self.gameTimer = QtCore.QTimer()
-        self.gameTimer.timeout.connect(self.timerSlot)
-        self.gameTimer.startTimer(int(1000 / 50))
-
         cursor = QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'))
         self.setCursor(cursor)
 
@@ -77,8 +73,6 @@ class TheUI(QtWidgets.QWidget):
         print('cfg ===> init TheUI', datetime.now())
 
 
-
-
     def changeTo(self):
         self.scene.update(-self.gameconfig.ava_ha_size[0],
                           -self.gameconfig.ava_ha_size[1],
@@ -86,17 +80,17 @@ class TheUI(QtWidgets.QWidget):
                           self.gameconfig.ava_size[1])
 
     def initLevel(self, level_name = None):
-        self.level = self.levelFactory.getLevel(level_name)
+        self.level = self.levelFactory.getLevel()
         self.levelFactory.addLevelToScene(self.scene)
 
     def destroyLevel(self):
         self.levelFactory.removeLevelFromScene(self.scene)
+        self.levelFactory.removeLevel()
+        self.gameRoot.level = None
 
-    def timerSlot(self):
-        print('timerSlot')
 
     def close_app(self):
-        if not self.loop is None:
+        if not self.gameRoot.loop is None:
             self.stopGame()
 
     def setDefaultGame(self):
@@ -108,6 +102,7 @@ class TheUI(QtWidgets.QWidget):
 
 
     def startGame(self):
+        self.setDefaultGame()
         self.loadGame()
         # game_loop thread initialization
         self.loop = GameLoopThread()
@@ -116,20 +111,22 @@ class TheUI(QtWidgets.QWidget):
         self.loop.game = self.gameRoot.game
         self.loop.the_ui = self
         # Qt signal initialization
-        self.loop.setSiganls(self.proxyEmit)
+        self.loop.setSiganls(ProxyEmit)
         # if the game_loop completes work then thread will completes its work
         self.loop.start()
 
     def loadGame(self):
+
         self.initLevel()
         self.gamePages.setUpPages()
-        # self.gamePages.setHeroUnit(self.game.the_hero)
-        # self.gamePages.setCharacter(self.game.character)
+        self.gamePages.page.resized()
+        # self.showPage()
+        self.gamePages.page = self.gamePages.gameMenu
         self.view.controller = self.controller
 
 
     def stopGame(self):
-        if not self.loop is None:
+        if not self.gameRoot.loop is None:
             # game.loop stop condition
             self.gameRoot.game.loop_state = False
             self.destroyLevel()
@@ -137,10 +134,10 @@ class TheUI(QtWidgets.QWidget):
             # thread call quit, exit from thread
             self.loop.quit()
             # application waiting for shutdown thread
-            self.loop.wait()
-            self.loop = None
+            self.loop.wait(5000)
+            del self.loop
             self.gameRoot.loop = None
-            self.gameRoot.game = None
+            del self.gameRoot.game
 
     def pauseGame(self):
         pass
