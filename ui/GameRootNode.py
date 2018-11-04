@@ -7,6 +7,7 @@ class GameRootNode(object):
         self.view = None
         self.cfg = None
         self.level = None
+        self.loop = None
         self.levels = None
         self.gamePages = None
         self.game = None
