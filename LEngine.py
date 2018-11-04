@@ -4,7 +4,8 @@ from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.small_graveyard import small_graveyard
 from cntent.dungeons.small_orc_cave import small_orc_cave
 
-from mechanics.AI.SimGame import SimGame as DreamGame
+from mechanics.AI.SimGame import SimGame
+# from GameImitation import DreamGame
 from character_creation.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 
@@ -36,17 +37,17 @@ class LEngine:
         if self.character is None or self.the_hero is None:
             self.character = Character(demohero_basetype)
             self.the_hero = self.character.unit
-            self.dungeon = self.getDungeon(levelName)
-            game = DreamGame.start_dungeon(self.dungeon, self.the_hero)
-            self.setUpTriggers(game)
-            game.character = self.character
+            game = self._getGame(levelName)
             return  game
         else:
-            self.dungeon = self.getDungeon(levelName)
-            game = DreamGame.start_dungeon(self.getDungeon(levelName), self.the_hero)
-            self.setUpTriggers(game)
-            game.character = self.character
-            return game
+            return self._getGame(levelName)
+
+    def _getGame(self, levelName):
+        game = SimGame.start_dungeon(self.getDungeon(levelName), self.the_hero)
+        self.setUpTriggers(game)
+        game.character = self.character
+        return game
+
 
     def setUpTriggers(self, game):
         levelstatus_trigger(game),
@@ -57,3 +58,4 @@ class LEngine:
         attack_anin_trigger(game),
         damage_anim_trigger(game),
         move_anim_trigger(game)
+
