@@ -3,34 +3,28 @@ from ui.units import UnitMiddleLayer
 from ui.units import Units, BasicUnit
 from ui.levels.BaseLevel import BaseLevel
 
-from game_objects.dungeon.Dungeon import Dungeon
 from game_objects import battlefield_objects as bf_objs
-from game_objects.battlefield_objects import Unit, Obstacle
+from game_objects.battlefield_objects import  Obstacle
 
 
 class LevelFactory:
     def __init__(self, logicEngine):
         self.LEngine = logicEngine
         self.gameRoot = None
-        self.dungeon:Dungeon = None
         self.level:BaseLevel = None
         pass
 
     def setGameRoot(self, gameRoot):
         self.gameRoot = gameRoot
 
-    def getLevel(self, levelName = None):
-        self.buildLevel(levelName)
+    def getLevel(self):
+        self.buildLevel()
         return self.level
 
-    def buildLevel(self, levelName = None):
-        if levelName is None:
-            self.dungeon = self.LEngine.dungeon
-        else:
-            self.dungeon = self.LEngine.getDungeon(levelName)
+    def buildLevel(self):
         self.level = BaseLevel()
         self.gameRoot.setLevel(self.level)
-        self.z_values = [i for i in range(self.dungeon.w)]
+        self.z_values = [i for i in range(self.gameRoot.game.battlefield.w)]
         self.setUpLevel()
 
 
@@ -42,7 +36,7 @@ class LevelFactory:
 
     def setUpLevel(self):
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
-        self.level.world.setWorldSize(self.dungeon.w, self.dungeon.h)
+        self.level.world.setWorldSize(self.gameRoot.game.battlefield.w, self.gameRoot.game.battlefield.h)
         self.level.world.setFloor(self.gameRoot.cfg.getPicFile('floor.png'))
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
@@ -74,7 +68,7 @@ class LevelFactory:
                 self.level.world.obstacles[unit.uid] = obstacle
 
         self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
-        self.level.middleLayer.createSuppot(self.level.units.units_at)
+        self.level.middleLayer.createSuppot(self.level.units.units_at, battlefield.units_at)
 
     def addLevelToScene(self, scene):
         scene.addItem(self.level.world)
@@ -85,6 +79,16 @@ class LevelFactory:
         scene.removeItem(self.level.world)
         scene.removeItem(self.level.units)
         scene.removeItem(self.level.middleLayer)
+
+    def removeLevel(self):
+        print('level --destroy')
+        self.level.world.level = None
+        self.level.world = None
+        self.level.units.level = None
+        self.level.units = None
+        self.level.middleLayer.level = None
+        self.level.middleLayer = None
+        del self.level
 
 
 
