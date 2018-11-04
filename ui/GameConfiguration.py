@@ -30,7 +30,7 @@ class GameConfiguration:
         self.loadFilesPath()
         print('cfg ===> loadFilesPath', datetime.now())
         self.lazy = lazy
-        if not lazy:
+        if lazy:
             self.setUpPixmaps()
             print('cfg ===> setUpPixmaps', datetime.now())
         self.setUpSounds()
@@ -106,17 +106,10 @@ class GameConfiguration:
         Объект QPixmap из словаря GameConfiguration.pix_maps
         """
         search_name = filename.lower()
-        print(filename)
-
+        # print(filename)
         try:
             return self.pix_maps[search_name]
         except KeyError:
-            if self.lazy and search_name in self.pic_file_paths:
-                    path = self.pic_file_paths[search_name]
-                    pixmap = QtGui.QPixmap(path)
-                    self.pix_maps[search_name] = pixmap
-                    return pixmap
-
             print(f"{filename} image was not found. using default.")
             return self.pix_maps.get("default.png")
 
@@ -124,7 +117,7 @@ class GameConfiguration:
         for filename, path in self.sound_file_paths.items():
             sound = None
             try:
-                print('load ', filename)
+                # print('load ', filename)
                 sound = QtMultimedia.QSound(path)
                 self.sound_maps[filename] = sound
             except Exception as e:
@@ -145,6 +138,8 @@ class GameConfiguration:
         которы добавляется в словарь GameConfiguration.pix_maps
         {filename: QtGui.QPixmap()}
         """
+        if self.lazy:
+            print('lazy')
         for filename, path in self.pic_file_paths.items():
             pixmap = None
             try:
@@ -152,3 +147,6 @@ class GameConfiguration:
                 self.pix_maps[filename] = pixmap
             except Exception as e:
                 print(e)
+
+
+
