@@ -66,20 +66,20 @@ class StartPage(AbstractPage):
         pass
 
     def startSlot(self):
-        self.gamePages.page.resized()
+        # self.gamePages.page.resized()
         self.showPage()
-        self.gamePages.page = self.gamePages.gameMenu
+        # self.gamePages.page = self.gamePages.gameMenu
 
     def stopSlot(self):
         pass
         # print('stop')
 
-    def checkFocus(self, pos):
-        return self.background.boundingRect().contains(pos)
-
-    @property
-    def focus(self):
-        return  self.actives.scrollArea.hasFocus()
+    # def checkFocus(self, pos):
+    #     return self.background.boundingRect().contains(pos)
+    #
+    # @property
+    # def focus(self):
+    #     return  self.actives.scrollArea.hasFocus()
 
 
     def keyPressEvent(self, e):
