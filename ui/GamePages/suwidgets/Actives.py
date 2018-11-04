@@ -152,3 +152,8 @@ class Actives(QtCore.QObject):
                 break
             else:
                 self.page.hideToolTip()
+
+    def destroy(self):
+        self.page.gamePages.gameRoot.scene.removeItem(self.prxScrollArea)
+        del self.prxScrollArea
+
