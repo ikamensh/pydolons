@@ -6,7 +6,7 @@ from cntent.dungeons.small_orc_cave import small_orc_cave
 
 from mechanics.AI.SimGame import SimGame
 # from GameImitation import DreamGame
-from character_creation.Character import Character
+from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 
 # import triggers
