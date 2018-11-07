@@ -5,6 +5,7 @@
 """
 from ui.GamePages.AbstractPage import AbstractPage
 from ui.GamePages.StartPage import StartPage
+from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.CharacterPage import CharacterPage
 
@@ -57,6 +58,10 @@ class GamePages(object):
         self.startPage.start.pressed.connect(ui.startGame)
         self.startPage.start.pressed.connect(self.startPage.startSlot)
         self.startPage.stop.pressed.connect(ui.stopGame)
+
+    def setUpLevelsPage(self):
+        self.levelSelect = self.buildPage('levelSelect', LevelSelect)
+        self.gameRoot.controller.mousePress.connect(self.levelSelect.mousePressEvent)
 
     def setUpGameMenu(self):
         gameMenu = self.buildPage('gameMenu', GameMenuPage)
