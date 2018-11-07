@@ -52,8 +52,9 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
         pass
 
     def mouseMoveEvent(self, e):
-        self.sceneEvent(e)
+        # self.sceneEvent(e)
         # super().mouseMoveEvent()
+        pass
 
     def keyPressEvent(self, e):
         pass
