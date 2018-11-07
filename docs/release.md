@@ -1,3 +1,10 @@
+`@date:2018.11.7`
+`@autor:reef425`
+`@note_start:`
+>1. Добавил модуль `ui/GamePages/LevelSelect.py`, выбор уровня.
+>2. Перезапуск уровня работает корретно.
+`@note_end`
+
 `@date:2018.10.26`
 `@autor:reef425`
 `@note_start:`
