@@ -12,3 +12,7 @@ class Dungeon:
 
         self.icon = icon
 
+    @property
+    def tooltip_info(self):
+        return self.name * 10
+
