@@ -34,6 +34,11 @@ class StartPage(AbstractPage):
         self.stop.pressed.connect(self.stopSlot)
         laoyout.addWidget(self.stop)
 
+        self.levels = QtWidgets.QPushButton('Levels', mainWidget)
+        self.levels.setStyleSheet(buttonStyle)
+        self.levels.pressed.connect(self.levelsSlot)
+        laoyout.addWidget(self.levels)
+
         settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
         settings.setStyleSheet(buttonStyle)
         laoyout.addWidget(settings)
@@ -51,12 +56,19 @@ class StartPage(AbstractPage):
                 self.gamePages.gameRoot.scene.removeItem(self)
                 self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
-                self.state = True
-                self.setFocus()
-                self.gamePages.page = self
-                self.gamePages.visiblePage = True
-                self.gamePages.gameRoot.scene.addItem(self)
-                self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+            self.state = True
+            self.setFocus()
+            self.gamePages.page = self
+            self.gamePages.visiblePage = True
+            self.gamePages.gameRoot.scene.addItem(self)
+            self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+
+    def hidePage(self):
+        self.state = False
+        self.gamePages.page = None
+        self.gamePages.visiblePage = False
+        self.gamePages.gameRoot.scene.removeItem(self)
+        self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def resized(self):
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
@@ -74,16 +86,14 @@ class StartPage(AbstractPage):
         pass
         # print('stop')
 
-    # def checkFocus(self, pos):
-    #     return self.background.boundingRect().contains(pos)
-    #
-    # @property
-    # def focus(self):
-    #     return  self.actives.scrollArea.hasFocus()
+    def levelsSlot(self):
+        self.hidePage()
+        self.gamePages.levelSelect.showPage()
 
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
             self.showPage()
+        pass
 
 
