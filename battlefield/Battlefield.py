@@ -18,7 +18,7 @@ class Battlefield:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.unit_locations: Dict[BattlefieldObject:Cell] = {}
+        self.unit_locations: Dict[BattlefieldObject,Cell] = {}
         self.unit_facings :Dict[Unit, complex] = {}
         self.vision = Vision(self)
 

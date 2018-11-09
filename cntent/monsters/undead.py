@@ -32,7 +32,7 @@ skeleton_bt = BaseType({'str':8, 'end':6, 'prc':5, 'agi':25, 'int':3, 'cha':3},
 
 skeleton = Monster(skeleton_bt,
                       [
-                          [std_items.sword_superior, std_items.hammer_cheap, std_items.axe_cheap],
+                          [std_items.sword_cheap, std_items.sword_cheap, std_items.sword_superior, std_items.hammer_cheap, std_items.axe_cheap],
                           [std_items.cuirass_usual, std_items.scalemail_inferior]
                       ])
 

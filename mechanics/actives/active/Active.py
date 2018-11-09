@@ -16,11 +16,12 @@ class Active:
 
     def __init__(self, targeting_cls: ClassVar = None, conditions: List[Callable] = None, cost: Union[Cost, Callable] = None,*,
                  game: DreamGame=None, callbacks: List[Callable], tags: List[ActiveTags]=None,
-                 name: str = "nameless active",simulate = None, icon: str = "fire.jpg"):
+                 name: str = "nameless active", cooldown = 0, simulate = None, icon: str = "fire.jpg"):
         self.name = name
         self.game = game
         self.targeting_cls = targeting_cls
         self.conditions = conditions or []
+        self.conditions.append( lambda a, t: a.remaining_cd == 0)
         self._cost = cost or Cost()
         self.callbacks = callbacks
         self.owner: Unit = None
@@ -28,6 +29,9 @@ class Active:
         self.tags = tags or []
         self.simulate_callback = simulate
         self.icon = icon
+
+        self.cooldown = cooldown
+        self.remaining_cd = 0
 
         Active.last_uid += 1
         self.uid = Active.last_uid
@@ -46,12 +50,16 @@ class Active:
         assert self.owner is not None
 
         if self.owner_can_afford_activation() and self.check_target(targeting):
+            self.remaining_cd = self.cooldown
             cpy = copy.copy(self)
             cpy._cost = copy.deepcopy(cpy._cost)
             cpy.spell = copy.deepcopy(cpy.spell)
             cpy.game = self.owner.game
             self.owner.pay(self.cost)
             ActiveEvent(cpy, targeting)
+            return True
+        else:
+            return False
 
     def owner_can_afford_activation(self):
         if self.spell:
