@@ -6,6 +6,8 @@ from character.masteries.MasteriesEnumSimple import MasteriesEnum
 
 from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
+from typing import List, Set
+
 class Character:
     def __init__(self, base_type : BaseType):
         self.base_type = base_type
@@ -18,7 +20,7 @@ class Character:
         self.perk_trees = [everymans_perks()]
 
     @property
-    def masteries_can_go_up(self):
+    def masteries_can_go_up(self) -> Set[MasteriesEnum]:
         result = set()
 
         mastery_map = self.temp_masteries or self.masteries
@@ -31,25 +33,25 @@ class Character:
         return result
 
     @property
-    def attributes_count(self):
+    def attributes_count(self) -> int:
         return Masteries.achieved_level(self.xp) + 48
 
     @property
-    def free_attribute_points(self):
+    def free_attribute_points(self) -> int:
         if self.temp_attributes:
             return self.attributes_count - sum(self.temp_attributes.values())
         else:
             return self.attributes_count - sum(self.base_type.attributes.values())
 
     @property
-    def free_xp(self):
+    def free_xp(self) -> int:
         if self.temp_masteries:
             return self.xp - self.temp_masteries.total_exp_spent
         else:
             return self.xp - self.masteries.total_exp_spent
 
 
-    def increase_attrib(self, attrib_enum):
+    def increase_attrib(self, attrib_enum: CharAttributes) -> None:
         if self.free_attribute_points <= 0:
             return
 
@@ -59,7 +61,7 @@ class Character:
         self.temp_attributes[attrib_enum] += 1
 
 
-    def increase_mastery(self, mastery):
+    def increase_mastery(self, mastery: MasteriesEnum) -> None:
         if not mastery in self.masteries_can_go_up:
             return
 
