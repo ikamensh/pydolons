@@ -19,7 +19,7 @@ def test_attack_cell(pirate_basetype, no_chances):
     game.add_unit(unit2, loc2, -1j)
 
     hp_before = unit2.health
-    attack_cell_active.conditions = []
+    attack_cell_active.checker._conditions = []
 
     active_cpy = unit1.give_active(attack_cell_active)
     unit1.activate(active_cpy, loc2)
@@ -41,7 +41,7 @@ def test_attack_unit(pirate_basetype, no_chances):
 
 
     hp_before = unit2.health
-    attack_unit_active.conditions = []
+    attack_unit_active.checker._conditions = []
 
     active_cpy = unit1.give_active(attack_unit_active)
     unit1.activate(active_cpy, unit2)

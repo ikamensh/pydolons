@@ -59,7 +59,7 @@ class SpellConcept(Item):
         cost = Cost(self.mana_cost, self.stamina_cost, self.health_cost, self.readiness_cost)
         spell = Spell(runes=runes, concept=self, complexity=self.complexity,
                       cost=cost, amount=self.amount, duration=self.duration,
-                      precision_factor=self.precision_factor, distance=self.distance,
+                      precision_factor=self.precision_factor, range=self.distance,
                       radius=self.radius, resolve_callback=self.resolve_callback)
         self.runes = None
         return spell
