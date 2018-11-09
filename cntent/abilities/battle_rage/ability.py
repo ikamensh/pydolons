@@ -1,5 +1,5 @@
 from mechanics.buffs import Ability
-from cntent.triggers.battle_rage import battle_rage as br_trigger
+from cntent.abilities.battle_rage.trigger import battle_rage as br_trigger
 
 def trig_factory( ability: Ability):
     owner = ability.bound_to

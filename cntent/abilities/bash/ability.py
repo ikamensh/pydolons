@@ -1,5 +1,5 @@
 from mechanics.buffs import Ability
-from cntent.triggers.bash import bash as bash_trigger
+from cntent.abilities.bash.trigger import bash as bash_trigger
 
 def trig_factory( ability: Ability):
     owner = ability.bound_to

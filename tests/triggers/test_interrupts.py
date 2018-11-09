@@ -1,4 +1,4 @@
-from cntent.triggers.immortality import immortality, undead_n_hits, refraction
+from cntent.abilities.undead.trigger import immortality, undead_n_hits, refraction
 from mechanics.damage import Damage, DamageTypes
 from mechanics.events import DamageEvent
 import pytest

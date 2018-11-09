@@ -1,5 +1,5 @@
 from mechanics.buffs import Ability
-from cntent.triggers.aoe_dmg import aoe_damage as aoe_trigger
+from cntent.abilities.aoe_damage.trigger import aoe_damage as aoe_trigger
 
 def trig_factory( ability: Ability):
     owner = ability.bound_to

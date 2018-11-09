@@ -1,4 +1,4 @@
-from cntent.abilities.battle_rage import battle_rage
+from cntent.abilities.battle_rage.ability import battle_rage
 
 
 from mechanics.damage import DamageTypes, Damage

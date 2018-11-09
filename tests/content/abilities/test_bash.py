@@ -1,4 +1,4 @@
-from cntent.abilities.bash import bash
+from cntent.abilities.bash.ability import bash
 
 
 from mechanics.damage import DamageTypes, Damage

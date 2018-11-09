@@ -1,8 +1,8 @@
 from cntent.items.std import std_items as si
-from cntent.abilities.generic import fat
-from cntent.abilities.bash import bash
-from cntent.abilities.battle_rage import battle_rage
-from cntent.abilities.aoe_damage import aoe_damage
+from cntent.abilities.generic.ability import fat
+from cntent.abilities.bash.ability import bash
+from cntent.abilities.battle_rage.ability import battle_rage
+from cntent.abilities.aoe_damage.ability import aoe_damage
 
 
 from game_objects.battlefield_objects import BaseType
