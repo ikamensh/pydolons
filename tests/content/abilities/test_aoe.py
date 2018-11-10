@@ -1,5 +1,4 @@
-from cntent.abilities.aoe_damage import aoe_damage
-import copy
+from cntent.abilities.aoe_damage.ability import aoe_damage
 
 from mechanics.damage import DamageTypes, Damage, ImpactFactor
 from mechanics.events import DamageEvent

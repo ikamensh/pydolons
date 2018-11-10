@@ -1,4 +1,4 @@
-from cntent.abilities.generic import fat
+from cntent.abilities.generic.ability import fat
 
 from game_objects.battlefield_objects import BaseType
 from game_objects.monsters.Monster import Monster

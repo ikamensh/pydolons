@@ -235,9 +235,9 @@ class Unit(BattlefieldObject):
         self.actives.remove(active)
 
 
-    def activate(self, active, user_targeting = None):
+    def activate(self, active: Active, user_targeting = None):
         active.owner = self
-        active.activate(user_targeting)
+        return active.activate(user_targeting)
 
     @property
     def movement_actives(self):

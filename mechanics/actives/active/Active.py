@@ -11,16 +11,24 @@ if TYPE_CHECKING:
     from mechanics.actives import Cost
     from DreamGame import DreamGame
 
+from mechanics.conditions.ActiveCheck import ActiveCheck
+from mechanics.conditions.ActiveCondition import ActiveCondition
+
+cooldown_condition = ActiveCondition("Cooldown", lambda a, t: a.remaining_cd == 0,
+                                     "{active} is on cooldown for next {active.remaining_cd} seconds")
+
+
 class Active:
     last_uid = 0
 
     def __init__(self, targeting_cls: ClassVar = None, conditions: List[Callable] = None, cost: Union[Cost, Callable] = None,*,
                  game: DreamGame=None, callbacks: List[Callable], tags: List[ActiveTags]=None,
-                 name: str = "nameless active",simulate = None, icon: str = "fire.jpg"):
+                 name: str = "nameless active", cooldown = 0, simulate = None, icon: str = "fire.jpg"):
         self.name = name
         self.game = game
         self.targeting_cls = targeting_cls
-        self.conditions = conditions or []
+        self.checker = ActiveCheck(conditions)
+        self.checker.append(cooldown_condition)
         self._cost = cost or Cost()
         self.callbacks = callbacks
         self.owner: Unit = None
@@ -29,29 +37,37 @@ class Active:
         self.simulate_callback = simulate
         self.icon = icon
 
+        self.cooldown = cooldown
+        self.remaining_cd = 0
+
         Active.last_uid += 1
         self.uid = Active.last_uid
 
 
-    def check_target(self, targeting):
-        if not self.conditions:
-            return True
-        return all((cond(self, targeting) for cond in self.conditions))
+    def check_target(self, target):
+        failing_conditions = self.checker.not_satisfied_conds(self, target)
+        # for c in failing_conditions:
+        #     print(c.message(self, target))
+        return len(failing_conditions) == 0
 
-    def activate(self, targeting=None):
+    def activate(self, target=None):
         from game_objects import battlefield_objects as bf_objs
 
         if self.targeting_cls in [Cell, bf_objs.Unit, bf_objs.BattlefieldObject]:
-            assert isinstance(targeting, self.targeting_cls)
+            assert isinstance(target, self.targeting_cls)
         assert self.owner is not None
 
-        if self.owner_can_afford_activation() and self.check_target(targeting):
+        if self.owner_can_afford_activation() and self.check_target(target):
+            self.remaining_cd = self.cooldown
             cpy = copy.copy(self)
             cpy._cost = copy.deepcopy(cpy._cost)
             cpy.spell = copy.deepcopy(cpy.spell)
             cpy.game = self.owner.game
             self.owner.pay(self.cost)
-            ActiveEvent(cpy, targeting)
+            ActiveEvent(cpy, target)
+            return True
+        else:
+            return False
 
     def owner_can_afford_activation(self):
         if self.spell:

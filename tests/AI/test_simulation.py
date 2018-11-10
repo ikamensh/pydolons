@@ -1,5 +1,5 @@
 from mechanics.events import MovementEvent
-from cntent.triggers.immortality import immortality
+from cntent.abilities.undead.trigger import immortality
 
 
 def test_simulation_units_dont_rly_die(minigame):

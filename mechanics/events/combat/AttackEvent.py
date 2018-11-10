@@ -18,6 +18,10 @@ class AttackEvent(Event):
         self.weapon = weapon or source.get_melee_weapon()
         self.is_backstab = not target.is_obstacle and not game.battlefield.x_sees_y(target, source)
         self.is_blind = not game.battlefield.x_sees_y(source, target)
+
+        precision, evasion = self.effective_precision_evasion()
+        self.impact = self.weapon.chances.actual(precision, evasion).roll_impact(random=game.random)
+
         super().__init__(game,fire)
 
     def check_conditions(self) -> bool:
@@ -25,11 +29,8 @@ class AttackEvent(Event):
 
     def resolve(self) -> None:
 
-        precision, evasion = self.effective_precision_evasion()
-
-        impact = self.weapon.chances.actual(precision, evasion).roll_impact(random=self.game.random)
-        if impact is not ImpactFactor.MISS:
-            dmg_event = DamageEvent( self.weapon.damage, self.target, source=self.source, impact_factor = impact)
+        if self.impact is not ImpactFactor.MISS:
+            dmg_event = DamageEvent( self.weapon.damage, self.target, source=self.source, impact_factor = self.impact)
 
             if self.weapon and self.weapon.durability:
                 self.weapon.durability -= dmg_event.weapon_dur_dmg
