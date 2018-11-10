@@ -1,6 +1,5 @@
-from PySide2 import QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 
-from ui.GamePages.widgets import WidgetFactory
 from ui.GamePages import AbstractPage
 
 class CharacterPage(AbstractPage):
@@ -9,160 +8,178 @@ class CharacterPage(AbstractPage):
         super(CharacterPage, self).__init__(gamePages)
         self.character = None
         self.unit = None
-        self.w, self.h = 790, 590
+        self.w, self.h = 700, 550
         self.w_2 = int(self.w / 2)
         self.h_2 = int(self.h / 2)
-
-
-    def setUpGui(self):
+        self.setUpAttributes()
         self.setUpWidgets()
-        self.resized()
 
-    def pageUpdate(self):
-        if not self.unit is None:
-            self.bx_hp.updateValue(int(self.unit.health), self.unit.max_health)
-            self.bx_mana.updateValue(int(self.unit.mana), self.unit.max_mana)
-            self.bx_stamina.updateValue(int(self.unit.stamina), self.unit.max_stamina)
-        self.update( self.x(), self.y(), self.w, self.h)
-        self.widgetFactory.update()
 
-    def release(self):
-        self.widgetFactory.release()
-        self.pageUpdate()
+    def setUpAttributes(self):
+        self.attributes = {}
+        self.attributes['str_base'] = 'STREINGTH'
+        self.attributes['end_base'] = 'ENDURANCE'
+        self.attributes['prc_base'] = 'PERCEPTION'
+        self.attributes['agi_base'] = 'AGILITY'
+        self.attributes['int_base'] = 'INTELLIGENCE'
+        self.attributes['cha_base'] = 'CHARISMA'
+        self.attributes['max_health_base'] = 'HEALTH'
+        self.attributes['max_mana_base'] = 'MANA'
+        self.attributes['max_stamina_base'] = 'STAMINA'
+        self.attributes['armor_base'] = 'ARMOR'
+        self.attributes['resists_base'] = 'RESISTANCES'
+        self.attributes['armor_base'] = 'ARMOR'
+        self.attributes['melee_precision_base'] = 'PRECISION'
+        self.attributes['melee_evasion_base'] = 'EVASION'
 
     def setUpWidgets(self):
-        x, y = 264, 18
-        n = 40
-        m = 150
-        self.widgetFactory = WidgetFactory(self.gamePages.gameRoot.cfg)
-        self.widgetFactory.page =self
-        self.spn_bx1 = self.widgetFactory.createSpinBox('STREINGTH')
-        self.spn_bx1.setPos(x, n)
-        self.spn_bx2 = self.widgetFactory.createSpinBox('AGILITY')
-        self.spn_bx2.setPos( x,  n * 2 +5)
-        self.spn_bx3 = self.widgetFactory.createSpinBox('ENDURANCE')
-        self.spn_bx3.setPos( x,  n * 3 + 10)
-        self.spn_bx4 = self.widgetFactory.createSpinBox('INTELLIGENCE')
-        self.spn_bx4.setPos(x,  n * 4 + 15)
-        self.spn_bx5 = self.widgetFactory.createSpinBox('PERCEPTION')
-        self.spn_bx5.setPos( x,  n * 5 + 20)
-        self.spn_bx6 = self.widgetFactory.createSpinBox('CHARISMA')
-        self.spn_bx6.setPos( x,  n * 6 + 25)
-        # Button quit
-        self.btn_quit = self.widgetFactory.createButton('X', w = 30, h = 20)
-        self.btn_quit.setPos( self.w - 40,  10)
-        self.btn_quit.presed.connect(self.onPressClose)
-        # Button ok
-        self.btn_ok = self.widgetFactory.createButton('ok', w = 60, h = 20)
-        self.btn_ok.setPos(40,  self.h - 40)
-        self.btn_ok.presed.connect(self.onPressOk)
-        # Button cancel
-        self.btn_cancel = self.widgetFactory.createButton('cancel', w = 60, h = 20)
-        self.btn_cancel.setPos(110, self.h - 40)
-        self.btn_cancel.presed.connect(self.onPressCancel)
-        # Box value
-        self.bx_hp = self.widgetFactory.createBoxValue()
-        self.bx_hp.setPos( 100,  295)
-        self.bx_mana = self.widgetFactory.createBoxValue()
-        self.bx_mana.setPos( 100,  335)
-        self.bx_stamina = self.widgetFactory.createBoxValue()
-        self.bx_stamina.setPos(100, 375)
+        hero = self.gamePages.gameRoot.game.the_hero
+        self.background = QtWidgets.QGraphicsRectItem(0, 0, self.w, self.h)
+        self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        self.addToGroup(self.background)
 
-    def paint(self, painter, option, widget):
-        painter.setPen(QtCore.Qt.white)
-        painter.setBrush(QtCore.Qt.black)
-        # Draw lines
-        painter.drawRect(self.x(), self.y(), self.w, self.h)
-        painter.drawLine(self.x() + 210, self.y(), self.x() + 210, self.y() + self.h)
-        painter.drawLine(self.x() + 540, self.y(), self.x() + 540, self.y() + 350)
-        painter.drawLine(self.x() + 210, self.y() + 350, self.x() + self.w, self.y() + 350)
-        painter.drawLine(self.x() + 210, self.y() + 417, self.x() + self.w, self.y() + 417)
-        painter.drawLine(self.x() + 416, self.y() + 417, self.x() + 416, self.y() + self.h)
-        painter.drawLine(self.x() + 597, self.y() + 417, self.x() + 597, self.y() + self.h)
-        # Number column
-        x, y = 35, 310
-        n = 40
-        painter.setBrush(QtCore.Qt.green)
-        # painter.drawRect(self.x() + x, self.y() + 144, 128, 128)
-        painter.drawPixmap(self.x() + x, self.y() + 144, 128, 128, self.gamePages.gameRoot.cfg.pix_maps[self.unit.icon])
-        painter.drawText(self.x() + x, self.y() + y, 'HP:')
-        self.bx_hp.paint(painter)
-        painter.drawText(self.x() + x, self.y() + y + n, 'Manna:')
-        self.bx_mana.paint(painter)
-        painter.drawText(self.x() + x, self.y() + y + 2 * n, 'Stamina:')
-        self.bx_stamina.paint(painter)
-        # Two column
-        x, y = 264, 18
-        n = 40
-        m = 150
-        # Set free xp
-        painter.drawText(self.x() + x, self.y() + y, 'Free point: ' + str(self.unit.xp))
-        # Debug text
+        self.heroIcon = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile(hero.icon))
+        self.addToGroup(self.heroIcon)
 
-        self.spn_bx1.paint(painter)
-        self.spn_bx2.paint(painter)
-        self.spn_bx3.paint(painter)
-        self.spn_bx4.paint(painter)
-        self.spn_bx5.paint(painter)
-        self.spn_bx6.paint(painter)
 
-        self.btn_quit.paint(painter)
-        self.btn_ok.paint(painter)
-        self.btn_cancel.paint(painter)
+        self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
 
-        # Tree, Four, Five column
-        painter.drawText(self.x() + 241, self.y() + 383, 'Mastery:')
-        # Tree column
-        x, y = 264, 436
-        n = 40
-        painter.drawText(self.x() + x, self.y() + y, 'Battle')
-        painter.drawText(self.x() + x, self.y() + y + n, 'Axe')
-        painter.drawText(self.x() + x, self.y() + y + 2 * n, 'Sword')
-        painter.drawText(self.x() + x, self.y() + y + 3 * n, 'Spear')
-        # Four column
-        x, y = 437, 436
-        n = 40
-        painter.drawText(self.x() + x, self.y() + y, 'Magic')
-        painter.drawText(self.x() + x, self.y() + y + n, 'Ice')
-        painter.drawText(self.x() + x, self.y() + y + 2 * n, 'Fire')
-        painter.drawText(self.x() + x, self.y() + y + 3 * n, 'Lighting')
-        # Fice column
-        x, y = 647, 436
-        n = 40
-        painter.drawText(self.x() + x, self.y() + y, 'Mics')
-        painter.drawText(self.x() + x, self.y() + y + n, 'Alchemy')
-        # Q_UNUSED(option)
-        # Q_UNUSED(widget)
-        # pass
+        mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
+        mainWidget.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        mainWidget.resize(self.w, self.h)
+        mainWidget.setStyleSheet('background-color: rgba(0, 0, 0, 0);color:white')
+        mainLayout: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
+        mainLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
 
-    def boundingRect(self):
-        return QtCore.QRectF(self.x() , self.y(), self.w, self.h)
+        mainLayout.addLayout(self.getHeroLayout(mainWidget), 0, 0, 1, 1, QtCore.Qt.AlignLeft)
+        mainLayout.addLayout(self.getPointLayout(mainWidget), 0, 1, 1, 2, QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        mainLayout.addLayout(self.getPageBtnLayout(mainWidget), 1, 0, 1, 1, QtCore.Qt.AlignLeft)
+        mainLayout.addLayout(self.getMasteryLayout(mainWidget), 1, 1, 1, 3)
+        mainWidget.setLayout(mainLayout)
+
+        self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
+        self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.resized()
+
+    def setUpGui(self):
+        self.cancel.pressed.connect(self.cancelSlot)
+        self.ok.pressed.connect(self.okSlot)
+
+    def getHeroLayout(self, parent):
+        hero = self.gamePages.gameRoot.game.the_hero
+        layout = QtWidgets.QGridLayout()
+        layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
+        # layout.setColumnStretch(0, -1)
+        layout.setVerticalSpacing(0)
+        layout.setHorizontalSpacing(0)
+        layout.setColumnMinimumWidth(0, 70)
+        self.healthBar = self.getHeroItemBar(layout, parent, 0, 'Health:')
+        self.manaBar = self.getHeroItemBar(layout, parent, 1, 'Mana:')
+        self.staminaBar = self.getHeroItemBar(layout, parent, 2, 'Stamina:')
+        return layout
+
+    def getHeroItemBar(self, layout, parent, row, name):
+        label = QtWidgets.QLabel(name, parent)
+        label.setFixedWidth(50)
+        layout.addWidget(label, row, 0, 1, 1, QtCore.Qt.AlignLeft)
+        bar = QtWidgets.QProgressBar(parent)
+        bar.setFixedWidth(100)
+        bar.setTextVisible(False)
+        layout.addWidget(bar, row,  1, 1, 1, QtCore.Qt.AlignLeft)
+        barLabel = QtWidgets.QLabel('', parent)
+        barLabel.setFixedWidth(50)
+        layout.addWidget(barLabel, row, 2, 1, 1, QtCore.Qt.AlignLeft)
+        bar.setProperty('label', barLabel)
+        return bar
+
+    def getMasteryLayout(self, parent):
+        layout = QtWidgets.QVBoxLayout()
+        label = QtWidgets.QLabel(parent)
+        label.setText('Mastery')
+        layout.addWidget(label)
+        body = QtWidgets.QHBoxLayout()
+        col_1 = QtWidgets.QVBoxLayout()
+        col_1.addWidget(QtWidgets.QLabel('Battle', parent))
+        body.addLayout(col_1)
+        col_2 = QtWidgets.QVBoxLayout()
+        col_2.addWidget(QtWidgets.QLabel('Magic', parent))
+        body.addLayout(col_2)
+        col_3 = QtWidgets.QVBoxLayout()
+        col_3.addWidget(QtWidgets.QLabel('Mics', parent))
+        body.addLayout(col_3)
+        layout.addLayout(body)
+        return layout
+
+
+    def setAttributeLayout(self, layout, row,name, parent):
+        labelInfo = QtWidgets.QLabel(name, parent)
+        spnBox = QtWidgets.QSpinBox(parent = parent)
+        # spnBox.setMaximumWidth(50)
+        # spnBox.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        layout.addWidget(labelInfo, row, 0, 1, 1, QtCore.Qt.AlignLeft)
+        layout.addWidget(spnBox, row, 1, 1, 1, QtCore.Qt.AlignLeft)
 
 
 
-    def onPressClose(self):
-        self.state = False
-        self.gamePages.page = None
-        self.gamePages.gameRoot.scene.removeItem(self)
-        self.widgetFactory.release()
+    def getPointLayout(self, parent):
+        layout = QtWidgets.QGridLayout()
+        layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
+        self.freePoint = QtWidgets.QLabel(parent = parent)
+        self.freePoint.setText('Free points:')
+        layout.addWidget(self.freePoint, 0, 0, 1, 1, QtCore.Qt.AlignRight)
+        row = 1
+        for key, name in self.attributes.items():
+            self.setAttributeLayout(layout, row, name, parent)
+            row += 1
 
-    def onPressCancel(self):
-        # self.state = False
-        # self.scene().removeItem(self)
+        # print(layout.stretch(2))
+        return layout
+
+    def getPageBtnLayout(self, parent):
+        btnLayout = QtWidgets.QHBoxLayout()
+
+        self.ok = QtWidgets.QPushButton("ok", parent)
+        self.ok.setStyleSheet(self.buttonStyle)
+        btnLayout.addWidget(self.ok)
+
+        self.save = QtWidgets.QPushButton("save", parent)
+        self.save.setStyleSheet(self.buttonStyle)
+        btnLayout.addWidget(self.save)
+
+        self.cancel = QtWidgets.QPushButton("cancel", parent)
+        self.cancel.setStyleSheet(self.buttonStyle)
+        btnLayout.addWidget(self.cancel)
+
+        return btnLayout
+
+    def updatePage(self):
+        hero = self.gamePages.gameRoot.game.the_hero
+        self.healthBar.setMaximum(hero.max_health)
+        self.healthBar.setValue(hero.health)
+        self.healthBar.property('label').setText(str(int(hero.health)))
+        self.manaBar.setMaximum(hero.max_mana)
+        self.manaBar.setValue(hero.mana)
+        self.manaBar.property('label').setText(str(int(hero.mana)))
+        self.staminaBar.setMaximum(hero.max_stamina)
+        self.staminaBar.setValue(hero.stamina)
+        self.staminaBar.property('label').setText(str(int(hero.stamina)))
+
+    def cancelSlot(self):
+        self.showPage()
         pass
 
-    def onPressOk(self):
-        # self.state = False
-        # self.scene().removeItem(self)
+    def okSlot(self):
+        self.showPage()
         pass
 
     def resized(self):
-        x, y = 0, 0
-        if self.gamePages.gameRoot.cfg.dev_size[0] > 800:
-            x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 4
-            y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 4
-        self.setPos(int(x), int(y))
-        self.pageUpdate()
+        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
+        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
+        self.mainWidget.setPos(x, y)
+        self.background.setRect(x, y, self.w, self.h)
+        self.heroIcon.setPos(x + 50, y + 50)
+        pass
+
 
     def showPage(self):
         if self.state:
@@ -170,11 +187,14 @@ class CharacterPage(AbstractPage):
             self.gamePages.page = None
             self.gamePages.visiblePage = False
             self.gamePages.gameRoot.scene.removeItem(self)
+            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
+            self.updatePage()
             self.state = True
             self.gamePages.page = self
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
+            self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
 
     def keyPressEvent(self, e):
@@ -182,10 +202,14 @@ class CharacterPage(AbstractPage):
             self.showPage()
 
     def mousePressEvent(self, e):
-        if self.isVisible():
-            self.widgetFactory.collisions(e.pos())
+        print(self.mainWidget.geometry())
+        if not self.mainWidget.geometry().contains(e.pos()):
+            self.showPage()
+
 
     def destroy(self):
-        self.widgetFactory.destroy()
-        self.widgetFactory.page = None
-        self.widgetFactory = None
+        self.mainWidget.widget().destroy()
+        if not self.mainWidget.scene() is None:
+            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        del self.mainWidget
+        pass
