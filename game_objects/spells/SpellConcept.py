@@ -19,8 +19,10 @@ class SpellConcept(Item):
     distance = AttributeWithBonuses("distance_base", SpellAttributes.DISTANCE)
     radius = AttributeWithBonuses("radius_base", SpellAttributes.RADIUS)
 
-    def __init__(self, name, school, targeting_cls,
-                 complexity, cost,
+    cooldown = AttributeWithBonuses("cooldown_base", SpellAttributes.COOLDOWN)
+
+    def __init__(self, name, school, *, targeting_cls,
+                 complexity, cost, cooldown=1,
                  amount, duration, precision_factor, distance, radius,
                  resolve_callback, targeting_cond=None):
 
@@ -34,6 +36,7 @@ class SpellConcept(Item):
         self.stamina_cost_base = Attribute.attribute_or_none(cost.stamina)
         self.health_cost_base = Attribute.attribute_or_none(cost.health)
         self.readiness_cost_base = Attribute.attribute_or_none(cost.readiness)
+        self.cooldown_base = Attribute.attribute_or_none(cooldown)
 
         self.amount_base = Attribute.attribute_or_none(amount)
         self.duration_base = Attribute.attribute_or_none(duration)
@@ -47,17 +50,18 @@ class SpellConcept(Item):
     @property
     def bonuses(self):
         #TODO test that same runes stack - set is a risk w/o copying the bonuses.
-        if self.runes is None:
-            return frozenset()
-        else:
+        if self.runes:
             return frozenset(flatten([rune.bonuses for rune in self.runes]))
+        else:
+            return frozenset()
+
 
 
 
     def to_spell(self, runes):
         self.runes = runes
         cost = Cost(self.mana_cost, self.stamina_cost, self.health_cost, self.readiness_cost)
-        spell = Spell(runes=runes, concept=self, complexity=self.complexity,
+        spell = Spell(runes=runes, concept=self, complexity=self.complexity, cooldown=self.cooldown,
                       cost=cost, amount=self.amount, duration=self.duration,
                       precision_factor=self.precision_factor, range=self.distance,
                       radius=self.radius, resolve_callback=self.resolve_callback)

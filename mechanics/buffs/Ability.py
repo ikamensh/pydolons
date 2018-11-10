@@ -9,22 +9,26 @@ if TYPE_CHECKING:
 
 
 class Ability:
-    def __init__(self, bonus: Bonus = None, triggers: List[Callable] = None):
+    def __init__(self, bonus: Bonus = None, trigger_factories: List[Callable] = None, name = "Nameless ability"):
         self.bonus = bonus
-        self.triggers = triggers            # callable( Ability ) -> Trigger
+        self.trigger_factories = trigger_factories            # callable( Ability ) -> Trigger
         self.to_deactivate: List[Trigger] = []
         self.bound_to: Unit = None
+        self.name = name
 
     def apply_to(self, unit):
         self.bound_to = unit
 
-        if self.triggers:
-            for trigger in self.triggers:
+        if self.trigger_factories:
+            for trigger in self.trigger_factories:
                 self.to_deactivate.append(trigger(self))
 
     def deactivate(self):
         self.bound_to = None
         for trigger in self.to_deactivate:
             trigger.deactivate()
+
+    def __repr__(self):
+        return f"{self.name} belonging to {self.bound_to}"
 
 

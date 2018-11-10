@@ -10,7 +10,7 @@ def trig_factory( ability: Ability):
 
 def aoe_damage(radius=1.5, percentage=1.):
     def _():
-        a = Ability(triggers=[trig_factory])
+        a = Ability(trigger_factories=[trig_factory])
         a.radius = radius
         a.percentage = percentage
         return a

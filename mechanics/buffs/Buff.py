@@ -8,17 +8,15 @@ class Buff(Ability):
     duration = DynamicParameter("max_duration", [BuffExpiredEvent])
 
 
-    def __init__(self, duration: float, bonus = None, triggers = None):
-        super().__init__(bonus, triggers)
+    def __init__(self, duration: float, bonus = None, triggers_factories = None, source = None, name="nameless"):
+        super().__init__(bonus, triggers_factories, name)
         self.max_duration = duration
+        self.source = source
 
     def reset(self):
         DynamicParameter.reset(self)
 
     def __repr__(self):
-        if self.bound_to:
-            return f"Buff with {self.duration}/{self.max_duration} s duration"
-        else:
-            return "Abstract Buff..."
+        return f"Buff {self.name}: {self.duration}/{self.max_duration} s left; on {self.bound_to}"
 
 

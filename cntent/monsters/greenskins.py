@@ -3,7 +3,7 @@ from cntent.abilities.generic.ability import fat
 from cntent.abilities.bash.ability import bash
 from cntent.abilities.battle_rage.ability import battle_rage
 from cntent.abilities.aoe_damage.ability import aoe_damage
-
+from mechanics.damage import DamageTypes as dt
 
 from game_objects.battlefield_objects import BaseType
 from game_objects.monsters.Monster import Monster
@@ -29,9 +29,10 @@ class ogre_sound_map:
 
 
 goblin_bt = BaseType({'str':8, 'end':7, 'prc':15, 'agi':15, 'int':12, 'cha':7},
-                     "Goblin", abilities=[battle_rage(1)], icon=["gobl.jpg","goblin.jpg" ,"goblin Ambusher.png",
-                                                                 "Goblin Crew-Leader.png","Goblin Poacher.png",
-                                                                 "Goblin Scout.png","Goblin Watchman.png","Goblin Skirmisher.png"], sound_map=goblin_sound_map)
+                     "Goblin", resists={dt.FIRE:0.15}, abilities=[battle_rage(1)],
+                     icon=["gobl.jpg","goblin.jpg" ,"goblin Ambusher.png",
+                             "Goblin Crew-Leader.png","Goblin Poacher.png",
+                             "Goblin Scout.png","Goblin Watchman.png","Goblin Skirmisher.png"], sound_map=goblin_sound_map)
 
 goblin = Monster(goblin_bt,
                       [
@@ -41,7 +42,7 @@ goblin = Monster(goblin_bt,
 
 
 orc_bt = BaseType({'str':14, 'end':14, 'prc':12, 'agi':12, 'int':6, 'cha':6},
-                     "Orc", abilities=[bash(0.33), fat, battle_rage(1)],
+                     "Orc", resists={dt.FIRE:0.20}, abilities=[bash(0.33), fat, battle_rage(1)],
                   icon=["orc.jpg", "Ork2.jpg", "Ork.jpg", "Ork Rager.jpg"], sound_map=orc_sound_map)
 
 orc = Monster(orc_bt,
@@ -51,6 +52,7 @@ orc = Monster(orc_bt,
                       ])
 
 ogre_bt = BaseType({'str':22, 'end':25, 'prc':14, 'agi':9, 'int':10, 'cha':4},"Ogre", sound_map=ogre_sound_map,
+                    resists={dt.FIRE:0.30},
                    abilities=[bash(0.5), fat, battle_rage(1), aoe_damage(radius=2,percentage=0.5)],
                    icon=["troll.png","ogre.png","ogrs.jpg"])
 

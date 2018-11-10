@@ -221,7 +221,7 @@ class Unit(BattlefieldObject):
                 'defence':str(self.melee_evasion)}
 
 
-    def give_active(self, active):
+    def give_active(self, active) -> Active:
         cpy = copy.deepcopy(active)
         cpy.game = self.game
         self.actives.add(cpy)

@@ -53,7 +53,7 @@ class AtbTurnsManager(TurnsManager):
         elif isinstance(managee, Buff):
             return managee.duration
 
-    def get_next(self):
+    def get_next(self) -> Unit:
         self.sort()
         next_managed = self.managed[0]
         while not isinstance(next_managed, Unit):
@@ -62,13 +62,13 @@ class AtbTurnsManager(TurnsManager):
             next_managed = self.managed[0]
 
         if next_managed.readiness >= 1:
-            assert 1.1 >= next_managed.readiness >= 1
+            # assert 1.1 >= next_managed.readiness
             return next_managed
         else:
             self.pass_time(self.time_until_turn(next_managed))
 
             new_closest_unit = self.managed[0]
-            assert 1.1 >= new_closest_unit.readiness >= 1
+            # assert 1.1 >= new_closest_unit.readiness >= 1
             return new_closest_unit
 
     def sort(self):

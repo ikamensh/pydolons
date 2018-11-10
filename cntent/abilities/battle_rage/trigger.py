@@ -13,7 +13,8 @@ def battle_rage_callback(t,e:DamageEvent):
             Buff(8, bonus=Bonus(
             {ca.STREINGTH: Attribute(1, 5, 0),
              ca.ENDURANCE: Attribute(1, 5, 0),
-             ca.AGILITY: Attribute(1, 5, 0)})),
+             ca.AGILITY: Attribute(1, 5, 0),
+             ca.PERCEPTION: Attribute(-1, -5, 0)})),
             e.target)
 
 

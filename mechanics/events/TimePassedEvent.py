@@ -9,6 +9,7 @@ class TimePassedEvent(Event):
     channel = EventsChannels.TimePassedChannel
 
     def __init__(self, game: DreamGame, dt: float):
+        self.time = game.turns_manager.time
         self.dt = dt
         super().__init__(game)
 

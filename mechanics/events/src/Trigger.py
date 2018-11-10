@@ -40,9 +40,12 @@ class Trigger:
         #     print([cond(self,event) for cond in self.conditions])
 
     def deactivate(self):
-        if self.is_interrupt:
-            self.platform.interrupts[self.channel].remove(self)
-        else:
-            self.platform.triggers[self.channel].remove(self)
+        try:
+            if self.is_interrupt:
+                self.platform.interrupts[self.channel].remove(self)
+            else:
+                self.platform.triggers[self.channel].remove(self)
+        except KeyError:
+            pass
 
 

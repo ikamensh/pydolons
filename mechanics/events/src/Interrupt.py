@@ -17,17 +17,19 @@ class PermanentInterrupt(Trigger):
 
 
 class CounteredInterrupt(PermanentInterrupt):
-    def __init__(self, target_event_cls, conditions, interrupt_event = True, callbacks=None,
+    def __init__(self, target_event_cls, conditions, interrupt_event = True, callbacks:list=None,
                  n_counters=1, *, platform):
 
         self.n_counters = n_counters
 
-        callbacks = callbacks or []
-        callbacks.append(CounteredInterrupt.count_down)
+        _callbacks = [CounteredInterrupt.count_down]
+        if callbacks:
+            _callbacks += callbacks
+
 
 
         super().__init__(target_event_cls, conditions, interrupt_event,
-                         callbacks=callbacks, platform=platform)
+                         callbacks=_callbacks, platform=platform)
 
     @staticmethod
     def count_down(self, _):

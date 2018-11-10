@@ -12,3 +12,5 @@ class SpellAttributes:
     PRECISION_FACTOR = auto()
     DISTANCE = auto()
     RADIUS = auto()
+
+    COOLDOWN = auto()

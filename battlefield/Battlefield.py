@@ -9,6 +9,7 @@ from battlefield.Vision import Vision
 from my_utils.utils import flatten
 
 
+
 class Battlefield:
 
     space_per_cell = 10
@@ -116,10 +117,15 @@ class Battlefield:
 
     @property
     def all_cells(self):
+        if hasattr(self, "_all_cells"):
+            return self._all_cells
+
         result = set()
         for i in range(self.w):
             for j in range(self.h):
                 result.add(Cell(i, j))
+
+        self._all_cells = result
         return result
 
 
@@ -129,13 +135,23 @@ class Battlefield:
 
     #optimize: use dirty bit
     @property
-    def units_at(self) -> Dict[Cell, List[Unit]]:
+    def units_at(self) -> Dict[Cell, List[BattlefieldObject]]:
         result = {}
         for unit, cell in self.unit_locations.items():
             if cell not in result:
                 result[cell] = [unit]
             else:
                 result[cell].append(unit)
+
+        return result
+
+    def cone(self, cell_from, direction, angle_max, dist_min, dist_max):
+        result = []
+        for cell in self.all_cells:
+            if dist_min <= self.distance(cell, cell_from) <= dist_max:
+                vector_to_target = cell.complex - cell_from.complex
+                if Cell.angle_between(direction, vector_to_target)[0] <= angle_max:
+                    result.append(cell)
 
         return result
 

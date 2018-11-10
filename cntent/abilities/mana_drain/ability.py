@@ -13,7 +13,7 @@ def trig_factory( ability: Ability):
 
 def mana_drain(amount, percentage_drain, percentage_heal):
     def _():
-        a = Ability(triggers=[trig_factory])
+        a = Ability(trigger_factories=[trig_factory])
 
         setattr(a, AMOUNT, amount)
         setattr(a, PCT_DRAIN, percentage_drain)

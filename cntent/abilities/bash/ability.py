@@ -8,7 +8,7 @@ def trig_factory( ability: Ability):
 
 def bash(chance=1):
     def _():
-        a = Ability(triggers=[trig_factory])
+        a = Ability(trigger_factories=[trig_factory])
         a.bash_chance = chance
         return a
     return _

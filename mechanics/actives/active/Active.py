@@ -46,8 +46,8 @@ class Active:
 
     def check_target(self, target):
         failing_conditions = self.checker.not_satisfied_conds(self, target)
-        # for c in failing_conditions:
-        #     print(c.message(self, target))
+        for c in failing_conditions:
+            print(c.message(self, target))
         return len(failing_conditions) == 0
 
     def activate(self, target=None):
@@ -59,12 +59,8 @@ class Active:
 
         if self.owner_can_afford_activation() and self.check_target(target):
             self.remaining_cd = self.cooldown
-            cpy = copy.copy(self)
-            cpy._cost = copy.deepcopy(cpy._cost)
-            cpy.spell = copy.deepcopy(cpy.spell)
-            cpy.game = self.owner.game
             self.owner.pay(self.cost)
-            ActiveEvent(cpy, target)
+            ActiveEvent(self, target)
             return True
         else:
             return False
@@ -81,8 +77,9 @@ class Active:
 
     @staticmethod
     def from_spell(spell, game=None):
-        new_active = Active(spell.targeting_cls, [spell.targeting_cond],
+        new_active = Active(spell.targeting_cls, [spell.targeting_cond] if spell.targeting_cond else None,
                             spell.cost,
+                            cooldown=spell.cooldown,
                             game=game,
                             callbacks=[spell.resolve_callback],
                             tags=[ActiveTags.MAGIC])

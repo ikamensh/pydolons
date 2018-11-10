@@ -14,9 +14,7 @@ class ActiveEvent(Event):
         super().__init__(active.game)
 
     def check_conditions(self):
-        return all([self.active.owner.alive,
-                    #self.active.owner_can_afford_activation(), - currently paid in the active.activate method
-                   self.active.check_target(self.targeting)])
+        return True
 
     def resolve(self):
         # print(type(self.active))
