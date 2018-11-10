@@ -30,7 +30,7 @@ class GamePages(object):
         self.gameRoot.gamePages = self
 
     def setUpPages(self):
-        # self.setUpCharecterPage()
+        self.setUpCharecterPage()
         self.setUpGameMenu()
 
     def destroyPages(self):
@@ -72,8 +72,8 @@ class GamePages(object):
 
     def setUpCharecterPage(self):
         self.characterPage = self.buildPage('characterPage', CharacterPage)
-        self.gameRoot.controller.mousePress.connect(self.characterPage.mousePressEvent)
-        self.characterPage.pageUpdate()
+        # self.gameRoot.controller.mousePress.connect(self.characterPage.mousePressEvent)
+        # self.characterPage.pageUpdate()
 
     def buildPage(self, pageName, pageClass):
         page = pageClass(self)
