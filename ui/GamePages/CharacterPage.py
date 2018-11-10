@@ -164,14 +164,6 @@ class CharacterPage(AbstractPage):
         self.staminaBar.setValue(hero.stamina)
         self.staminaBar.property('label').setText(str(int(hero.stamina)))
 
-
-
-    def onPressClose(self):
-        self.state = False
-        self.gamePages.page = None
-        self.gamePages.gameRoot.scene.removeItem(self)
-        self.widgetFactory.release()
-
     def cancelSlot(self):
         self.showPage()
         pass
@@ -216,7 +208,8 @@ class CharacterPage(AbstractPage):
 
 
     def destroy(self):
-        # if not self.mainWidget.scene() is None:
-        #     self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
-        # del self.mainWidget
+        self.mainWidget.widget().destroy()
+        if not self.mainWidget.scene() is None:
+            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        del self.mainWidget
         pass
