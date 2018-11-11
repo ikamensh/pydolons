@@ -80,6 +80,13 @@ class LevelSelect(AbstractPage):
         self.resized()
 
     def getWidget(self, dungeon, parent):
+        def startGame():
+            name = dungeon.name
+            print('start', name)
+            self.hidePage()
+            self.gamePages.gameRoot.ui.setGame(name)
+            self.gamePages.gameRoot.ui.startGame()
+
         frame:QtWidgets.QFrame = QtWidgets.QFrame(parent=parent)
         frame.setProperty('dungeon',  dungeon)
         frame.setObjectName("DungeonFrame")
@@ -102,6 +109,7 @@ class LevelSelect(AbstractPage):
 
         start = QtWidgets.QPushButton('start', parent)
         start.setStyleSheet(self.buttonStyle)
+        start.pressed.connect(startGame)
         form_layout.addRow(start)
         self.fake_btns.append(start)
 
@@ -125,6 +133,14 @@ class LevelSelect(AbstractPage):
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+
+
+    def hidePage(self):
+        self.state = False
+        self.gamePages.page = None
+        self.gamePages.visiblePage = False
+        self.gamePages.gameRoot.scene.removeItem(self)
+        self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
 
 
