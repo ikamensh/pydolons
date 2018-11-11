@@ -19,11 +19,11 @@ class LEngine:
     """
     def __init__(self):
         self.dungeons = {}
-        self.dungeons['demo_level'] = demo_dungeon
-        self.dungeons['walls_level'] = walls_dungeon
-        self.dungeons['pirate_level'] = pirate_lair
-        self.dungeons['small_graveyard_level'] = small_graveyard
-        self.dungeons['small_orc_cave_level'] = small_orc_cave
+        self.dungeons[demo_dungeon.name] = demo_dungeon
+        self.dungeons[walls_dungeon.name] = walls_dungeon
+        self.dungeons[pirate_lair.name] = pirate_lair
+        self.dungeons[small_graveyard.name] = small_graveyard
+        self.dungeons[small_orc_cave.name] = small_orc_cave
         self.character:Character = None
         self.the_hero  = None
         self.dungeon = None
@@ -38,7 +38,7 @@ class LEngine:
             self.character = Character(demohero_basetype)
             self.the_hero = self.character.unit
             game = self._getGame(levelName)
-            return  game
+            return game
         else:
             return self._getGame(levelName)
 
