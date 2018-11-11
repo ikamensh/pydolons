@@ -96,7 +96,8 @@ class GamePages(object):
 
     def resized(self):
         for page in self.pages.values():
-            page.resized()
+            if not page is None:
+                page.resized()
 
     def setCharacter(self, character):
         self.characterPage.character = character
