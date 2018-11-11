@@ -46,9 +46,11 @@ class Character:
     @property
     def free_xp(self) -> int:
         if self.temp_masteries:
-            return self.xp - self.temp_masteries.total_exp_spent
+            masteries_xp =  self.temp_masteries.total_exp_spent
         else:
-            return self.xp - self.masteries.total_exp_spent
+            masteries_xp = self.masteries.total_exp_spent
+
+        return self.xp - masteries_xp - sum( pt.spent_xp for pt in self.perk_trees)
 
 
     def increase_attrib(self, attrib_enum: CharAttributes) -> None:

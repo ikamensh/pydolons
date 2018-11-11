@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from PySide2.QtWidgets import QPushButton, QWidget, QLabel, QVBoxLayout
 from PySide2.QtGui import QPixmap, QIcon
+from PySide2.QtCore import QSize
 import os
 import config
 
@@ -26,13 +27,13 @@ class QPerk(QWidget):
         layout.addWidget(icon)
         self.icon = icon
 
-        up_pixmap = QPixmap( os.path.join(config.res_dir,"icons","ui","up_button.jpg") )
+        # up_pixmap = QPixmap( os.path.join(config.res_dir,"icons","ui","up_button.jpg") )
         up_button = QPushButton()
         # up_icon = QIcon(up_pixmap)
         # up_button.setIcon(up_icon)
-        up_button.setIconSize(up_pixmap.rect().size())
+        # up_button.setIconSize(QSize(32,50))
         up_button.clicked.connect(self.on_click)
-        up_button.setText( self.string_cost( self.xp_to_levelup ) )
+        up_button.setText( "Not initialized" )
         layout.addWidget(up_button)
         self.up_button = up_button
 
@@ -85,6 +86,7 @@ class QPerk(QWidget):
             self.up_button.setText("^maxed^")
 
     def on_click(self):
+        self.perk_tree.spent_xp += self.xp_to_levelup
         self.perk.current_level += 1
         self.match_level()
         self.group.levelup()

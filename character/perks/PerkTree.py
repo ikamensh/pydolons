@@ -11,9 +11,11 @@ class PerkTree:
 
     cost_factors = {1:1, 2:3, 3:7}
 
-    def __init__(self, perk_groups: List[PerkGroup], base_cost = 100):
+    def __init__(self, name, perk_groups: List[PerkGroup], base_cost = 100):
+        self.name = name
         self.perk_groups = perk_groups
         self.base_cost = base_cost
+        self.spent_xp = 0
 
     def get_accessible_groups(self) -> List[PerkGroup]:
         return [pg for pg in self.perk_groups if pg.requirements_matched()]

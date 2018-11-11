@@ -22,5 +22,5 @@ class Perk:
 
     def __repr__(self):
         if self.current_level == 0:
-            return f"learn {self.name[self.current_level+1]}"
+            return f"not learned {self.name[self.current_level+1]}"
         return f"{self.name[self.current_level]}"

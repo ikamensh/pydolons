@@ -16,3 +16,6 @@ class PerkGroup:
     @property
     def total_level(self):
         return sum([p.current_level for p in self.perk_list])
+
+    def __repr__(self):
+        return f"group of {self.perk_list}"

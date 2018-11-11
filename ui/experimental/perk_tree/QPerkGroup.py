@@ -34,9 +34,14 @@ class QPerkGroup(QWidget):
 
         self.setLayout(layout)
 
+
     def xp_changed(self, new_xp):
+        can_spend = new_xp
+        if not self.perk_group.requirements_matched():
+            can_spend = 0
+
         for qperk in self.identities.values():
-            qperk.xp_changed(new_xp)
+            qperk.xp_changed(can_spend)
 
     def levelup(self):
         self.tree.levelup()
@@ -56,6 +61,9 @@ class QPerkGroup(QWidget):
 
         row.setLayout(layout)
         return row, identities
+
+    def __repr__(self):
+        return f"UI for {self.perk_group}"
 
 
 

@@ -6,7 +6,7 @@ from character.perks.everymans_perks.group_param import pg_params
 import copy
 
 def everymans_perks():
-    return PerkTree([copy.deepcopy( pg_attributes ), copy.deepcopy( pg_params)] )
+    return copy.deepcopy(PerkTree("Generic perks", [pg_attributes,  pg_params]))
 
 
 if __name__ == "__main__":
