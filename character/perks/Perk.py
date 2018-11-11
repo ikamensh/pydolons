@@ -8,11 +8,12 @@ class Perk:
 
     abilities = {}
 
-    def __init__(self, name, level_to_abils: Dict[int, Ability], cost_factor=1):
+    def __init__(self, name, level_to_abils: Dict[int, Ability], cost_factor=1, icon = "strange_perk.png"):
         self.name = name
         self.current_level = 0
         self.level_to_abils = level_to_abils
         self.cost_factor = cost_factor
+        self.icon = icon
 
     @property
     def abils(self):

@@ -1,6 +1,6 @@
 from mechanics.buffs import Ability
 #TODO packaging makes no sense?
-from game_objects.battlefield_objects import CharAttributes
+from game_objects.battlefield_objects import CharAttributes, enum_to_abbrev
 from game_objects.attributes import Bonus, Attribute
 from character.perks import Perk
 from character.perks import PerkGroup
@@ -24,7 +24,7 @@ def attr_perk_names(attr):
             3: fmt.format(str(attr) + " III")}
 
 def build_perk(attr):
-    return Perk(attr_perk_names(attr), attr_bonus_abilities(attr))
+    return Perk(attr_perk_names(attr), attr_bonus_abilities(attr), icon=enum_to_abbrev(attr))
 
 
 str_perk = build_perk(CharAttributes.STREINGTH)
