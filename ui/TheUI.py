@@ -37,6 +37,7 @@ class TheUI(QtWidgets.QWidget):
 
         self.gameRoot: GameRootNode = GameRootNode()
         self.gameRoot.lengine = self.lengine
+        self.gameRoot.ui = self
 
         self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
@@ -89,21 +90,17 @@ class TheUI(QtWidgets.QWidget):
         self.levelFactory.removeLevel()
         self.gameRoot.level = None
 
-
     def close_app(self):
         if not self.gameRoot.loop is None:
             self.stopGame()
 
     def setDefaultGame(self):
-        self.gameRoot.game = self.lengine.getGame('demo_level')
-        # self.game = lengine.getGame('small_graveyard_level')
-        # self.game = lengine.getGame('small_orc_cave_level')
-        # self.game = lengine.getGame('walls_level')
-        # self.game = lengine.getGame('pirate_level')
+        self.gameRoot.game = self.lengine.getGame("Haunted Graveyard")
 
+    def setGame(self, name):
+        self.gameRoot.game = self.lengine.getGame(name)
 
     def startGame(self):
-        self.setDefaultGame()
         self.loadGame()
         # game_loop thread initialization
         self.loop = GameLoopThread()
@@ -120,7 +117,7 @@ class TheUI(QtWidgets.QWidget):
 
         self.initLevel()
         self.gamePages.setUpPages()
-        self.gamePages.page.resized()
+        self.gamePages.resized()
         # self.showPage()
         self.gamePages.page = self.gamePages.gameMenu
         self.view.controller = self.controller
