@@ -30,14 +30,14 @@ def attr_perk_names(attr):
             2: fmt2.format(str(attr) + " II"),
             3: fmt3.format(str(attr) + " III")}
 
-health_perk = Perk(attr_perk_names(ca.HEALTH), param_bonus_abilities(ca.HEALTH, 1*c.HP_PER_STR, 20, 2*c.HP_PER_STR))
+health_perk = Perk(attr_perk_names(ca.HEALTH), param_bonus_abilities(ca.HEALTH, 1*c.HP_PER_STR, 20, 2*c.HP_PER_STR), cost_factor=2.5)
 
-mana_perk = Perk(attr_perk_names(ca.MANA), param_bonus_abilities(ca.MANA, 2*c.MANA_PER_INT, 30, 2*c.MANA_PER_INT))
+mana_perk = Perk(attr_perk_names(ca.MANA), param_bonus_abilities(ca.MANA, 2*c.MANA_PER_INT, 30, 2*c.MANA_PER_INT), cost_factor=2.5)
 
 stamina_perk = Perk(attr_perk_names(ca.STAMINA), param_bonus_abilities(ca.STAMINA, 2*c.STAMINA_PER_END, 30,
-                                                          2*c.STAMINA_PER_END))
+                                                          2*c.STAMINA_PER_END), cost_factor=2.5)
 
-ini_perk = Perk(attr_perk_names(ca.INITIATIVE), param_bonus_abilities(ca.INITIATIVE, 0.3, 7, 0.3))
+ini_perk = Perk(attr_perk_names(ca.INITIATIVE), param_bonus_abilities(ca.INITIATIVE, 0.3, 7, 0.3), cost_factor=2.5)
 
 
 
