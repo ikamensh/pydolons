@@ -8,6 +8,7 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
         super(AbstractPage, self).__init__()
         self.gamePages = gamePages
         self.state = False
+        self.isService = False
 
         
     @abstractmethod
