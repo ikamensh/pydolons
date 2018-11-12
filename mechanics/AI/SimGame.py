@@ -1,8 +1,17 @@
+from __future__ import annotations
 from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.AI import SearchNode
 from battlefield.Battlefield import Cell
 from DreamGame import DreamGame
 import copy
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit, Obstacle, BattlefieldObject
+    from typing import Tuple, Union
+    from mechanics.actives import Active
+    from battlefield import Cell
+    from mechanics.fractions import Fractions
 
 class SimGame(DreamGame):
 
@@ -15,7 +24,7 @@ class SimGame(DreamGame):
         return sim
 
 
-    def get_all_neighbouring_states(self, _unit):
+    def get_all_neighbouring_states(self, _unit: Unit):
 
         unit = self.find_unit(_unit)
         if unit is None:
@@ -24,7 +33,7 @@ class SimGame(DreamGame):
         nodes = [self.get_neighbour(c) for c in choices]
         return nodes
 
-    def get_neighbour(self, c):
+    def get_neighbour(self, c:Tuple[Active, Union[Cell, BattlefieldObject, None]]):
 
         active, target = c
         if active.simulate_callback:
@@ -34,7 +43,7 @@ class SimGame(DreamGame):
 
         return SearchNode(SearchNode(None,None,self), c, sim)
 
-    def step_into_sim(self, active, target):
+    def step_into_sim(self, active: Active, target: Union[Cell, BattlefieldObject, None]):
 
         sim = self.simulation()
         sim_active = sim.find_active(active)
@@ -44,12 +53,12 @@ class SimGame(DreamGame):
         return sim
 
 
-    def fake_measure(self, choice, fraction, use_position=True):
+    def fake_measure(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction: Fractions, use_position=True):
         active, target = choice
         with active.simulate(target):
             return self.utility(fraction, use_position=use_position)
 
-    def delta(self, choice, fraction = None):
+    def delta(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction = None):
         _fraction = fraction or self.fractions[choice[0].owner]
         _delta = self.get_neighbour(choice).utility(_fraction) - self.utility(_fraction)
         return _delta
@@ -106,7 +115,7 @@ class SimGame(DreamGame):
         return total
 
     @staticmethod
-    def unit_utility(unit):
+    def unit_utility(unit: Unit):
         hp_factor = 1 + unit.health
         other_factors = 1 # + (unit.mana + unit.stamina + unit.readiness*3) * len(unit.actives) / 1000
         magnitude = sum([unit.str, unit.end, unit.agi, unit.prc, unit.int, unit.cha])
@@ -116,7 +125,7 @@ class SimGame(DreamGame):
 
     # extracting all possible transitions
 
-    def get_all_choices(self, unit):
+    def get_all_choices(self, unit: Unit):
         actives = unit.actives
 
         choices = []
@@ -161,7 +170,7 @@ class SimGame(DreamGame):
                 return other
 
     def find_active(self, active):
-        for unit in self.battlefield.unit_locations:
+        for unit in self.battlefield.all_units:
             for other in unit.actives:
                 if active.uid == other.uid:
                     return other
@@ -172,7 +181,7 @@ class SimGame(DreamGame):
                 return other
 
     def find_active_by_uid(self, active_uid):
-        for unit in self.battlefield.unit_locations:
+        for unit in self.battlefield.all_units:
             for other in unit.actives:
                 if active_uid == other.uid:
                     return other

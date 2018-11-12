@@ -74,6 +74,16 @@ def test_no_friendly_fire(sim_game, hero, pirate):
         if len(attack_actives)>0:
             assert action not in attack_actives
 
+def test_with_obstacle(sim_game, hero, pirate, obstacle):
+
+    sim_game.add_obstacle(obstacle, 5+5j)
+    for unit in sim_game.battlefield.all_units:
+        ai = BruteAI(sim_game)
+        choices = sim_game.get_all_choices(unit)
+        actives = [c[0] for c in choices]
+        real_actives = [sim_game.find_active(a) for a in actives]
+    # no exceptions thrown
+
 def test_hits_take_prio(sim_game, hero, pirate, no_chances):
     for unit in sim_game.battlefield.unit_locations:
         bf = sim_game.battlefield

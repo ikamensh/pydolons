@@ -8,6 +8,12 @@ from mechanics.damage import DamageTypeGroups
 from mechanics.chances import ChanceCalculator
 from mechanics.fractions import Fractions
 from cntent.base_types.mud_golem import mud_golem_basetype
+from game_objects.battlefield_objects import Obstacle
+
+@pytest.fixture()
+def obstacle():
+    obstacle = Obstacle("dummy", 500)
+    return obstacle
 
 
 @pytest.fixture()

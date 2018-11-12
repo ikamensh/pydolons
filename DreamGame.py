@@ -234,23 +234,23 @@ class DreamGame:
             # We can't directly execute this order.
             if not AI_assist:
                 raise PydolonsException("None of the user movement actives can reach the target cell.")
+
+            facing = self.battlefield.unit_facings[unit]
+            angle, ccw = Cell.angle_between(facing, target_cell.complex - cell_from.complex)
+            if angle > 45:
+                active = unit.turn_ccw_active if ccw else unit.turn_cw_active
+                self.order_action(unit, active, None)
+                return
+
+            distance = self.battlefield.distance(unit, target_cell)
+
+            if distance >= 2:
+                vec = target_cell.complex - cell_from.complex
+                vec_magnitude_1 = vec / abs(vec)
+                closer_target = Cell.from_complex(cell_from.complex + vec_magnitude_1)
+                self.order_move(unit, closer_target)
             else:
-                facing = self.battlefield.unit_facings[unit]
-                angle, ccw = Cell.angle_between(facing, target_cell.complex - cell_from.complex)
-                if angle > 45:
-                    active = unit.turn_ccw_active if ccw else unit.turn_cw_active
-                    self.order_action(unit, active, None)
-                    return
-
-                distance = self.battlefield.distance(unit, target_cell)
-
-                if distance >= 2:
-                    vec = target_cell.complex - cell_from.complex
-                    vec_magnitude_1 = vec / abs(vec)
-                    closer_target = Cell.from_complex(cell_from.complex + vec_magnitude_1)
-                    self.order_move(unit, closer_target)
-                else:
-                    raise PydolonsException("None of the user movement actives can reach the target.")
+                raise PydolonsException("None of the user movement actives can reach the target.")
 
 
     def order_attack(self, unit: Unit, _target: Unit, AI_assist=True):

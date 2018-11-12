@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Dict, Collection, List, TYPE_CHECKING
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import Unit, BattlefieldObject
+    from game_objects.battlefield_objects import Unit, BattlefieldObject, Obstacle
 
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
@@ -52,6 +52,8 @@ class Battlefield:
             return self.units_at[cell]
         else:
             return None
+
+
 
     def neighbours_exclude_center(self, cell, distance=1):
         neighbours = set(self.get_cells_within_dist(cell, distance))
@@ -127,6 +129,14 @@ class Battlefield:
 
         self._all_cells = result
         return result
+
+    @property
+    def all_units(self) -> List[Unit]:
+        return [u for u in self.unit_locations.keys() if not u.is_obstacle] # avoiding direct import
+
+    @property
+    def all_obstacles(self) -> List[Obstacle]:
+        return [u for u in self.unit_locations.keys() if u.is_obstacle] # avoiding direct import
 
 
     def units_in_area(self, cells : Collection[Cell]) -> List[Unit]:
