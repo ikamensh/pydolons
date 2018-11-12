@@ -22,9 +22,10 @@ class LevelSelect(AbstractPage):
         self.fake_btns = []
         self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
         self.defaultGame = True
+        self.isService = True
 
     def setUpGui(self):
-        self.cancel.pressed.connect(self.showPage)
+        self.cancel.pressed.connect(self.cancelSlot)
 
 
     def setUpWidgets(self, dung_list):
@@ -82,7 +83,7 @@ class LevelSelect(AbstractPage):
     def getWidget(self, dungeon, parent):
         def startGame():
             name = dungeon.name
-            print('start', name)
+            print('start:', name)
             self.hidePage()
             self.gamePages.gameRoot.ui.setGame(name)
             self.gamePages.gameRoot.ui.startGame()
@@ -126,7 +127,6 @@ class LevelSelect(AbstractPage):
             self.gamePages.visiblePage = False
             self.gamePages.gameRoot.scene.removeItem(self)
             self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
-            self.gamePages.startPage.showPage()
         else:
             self.state = True
             self.gamePages.page = self
@@ -134,16 +134,12 @@ class LevelSelect(AbstractPage):
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
-
     def hidePage(self):
         self.state = False
         self.gamePages.page = None
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
-
-
-
 
     def resized(self):
         self.w = self.mainWidget.boundingRect().width()
@@ -156,7 +152,7 @@ class LevelSelect(AbstractPage):
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
             if self.state:
-                self.showPage()
+                self.hidePage()
 
     def mousePressEvent(self, e):
         for widget in self.dungeon_widgets:
@@ -170,6 +166,10 @@ class LevelSelect(AbstractPage):
 
     def selectDungeon(self, dungeon):
         self.textWidget.setText(dungeon.tooltip_info)
+
+    def cancelSlot(self):
+        self.hidePage()
+        self.gamePages.startPage.showPage()
 
 
 
