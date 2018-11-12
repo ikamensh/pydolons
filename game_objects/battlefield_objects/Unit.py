@@ -50,8 +50,7 @@ class Unit(BattlefieldObject):
 
 
     def __init__(self, base_type: BaseType, *, game=None,  masteries: Masteries = None):
-        Unit.last_uid += 1
-        self.uid = Unit.last_uid
+        super().__init__()
         self.game: DreamGame = game
         self.readiness = 0
         self.disabled = False

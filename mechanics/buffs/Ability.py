@@ -28,6 +28,14 @@ class Ability:
         for trigger in self.to_deactivate:
             trigger.deactivate()
 
+    def rpg_description(self):
+        descr = f"Bonuses: {self.bonus}"
+        if self.trigger_factories:
+            for tf in self.trigger_factories:
+                descr += "\n" + repr(tf)
+
+
+
     def __repr__(self):
         return f"{self.name} belonging to {self.bound_to}"
 

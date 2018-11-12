@@ -96,6 +96,11 @@ class TheUI(QtWidgets.QWidget):
 
     def setDefaultGame(self):
         self.gameRoot.game = self.lengine.getGame("Haunted Graveyard")
+        # self.gameRoot.game = self.lengine.getGame('demo_level')
+        # self.game = self.lengine.getGame('small_graveyard_level')
+        # self.game = self.lengine.getGame('small_orc_cave_level')
+        # self.game = self.lengine.getGame('walls_level')
+        # self.game = self.lengine.getGame('pirate_level')
 
     def setGame(self, name):
         self.gameRoot.game = self.lengine.getGame(name)
