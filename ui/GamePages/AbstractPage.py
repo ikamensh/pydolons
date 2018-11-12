@@ -60,3 +60,21 @@ class AbstractPage(QtWidgets.QGraphicsItemGroup):
     def keyPressEvent(self, e):
         pass
 
+    def resizeBackground(self, background):
+        w_screen = self.gamePages.gameRoot.cfg.dev_size[0]
+        w_pic = self.background.boundingRect().width()
+        prec = 0
+        if w_screen > w_pic:
+            prec = w_pic / w_screen
+        else:
+            prec = w_screen /w_pic
+        print(prec)
+        background.setScale(prec)
+
+        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.background.boundingRect().width() * prec) / 2
+        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.background.boundingRect().height() * prec) / 2
+        print(x, y)
+        background.setPos(x, y)
+
+
+
