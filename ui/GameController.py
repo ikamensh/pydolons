@@ -41,21 +41,19 @@ class GameController(QtCore.QObject):
     def mouseMoveEvent(self, e):
         """ Метод перехватывает событие движение мыши
         """
-        if not self.gameRoot.gamePages.visiblePage:
-            # newPos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
-            newPos = e.pos()
+        if not self.gameRoot.gamePages.isGamePage:
+            newPos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
+        # newPos = e.pos()
             self.moveCursor(newPos)
             self.itemSelect(newPos)
 
     def mousePressEvent(self, e):
         self.mousePress.emit(e)
         try:
-            if not self.gameRoot.gamePages.visiblePage:
+            if not self.gameRoot.gamePages.isGamePage:
                 self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
                 self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
                 self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
-            # else:
-            #     self.gameRoot.gamePages.mousePressEvent(e)
         except PydolonsException as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
