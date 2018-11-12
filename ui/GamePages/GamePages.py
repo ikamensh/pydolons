@@ -38,25 +38,21 @@ class GamePages(object):
         keys = list(self.pages.keys())[:]
         i =0
         for page in pages:
-            if keys[i] != 'startPage':
+            if not page.isService:
                 page.destroy()
                 print(keys[i], '-- destroy')
                 if not page.scene() is None:
                     self.gameRoot.scene.removeItem(page)
-                page = None
                 del self.pages[keys[i]]
             i+=1
-        self.pages = {}
-        del self.gameMenu
+        self.gameMenu = None
         self.characterPage = None
 
 
     def setUpStartPage(self, ui):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
-        # self.startPage.start.pressed.connect(ui.setDefaultGame)
-        self.startPage.start.pressed.connect(ui.startGame)
-        self.startPage.start.pressed.connect(self.startPage.startSlot)
+        # self.startPage.newGame.pressed.connect(ui.setDefaultGame)
         self.startPage.stop.pressed.connect(ui.stopGame)
 
     def setUpLevelsPage(self):
@@ -96,9 +92,16 @@ class GamePages(object):
 
     def resized(self):
         for page in self.pages.values():
-            if not page is None:
-                page.resized()
+            page.resized()
 
     def setCharacter(self, character):
         self.characterPage.character = character
+
+    @property
+    def isGamePage(self):
+        if self.startPage.state:
+            return True
+        if self.levelSelect.state:
+            return True
+        # return self.gameMenu.isPage()
 
