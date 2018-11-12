@@ -1,3 +1,7 @@
+from PySide2 import QtCore
+
+QObject = QtCore.QObject
+
 from ui.gamecore import GameObject
 from ui.GameAnimation import Direction
 
@@ -6,16 +10,19 @@ from battlefield.Facing import Facing
 
 from ui.GameAnimation import SmoothAnimation
 
-class BasicUnit(GameObject):
+class BasicUnit(QObject, GameObject):
     """docstring for BasicUnit."""
-    def __init__(self, *arg, gameconfig):
-        super(BasicUnit, self).__init__(*arg)
+    def __init__(self, *arg, gameconfig, parent = None):
+        QObject.__init__(self, parent)
+        GameObject.__init__(self, *arg)
         self.uid = 0
         self.gameconfig = gameconfig
         self.setUpDirections()
         self.activate = False
         self.hp = 100
         self.dir_angle = Facing.SOUTH
+        self.count = 0
+        self.count_max = 1
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
