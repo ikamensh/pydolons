@@ -12,6 +12,7 @@ class StartPage(AbstractPage):
         self.gamePages.gameRoot.scene.addItem(self)
         self.setUpWidgets()
         self.defaultGame = True
+        self.isService = True
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
@@ -25,9 +26,10 @@ class StartPage(AbstractPage):
         laoyout :QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout(mainWidget)
         buttonStyle = 'QPushButton{background-color:black;color:white;}QPushButton:pressed{background-color:white;color:black;}'
 
-        self.start = QtWidgets.QPushButton('START', mainWidget)
-        self.start.setStyleSheet(buttonStyle)
-        laoyout.addWidget(self.start)
+        self.newGame = QtWidgets.QPushButton('New Game', mainWidget)
+        self.newGame.setStyleSheet(buttonStyle)
+        self.newGame.pressed.connect(self.startNewGame)
+        laoyout.addWidget(self.newGame)
 
         self.stop = QtWidgets.QPushButton('STOP', mainWidget)
         self.stop.setStyleSheet(buttonStyle)
@@ -57,11 +59,11 @@ class StartPage(AbstractPage):
                 self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
             self.state = True
-            self.setFocus()
             self.gamePages.page = self
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+
 
     def hidePage(self):
         self.state = False
@@ -77,10 +79,10 @@ class StartPage(AbstractPage):
         self.background.setRect(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
         pass
 
-    def startSlot(self):
-        # self.gamePages.page.resized()
-        self.showPage()
-        # self.gamePages.page = self.gamePages.gameMenu
+    def startNewGame(self):
+        self.gamePages.gameRoot.lengine.character = None
+        self.hidePage()
+        self.gamePages.levelSelect.showPage()
 
     def stopSlot(self):
         pass
