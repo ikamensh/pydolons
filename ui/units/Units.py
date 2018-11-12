@@ -6,6 +6,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         super(Units, self).__init__(*arg)
         self.active_unit = None
         self.units_at = {}
+        self.groups_at = {}
         self.level = None
 
     def setLevel(self, level):
@@ -19,7 +20,12 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def moveUnit(self, unit, cell_to):
         x, y = cell_to.x, cell_to.y
+        if cell_to in self.getUitsLocations():
+            for cell_unit in self.getUnitsFromCell():
+                print('gt', cell_unit)
+                pass
         self.units_at[unit.uid].setWorldPos(x, y)
+
 
     def unitDied(self, unit):
         unit = self.units_at[unit.uid]
@@ -69,3 +75,15 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.level.middleLayer.removeUnitLayer(msg.get('unit').uid)
         self.unitDied(msg.get('unit'))
+
+    def addToUnitsGroup(self, unit):
+            # group = self.groups_at.get(unit.worldPos)
+            # if group is None:
+            #     self.groups_at[unit.worldPos] =
+            # print('add', unit)
+            pass
+
+    def getUnitsFromCell(self, cell_to):
+        for unit in self.units_at.values():
+            if unit.worldPos == cell_to:
+                yield unit
