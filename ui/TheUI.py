@@ -27,7 +27,7 @@ class TheUI(QtWidgets.QWidget):
 
     def __init__(self, lengine:LEngine, game = None):
         super().__init__()
-        print('cfg ===> start init TheUI', datetime.now())
+        print('cfg ===> newGame init TheUI', datetime.now())
         # work level
         self.lengine = lengine
         self.loop = None
@@ -114,7 +114,6 @@ class TheUI(QtWidgets.QWidget):
         self.loop.start()
 
     def loadGame(self):
-
         self.initLevel()
         self.gamePages.setUpPages()
         self.gamePages.resized()
