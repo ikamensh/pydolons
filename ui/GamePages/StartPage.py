@@ -15,8 +15,10 @@ class StartPage(AbstractPage):
         self.isService = True
 
     def setUpWidgets(self):
-        self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
-        self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.resizeBackground(self.background )
+        # self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+        # self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
         self.addToGroup(self.background)
 
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
@@ -76,7 +78,8 @@ class StartPage(AbstractPage):
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
         y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
         self.mainWidget.setPos(x, y)
-        self.background.setRect(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+        # self.background.setRect(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+        self.resizeBackground(self.background )
         pass
 
     def startNewGame(self):
