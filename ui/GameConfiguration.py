@@ -36,6 +36,7 @@ class GameConfiguration:
         self.setUpSounds()
         print('cfg ===> setUpSounds', datetime.now())
         self.gameRoot = None
+        self.tr = QtGui.QTransform()
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -66,6 +67,8 @@ class GameConfiguration:
     def updateScreenSize(self, w, h):
         self.screenSize = (w, h)
         self.dev_size = self.screenSize
+        self.tr.reset()
+        self.tr.translate(w/2, h/2)
 
     def setUpUnits(self):
         """
