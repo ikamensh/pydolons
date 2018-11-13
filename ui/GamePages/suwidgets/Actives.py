@@ -6,11 +6,11 @@ class Actives(QtCore.QObject):
         super(Actives, self).__init__(parent)
         self.x, self.y = 0, 0
         self.rect = QtCore.QRectF(self.x, self.y, 1, 1)
+        self.mousePos = QtCore.QPoint(0, 0)
         self.page = page
         self.hero = None
         self.names = None
         self.frame = None
-        self.scrollArea = None
         self.widget_size = widget_size
         self.widgets = {}
         self.margin = margin
@@ -25,21 +25,15 @@ class Actives(QtCore.QObject):
         self.setFrameSize(self.widget_size, 1, 1)
         self.setActivesSize()
         self.setNames()
-        self.setUp()
+        self.setUpWidgets()
         self.addActiveButtons()
-        self.resized()
 
     def setActivesSize(self):
         self.w = self.frame_size[0] + 16
         self.h = self.widget_size[1] + 2 * self.margin
-        # self.rect.(self.x, self.y, self.w, self.h)
         self.rect.setWidth(self.w)
         self.rect.setHeight(self.h)
-        if not self.scrollArea is None:
-            step = self.h - int(self.margin / 2)
-            self.scrollArea.verticalScrollBar().setSingleStep(step)
-            self.scrollArea.setMinimumSize(self.w, self.h)
-            self.scrollArea.setFixedSize(self.w, self.h)
+
 
     def setFrameSize(self, size:set, col:int, row:int):
         w = size[0] * col + self.margin * (col + 2)
@@ -94,34 +88,55 @@ class Actives(QtCore.QObject):
         for i in range(6, 25, 1):
             self.names.append('active_' + str(i))
 
-    def setUp(self):
+    def setUpWidgets(self):
         margin = QtCore.QMargins(0, 0, 0, 0)
 
+        self.mainWidget = QtWidgets.QWidget()
+        self.mainWidget.setStyleSheet('background-color: black;color:white')
+        mainLayout = QtWidgets.QHBoxLayout()
+        mainLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
+        mainLayout.setAlignment(QtCore.Qt.AlignRight)
+        mainLayout.setMargin(0)
 
-        self.scrollArea = QtWidgets.QScrollArea()
-        self.scrollArea.setStyleSheet('background-color:black;' \
-                                      'color:white;')
-        self.scrollArea.setMinimumSize(self.w, self.h)
-        self.scrollArea.setFixedSize(self.w, self.h)
-        self.scrollArea.setSizePolicy(self.sizePolicy)
+        btnLayout = QtWidgets.QVBoxLayout()
+        btnLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
+        btnLayout.setAlignment(QtCore.Qt.AlignRight)
+        btnLayout.setMargin(0)
+        btnLayout.setContentsMargins(margin)
 
-        self.layout = QtWidgets.QGridLayout(self.scrollArea)
+        buttonStyle = 'QPushButton{background-color:black;color:white;}QPushButton:pressed{background-color:white;color:black;}'
+
+        self.up = QtWidgets.QPushButton('^', self.mainWidget)
+        self.up.setFixedSize(40, 30)
+        self.up.setStyleSheet(buttonStyle)
+        btnLayout.addWidget(self.up, QtCore.Qt.AlignRight)
+
+        self.down = QtWidgets.QPushButton('V', self.mainWidget)
+        self.down.setFixedSize(40, 30)
+        self.down.setStyleSheet(buttonStyle)
+        btnLayout.addWidget(self.down, QtCore.Qt.AlignRight)
+
+        self.layout = QtWidgets.QGridLayout()
         self.layout.setContentsMargins(margin)
         self.layout.setMargin(0)
-        self.frame = QtWidgets.QWidget(self.scrollArea)
+        self.frame = QtWidgets.QWidget(self.mainWidget)
         self.frame.setMinimumSize(self.frame_size[0], self.frame_size[1])
         self.frame.setLayout(self.layout)
-        self.scrollArea.setWidget(self.frame)
+        mainLayout.addLayout(btnLayout)
+        self.mainWidget.setLayout(mainLayout)
+        self.up.pressed.connect(self.upSlot)
+        self.down.pressed.connect(self.downSlot)
+        self.mainWidget:QtWidgets.QGraphicsProxyWidget = self.page.gamePages.gameRoot.scene.addWidget(self.mainWidget)
+        self.resized()
+
 
     def resized(self, size = None):
         size = self.page.gamePages.gameRoot.cfg.dev_size
         self.x = size[0] / 2 - self.w /2
-        self.y = size[1] - self.h - 5
-        self.scrollArea.move(self.x , self.y )
+        self.y = size[1] - self.h
+        self.mainWidget.setPos(self.x, self.y)
+        self.mainWidget.widget().setFixedSize(self.w + 30, self.h)
         self.rect.moveTo(self.x, self.y)
-        # if self.widgets!= {}:
-        #     for widget in self.widgets.values():
-        #         widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
 
     def selectActive(self):
         active = self.frame.focusWidget().property('active')
@@ -135,18 +150,16 @@ class Actives(QtCore.QObject):
         self.prxToolTip.widget().setText(widget.text())
         self.prxToolTip.setVisible(True)
 
-    def setScene(self, scene):
-        self.prxScrollArea = scene.addWidget(self.scrollArea)
 
     def mouseMoveEvent(self, e):
-        if self.prxScrollArea.geometry().contains(e.pos()):
+        self.mousePos = e.pos()
+        if self.mainWidget.geometry().contains(e.pos()):
             self.collision(e.pos())
 
     def collision(self, pos):
         for widget in self.widgets.values():
             qr = QtCore.QRect(self.x + self.frame.x() + widget.x(), self.y + self.frame.y() + widget.y(), self.widget_size[0], self.widget_size[1])
             if qr.contains(pos.x(), pos.y()):
-            # if widget.ajGeometry.contains(pos):
                 widget.setFocus()
                 self.page.showToolTip(widget.text(), pos.x() + 20, pos.y() - 20)
                 break
@@ -154,6 +167,23 @@ class Actives(QtCore.QObject):
                 self.page.hideToolTip()
 
     def destroy(self):
-        self.page.gamePages.gameRoot.scene.removeItem(self.prxScrollArea)
-        del self.prxScrollArea
+        del self.up
+        del self.down
+        del self.frame
+        self.page.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        del self.mainWidget
+
+    def upSlot(self):
+        print('pressed up')
+        self.frame.move(0, 0)
+
+
+    def downSlot(self):
+        print('pressed down')
+        self.frame.move(0, - self.mainWidget.widget().height())
+
+    def isFocus(self):
+        focus = self.mainWidget.widget().geometry().contains(self.mousePos.x(), self.mousePos.y())
+        return focus
+
 
