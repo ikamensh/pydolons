@@ -8,6 +8,7 @@ from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.CharacterPage import CharacterPage
+from ui.GamePages.PerksPage import PerksPage
 
 from PySide2 import QtGui, QtCore, QtWidgets
 
@@ -18,6 +19,7 @@ class GamePages(object):
         super(GamePages, self).__init__()
         self.gameRoot = None
         # this is current page
+        self.focusState = False
         self.page = None
         self.focus = False
         self.pages = {}
@@ -31,6 +33,7 @@ class GamePages(object):
 
     def setUpPages(self):
         self.setUpCharecterPage()
+        self.setUpPerksPage()
         self.setUpGameMenu()
 
     def destroyPages(self):
@@ -68,13 +71,18 @@ class GamePages(object):
 
     def setUpCharecterPage(self):
         self.characterPage = self.buildPage('characterPage', CharacterPage)
-        # self.gameRoot.controller.mousePress.connect(self.characterPage.mousePressEvent)
+        self.gameRoot.controller.mousePress.connect(self.characterPage.mousePress)
         # self.characterPage.pageUpdate()
+
+    def setUpPerksPage(self):
+        self.perksPage = self.buildPage('perksPage', PerksPage)
+        self.gameRoot.controller.mousePress.connect(self.perksPage .mousePress)
 
     def buildPage(self, pageName, pageClass):
         page = pageClass(self)
         self.pages[pageName] = page
         self.gameRoot.controller.keyPress.connect(page.keyPressEvent)
+        page.focusable.connect(self.setFocus)
         page.setUpGui()
         return page
 
@@ -103,5 +111,11 @@ class GamePages(object):
             return True
         if self.levelSelect.state:
             return True
-        # return self.gameMenu.isPage()
+
+    def setFocus(self, isFocus):
+        self.focusState = isFocus
+
+    @property
+    def isFocus(self):
+        return self.focusState or self.gameMenu.isFocus()
 
