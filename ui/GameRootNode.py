@@ -29,8 +29,6 @@ class GameRootNode(object):
         self.controller = controller
         self.controller.gameRoot = self
 
-
-
     def setLevel(self, level):
         self.level = level
         self.level.setGameRoot(self)
@@ -38,8 +36,6 @@ class GameRootNode(object):
     def setLevelFactory(self, factory):
         self.levelFactory = factory
         self.levelFactory.setGameRoot(self)
-
-
 
     def setGamePages(self, gamePages):
         self.gamePages = gamePages
