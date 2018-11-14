@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from PySide2.QtWidgets import QPushButton, QWidget, QLabel, QVBoxLayout
-from PySide2.QtGui import QPixmap, QIcon
-from PySide2.QtCore import QSize
+from PySide2.QtGui import QPixmap
 import os
 import config
 
@@ -24,6 +23,7 @@ class QPerk(QWidget):
         pixmap = QPixmap( os.path.join(config.res_dir,perk.icon) )
         icon = QLabel()
         icon.setPixmap(pixmap)
+        icon.setFixedSize(pixmap.size())
         layout.addWidget(icon)
         self.icon = icon
 
