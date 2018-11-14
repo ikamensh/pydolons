@@ -180,10 +180,10 @@ class CharacterPage(AbstractPage):
         self.heroIcon.setPos(x + 50, y + 50)
         pass
 
-
     def showPage(self):
         if self.state:
             self.state = False
+            self.focusable.emit(False)
             self.gamePages.page = None
             self.gamePages.visiblePage = False
             self.gamePages.gameRoot.scene.removeItem(self)
@@ -196,16 +196,26 @@ class CharacterPage(AbstractPage):
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
+    def hidePage(self):
+        self.state = False
+        self.gamePages.page = None
+        self.gamePages.visiblePage = False
+        self.gamePages.gameRoot.scene.removeItem(self)
+        self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_O:
             self.showPage()
 
-    def mousePressEvent(self, e):
-        print(self.mainWidget.geometry())
-        if not self.mainWidget.geometry().contains(e.pos()):
-            self.showPage()
-
+    def mousePress(self, e):
+        self.mousePos = e.pos()
+        if self.state:
+            focusState = self.mainWidget.widget().geometry().contains(e.pos().x(), e.pos().y())
+            if focusState:
+                self.focusable.emit(True)
+            else:
+                self.focusable.emit(False)
+                self.hidePage()
 
     def destroy(self):
         self.mainWidget.widget().destroy()
