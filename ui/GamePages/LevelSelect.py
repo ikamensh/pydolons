@@ -123,12 +123,14 @@ class LevelSelect(AbstractPage):
     def showPage(self):
         if self.state:
             self.state = False
+            self.focusable.emit(False)
             self.gamePages.page = None
             self.gamePages.visiblePage = False
             self.gamePages.gameRoot.scene.removeItem(self)
             self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
             self.state = True
+            self.focusable.emit(True)
             self.gamePages.page = self
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
