@@ -21,7 +21,7 @@ class PerksPage(AbstractPage):
 
         character = self.gamePages.gameRoot.lengine.character
         mainWidget = QtWidgets.QScrollArea()
-        tree = QPerkTree(character.perk_trees[0], character)
+        tree = QPerkTree(character.perk_trees[0], character, parent=mainWidget)
         mainWidget.setWidget(tree)
         self.w = tree.width() + 20
         mainWidget.setFixedSize(self.w, self.h)
