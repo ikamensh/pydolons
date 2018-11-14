@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets, QtCore
 
 
-class AbstractPage(QtWidgets.QGraphicsItemGroup):
+class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
-    def __init__(self, gamePages):
-        super(AbstractPage, self).__init__()
+    focusable = QtCore.Signal(bool)
+    def __init__(self, gamePages, parent = None):
+        QtCore.QObject.__init__(self, parent)
+        QtWidgets.QGraphicsItemGroup.__init__(self)
+        # super(AbstractPage, self).__init__()
         self.gamePages = gamePages
         self.state = False
         self.isService = False
