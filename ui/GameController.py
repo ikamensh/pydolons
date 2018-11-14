@@ -51,11 +51,10 @@ class GameController(QtCore.QObject):
     def mousePressEvent(self, e):
         self.mousePress.emit(e)
         try:
-            if not self.gameRoot.gamePages.isGamePage:
-                if not self.gameRoot.gamePages.gameMenu.isFocus():
-                    self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
-                    self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                    self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            if not self.gameRoot.gamePages.isFocus:
+                self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
         except PydolonsException as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
