@@ -45,8 +45,8 @@ class CharacterPage(AbstractPage):
         self.resized()
 
     def setUpGui(self):
-        self.cancel.pressed.connect(self.cancelSlot)
-        self.ok.pressed.connect(self.okSlot)
+        self.save.clicked.connect(self.saveSlot)
+        self.ok.clicked.connect(self.okSlot)
 
     def getHeroLayout(self, parent):
         hero = self.gamePages.gameRoot.game.the_hero
@@ -123,10 +123,6 @@ class CharacterPage(AbstractPage):
         self.save.setStyleSheet(self.buttonStyle)
         btnLayout.addWidget(self.save)
 
-        self.cancel = QtWidgets.QPushButton("cancel", parent)
-        self.cancel.setStyleSheet(self.buttonStyle)
-        btnLayout.addWidget(self.cancel)
-
         return btnLayout
 
     def updatePage(self):
@@ -140,14 +136,16 @@ class CharacterPage(AbstractPage):
         self.staminaBar.setMaximum(hero.max_stamina)
         self.staminaBar.setValue(hero.stamina)
         self.staminaBar.property('label').setText(str(int(hero.stamina)))
+        self.freePoints = self.gamePages.gameRoot.lengine.character.free_attribute_points
+        self.freePointLabel.setText('Free points: ' + str(self.freePoints))
 
-    def cancelSlot(self):
-        self.showPage()
-        pass
 
     def okSlot(self):
+        self.comitToChacracter()
         self.showPage()
-        pass
+
+    def saveSlot(self):
+        self.comitToChacracter()
 
     def resized(self):
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
@@ -208,15 +206,28 @@ class CharacterPage(AbstractPage):
         tmpValue = self.points.get(spnBox.property('attribute').name)
         if tmpValue is None:
             tmpValue = 0
-        self.points[spnBox.property('attribute').name] = value
+        else:
+            tmpValue = tmpValue[0]
+        self.points[spnBox.property('attribute').name] = (value, spnBox)
         res = 0
         for value in self.points.values():
-            res += value
+            res += value[0]
         self.freePoints = self.gamePages.gameRoot.lengine.character.free_attribute_points - res
         if self.freePoints < 0:
             spnBox.setValue(tmpValue)
-            self.points[spnBox.property('attribute').name] = tmpValue
+            self.points[spnBox.property('attribute').name] = (tmpValue, spnBox)
             if self.freePoints != 0:
                 self.freePoints += 1
         self.freePointLabel.setText('Free points: ' + str(self.freePoints))
+
+    def comitToChacracter(self):
+        print('call increase_attrib')
+        for k, v in self.points.items():
+            v[1].setMinimum(v[0])
+            for i in range(v[0]):
+                self.gamePages.gameRoot.lengine.character.increase_attrib(v[1].property('attribute'))
+            self.points[k] = (0, v[1])
+        self.gamePages.gameRoot.lengine.character.commit()
+
+
 
