@@ -74,11 +74,13 @@ class Character:
 
 
     def commit(self):
-        self.base_type.attributes = self.temp_attributes
-        self.temp_attributes = None
+        if self.temp_attributes:
+            self.base_type.attributes = self.temp_attributes
+            self.temp_attributes = None
 
-        self.masteries = self.temp_masteries
-        self.temp_masteries = None
+        if self.temp_masteries:
+            self.masteries = self.temp_masteries
+            self.temp_masteries = None
 
 
     def reset(self):
