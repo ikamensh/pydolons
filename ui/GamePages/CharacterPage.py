@@ -22,8 +22,8 @@ class CharacterPage(AbstractPage):
         self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
         self.addToGroup(self.background)
 
-        self.heroIcon = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile(hero.icon, 101002002))
-        self.addToGroup(self.heroIcon)
+        # self.heroIcon = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile(hero.icon, 101002002))
+        # self.addToGroup(self.heroIcon)
 
 
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
@@ -55,9 +55,14 @@ class CharacterPage(AbstractPage):
         layout.setVerticalSpacing(0)
         layout.setHorizontalSpacing(0)
         layout.setColumnMinimumWidth(0, 70)
-        self.healthBar = self.getHeroItemBar(layout, parent, 0, 'Health:')
-        self.manaBar = self.getHeroItemBar(layout, parent, 1, 'Mana:')
-        self.staminaBar = self.getHeroItemBar(layout, parent, 2, 'Stamina:')
+        icon = QtWidgets.QLabel(parent)
+        pixmap = self.gamePages.gameRoot.cfg.getPicFile(hero.icon, 101002002)
+        icon.setPixmap(pixmap)
+        icon.setFixedSize(pixmap.size())
+        layout.addWidget(icon, 0, 0, 1, 2, QtCore.Qt.AlignLeft)
+        self.healthBar = self.getHeroItemBar(layout, parent, 1, 'Health:')
+        self.manaBar = self.getHeroItemBar(layout, parent, 2, 'Mana:')
+        self.staminaBar = self.getHeroItemBar(layout, parent, 3, 'Stamina:')
         return layout
 
     def getHeroItemBar(self, layout, parent, row, name):
@@ -154,17 +159,13 @@ class CharacterPage(AbstractPage):
         self.w = self.mainWidget.widget().width()
         self.h = self.mainWidget.widget().height()
         self.background.setRect(x, y, self.w, self.h)
-        self.heroIcon.setPos(x + 50, y + 50)
+        # self.heroIcon.setPos(x + 50, y + 50)
         pass
 
     def showPage(self):
         if self.state:
-            self.state = False
             self.focusable.emit(False)
-            self.gamePages.page = None
-            self.gamePages.visiblePage = False
-            self.gamePages.gameRoot.scene.removeItem(self)
-            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+            self.hidePage()
         else:
             self.updatePage()
             self.state = True
@@ -175,7 +176,7 @@ class CharacterPage(AbstractPage):
 
     def hidePage(self):
         self.state = False
-        self.gamePages.page = None
+        self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
@@ -227,7 +228,10 @@ class CharacterPage(AbstractPage):
             for i in range(v[0]):
                 self.gamePages.gameRoot.lengine.character.increase_attrib(v[1].property('attribute'))
             self.points[k] = (0, v[1])
-        self.gamePages.gameRoot.lengine.character.commit()
+        try:
+            self.gamePages.gameRoot.lengine.character.commit()
+        except Exception as er:
+            print(er)
 
 
 
