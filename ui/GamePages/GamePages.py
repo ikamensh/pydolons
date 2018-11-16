@@ -49,9 +49,8 @@ class GamePages(object):
                 if not page.scene() is None:
                     self.gameRoot.scene.removeItem(page)
                 del self.pages[keys[i]]
-            i+=1
+            i += 1
         self.gameMenu = None
-        self.characterPage = None
 
 
     def setUpStartPage(self, ui):
