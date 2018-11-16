@@ -1,7 +1,7 @@
 from PySide2 import QtGui, QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
-from ui.experimental.perk_tree.QPerkTree import QPerkTree
+from ui.GamePages.suwidgets.perk_tree.QPerkTree import QPerkTree
 
 class PerksPage(AbstractPage):
     """docstring for DefaultPage.
@@ -21,7 +21,8 @@ class PerksPage(AbstractPage):
 
         character = self.gamePages.gameRoot.lengine.character
         mainWidget = QtWidgets.QScrollArea()
-        tree = QPerkTree(character.perk_trees[0], character, parent=mainWidget)
+        cfg = self.gamePages.gameRoot.cfg
+        tree = QPerkTree(cfg, character.perk_trees[0], character, mainWidget)
         mainWidget.setWidget(tree)
         self.w = tree.width() + 20
         mainWidget.setFixedSize(self.w, self.h)
@@ -66,7 +67,7 @@ class PerksPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def destroy(self):
-        # self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.mainWidget.widget().destroy()
         del self.mainWidget
 
     def mousePress(self, e):
