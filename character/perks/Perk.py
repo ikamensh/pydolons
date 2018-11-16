@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import Dict, TYPE_CHECKING
-import os
 if TYPE_CHECKING:
     from mechanics.buffs import Ability
 
@@ -9,7 +8,7 @@ class Perk:
 
     abilities = {}
 
-    def __init__(self, name, level_to_abils: Dict[int, Ability], cost_factor=1, icon = os.path.join("icons", "params", "64", "strange_perk.png") ):
+    def __init__(self, name, level_to_abils: Dict[int, Ability], cost_factor=1, icon = "strange_perk.png" ):
         self.name = name
         self.current_level = 0
         self.level_to_abils = level_to_abils
