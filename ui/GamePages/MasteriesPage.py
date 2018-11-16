@@ -33,16 +33,7 @@ class MasteriesPage(AbstractPage):
         self.frame = QtWidgets.QWidget(mainWidget)
         layout = QtWidgets.QVBoxLayout()
 
-        layout.addLayout(self.getMasteriesGroupLayout('chop_chop_chop', MasteriesGroups.chop_chop_chop, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('stabby', MasteriesGroups.stabby, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('bashy', MasteriesGroups.bashy, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('sniping', MasteriesGroups.sniping, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('spicky', MasteriesGroups.spicky, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('loud', MasteriesGroups.loud, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('explosive', MasteriesGroups.explosive, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('cold', MasteriesGroups.cold, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('arcane', MasteriesGroups.arcane, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('chemical', MasteriesGroups.chemical, mainWidget))
+
         layout.addLayout(self.getMasteriesGroupLayout('all_battle', MasteriesGroups.all_battle, mainWidget))
         layout.addLayout(self.getMasteriesGroupLayout('all_magic', MasteriesGroups.all_magic, mainWidget))
 
@@ -111,11 +102,11 @@ class MasteriesPage(AbstractPage):
 
     def resized(self):
         print(self.frame.size())
-        self.w = self.frame.width() + 20
+        self.w = self.frame.width() + 25
         if self.gamePages.gameRoot.cfg.dev_size[1] < self.frame.height():
             self.h = self.gamePages.gameRoot.cfg.dev_size[1] - 100
         else:
-            self.h = self.frame.height() - 100
+            self.h = self.frame.height() + 100
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
         y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
         self.mainWidget.setPos(x, y)
@@ -130,12 +121,8 @@ class MasteriesPage(AbstractPage):
 
     def showPage(self):
         if self.state:
-            self.state = False
             self.focusable.emit(False)
-            self.gamePages.page = None
-            self.gamePages.visiblePage = False
-            self.gamePages.gameRoot.scene.removeItem(self)
-            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+            self.hidePage()
         else:
             self.state = True
             self.gamePages.page = self
@@ -145,7 +132,7 @@ class MasteriesPage(AbstractPage):
 
     def hidePage(self):
         self.state = False
-        self.gamePages.page = None
+        self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
