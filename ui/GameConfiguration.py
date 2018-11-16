@@ -64,7 +64,7 @@ class GameConfiguration:
             self.rez_step = 0
         else:
             self.rez_step = 1
-            if self.rez_step > 1079:
+            if self.dev_size[1] > 1079:
                 self.rez_step = 2
         self.dev_ha_size = int(self.dev_size[0] / 2), int(self.dev_size[1] / 2)
         self.ava_size = self.desktop.availableGeometry().width(), self.desktop.availableGeometry().height()
@@ -119,7 +119,7 @@ class GameConfiguration:
         filename = filename.lower()
         pixmap = self.pix_maps.get(filename)
         if pixmap is None:
-            print(filename + ' image was not found. using default.')
+            # print(filename + ' image was not found. using default.')
             pixmap = self.pix_maps.get("default_128.png")
         if not id is None:
             size = gameItemsSizes.get(id)

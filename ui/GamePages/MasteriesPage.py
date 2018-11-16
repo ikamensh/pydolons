@@ -101,7 +101,6 @@ class MasteriesPage(AbstractPage):
                 item[1].setStyleSheet('border: 1px solid black')
 
     def resized(self):
-        print(self.frame.size())
         self.w = self.frame.width() + 25
         if self.gamePages.gameRoot.cfg.dev_size[1] < self.frame.height():
             self.h = self.gamePages.gameRoot.cfg.dev_size[1] - 100

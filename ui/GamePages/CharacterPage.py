@@ -1,7 +1,7 @@
 from PySide2 import QtGui, QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
-from game_objects.battlefield_objects import get_attrib_by_enum, enum_to_abbrev
+from game_objects.battlefield_objects import base_attributes
 
 class CharacterPage(AbstractPage):
     """docstring for CharacterPage."""
@@ -17,20 +17,14 @@ class CharacterPage(AbstractPage):
         self.setUpWidgets()
 
     def setUpWidgets(self):
-        hero = self.gamePages.gameRoot.game.the_hero
         self.background = QtWidgets.QGraphicsRectItem(0, 0, self.w, self.h)
         self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
         self.addToGroup(self.background)
-
-        # self.heroIcon = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile(hero.icon, 101002002))
-        # self.addToGroup(self.heroIcon)
-
 
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
 
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
         mainWidget.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        # mainWidget.resize(self.w, self.h)
         mainWidget.setStyleSheet('background-color: rgba(0, 0, 0, 0);color:white')
         mainLayout: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
         mainLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
@@ -107,7 +101,7 @@ class CharacterPage(AbstractPage):
         layout.addWidget(self.freePointLabel, 0, 0, 1, 1, QtCore.Qt.AlignRight)
         i = 1
         row = 1
-        for attribute in enum_to_abbrev.keys():
+        for attribute in base_attributes:
             if i % 2 == 0:
                 col = 0
             else:
