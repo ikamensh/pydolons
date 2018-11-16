@@ -12,8 +12,10 @@ class MasteriesPage(AbstractPage):
         self.w = 480
         self.h = 320
         self.mousePos = QtCore.QPoint(0, 0)
+        self.character = None
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
         self.masteriesDict = {}
+        self.label_size = self.getLabelSize()
         self.setUpWidgets()
         self.workMasteries = None
         pass
@@ -24,19 +26,21 @@ class MasteriesPage(AbstractPage):
         self.addToGroup(self.background)
 
         character = self.gamePages.gameRoot.lengine.character
+        self.character = character
         self.workMasteries = character.masteries_can_go_up
 
         mainWidget = QtWidgets.QWidget()
         mainLayout = QtWidgets.QVBoxLayout()
 
+        self.xpLabel = QtWidgets.QLabel('Total XP:' + str(character.masteries.total_exp_spent), mainWidget)
+        # self.xpLabel.setFixedWidth(self.label_size)
+
         sArea = QtWidgets.QScrollArea(mainWidget)
         self.frame = QtWidgets.QWidget(mainWidget)
         layout = QtWidgets.QVBoxLayout()
 
-
-        layout.addLayout(self.getMasteriesGroupLayout('all_battle', MasteriesGroups.all_battle, mainWidget))
-        layout.addLayout(self.getMasteriesGroupLayout('all_magic', MasteriesGroups.all_magic, mainWidget))
-
+        layout.addLayout(self.getMasteriesGroupLayout(character, 'all_battle', MasteriesGroups.all_battle, mainWidget))
+        layout.addLayout(self.getMasteriesGroupLayout(character, 'all_magic', MasteriesGroups.all_magic, mainWidget))
 
         self.frame.setLayout(layout)
         sArea.setWidget(self.frame)
@@ -51,54 +55,75 @@ class MasteriesPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         self.resized()
 
-    def getMasteriesGroupLayout(self, groupName, masteries, parent):
+    def getMasteriesGroupLayout(self, character, groupName, masteries, parent):
         layout = QtWidgets.QVBoxLayout()
         label = QtWidgets.QLabel(groupName, parent)
         layout.addWidget(label)
         mgLayout = QtWidgets.QHBoxLayout()
         for masteri in masteries:
-            mgLayout.addLayout(self.getMasteriLayout(masteri, parent))
+            mgLayout.addLayout(self.getMasteriLayout(character, masteri, parent))
         layout.addLayout(mgLayout)
         return layout
 
-    def getMasteriLayout(self, masteri, parent):
+    def getMasteriLayout(self, character, mastery, parent):
         layout = QtWidgets.QVBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignCenter)
-        pixmap = self.gamePages.gameRoot.cfg.getPicFile(str(masteri.name).lower() + '.png', 101003001)
-        label = QtWidgets.QLabel(str(masteri.name), parent)
+        pixmap = self.gamePages.gameRoot.cfg.getPicFile(str(mastery.name).lower() + '.png', 101003001)
+        label = QtWidgets.QLabel(str(mastery.name), parent)
+        label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(label)
         icon = QtWidgets.QLabel(parent)
         icon.setPixmap(pixmap)
         icon.setFixedSize(pixmap.size())
         layout.addWidget(icon)
-        button = QtWidgets.QPushButton('up', parent)
-        button.setFixedWidth(pixmap.width())
+        layout.setAlignment(icon, QtCore.Qt.AlignCenter)
+        currentLevel = QtWidgets.QLabel(str(character.masteries.values[mastery]), parent)
+        currentLevel.setFixedWidth(self.label_size)
+        currentLevel.setAlignment(QtCore.Qt.AlignCenter)
+        layout.addWidget(currentLevel)
+        button = QtWidgets.QPushButton(str(character.masteries.calculate_cost(mastery)[0]), parent)
+        button.setFixedWidth(self.label_size)
         button.setStyleSheet(self.buttonStyle)
-        button.setProperty('mastery', masteri)
+        button.setProperty('mastery', mastery)
         button.clicked.connect(self.upClick)
-        if masteri in self.workMasteries:
+        layout.setAlignment(icon, QtCore.Qt.AlignCenter)
+        if mastery in self.workMasteries:
             button.setEnabled(True)
             icon.setStyleSheet('border: 1px solid blue')
         else:
             button.setEnabled(False)
-        self.addToMasteriesDict(masteri, button, icon)
+        self.addToMasteriesDict(mastery, button, icon, currentLevel)
         layout.addWidget(button)
+        layout.setAlignment(button, QtCore.Qt.AlignCenter)
         return layout
 
-    def addToMasteriesDict(self, mastery, button, icon):
+    def addToMasteriesDict(self, mastery, button, icon, currentLevel):
         l = self.masteriesDict.get(mastery.name)
         if l is None:
             self.masteriesDict[mastery.name] = []
-            self.masteriesDict[mastery.name].append((button, icon))
+            self.masteriesDict[mastery.name].append((button, icon, currentLevel))
         else:
-            self.masteriesDict[mastery.name].append((button, icon))
+            self.masteriesDict[mastery.name].append((button, icon, currentLevel))
 
     def updateMasteriesWidgets(self, mastery):
         l = self.masteriesDict.get(mastery.name)
         if not l is None:
             for item in self.masteriesDict.get(mastery.name):
                 item[0].setEnabled(False)
+                item[0].setText(str(self.character.temp_masteries.calculate_cost(mastery)[0]))
                 item[1].setStyleSheet('border: 1px solid black')
+                item[2].setText(str(self.character.temp_masteries.values[mastery]))
+                self.xpLabel.setText('Total XP:' + str(self.character.temp_masteries.total_exp_spent))
+
+    def upgradedMasteriesWidgets(self):
+        self.xpLabel.setText('Total XP:' + str(self.character.masteries.total_exp_spent))
+        for items in self.masteriesDict.values():
+            item = items[0]
+            item[0].setEnabled(True)
+            mastery = item[0].property('mastery')
+            item[0].setText(str(self.character.masteries.calculate_cost(mastery)[0]))
+            item[1].setStyleSheet('border: 1px solid blue')
+            item[2].setText(str(self.character.masteries.values[mastery]))
 
     def resized(self):
         self.w = self.frame.width() + 25
@@ -106,6 +131,10 @@ class MasteriesPage(AbstractPage):
             self.h = self.gamePages.gameRoot.cfg.dev_size[1] - 100
         else:
             self.h = self.frame.height() + 100
+        if self.gamePages.gameRoot.cfg.dev_size[0] < self.frame.width() + 25:
+            self.w = self.gamePages.gameRoot.cfg.dev_size[0] - 100
+        else:
+            self.w = self.frame.width() + 25
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
         y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
         self.mainWidget.setPos(x, y)
@@ -128,6 +157,7 @@ class MasteriesPage(AbstractPage):
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+            self.upgradedMasteriesWidgets()
 
     def hidePage(self):
         self.state = False
@@ -138,6 +168,8 @@ class MasteriesPage(AbstractPage):
 
     def destroy(self):
         self.mainWidget.widget().destroy()
+        if not self.mainWidget.scene() is None:
+            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         del self.mainWidget
 
     def mousePress(self, e):
@@ -152,8 +184,8 @@ class MasteriesPage(AbstractPage):
 
     def upClick(self):
         widget = self.mainWidget.widget().focusWidget()
-        self.updateMasteriesWidgets(widget.property('mastery'))
         self.gamePages.gameRoot.lengine.character.increase_mastery(widget.property('mastery'))
+        self.updateMasteriesWidgets(widget.property('mastery'))
 
     def getPageBtnLayout(self, parent):
         btnLayout = QtWidgets.QHBoxLayout()
@@ -184,6 +216,11 @@ class MasteriesPage(AbstractPage):
     def setUpGui(self):
         self.save.clicked.connect(self.saveSlot)
         self.ok.clicked.connect(self.okSlot)
+
+    def getLabelSize(self):
+        label = QtWidgets.QLabel('1234500')
+        label.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        return label.sizeHint().width()
 
 
 

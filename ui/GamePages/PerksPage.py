@@ -68,6 +68,8 @@ class PerksPage(AbstractPage):
 
     def destroy(self):
         self.mainWidget.widget().destroy()
+        if not self.mainWidget.scene() is None:
+            self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         del self.mainWidget
 
     def mousePress(self, e):

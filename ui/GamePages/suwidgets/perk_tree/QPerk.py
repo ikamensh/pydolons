@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from PySide2.QtWidgets import QPushButton, QWidget, QLabel, QVBoxLayout
 from PySide2.QtGui import QPixmap
+from PySide2 import QtCore
 
 
 from character.perks import Perk, PerkTree
@@ -15,11 +16,12 @@ class QPerk(QWidget):
         super().__init__(parent)
 
         layout = QVBoxLayout()
-        pixmap = QPixmap(self.cfg.getPicFile(perk.icon))
+        pixmap = QPixmap(self.cfg.getPicFile(perk.icon, 101004001))
         icon = QLabel(self)
         icon.setPixmap(pixmap)
         icon.setFixedSize(pixmap.size())
         layout.addWidget(icon)
+        layout.setAlignment(icon, QtCore.Qt.AlignCenter)
         self.icon = icon
         up_button = QPushButton(self)
         up_button.clicked.connect(self.on_click)
