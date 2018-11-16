@@ -13,6 +13,7 @@ class MasteriesPage(AbstractPage):
         self.h = 600
         self.mousePos = QtCore.QPoint(0, 0)
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
+        self.masteriesDict = {}
         self.setUpWidgets()
         self.workMasteries = None
         pass
@@ -71,6 +72,7 @@ class MasteriesPage(AbstractPage):
         pixmap = self.gamePages.gameRoot.cfg.pix_maps.get(str(masteri.name).lower() + '.png')
         if pixmap is None:
             pixmap = self.gamePages.gameRoot.cfg.pix_maps.get('default_masteri.png')
+        pixmap = pixmap.scaled(32, 32)
         label = QtWidgets.QLabel(str(masteri.name), parent)
         layout.addWidget(label)
         icon = QtWidgets.QLabel(parent)
@@ -80,13 +82,31 @@ class MasteriesPage(AbstractPage):
         button = QtWidgets.QPushButton('up', parent)
         button.setFixedWidth(pixmap.width())
         button.setStyleSheet(self.buttonStyle)
+        button.setProperty('mastery', masteri)
+        button.clicked.connect(self.upClick)
         if masteri in self.workMasteries:
             button.setEnabled(True)
             icon.setStyleSheet('border: 1px solid blue')
         else:
             button.setEnabled(False)
+        self.addToMasteriesDict(masteri, button, icon)
         layout.addWidget(button)
         return layout
+
+    def addToMasteriesDict(self, mastery, button, icon):
+        l = self.masteriesDict.get(mastery.name)
+        if l is None:
+            self.masteriesDict[mastery.name] = []
+            self.masteriesDict[mastery.name].append((button, icon))
+        else:
+            self.masteriesDict[mastery.name].append((button, icon))
+
+    def updateMasteriesWidgets(self, mastery):
+        l = self.masteriesDict.get(mastery.name)
+        if not l is None:
+            for item in self.masteriesDict.get(mastery.name):
+                item[0].setEnabled(False)
+                item[1].setStyleSheet('border: 1px solid black')
 
     def resized(self):
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
@@ -115,7 +135,6 @@ class MasteriesPage(AbstractPage):
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
-
     def hidePage(self):
         self.state = False
         self.gamePages.page = None
@@ -124,7 +143,7 @@ class MasteriesPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def destroy(self):
-        # self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.mainWidget.widget().destroy()
         del self.mainWidget
 
     def mousePress(self, e):
@@ -136,6 +155,11 @@ class MasteriesPage(AbstractPage):
             else:
                 self.focusable.emit(False)
                 self.hidePage()
+
+    def upClick(self):
+        widget = self.mainWidget.widget().focusWidget()
+        self.updateMasteriesWidgets(widget.property('mastery'))
+        self.gamePages.gameRoot.lengine.character.increase_mastery(widget.property('mastery'))
 
 
 
