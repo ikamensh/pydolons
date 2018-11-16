@@ -7,6 +7,9 @@ def setUpSize():
     # MasteriesPage
     gameItemsSizes[101003001] = ((32, 32), (64, 64), (128, 128))
     gameItemsSizes[101003002] = ((128, 128), (256, 256), (384, 384))
+    # PerksPage
+    gameItemsSizes[101004001] = ((32, 32), (64, 64), (128, 128))
+    gameItemsSizes[101004002] = ((128, 128), (256, 256), (384, 384))
     return gameItemsSizes
 
 gameItemsSizes = setUpSize()
