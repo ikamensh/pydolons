@@ -220,11 +220,6 @@ class CharacterPage(AbstractPage):
 
     def comitToChacracter(self):
         print('call increase_attrib')
-        for k, v in self.points.items():
-            v[1].setMinimum(v[0])
-            for i in range(v[0]):
-                self.gamePages.gameRoot.lengine.character.increase_attrib(v[1].property('attribute'))
-            self.points[k] = (0, v[1])
         try:
             self.gamePages.gameRoot.lengine.character.commit()
         except Exception as er:
