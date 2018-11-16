@@ -7,9 +7,10 @@ class CharacterPage(AbstractPage):
     """docstring for CharacterPage."""
     def __init__(self, gamePages):
         super(CharacterPage, self).__init__(gamePages)
-        self.character = None
-        self.unit = None
+        self.character = self.gamePages.gameRoot.lengine.character
         self.freePoints = 0
+        self.curentPoins = sum(self.character.base_type.attributes.values())
+        self.unit = None
         self.points = {}
         self.w, self.h = 700, 550
         self.w_2 = int(self.w / 2)
@@ -83,6 +84,7 @@ class CharacterPage(AbstractPage):
         icon.setFixedSize(pixmap.size())
         subLayout.addWidget(icon)
         spnBox = QtWidgets.QSpinBox(parent=parent)
+        spnBox.setMinimum(self.character.base_type.attributes[attribute])
         spnBox.valueChanged.connect(self.freePointsChanged)
         spnBox.setProperty('attribute', attribute)
         subLayout.addWidget(spnBox)
@@ -198,22 +200,23 @@ class CharacterPage(AbstractPage):
 
     def freePointsChanged(self, value):
         spnBox = self.mainWidget.widget().focusWidget()
-        tmpValue = self.points.get(spnBox.property('attribute').name)
-        if tmpValue is None:
-            tmpValue = 0
+        if self.character.temp_attributes is None:
+            attributes = self.character.base_type.attributes
         else:
-            tmpValue = tmpValue[0]
-        self.points[spnBox.property('attribute').name] = (value, spnBox)
-        res = 0
-        for value in self.points.values():
-            res += value[0]
-        self.freePoints = self.gamePages.gameRoot.lengine.character.free_attribute_points - res
-        if self.freePoints < 0:
-            spnBox.setValue(tmpValue)
-            self.points[spnBox.property('attribute').name] = (tmpValue, spnBox)
-            if self.freePoints != 0:
-                self.freePoints += 1
-        self.freePointLabel.setText('Free points: ' + str(self.freePoints))
+            attributes = self.character.temp_attributes
+
+        if attributes[spnBox.property('attribute')] == value:
+            return
+        elif attributes[spnBox.property('attribute')] > value:
+            self.character.reduce_attrib(spnBox.property('attribute'))
+        else:
+            self.character.increase_attrib(spnBox.property('attribute'))
+            if self.character.free_attribute_points == 0:
+                spnBox.setValue(attributes[spnBox.property('attribute')])
+        self.freePointLabel.setText('Free points: ' + str(self.character.free_attribute_points))
+
+    def updateData(self):
+        pass
 
     def comitToChacracter(self):
         print('call increase_attrib')
@@ -226,6 +229,11 @@ class CharacterPage(AbstractPage):
             self.gamePages.gameRoot.lengine.character.commit()
         except Exception as er:
             print(er)
+
+    def resetPage(self):
+        self.gamePages.gameRoot.lengine.character.reset()
+        self.freePoints = self.gamePages.gameRoot.lengine.character.free_attribute_points
+        pass
 
 
 
