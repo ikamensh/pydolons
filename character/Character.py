@@ -62,6 +62,12 @@ class Character:
             self.temp_attributes = copy.copy(self.base_type.attributes)
         self.temp_attributes[attrib_enum] += 1
 
+    def reduce_attrib(self, attrib_enum: CharAttributes) -> None:
+        assert attrib_enum in CharAttributes
+        if self.temp_attributes is None :
+            return
+        self.temp_attributes[attrib_enum] -= 1
+
 
     def increase_mastery(self, mastery: MasteriesEnum) -> None:
         if not mastery in self.masteries_can_go_up:
@@ -74,11 +80,13 @@ class Character:
 
 
     def commit(self):
-        self.base_type.attributes = self.temp_attributes
-        self.temp_attributes = None
+        if self.temp_attributes:
+            self.base_type.attributes = self.temp_attributes
+            self.temp_attributes = None
 
-        self.masteries = self.temp_masteries
-        self.temp_masteries = None
+        if self.temp_masteries:
+            self.masteries = self.temp_masteries
+            self.temp_masteries = None
 
 
     def reset(self):

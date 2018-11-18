@@ -4,7 +4,6 @@ from game_objects.battlefield_objects import CharAttributes, enum_to_abbrev
 from game_objects.attributes import Bonus, Attribute
 from character.perks import Perk
 from character.perks import PerkGroup
-import os
 
 def attr_bonus_abilities(attr):
     b1 = Bonus({attr: Attribute(1, 10, 1)})
@@ -26,7 +25,8 @@ def attr_perk_names(attr):
 
 def build_perk(attr):
     return Perk(attr_perk_names(attr), attr_bonus_abilities(attr),
-                icon=os.path.join("icons", "params", "64", enum_to_abbrev[attr]) +".png" )
+                # icon=os.path.join("icons", "params", "64", enum_to_abbrev[attr]) +".png" )
+                icon=enum_to_abbrev[attr] +".png")
 
 
 str_perk = build_perk(CharAttributes.STREINGTH)

@@ -16,9 +16,7 @@ class StartPage(AbstractPage):
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
-        self.resizeBackground(self.background )
-        # self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
-        # self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
@@ -55,12 +53,14 @@ class StartPage(AbstractPage):
         if self.state:
             if not self.gamePages.gameRoot.loop is None:
                 self.state = False
+                self.focusable.emit(False)
                 self.gamePages.page = None
                 self.gamePages.visiblePage = False
                 self.gamePages.gameRoot.scene.removeItem(self)
                 self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
             self.state = True
+            self.focusable.emit(True)
             self.gamePages.page = self
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
@@ -69,6 +69,7 @@ class StartPage(AbstractPage):
 
     def hidePage(self):
         self.state = False
+        self.focusable.emit(False)
         self.gamePages.page = None
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
@@ -95,10 +96,10 @@ class StartPage(AbstractPage):
         self.hidePage()
         self.gamePages.levelSelect.showPage()
 
-
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
             self.showPage()
         pass
+
 
 

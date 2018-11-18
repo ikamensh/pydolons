@@ -21,11 +21,14 @@ class CharAttributes(NameEnum):
     PRECISION = auto()
     EVASION = auto()
 
-abbrev_to_enum = {'str':CharAttributes.STREINGTH, 'end':CharAttributes.ENDURANCE, 'agi':CharAttributes.AGILITY,
-           'prc':CharAttributes.PERCEPTION, 'int':CharAttributes.INTELLIGENCE, 'cha':CharAttributes.CHARISMA,
-           'health':CharAttributes.HEALTH, 'stamina': CharAttributes.STAMINA, 'mana':CharAttributes.MANA,
-                  'initiative':CharAttributes.INITIATIVE, 'armor':CharAttributes.ARMOR, 'resistances':CharAttributes.RESISTANCES,
-                  'melee_precision': CharAttributes.PRECISION, 'melee_evasion': CharAttributes.EVASION}
+c = CharAttributes
+abbrev_to_enum = {'str':c.STREINGTH, 'end':c.ENDURANCE, 'agi':c.AGILITY,
+           'prc':c.PERCEPTION, 'int':c.INTELLIGENCE, 'cha':c.CHARISMA,
+           'health':c.HEALTH, 'stamina': c.STAMINA, 'mana':c.MANA,
+                  'initiative':c.INITIATIVE, 'armor':c.ARMOR, 'resistances':c.RESISTANCES,
+                  'melee_precision': c.PRECISION, 'melee_evasion': c.EVASION}
+
+base_attributes = [c.STREINGTH, c.ENDURANCE, c.AGILITY, c.PERCEPTION, c.INITIATIVE, c.CHARISMA]
 
 enum_to_abbrev = {v: k for k, v in abbrev_to_enum.items()}
 
@@ -39,7 +42,6 @@ class Constants:
     MANA_PER_INT = 10
     UNARMED_DAMAGE_PER_STR = 3
 
-c = CharAttributes
 std_bonus = Attribute(1, 0.05, 2)
 
 value_norms = {

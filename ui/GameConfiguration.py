@@ -1,5 +1,6 @@
 import os
 from PySide2 import QtGui, QtWidgets, QtMultimedia
+from ui.GameSizeConfig import gameItemsSizes
 
 from config import pydolons_rootdir
 from mechanics.damage import DamageTypes
@@ -36,6 +37,7 @@ class GameConfiguration:
         self.setUpSounds()
         print('cfg ===> setUpSounds', datetime.now())
         self.gameRoot = None
+        self.tr = QtGui.QTransform()
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -58,6 +60,12 @@ class GameConfiguration:
         """
         self.desktop =  QtWidgets.QDesktopWidget()
         self.dev_size = self.desktop.screenGeometry().width(), self.desktop.screenGeometry().height()
+        if self.dev_size[1] < 900:
+            self.rez_step = 0
+        else:
+            self.rez_step = 1
+            if self.dev_size[1] > 1079:
+                self.rez_step = 2
         self.dev_ha_size = int(self.dev_size[0] / 2), int(self.dev_size[1] / 2)
         self.ava_size = self.desktop.availableGeometry().width(), self.desktop.availableGeometry().height()
         self.ava_ha_size = int(self.ava_size[0] / 2), int(self.ava_size[1] / 2)
@@ -66,6 +74,8 @@ class GameConfiguration:
     def updateScreenSize(self, w, h):
         self.screenSize = (w, h)
         self.dev_size = self.screenSize
+        self.tr.reset()
+        self.tr.translate(w/2, h/2)
 
     def setUpUnits(self):
         """
@@ -98,20 +108,24 @@ class GameConfiguration:
                     elif name[-3:].lower() in self.sound_formats:
                         self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
 
-    def getPicFile(self, filename):
+
+    def getPicFile(self, filename, id = None, size = None):
         """
         если файл не найден генерируется ошибка
         argument: filename -- название файла в файловой системе
         return: QtGui.QPixmap
         Объект QPixmap из словаря GameConfiguration.pix_maps
         """
-        search_name = filename.lower()
-        # print(filename)
-        try:
-            return self.pix_maps[search_name]
-        except KeyError:
-            print(f"{filename} image was not found. using default.")
-            return self.pix_maps.get("default.png")
+        filename = filename.lower()
+        pixmap = self.pix_maps.get(filename)
+        if pixmap is None:
+            # print(filename + ' image was not found. using default.')
+            pixmap = self.pix_maps.get("default_128.png")
+        if not id is None:
+            size = gameItemsSizes.get(id)
+            if not size is None:
+                pixmap = pixmap.scaled(size[self.rez_step][0], size[self.rez_step][1])
+        return pixmap
 
     def setUpSounds(self):
         for filename, path in self.sound_file_paths.items():

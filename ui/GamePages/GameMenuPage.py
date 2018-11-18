@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 from ui.gamecore.GameObject import GameObject
 from ui.GamePages.suwidgets.GuiConsole import GuiConsole
@@ -13,13 +13,14 @@ class GameMenuPage(AbstractPage):
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gui_console = None
 
-
     def showNotify(self, text):
         self.notify.showText(text)
 
     def setUpGui(self):
         self.actives = Actives(self, columns = 6)
         self.actives.setTargets.connect(self.gamePages.gameRoot.level.middleLayer.getTargets)
+
+        self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
 
         self.notify = self.gamePages.gameRoot.suwidgetFactory.getNotifyText(self.gamePages.gameRoot)
         self.addToGroup(self.notify)
@@ -38,9 +39,6 @@ class GameMenuPage(AbstractPage):
             self.updateUnitStack()
 
         self.createToolTip()
-        self.actives.setScene(self.gamePages.gameRoot.scene)
-        print(self.hasFocus())
-
 
     def createUnitStack(self):
         self.unitStack.items = {}
@@ -52,7 +50,7 @@ class GameMenuPage(AbstractPage):
             item.setPos(self.unitStack.x() + i* 64, self.unitStack.y())
             item.stackBefore(self.active_select)
             self.unitStack.items[unit.uid] = item
-            i+=1
+            i += 1
 
     def createToolTip(self):
         self.tool:QtWidgets.QGraphicsItem = self.gamePages.gameRoot.suwidgetFactory.getToolTip(128, 128)
@@ -71,15 +69,14 @@ class GameMenuPage(AbstractPage):
         self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
         self.gui_console.id = self.gui_console.startTimer(50)
         self.gui_console.setTabChangesFocus(False)
-        self.gui_console.setEnabled(False)
         self.gui_console.resize(320, 240)
+        self.gamePages.gameRoot.controller.mouseMove.connect(self.gui_console.setMousePos)
         self.p_gui_console = self.scene().addWidget(self.gui_console)
 
     def rmToUnitStack(self, uid):
         self.unitStack.items[uid].setParentItem(None)
         del self.unitStack.items[uid]
         self.updateUnitStack()
-
 
     def updateUnitStack(self):
         units_stack = self.gamePages.gameRoot.game.turns_manager.managed_units
@@ -89,21 +86,21 @@ class GameMenuPage(AbstractPage):
         #next_unit = my_context.the_game.turns_manager.get_next()
         for bf_unit in units_stack:
             self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
-            i+=1
+            i += 1
 
     def setDefaultPos(self):
+        # TODO setDefaultPos is deprecated method, delete in future.
         pos = self.scene().views()[0].mapToScene(self.gamePages.gameRoot.cfg.correct_size[0], self.gamePages.gameRoot.cfg.correct_size[1])
-        self.gui_console.move(self.console_pos[0] + pos.x(), self.console_pos[1] + pos.y())
+        self.gui_console.move(self.gui_console.x() + pos.x(), self.gui_console.y() + pos.y())
         self.setX(pos.x())
         self.setY(pos.y())
 
     def resized(self):
-        self.console_pos = self.gamePages.gameRoot.cfg.dev_size[0] - 320, self.gamePages.gameRoot.cfg.dev_size[1] - 240
-        self.gui_console.move(self.gamePages.gameRoot.cfg.dev_size[0] - 320, self.gamePages.gameRoot.cfg.dev_size[1] - 240)
+        self.gui_console.resized(self.gamePages.gameRoot.cfg.dev_size)
         self.actives.resized()
 
-    def mouseMoveEvent(self, e):
-        self.actives.mouseMoveEvent(e)
+    def isFocus(self):
+        return self.actives.isFocus() or self.gui_console.isFocus()
 
     def destroy(self):
         self.actives.destroy()
@@ -111,5 +108,4 @@ class GameMenuPage(AbstractPage):
         self.gui_console.killTimer(self.gui_console.id)
         self.gamePages.gameRoot.scene.removeItem(self.p_gui_console )
         del self.p_gui_console
-        # self.notify
 

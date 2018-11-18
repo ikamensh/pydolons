@@ -2,38 +2,30 @@ from __future__ import annotations
 
 from PySide2.QtWidgets import QPushButton, QWidget, QLabel, QVBoxLayout
 from PySide2.QtGui import QPixmap
-import os
-import config
+from PySide2 import QtCore
 
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from character.perks import Perk, PerkTree
-    from ui.experimental.perk_tree.QPerkGroup import QPerkGroup
 
+from character.perks import Perk, PerkTree
 
 class QPerk(QWidget):
-    def __init__(self, perk: Perk, parent: QPerkGroup):
+    def __init__(self, cfg, perk: Perk, parent):
+        self.cfg = cfg
         self.perk = perk
         self.perk_tree: PerkTree = parent.tree.perk_tree
         self.group = parent
         super().__init__(parent)
 
         layout = QVBoxLayout()
-
-        pixmap = QPixmap( os.path.join(config.res_dir,perk.icon) )
-        icon = QLabel()
+        pixmap = QPixmap(self.cfg.getPicFile(perk.icon, 101004001))
+        icon = QLabel(self)
         icon.setPixmap(pixmap)
         icon.setFixedSize(pixmap.size())
         layout.addWidget(icon)
+        layout.setAlignment(icon, QtCore.Qt.AlignCenter)
         self.icon = icon
-
-        # up_pixmap = QPixmap( os.path.join(config.res_dir,"icons","ui","up_button.jpg") )
-        up_button = QPushButton()
-        # up_icon = QIcon(up_pixmap)
-        # up_button.setIcon(up_icon)
-        # up_button.setIconSize(QSize(32,50))
+        up_button = QPushButton(self)
         up_button.clicked.connect(self.on_click)
-        up_button.setText( "Not initialized" )
+        up_button.setText("Not initialized")
         layout.addWidget(up_button)
         self.up_button = up_button
 

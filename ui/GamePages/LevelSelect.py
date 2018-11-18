@@ -29,8 +29,8 @@ class LevelSelect(AbstractPage):
 
 
     def setUpWidgets(self, dung_list):
-        self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
-        self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
@@ -123,12 +123,14 @@ class LevelSelect(AbstractPage):
     def showPage(self):
         if self.state:
             self.state = False
+            self.focusable.emit(False)
             self.gamePages.page = None
             self.gamePages.visiblePage = False
             self.gamePages.gameRoot.scene.removeItem(self)
             self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         else:
             self.state = True
+            self.focusable.emit(True)
             self.gamePages.page = self
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
@@ -146,7 +148,7 @@ class LevelSelect(AbstractPage):
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
         y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
         self.mainWidget.setPos(x, y)
-        self.background.setRect(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+        self.resizeBackground(self.background)
         pass
 
     def keyPressEvent(self, e):

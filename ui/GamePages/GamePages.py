@@ -8,6 +8,8 @@ from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.CharacterPage import CharacterPage
+from ui.GamePages.PerksPage import PerksPage
+from ui.GamePages.MasteriesPage import MasteriesPage
 
 from PySide2 import QtGui, QtCore, QtWidgets
 
@@ -18,6 +20,7 @@ class GamePages(object):
         super(GamePages, self).__init__()
         self.gameRoot = None
         # this is current page
+        self.focusState = False
         self.page = None
         self.focus = False
         self.pages = {}
@@ -31,6 +34,8 @@ class GamePages(object):
 
     def setUpPages(self):
         self.setUpCharecterPage()
+        self.setUpPerksPage()
+        self.setUpMasteriesPage()
         self.setUpGameMenu()
 
     def destroyPages(self):
@@ -44,9 +49,8 @@ class GamePages(object):
                 if not page.scene() is None:
                     self.gameRoot.scene.removeItem(page)
                 del self.pages[keys[i]]
-            i+=1
+            i += 1
         self.gameMenu = None
-        self.characterPage = None
 
 
     def setUpStartPage(self, ui):
@@ -67,14 +71,24 @@ class GamePages(object):
         self.gameMenu = gameMenu
 
     def setUpCharecterPage(self):
-        self.characterPage = self.buildPage('characterPage', CharacterPage)
-        # self.gameRoot.controller.mousePress.connect(self.characterPage.mousePressEvent)
+        characterPage = self.buildPage('characterPage', CharacterPage)
+        self.gameRoot.controller.mousePress.connect(characterPage.mousePress)
         # self.characterPage.pageUpdate()
+
+    def setUpPerksPage(self):
+        perksPage = self.buildPage('perksPage', PerksPage)
+        self.gameRoot.controller.mousePress.connect(perksPage .mousePress)
+
+    def setUpMasteriesPage(self):
+        masteriesPage = self.buildPage('masteriesPage', MasteriesPage)
+        self.gameRoot.controller.mousePress.connect(masteriesPage .mousePress)
+
 
     def buildPage(self, pageName, pageClass):
         page = pageClass(self)
         self.pages[pageName] = page
         self.gameRoot.controller.keyPress.connect(page.keyPressEvent)
+        page.focusable.connect(self.setFocus)
         page.setUpGui()
         return page
 
@@ -103,5 +117,11 @@ class GamePages(object):
             return True
         if self.levelSelect.state:
             return True
-        # return self.gameMenu.isPage()
+
+    def setFocus(self, isFocus):
+        self.focusState = isFocus
+
+    @property
+    def isFocus(self):
+        return self.focusState or self.gameMenu.isFocus()
 
