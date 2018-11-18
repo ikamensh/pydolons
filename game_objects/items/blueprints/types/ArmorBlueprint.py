@@ -5,7 +5,7 @@ from mechanics.damage import Armor
 
 
 class ArmorBlueprint(Blueprint):
-    armor_per_rarity = 30
+    armor_per_rarity = 25
 
 
     def __init__(self, name, target_item_type, rarity, armor=None, durability=None, material_count = 8):

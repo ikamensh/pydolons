@@ -2,11 +2,12 @@ from mechanics.events.src.Trigger import Trigger
 from mechanics.events import UnitDiedEvent
 from mechanics.fractions import Fractions
 
+from my_utils.utils import tractable_value
 
 def compute_exp_gain(hero, monster):
     factor = (monster.xp / hero.xp) ** (4/5)
     std_amount = monster.xp ** (7/10) // 25
-    return int(std_amount * factor + 0.5)
+    return tractable_value(std_amount * factor + 0.5, digits=3)
 
 
 def condition(t,e):

@@ -42,8 +42,8 @@ class PerkTree:
         assert perk in self.all_perks
         precise_cost =  perk.cost_factor * self.base_cost * self.cost_growth * \
                         ( self.cost_factors[perk.current_level+1] ** (1 + self.total_level/60) )
-        log10 = int( math.log10(precise_cost) )
 
+        log10 = int( math.log10(precise_cost) )
         base = 10 ** (log10-1)
         return int( precise_cost // base * base )
 

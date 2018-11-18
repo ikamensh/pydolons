@@ -7,3 +7,5 @@ class QualityLevels:
     SUPERIOR = QualityLevel("Superior", 1.15)
     MASTERPIECE = QualityLevel("Masterpiece", 1.3)
     LEGENDARY = QualityLevel("Legendary", 1.45)
+
+    all = [CRUDE, PRIMITIVE, USUAL, SUPERIOR, MASTERPIECE, LEGENDARY]
