@@ -83,12 +83,15 @@ class GameController(QtCore.QObject):
         self.world.setTransform(self.tr)
         self.middleLayer.setTransform(self.tr)
         self.units.setTransform(self.tr)
+        self.gameRoot.level.gameVision.setTransform(self.tr)
 
     def zoomOut(self):
         self.tr.scale(1/1.05, 1/1.05)
         self.world.setTransform(self.tr)
         self.middleLayer.setTransform(self.tr)
         self.units.setTransform(self.tr)
+        self.gameRoot.level.gameVision.setTransform(self.tr)
+
 
     def moveScene(self, rect, x, y):
         rect.translate(x, y)
