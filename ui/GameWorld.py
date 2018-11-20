@@ -45,17 +45,11 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         y = (self.gameconfig.dev_size[1] - self.size.height()) / 2
         # self.setPos(x, y)
 
-
-
     def setFloor(self, pixMap):
-        self.floors = []
-        for i in range(self.worldSize[0]):
-            col = []
-            for j in range(self.worldSize[1]):
-                floor = GameObject(self.gameconfig.unit_size[0], self.gameconfig.unit_size[1])
-                floor.setPixmap(pixMap)
-                floor.setWorldPos(i, j)
-                self.addToGroup(floor)
-                col.append(floor)
-                # self.floors =self.floors +col
-            self.floors.append(col)
+        w = pixMap.width()
+        h = pixMap.width()
+        self.floor = QtWidgets.QGraphicsRectItem()
+        self.floor.setBrush(QtGui.QBrush(pixMap))
+        self.floor.setRect(0, 0, w * self.worldSize[0], h * self.worldSize[1])
+        self.addToGroup(self.floor)
+
