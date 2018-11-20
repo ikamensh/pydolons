@@ -12,7 +12,7 @@ class MasteriesPage(AbstractPage):
         self.w = 480
         self.h = 320
         self.mousePos = QtCore.QPoint(0, 0)
-        self.character = None
+        self.character = self.gamePages.gameRoot.lengine.character
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
         self.masteriesDict = {}
         self.label_size = self.getLabelSize()
@@ -98,12 +98,7 @@ class MasteriesPage(AbstractPage):
         return layout
 
     def addToMasteriesDict(self, mastery, button, icon, currentLevel):
-        l = self.masteriesDict.get(mastery.name)
-        if l is None:
-            self.masteriesDict[mastery.name] = []
-            self.masteriesDict[mastery.name].append((button, icon, currentLevel))
-        else:
-            self.masteriesDict[mastery.name].append((button, icon, currentLevel))
+        self.masteriesDict[mastery] = (button, icon, currentLevel)
 
     def updateMasteriesWidgets(self, mastery):
         l = self.masteriesDict.get(mastery.name)
@@ -115,10 +110,9 @@ class MasteriesPage(AbstractPage):
                 item[2].setText(str(self.character.temp_masteries.values[mastery]))
                 self.xpLabel.setText('Total XP:' + str(self.character.temp_masteries.total_exp_spent))
 
-    def upgradedMasteriesWidgets(self):
+    def updatePage(self):
         self.xpLabel.setText('Total XP:' + str(self.character.masteries.total_exp_spent))
-        for items in self.masteriesDict.values():
-            item = items[0]
+        for item in self.masteriesDict.values():
             item[0].setEnabled(True)
             mastery = item[0].property('mastery')
             item[0].setText(str(self.character.masteries.calculate_cost(mastery)[0]))
@@ -144,22 +138,24 @@ class MasteriesPage(AbstractPage):
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_M:
+            if self.state:
+                self.focusable.emit(False)
+                self.hidePage()
+                self.resetPage()
+            else:
+                self.updatePage()
                 self.showPage()
         pass
 
     def showPage(self):
-        if self.state:
-            self.focusable.emit(False)
-            self.hidePage()
-        else:
-            self.state = True
-            self.gamePages.page = self
-            self.gamePages.visiblePage = True
-            self.gamePages.gameRoot.scene.addItem(self)
-            self.gamePages.gameRoot.scene.addItem(self.mainWidget)
-            self.upgradedMasteriesWidgets()
+        self.state = True
+        self.gamePages.page = self
+        self.gamePages.visiblePage = True
+        self.gamePages.gameRoot.scene.addItem(self)
+        self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
     def hidePage(self):
+        self.focusable.emit(False)
         self.state = False
         self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
@@ -184,8 +180,8 @@ class MasteriesPage(AbstractPage):
 
     def upClick(self):
         widget = self.mainWidget.widget().focusWidget()
-        self.gamePages.gameRoot.lengine.character.increase_mastery(widget.property('mastery'))
-        self.updateMasteriesWidgets(widget.property('mastery'))
+        self.character.increase_mastery(widget.property('mastery'))
+        self.updatePage()
 
     def getPageBtnLayout(self, parent):
         btnLayout = QtWidgets.QHBoxLayout()
@@ -204,7 +200,7 @@ class MasteriesPage(AbstractPage):
 
     def okSlot(self):
         self.comitToChacracter()
-        self.showPage()
+        self.hidePage()
 
     def saveSlot(self):
         self.comitToChacracter()
@@ -221,6 +217,10 @@ class MasteriesPage(AbstractPage):
         label = QtWidgets.QLabel('1234500')
         label.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         return label.sizeHint().width()
+
+    def resetPage(self):
+        self.gamePages.gameRoot.lengine.character.reset()
+        pass
 
 
 

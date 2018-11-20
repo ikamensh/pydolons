@@ -3,6 +3,7 @@ from PySide2 import QtGui, QtCore, QtWidgets
 from ui.GamePages import AbstractPage
 from ui.GamePages.suwidgets.perk_tree.QPerkTree import QPerkTree
 
+
 class PerksPage(AbstractPage):
     """docstring for DefaultPage.
     """
@@ -58,7 +59,6 @@ class PerksPage(AbstractPage):
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
-
     def hidePage(self):
         self.state = False
         self.gamePages.page = None
@@ -81,6 +81,42 @@ class PerksPage(AbstractPage):
             else:
                 self.focusable.emit(False)
                 self.hidePage()
+
+    def getPageBtnLayout(self, parent):
+        btnLayout = QtWidgets.QHBoxLayout()
+        btnLayout.setAlignment(QtCore.Qt.AlignLeft)
+        self.ok = QtWidgets.QPushButton("ok", parent)
+        self.ok.setStyleSheet(self.buttonStyle)
+        self.ok.setFixedWidth(100)
+        btnLayout.addWidget(self.ok)
+
+        self.save = QtWidgets.QPushButton("save", parent)
+        self.save.setStyleSheet(self.buttonStyle)
+        self.save.setFixedWidth(100)
+        btnLayout.addWidget(self.save)
+
+        return btnLayout
+
+    def okSlot(self):
+        self.comitToChacracter()
+        self.hidePage()
+
+    def saveSlot(self):
+        self.comitToChacracter()
+
+    def comitToChacracter(self):
+        self.gamePages.gameRoot.lengine.character.commit()
+        pass
+
+    # def setUpGui(self):
+    #     self.save.clicked.connect(self.saveSlot)
+    #     self.ok.clicked.connect(self.okSlot)
+
+    def resetPage(self):
+        self.gamePages.gameRoot.lengine.character.reset()
+        pass
+
+
 
 
 

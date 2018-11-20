@@ -8,10 +8,8 @@ class CharacterPage(AbstractPage):
     def __init__(self, gamePages):
         super(CharacterPage, self).__init__(gamePages)
         self.character = self.gamePages.gameRoot.lengine.character
-        self.freePoints = 0
-        self.curentPoins = sum(self.character.base_type.attributes.values())
         self.unit = None
-        self.points = {}
+        self.btns = {}
         self.w, self.h = 700, 550
         self.w_2 = int(self.w / 2)
         self.h_2 = int(self.h / 2)
@@ -87,6 +85,7 @@ class CharacterPage(AbstractPage):
         spnBox.setMinimum(self.character.base_type.attributes[attribute])
         spnBox.valueChanged.connect(self.freePointsChanged)
         spnBox.setProperty('attribute', attribute)
+        self.btns[attribute] = spnBox
         subLayout.addWidget(spnBox)
         label = QtWidgets.QLabel(str(attribute.name), parent)
         layout.addLayout(subLayout)
@@ -94,12 +93,10 @@ class CharacterPage(AbstractPage):
         return layout
 
     def getPointLayout(self, parent):
-        charactrer = self.gamePages.gameRoot.lengine.character
-        self.freePoints = charactrer.free_attribute_points
         layout = QtWidgets.QGridLayout()
         layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         self.freePointLabel = QtWidgets.QLabel(parent = parent)
-        self.freePointLabel.setText('Free points: '+ str(self.freePoints))
+        self.freePointLabel.setText('Free points: '+ str(self.character.free_attribute_points))
         layout.addWidget(self.freePointLabel, 0, 0, 1, 1, QtCore.Qt.AlignRight)
         i = 1
         row = 1
@@ -137,13 +134,16 @@ class CharacterPage(AbstractPage):
         self.staminaBar.setMaximum(hero.max_stamina)
         self.staminaBar.setValue(hero.stamina)
         self.staminaBar.property('label').setText(str(int(hero.stamina)))
-        self.freePoints = self.gamePages.gameRoot.lengine.character.free_attribute_points
-        self.freePointLabel.setText('Free points: ' + str(self.freePoints))
-
+        self.freePointLabel.setText('Free points: ' + str(self.character.free_attribute_points))
+        for k, v in self.character.base_type.attributes.items():
+            spnBtn = self.btns.get(k)
+            if not spnBtn is None:
+                spnBtn.setValue(v)
 
     def okSlot(self):
         self.comitToChacracter()
-        self.showPage()
+        self.focusable.emit(False)
+        self.hidePage()
 
     def saveSlot(self):
         self.comitToChacracter()
@@ -159,16 +159,11 @@ class CharacterPage(AbstractPage):
         pass
 
     def showPage(self):
-        if self.state:
-            self.focusable.emit(False)
-            self.hidePage()
-        else:
-            self.updatePage()
-            self.state = True
-            self.gamePages.page = self
-            self.gamePages.visiblePage = True
-            self.gamePages.gameRoot.scene.addItem(self)
-            self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+        self.state = True
+        self.gamePages.page = self
+        self.gamePages.visiblePage = True
+        self.gamePages.gameRoot.scene.addItem(self)
+        self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
     def hidePage(self):
         self.state = False
@@ -179,7 +174,13 @@ class CharacterPage(AbstractPage):
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_O:
-            self.showPage()
+            if self.state:
+                self.focusable.emit(False)
+                self.hidePage()
+                self.resetPage()
+            else:
+                self.updatePage()
+                self.showPage()
 
     def mousePress(self, e):
         self.mousePos = e.pos()
@@ -189,6 +190,7 @@ class CharacterPage(AbstractPage):
                 self.focusable.emit(True)
             else:
                 self.focusable.emit(False)
+                self.resetPage()
                 self.hidePage()
 
     def destroy(self):
@@ -215,19 +217,14 @@ class CharacterPage(AbstractPage):
                 spnBox.setValue(attributes[spnBox.property('attribute')])
         self.freePointLabel.setText('Free points: ' + str(self.character.free_attribute_points))
 
-    def updateData(self):
-        pass
-
     def comitToChacracter(self):
-        print('call increase_attrib')
         try:
             self.gamePages.gameRoot.lengine.character.commit()
         except Exception as er:
-            print(er)
+            print("D'ont commit character", er)
 
     def resetPage(self):
         self.gamePages.gameRoot.lengine.character.reset()
-        self.freePoints = self.gamePages.gameRoot.lengine.character.free_attribute_points
         pass
 
 
