@@ -10,6 +10,8 @@ from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.CharacterPage import CharacterPage
 from ui.GamePages.PerksPage import PerksPage
 from ui.GamePages.MasteriesPage import MasteriesPage
+from ui.GamePages.ChaPage import ChaPage
+
 
 from PySide2 import QtGui, QtCore, QtWidgets
 
@@ -34,8 +36,6 @@ class GamePages(object):
 
     def setUpPages(self):
         self.setUpCharecterPage()
-        self.setUpPerksPage()
-        self.setUpMasteriesPage()
         self.setUpGameMenu()
 
     def destroyPages(self):
@@ -71,17 +71,13 @@ class GamePages(object):
         self.gameMenu = gameMenu
 
     def setUpCharecterPage(self):
-        characterPage = self.buildPage('characterPage', CharacterPage)
-        self.gameRoot.controller.mousePress.connect(characterPage.mousePress)
+        # characterPage = self.buildPage('characterPage', CharacterPage)
+        # self.gameRoot.controller.mousePress.connect(characterPage.mousePress)
+
+        chaPage = self.buildPage('chaPage', ChaPage)
+        self.gameRoot.controller.mousePress.connect(chaPage.mousePress)
         # self.characterPage.pageUpdate()
 
-    def setUpPerksPage(self):
-        perksPage = self.buildPage('perksPage', PerksPage)
-        self.gameRoot.controller.mousePress.connect(perksPage .mousePress)
-
-    def setUpMasteriesPage(self):
-        masteriesPage = self.buildPage('masteriesPage', MasteriesPage)
-        self.gameRoot.controller.mousePress.connect(masteriesPage .mousePress)
 
 
     def buildPage(self, pageName, pageClass):
