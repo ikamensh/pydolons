@@ -1,5 +1,9 @@
 import pytest
 
+import sys, os
+my_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, my_path +'/../')
+
 from DreamGame import DreamGame
 from battlefield.Battlefield import Cell, Battlefield
 from game_objects.battlefield_objects import Unit, BaseType, Obstacle
@@ -92,7 +96,6 @@ def pirate_band(pirate_basetype):
 @pytest.fixture()
 def battlefield8():
     bf = Battlefield(8, 8)
-
     return bf
 
 @pytest.fixture()

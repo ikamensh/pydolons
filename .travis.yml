@@ -1,10 +1,13 @@
 language: python
+sudo: required
+dist: xenial
 python:
-  - "3.6"  # 3.6 development branch
+  - "3.7"  # 3.7 development branch
   
 # command to install dependencies
 install:
   - pip install -r requirements.txt
 # command to run tests
 script:
+  - pwd
   - pytest

@@ -25,9 +25,12 @@ class Slot:
         item.owner = self.owner
 
         if self.owner:
-            item.game = self.owner.game
-            if hasattr(item, "on_equip"):
-                item.on_equip(self)
+            try:
+                item.game = self.owner.game
+                if hasattr(item, "on_equip"):
+                    item.on_equip(self)
+            except AttributeError:
+                pass
 
 
 

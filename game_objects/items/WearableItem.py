@@ -1,6 +1,13 @@
+from __future__ import annotations
 from game_objects.items import Item
 from game_objects.attributes import DynamicParameter
 from mechanics.events import ItemDestroyedEvent
+
+from my_utils.utils import tractable_value
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.items import Blueprint, Material, QualityLevel
 
 #Design: ensure item has game variable as soon as it enters any interactable containers.
 class WearableItem(Item):
@@ -8,7 +15,7 @@ class WearableItem(Item):
     durability = DynamicParameter("max_durability", on_zero_callbacks=[ItemDestroyedEvent])
     energy = DynamicParameter("max_energy")
 
-    def __init__(self, name, item_type, *, blueprint=None, quality=None, material=None,
+    def __init__(self, name, item_type, *, blueprint:Blueprint=None, quality:QualityLevel=None, material:Material=None,
                  max_durability=None, actives = None,
                  game=None):
         super().__init__(name, item_type, game=game)
@@ -24,6 +31,11 @@ class WearableItem(Item):
         self.active_enchantment = None
         self.bonuses = []
         self.actives = actives or []
+
+    @property
+    def price(self):
+        components_price = self.blueprint.price + ( self.material.price * self.blueprint.material_count)
+        return tractable_value( components_price * (0.8 + self.quality.rarity ** 4 / 5 ) )
 
     @property
     def durability_factor(self):

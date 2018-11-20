@@ -21,6 +21,9 @@ class Inventory:
         count = sum([1 for slot in self.all if slot.content])
         return count
 
+    def all_items(self):
+        return [slot.content for slot in self.all if slot.content]
+
     @property
     def empty_slots(self):
         return [slot for slot in self.all if not slot.content]
