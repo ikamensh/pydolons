@@ -108,7 +108,6 @@ class GameConfiguration:
                     elif name[-3:].lower() in self.sound_formats:
                         self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
 
-
     def getPicFile(self, filename, id = None, size = None):
         """
         если файл не найден генерируется ошибка
@@ -122,9 +121,8 @@ class GameConfiguration:
             # print(filename + ' image was not found. using default.')
             pixmap = self.pix_maps.get("default_128.png")
         if not id is None:
-            size = gameItemsSizes.get(id)
-            if not size is None:
-                pixmap = pixmap.scaled(size[self.rez_step][0], size[self.rez_step][1])
+            size = self.getSize(id)
+            pixmap = pixmap.scaled(size[0], size[1])
         return pixmap
 
     def setUpSounds(self):
@@ -161,6 +159,15 @@ class GameConfiguration:
                 self.pix_maps[filename] = pixmap
             except Exception as e:
                 print(e)
+
+    def getSize(self, id):
+        size = gameItemsSizes.get(id)
+        if size is None:
+            print("d'ont get size for id, set default")
+            return (64, 64)
+        else:
+            return size[self.rez_step]
+
 
 
 
