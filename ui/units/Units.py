@@ -19,20 +19,22 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
+        if unit == self.level.gameRoot.game.the_hero:
+            self.updateVision()
         x, y = cell_to.x, cell_to.y
-        if cell_to in self.getUitsLocations():
-            for cell_unit in self.getUnitsFromCell():
-                print('gt', cell_unit)
-                pass
         self.units_at[unit.uid].setWorldPos(x, y)
 
 
     def unitDied(self, unit):
         unit = self.units_at[unit.uid]
         self.removeFromGroup(unit)
+        if unit != self.level.gameRoot.game.the_hero:
+            self.updateVision()
         del self.units_at[unit.uid]
 
     def turnUnit(self, uid, turn):
+        if uid == self.level.gameRoot.game.the_hero.uid:
+            self.updateVision()
         self.units_at[uid].setDirection(turn)
 
     def collisionHeorOfUnits(self, x = None, y = None):
@@ -87,3 +89,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
         for unit in self.units_at.values():
             if unit.worldPos == cell_to:
                 yield unit
+
+    def updateVision(self):
+        hero = self.level.gameRoot.game.the_hero
+        bf = self.level.gameRoot.game.battlefield
+        self.level.gameVision.setSeenCells(bf.vision.std_seen_cells(hero))
