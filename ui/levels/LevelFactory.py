@@ -1,5 +1,6 @@
 from ui.GameWorld import GameWorld, ObstacleUnit
 from ui.units import UnitMiddleLayer
+from ui.units import GameVision
 from ui.units import Units, BasicUnit
 from ui.levels.BaseLevel import BaseLevel
 
@@ -37,9 +38,11 @@ class LevelFactory:
     def setUpLevel(self):
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
         self.level.world.setWorldSize(self.gameRoot.game.battlefield.w, self.gameRoot.game.battlefield.h)
-        self.level.world.setFloor(self.gameRoot.cfg.getPicFile('floor.png'))
+        self.level.world.setFloor(self.gameRoot.cfg.getPicFile('floor.png', 102001001))
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
+
+        self.level.gameVision = GameVision(self.level)
 
         self.setUpUnits(self.gameRoot.game.battlefield)
         self.level.gameRoot.cfg.setWorld(self.level.world)
@@ -74,11 +77,13 @@ class LevelFactory:
         scene.addItem(self.level.world)
         scene.addItem(self.level.units)
         scene.addItem(self.level.middleLayer)
+        scene.addItem(self.level.gameVision)
 
     def removeLevelFromScene(self, scene):
         scene.removeItem(self.level.world)
         scene.removeItem(self.level.units)
         scene.removeItem(self.level.middleLayer)
+        scene.removeItem(self.level.gameVision)
 
     def removeLevel(self):
         print('level --destroy')
