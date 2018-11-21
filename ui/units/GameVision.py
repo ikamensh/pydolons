@@ -51,6 +51,7 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
 
         self.shadowDark = QtWidgets.QGraphicsPolygonItem()
         self.shadowDark.setBrush(QtCore.Qt.black)
+        self.shadowGray.setOpacity(0.9)
         # self.shadowDark.setBrush(gBrush)
         self.shadowDark.setPen(pen)
         self.shadowDark.setPolygon(self.polyDark)

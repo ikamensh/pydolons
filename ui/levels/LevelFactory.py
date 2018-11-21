@@ -72,6 +72,7 @@ class LevelFactory:
 
         self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
         self.level.middleLayer.createSuppot(self.level.units.units_at, battlefield.units_at)
+        self.level.units.updateVision()
 
     def addLevelToScene(self, scene):
         scene.addItem(self.level.world)
