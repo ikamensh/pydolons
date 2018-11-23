@@ -2,7 +2,7 @@
 def setUpSize():
     gameItemsSizes = {}
     # CharacterPage sizes
-    gameItemsSizes[101002001] = ((32, 32), (64, 64), (128, 128))
+    gameItemsSizes[101002001] = ((32, 32), (64, 64), (96, 96))
     gameItemsSizes[101002002] = ((128, 128), (256, 256), (384, 384))
     # MasteriesPage
     gameItemsSizes[101003001] = ((32, 32), (64, 64), (128, 128))
@@ -12,10 +12,10 @@ def setUpSize():
     gameItemsSizes[101004002] = ((128, 128), (256, 256), (384, 384))
     # World size
     # Floor
-    gameItemsSizes[102001001] = ((128, 128), (256, 256), (256, 256))
+    gameItemsSizes[102001001] = ((128, 128), (128, 128), (128, 128))
     # GameVision
     # Shaow
-    gameItemsSizes[103001001] = ((128, 128), (256, 256), (256, 256))
+    gameItemsSizes[103001001] = ((128, 128), (128, 128), (128, 128))
     return gameItemsSizes
 
 gameItemsSizes = setUpSize()
