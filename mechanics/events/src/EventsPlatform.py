@@ -22,7 +22,7 @@ class EventsPlatform:
             if self.history is not None:
                 self.history.append( (event, True) )
 
-            if not isinstance(event, ActiveEvent) and not isinstance(event, NextUnitEvent):
+            if event.logging:
                 self.gamelog(event)
             event.resolve()
             for trigger in list(triggers):
@@ -31,7 +31,7 @@ class EventsPlatform:
         else:
             if self.history is not None:
                 self.history.append( (event, False) )
-            self.gamelog(repr(channel)+": INTERRUPTED")
+            self.gamelog(f"{event}: INTERRUPTED")
 
     def collect_history(self):
         self.history = []

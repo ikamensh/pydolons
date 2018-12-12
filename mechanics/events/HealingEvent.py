@@ -12,7 +12,7 @@ class HealingEvent(Event):
         self.source = source
         self.target = target
         self.healing_amount = healing_amount
-        super().__init__(target.game)
+        super().__init__(target.game, logging=True)
 
     def check_conditions(self):
         return self.target.alive and self.healing_amount > 0

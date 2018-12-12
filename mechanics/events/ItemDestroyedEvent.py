@@ -10,7 +10,7 @@ class ItemDestroyedEvent(Event):
 
     def __init__(self, item: WearableItem):
         self.item = item
-        super().__init__(item.game)
+        super().__init__(item.game, logging=True)
 
     def check_conditions(self):
         return True
