@@ -9,9 +9,10 @@ from mechanics.actives import ActiveTags, Active
 from cntent.actives.std_movements import std_movements, turn_ccw, turn_cw
 from cntent.actives.std_melee_attack import std_attacks
 from character.masteries.Masteries import Masteries, MasteriesEnum
-from typing import Set, TYPE_CHECKING
+from typing import Set, TYPE_CHECKING, List
 if TYPE_CHECKING:
     from DreamGame import DreamGame
+    from mechanics.buffs import Ability
 
 import copy
 from functools import lru_cache
@@ -40,8 +41,6 @@ class Unit(BattlefieldObject):
     melee_evasion = AttributeWithBonuses("melee_evasion_base", ca.EVASION)
 
 
-
-
     health = DynamicParameter("max_health", [lambda u : events.UnitDiedEvent(u)])
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
@@ -58,7 +57,8 @@ class Unit(BattlefieldObject):
         self.last_damaged_by = None
 
         self.bonuses = frozenset()
-        self._buffs = []
+        self.buffs = []
+        self.abilities: List[Ability] = []
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.quick_items = QuickItems(base_type.quick_items, self)
@@ -91,7 +91,7 @@ class Unit(BattlefieldObject):
             for a in self._abilities:
                 self.remove_ability(a)
 
-        self._abilities = []
+        self.abilities = []
         for abil in base_type.abilities:
             self.add_ability(abil())
 
@@ -116,7 +116,8 @@ class Unit(BattlefieldObject):
 
 
     def add_ability(self, ability):
-        ability.apply_to(self)
+        if self.game:
+            ability.apply_to(self)
         self.abilities.append(ability)
         self.recalc()
 
@@ -127,17 +128,17 @@ class Unit(BattlefieldObject):
 
     def add_buff(self, buff):
         buff.apply_to(self)
-        self._buffs.append(buff)
+        self.buffs.append(buff)
         self.recalc()
 
     def remove_buff(self, buff):
         buff.deactivate()
-        self._buffs.remove(buff)
+        self.buffs.remove(buff)
         self.recalc()
 
     def recalc(self):
         bonus_lists = [ability.bonus for ability in self.abilities if ability.bonus]
-        bonus_lists += [buff.bonus for buff in self._buffs if buff.bonus]
+        bonus_lists += [buff.bonus for buff in self.buffs if buff.bonus]
         bonus_lists += self.equipment.bonuses
         self.bonuses = frozenset(bonus_lists)
 
@@ -290,13 +291,6 @@ class Unit(BattlefieldObject):
     def attacks(self):
         return [a for a in self.actives if ActiveTags.ATTACK in a.tags]
 
-    @property
-    def abilities(self):
-        return self._abilities
-
-    @property
-    def buffs(self):
-        return self._buffs
 
 
     def __repr__(self):

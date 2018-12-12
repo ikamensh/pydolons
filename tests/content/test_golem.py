@@ -30,6 +30,20 @@ def test_discharges_stamina(just_a_golem, monkeypatch):
 
     assert just_a_golem.disabled is True
 
+def test_can_be_disabled(just_a_golem):
+    just_a_golem.disabled = True
+    assert just_a_golem.disabled
+
+def test_can_be_recharged(just_a_golem):
+
+    just_a_golem.golem_charge = 0
+    assert just_a_golem.disabled
+
+    just_a_golem.golem_charge += 1
+    assert just_a_golem.disabled is False
+
+
+
 
 
 
