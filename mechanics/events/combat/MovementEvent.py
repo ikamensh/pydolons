@@ -15,7 +15,7 @@ class MovementEvent(Event):
         self.battlefield = game.battlefield
         self.cell_from = self.battlefield.unit_locations[unit]
         self.cell_to = Cell.maybe_complex(cell_to)
-        super().__init__(game, fire=fire)
+        super().__init__(game, fire=fire, logging=True)
 
     def check_conditions(self):
         units_on_target_cell = self.battlefield.get_units_at(self.cell_to)

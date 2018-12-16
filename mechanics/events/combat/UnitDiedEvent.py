@@ -11,7 +11,7 @@ class UnitDiedEvent(Event):
     def __init__(self, unit: Unit):
         self.unit = unit
         self.killer: Unit = unit.last_damaged_by
-        super().__init__(unit.game)
+        super().__init__(unit.game, logging=True)
 
     def check_conditions(self):
         return self.unit.alive

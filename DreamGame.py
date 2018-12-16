@@ -88,6 +88,10 @@ class DreamGame:
         self.turns_manager.add_unit(unit)
         unit.alive = True
 
+        for a in unit.abilities:
+            a.apply_to(unit)
+
+
 
     def unit_died(self, unit: Unit):
         self.battlefield.remove(unit)

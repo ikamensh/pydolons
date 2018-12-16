@@ -8,7 +8,8 @@ from mechanics.events import DamageEvent
 def test_aoe(empty_game, hero, pirate_band):
 
     empty_game.add_unit(hero, 1+1j)
-    hero.add_ability( aoe_damage(1,1)() )
+    ability = aoe_damage(1,1)()
+    hero.add_ability( ability )
 
     p1, p2, p3 = pirate_band
 

@@ -46,8 +46,8 @@ class Active:
 
     def check_target(self, target):
         failing_conditions = self.checker.not_satisfied_conds(self, target)
-        for c in failing_conditions:
-            print(c.message(self, target))
+        # for c in failing_conditions:
+        #     print(c.message(self, target))
         return len(failing_conditions) == 0
 
     def activate(self, target=None):
@@ -100,7 +100,7 @@ class Active:
     # deepcopy throws TypeError on properties. But it does not on lambdas. Therefore _cost is either a Cost
     # object, or a lambda self: -> Cost
     @property
-    def cost(self):
+    def cost(self) -> Cost:
         try:
             return self._cost(self)
         except TypeError:

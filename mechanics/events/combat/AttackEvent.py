@@ -22,7 +22,7 @@ class AttackEvent(Event):
         precision, evasion = self.effective_precision_evasion()
         self.impact = self.weapon.chances.actual(precision, evasion).roll_impact(random=game.random)
 
-        super().__init__(game,fire)
+        super().__init__(game,fire, logging=True)
 
     def check_conditions(self) -> bool:
         return all( (self.source, self.source.alive, self.target, self.target.alive, self.weapon, self.weapon.durability is None or self.weapon.durability > 0) )
@@ -35,7 +35,7 @@ class AttackEvent(Event):
             if self.weapon and self.weapon.durability:
                 self.weapon.durability -= dmg_event.weapon_dur_dmg
         else:
-            self.game.gamelog("MISS")
+            self.game.gamelog(f"{self.source} misses {self.target}")
 
 
 

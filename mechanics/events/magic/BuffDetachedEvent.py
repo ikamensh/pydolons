@@ -10,7 +10,7 @@ class BuffDetachedEvent(Event):
 
     def __init__(self, buff):
         self.buff = buff
-        super().__init__(buff.bound_to.game)
+        super().__init__(buff.bound_to.game, logging=True)
 
     def check_conditions(self):
         return True

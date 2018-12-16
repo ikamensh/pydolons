@@ -12,7 +12,7 @@ class BuffAppliedEvent(Event):
     def __init__(self, buff: Buff, unit: Unit):
         self.buff = buff
         self.unit = unit
-        super().__init__(unit.game)
+        super().__init__(unit.game, logging=True)
 
     def check_conditions(self):
         return self.unit.alive

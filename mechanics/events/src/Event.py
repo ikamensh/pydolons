@@ -5,9 +5,10 @@ if TYPE_CHECKING:
     from DreamGame import DreamGame
 
 class Event:
-    def __init__(self, game: DreamGame, fire: bool=True):
+    def __init__(self, game: DreamGame, fire: bool=True, logging:bool = False):
         self.interrupted = False
         self.game = game
+        self.logging = logging
         if fire:
             self.fire()
 

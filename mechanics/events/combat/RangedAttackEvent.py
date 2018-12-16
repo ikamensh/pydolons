@@ -18,7 +18,7 @@ class RangedAttackEvent(Event):
         self.weapon = weapon
         self.is_backstab = not target.is_obstacle and not game.battlefield.x_sees_y(target, source)
         self.is_blind = not game.battlefield.x_sees_y(source, target)
-        super().__init__(game,fire)
+        super().__init__(game,fire, logging=True)
 
     def check_conditions(self) -> bool:
         return all( (self.source, self.source.alive, self.target, self.target.alive, self.weapon, self.weapon.durability is None or self.weapon.durability > 0) )
@@ -59,4 +59,4 @@ class RangedAttackEvent(Event):
         msg = ""
         msg += "Backstab! " if self.is_backstab else ""
         msg += "Blind attack! " if self.is_blind else ""
-        return msg + f"{self.source} attacks { self.target}."
+        return msg + f"{self.source} shoots at { self.target}."
