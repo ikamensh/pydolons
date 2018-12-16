@@ -13,9 +13,11 @@ class StartPage(AbstractPage):
         self.setUpWidgets()
         self.defaultGame = True
         self.isService = True
+        self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        # self.background.sceneBoundingRect()
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
@@ -28,17 +30,17 @@ class StartPage(AbstractPage):
 
         self.newGame = QtWidgets.QPushButton('New Game', mainWidget)
         self.newGame.setStyleSheet(buttonStyle)
-        self.newGame.pressed.connect(self.startNewGame)
+        self.newGame.clicked.connect(self.startNewGame)
         laoyout.addWidget(self.newGame)
 
         self.stop = QtWidgets.QPushButton('STOP', mainWidget)
         self.stop.setStyleSheet(buttonStyle)
-        self.stop.pressed.connect(self.stopSlot)
+        self.stop.clicked.connect(self.stopSlot)
         laoyout.addWidget(self.stop)
 
         self.levels = QtWidgets.QPushButton('Levels', mainWidget)
         self.levels.setStyleSheet(buttonStyle)
-        self.levels.pressed.connect(self.levelsSlot)
+        self.levels.clicked.connect(self.levelsSlot)
         laoyout.addWidget(self.levels)
 
         settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
@@ -47,6 +49,7 @@ class StartPage(AbstractPage):
 
         mainWidget.setLayout(laoyout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
+        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.resized()
 
     def showPage(self):
@@ -76,11 +79,11 @@ class StartPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def resized(self):
-        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
-        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
-        self.mainWidget.setPos(x, y)
-        # self.background.setRect(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
-        self.resizeBackground(self.background )
+        super().resized()
+        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        self.resizeBackground(self.background)
         pass
 
     def startNewGame(self):
@@ -100,6 +103,10 @@ class StartPage(AbstractPage):
         if e.key() == QtCore.Qt.Key_Escape:
             self.showPage()
         pass
+
+    def updatePos(self):
+        super().updatePos()
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
 
 
 

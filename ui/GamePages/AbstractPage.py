@@ -9,6 +9,8 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsItemGroup.__init__(self)
         # super(AbstractPage, self).__init__()
+        self.widget_pos = QtCore.QPoint()
+        self.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages = gamePages
         self.state = False
         self.isService = False
@@ -41,6 +43,7 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         pass
 
     def resized(self):
+        self.setPos(self.gamePages.gameRoot.view.mapToScene(0, 0))
         pass
 
     def release(self):
@@ -56,8 +59,6 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         pass
 
     def mouseMoveEvent(self, e):
-        # self.sceneEvent(e)
-        # super().mouseMoveEvent()
         pass
 
     def keyPressEvent(self, e):
@@ -72,10 +73,13 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         else:
             prec = w_screen /w_pic
         background.setScale(prec)
-
         x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.background.boundingRect().width() * prec) / 2
         y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.background.boundingRect().height() * prec) / 2
         background.setPos(x, y)
+
+    def updatePos(self):
+        """ update position for scale view"""
+        self.setPos(self.gamePages.gameRoot.view.mapToScene(0, 0))
 
 
 

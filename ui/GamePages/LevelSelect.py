@@ -10,6 +10,7 @@ from cntent.dungeons.small_graveyard import small_graveyard
 
 from DreamGame import DreamGame
 
+
 class LevelSelect(AbstractPage):
     """docstring for LevelSelect."""
     def __init__(self, gamePages):
@@ -23,6 +24,8 @@ class LevelSelect(AbstractPage):
         self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
         self.defaultGame = True
         self.isService = True
+        self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
+
 
     def setUpGui(self):
         self.cancel.pressed.connect(self.cancelSlot)
@@ -77,6 +80,7 @@ class LevelSelect(AbstractPage):
 
         mainWidget.setLayout(mainLayout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
+        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         self.resized()
 
@@ -144,10 +148,11 @@ class LevelSelect(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def resized(self):
+        super().resized()
         self.w = self.mainWidget.boundingRect().width()
-        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
-        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
-        self.mainWidget.setPos(x, y)
+        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.mainWidget.setPos(self.widget_pos)
         self.resizeBackground(self.background)
         pass
 
@@ -165,13 +170,16 @@ class LevelSelect(AbstractPage):
             else:
                 widget.setStyleSheet("#DungeonFrame {border: 2px solid black}")
 
-
     def selectDungeon(self, dungeon):
         self.textWidget.setText(dungeon.tooltip_info)
 
     def cancelSlot(self):
         self.hidePage()
         self.gamePages.startPage.showPage()
+
+    def updatePos(self):
+        super().updatePos()
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
 
 
 
