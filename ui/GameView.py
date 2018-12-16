@@ -4,6 +4,7 @@ from ui.GameConfiguration import GameConfiguration
 
 class GameView(QtWidgets.QGraphicsView):
     resized = QtCore.Signal()
+    wheel_change = QtCore.Signal()
     def __init__(self, parent = None):
         QtWidgets.QGraphicsView.__init__(self, parent)
         # Задаем минимальный размер виджета
@@ -20,9 +21,16 @@ class GameView(QtWidgets.QGraphicsView):
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.slotAlarmTimer)
         self.timer.start(50)
+        self.setTransformationAnchor(QtWidgets.QGraphicsView.AnchorUnderMouse)
 
     def wheelEvent(self, e):
-        self.controller.wheelEvent(e)
+        if e.delta() > 0.0:
+            self.scale(1.05, 1.05)
+        else:
+            self.scale(1 / 1.05, 1 / 1.05)
+        self.wheel_change.emit()
+
+
 
     def keyPressEvent(self, e):
         super(GameView, self).keyPressEvent(e)
