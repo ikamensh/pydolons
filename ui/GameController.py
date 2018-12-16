@@ -72,10 +72,10 @@ class GameController(QtCore.QObject):
         """ Метод перехватывает событие мышки скролл, скролл больше 0 зумм +,
         скролл меньше нуля зумм -
         """
-        if e.delta() > 0.0:
-            self.zoomIn()
-        elif e.delta() < 0.0:
-            self.zoomOut()
+        # if e.delta() > 0.0:
+        #     self.zoomIn()
+        # elif e.delta() < 0.0:
+        #     self.zoomOut()
         pass
 
     def zoomIn(self):
