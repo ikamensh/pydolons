@@ -67,4 +67,3 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
         for cell in cells:
             painPath.addRect(cell.x * self.cell_w, cell.y * self.cell_h , self.cell_w, self.cell_h )
         return painPath
-    
