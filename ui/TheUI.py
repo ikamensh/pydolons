@@ -55,7 +55,7 @@ class TheUI(QtWidgets.QWidget):
         self.scene = QtWidgets.QGraphicsScene(0, 0, 500, 500)
         self.gameRoot.setScene(self.scene)
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
-        self.scene.setBackgroundBrush(QtGui.QBrush(self.gameconfig.getPicFile('dungeon.jpg')))
+        self.scene.setBackgroundBrush(QtCore.Qt.black)
 
         self.controller = GameController()
         self.gameRoot.setGameController(self.controller)
