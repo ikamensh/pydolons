@@ -77,8 +77,8 @@ class LevelFactory:
     def addLevelToScene(self, scene):
         scene.addItem(self.level.world)
         scene.addItem(self.level.units)
-        scene.addItem(self.level.middleLayer)
         scene.addItem(self.level.gameVision)
+        scene.addItem(self.level.middleLayer)
 
     def removeLevelFromScene(self, scene):
         scene.removeItem(self.level.world)
