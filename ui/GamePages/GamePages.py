@@ -3,17 +3,12 @@
 Страницы создаются один раз при загрузке игры.
 Страницы обновляются по мере необходимости.
 """
-from ui.GamePages.AbstractPage import AbstractPage
+
 from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
-from ui.GamePages.CharacterPage import CharacterPage
-from ui.GamePages.PerksPage import PerksPage
-from ui.GamePages.MasteriesPage import MasteriesPage
 from ui.GamePages.ChaPage import ChaPage
-
-
-from PySide2 import QtGui, QtCore, QtWidgets
+from ui.GamePages.BackGorundPage import BackGorundPage
 
 
 class GamePages(object):
@@ -31,10 +26,11 @@ class GamePages(object):
 
 
     def setGameRoot(self, gameRoot):
-        self.gameRoot =  gameRoot
+        self.gameRoot = gameRoot
         self.gameRoot.gamePages = self
 
     def setUpPages(self):
+        self.setUpBackgrounPage()
         self.setUpCharecterPage()
         self.setUpGameMenu()
 
@@ -52,6 +48,9 @@ class GamePages(object):
             i += 1
         self.gameMenu = None
 
+    def setUpBackgrounPage(self):
+        self.background = self.buildPage('background', BackGorundPage)
+        self.gameRoot.scene.addItem(self.background)
 
     def setUpStartPage(self, ui):
         self.startPage = self.buildPage('startPage', StartPage)
@@ -71,14 +70,7 @@ class GamePages(object):
         self.gameMenu = gameMenu
 
     def setUpCharecterPage(self):
-        # characterPage = self.buildPage('characterPage', CharacterPage)
-        # self.gameRoot.controller.mousePress.connect(characterPage.mousePress)
-
         chaPage = self.buildPage('chaPage', ChaPage)
-        self.gameRoot.controller.mousePress.connect(chaPage.mousePress)
-        # self.characterPage.pageUpdate()
-
-
 
     def buildPage(self, pageName, pageClass):
         page = pageClass(self)
@@ -87,8 +79,6 @@ class GamePages(object):
         page.focusable.connect(self.setFocus)
         page.setUpGui()
         return page
-
-
 
     def mouseMoveEvent(self, e):
         # self.checkFocus(e.pos())
@@ -113,6 +103,12 @@ class GamePages(object):
             return True
         if self.levelSelect.state:
             return True
+        if not self.pages.get('chaPage') is None:
+            if self.pages.get('chaPage').state:
+                return True
+        if not self.pages.get('gameMenu') is None:
+            if self.pages.get('gameMenu').isFocus():
+                return True
 
     def setFocus(self, isFocus):
         self.focusState = isFocus
