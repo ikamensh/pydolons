@@ -15,22 +15,10 @@ class Target(QtWidgets.QGraphicsRectItem):
         self.worldPos.x = x
         self.setX(x * self.w)
 
-    # def boundingRect(self):
-    #     return  QtCore.QRectF(self.x(), self.y(), self.w, self.h)
-
     def setWorldY(self, y):
         self.worldPos.y = y
         self.setY(y * self.h )
 
-
     def setWorldPos(self, x, y):
         self.setWorldX(x)
         self.setWorldY(y)
-
-
-    # def paint(self, painter, option = None, widget = None):
-    #     tempPen = painter.pen()
-    #     painter.setPen(self.pen)
-    #     painter.drawLine(self.x() + self.w / 2 , self.y(), self.x()+ self.w/2, self.y()+ self.h)
-    #     painter.drawLine(self.x()  , self.y() + self.h/ 2, self.x()+ self.w, self.y()+ self.h/2)
-    #     painter.setPen(tempPen)
