@@ -45,14 +45,13 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
         self.shadowGray = QtWidgets.QGraphicsPolygonItem()
         self.shadowGray.setBrush(QtCore.Qt.black)
         self.shadowGray.setPen(pen)
-        self.shadowGray.setOpacity(0.7)
+        self.shadowGray.setOpacity(0.6)
         self.shadowGray.setPolygon(self.polyGray)
         self.addToGroup(self.shadowGray)
 
         self.shadowDark = QtWidgets.QGraphicsPolygonItem()
         self.shadowDark.setBrush(QtCore.Qt.black)
-        self.shadowGray.setOpacity(0.9)
-        # self.shadowDark.setBrush(gBrush)
+        self.shadowDark.setOpacity(0.8)
         self.shadowDark.setPen(pen)
         self.shadowDark.setPolygon(self.polyDark)
         self.addToGroup(self.shadowDark)
@@ -68,3 +67,4 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
         for cell in cells:
             painPath.addRect(cell.x * self.cell_w, cell.y * self.cell_h , self.cell_w, self.cell_h )
         return painPath
+    
