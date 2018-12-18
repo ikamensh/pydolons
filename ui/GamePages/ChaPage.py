@@ -19,10 +19,11 @@ class ChaPage(AbstractPage):
         self.w_2 = int(self.w / 2)
         self.h_2 = int(self.h / 2)
         self.setUpWidgets()
+        self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
-        self.background = QtWidgets.QGraphicsRectItem(0, 0, self.w, self.h)
-        self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
@@ -45,6 +46,7 @@ class ChaPage(AbstractPage):
         mainWidget.setLayout(mainLayout)
 
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
+        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         self.resized()
 
@@ -149,12 +151,13 @@ class ChaPage(AbstractPage):
         self.updatePage()
 
     def resized(self):
-        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
-        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
-        self.mainWidget.setPos(x, y)
+        super().resized()
+        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
         self.w = self.mainWidget.widget().width()
         self.h = self.mainWidget.widget().height()
-        self.background.setRect(x, y, self.w, self.h)
+        self.resizeBackground(self.background)
         pass
 
     def showPage(self):
@@ -180,17 +183,7 @@ class ChaPage(AbstractPage):
             else:
                 self.updatePage()
                 self.showPage()
-
-    def mousePress(self, e):
-        self.mousePos = e.pos()
-        if self.state:
-            focusState = self.mainWidget.widget().geometry().contains(e.pos().x(), e.pos().y())
-            if focusState:
                 self.focusable.emit(True)
-            else:
-                self.focusable.emit(False)
-                self.resetPage()
-                self.hidePage()
 
     def destroy(self):
         self.mainWidget.widget().destroy()
@@ -208,3 +201,7 @@ class ChaPage(AbstractPage):
     def resetPage(self):
         self.gamePages.gameRoot.lengine.character.reset()
         pass
+
+    def updatePos(self):
+        super().updatePos()
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
