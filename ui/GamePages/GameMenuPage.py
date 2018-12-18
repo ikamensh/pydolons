@@ -1,4 +1,5 @@
 from PySide2 import QtCore, QtWidgets
+from PySide2.QtGui import QPolygon
 
 from ui.gamecore.GameObject import GameObject
 from ui.GamePages.suwidgets.GuiConsole import GuiConsole
@@ -10,17 +11,18 @@ class GameMenuPage(AbstractPage):
     """docstring for ScreenMenu."""
     def __init__(self, gamePages):
         super(GameMenuPage, self).__init__(gamePages)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gui_console = None
+        self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def showNotify(self, text):
         self.notify.showText(text)
 
     def setUpGui(self):
-        self.actives = Actives(self, columns = 6)
+        self.actives = Actives(self, columns=6)
         self.actives.setTargets.connect(self.gamePages.gameRoot.level.middleLayer.getTargets)
 
         self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
+        self.gamePages.gameRoot.controller.mouseMove.connect(self.mouseMove)
 
         self.notify = self.gamePages.gameRoot.suwidgetFactory.getNotifyText(self.gamePages.gameRoot)
         self.addToGroup(self.notify)
@@ -47,7 +49,7 @@ class GameMenuPage(AbstractPage):
             item = GameObject(64, 64)
             item.setParentItem(self.unitStack)
             item.setPixmap(unit.pixmap().scaled(64, 64))
-            item.setPos(self.unitStack.x() + i* 64, self.unitStack.y())
+            item.setPos(self.unitStack.x() + i * 64, self.unitStack.y())
             item.stackBefore(self.active_select)
             self.unitStack.items[unit.uid] = item
             i += 1
@@ -71,7 +73,12 @@ class GameMenuPage(AbstractPage):
         self.gui_console.setTabChangesFocus(False)
         self.gui_console.resize(320, 240)
         self.gamePages.gameRoot.controller.mouseMove.connect(self.gui_console.setMousePos)
+        self.gui_console.btn.clicked.connect(self.updateGuiConsolePos)
         self.p_gui_console = self.scene().addWidget(self.gui_console)
+        self.p_gui_console.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+
+    def updateGuiConsolePos(self):
+        self.p_gui_console.setPos(self.gamePages.gameRoot.view.mapToScene(self.gui_console.widget_pos))
 
     def rmToUnitStack(self, uid):
         self.unitStack.items[uid].setParentItem(None)
@@ -83,7 +90,6 @@ class GameMenuPage(AbstractPage):
         w = len(units_stack)
         self.unitStack.rect().setWidth(w * 64)
         i = 0
-        #next_unit = my_context.the_game.turns_manager.get_next()
         for bf_unit in units_stack:
             self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
             i += 1
@@ -96,8 +102,12 @@ class GameMenuPage(AbstractPage):
         self.setY(pos.y())
 
     def resized(self):
+        super().resized()
         self.gui_console.resized(self.gamePages.gameRoot.cfg.dev_size)
+
+        self.updateGuiConsolePos()
         self.actives.resized()
+        self.upateActivesPos()
 
     def isFocus(self):
         return self.actives.isFocus() or self.gui_console.isFocus()
@@ -108,4 +118,16 @@ class GameMenuPage(AbstractPage):
         self.gui_console.killTimer(self.gui_console.id)
         self.gamePages.gameRoot.scene.removeItem(self.p_gui_console )
         del self.p_gui_console
+
+    def updatePos(self):
+        super().updatePos()
+        self.upateActivesPos()
+        self.updateGuiConsolePos()
+
+    def upateActivesPos(self):
+        self.actives.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.actives.x, self.actives.y))
+
+    def mouseMove(self, e):
+        pass
+
 
