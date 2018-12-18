@@ -17,7 +17,6 @@ class StartPage(AbstractPage):
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
-        # self.background.sceneBoundingRect()
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
