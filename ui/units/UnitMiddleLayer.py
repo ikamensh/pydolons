@@ -23,7 +23,6 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def setUp(self):
         self.level.gameRoot.pages.gameMenu.actives.setTargets.connect(self.getTargets)
 
-
     def setUpSelectItem(self):
         self.select_item = QtWidgets.QGraphicsRectItem()
         self.select_item.setRect(0, 0, self.w, self.h)
@@ -48,7 +47,6 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def selectItem(self, x, y):
         self.select_item.setX(x * self.w)
         self.select_item.setY(y * self.h)
-
 
     def createHPBar(self, unit, unit_bf):
         hp = HealthBar()
@@ -117,14 +115,13 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
             else:
                 self.addTarget(self.level.gameRoot.game.battlefield.unit_locations[item])
 
-
     def addTarget(self, item):
         target = Target()
         target.setBrush(QtCore.Qt.green)
-        target.w =  self.w *  self.transform().m11()
+        target.w = self.w * self.transform().m11()
         target.h = self.h * self.transform().m11()
-        target.setRect(0, 0, target.w , target.h)
-        target.setWorldPos(item.x, item.y )
+        target.setRect(0, 0, target.w, target.h)
+        target.setWorldPos(item.x, item.y)
         self.targets.append(target)
         self.addToGroup(target)
         self.targeted = True
