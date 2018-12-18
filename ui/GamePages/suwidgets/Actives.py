@@ -1,7 +1,10 @@
 from PySide2 import QtCore, QtWidgets
+from PySide2.QtGui import QIcon
+
 
 class Actives(QtCore.QObject):
     setTargets = QtCore.Signal(list)
+
     def __init__(self, page, parent = None, widget_size = (64, 64), margin = 10, columns = 3):
         super(Actives, self).__init__(parent)
         self.x, self.y = 0, 0
@@ -34,7 +37,6 @@ class Actives(QtCore.QObject):
         self.rect.setWidth(self.w)
         self.rect.setHeight(self.h)
 
-
     def setFrameSize(self, size:set, col:int, row:int):
         w = size[0] * col + self.margin * (col + 2)
         h = size[1] * row + self.margin * (row + 2)
@@ -42,10 +44,11 @@ class Actives(QtCore.QObject):
         if not self.frame is None:
             self.frame.setMinimumSize(self.frame_size[0], self.frame_size[1])
 
-
-
     def addWidget(self, name):
-        widget = QtWidgets.QPushButton(name)
+        widget = QtWidgets.QPushButton()
+        widget.setIcon(self.getIcon(name))
+        widget.setIconSize(QtCore.QSize(48, 48))
+        widget.setProperty('active_name', name)
         widget.setMinimumSize(self.widget_size[0], self.widget_size[1])
         widget.setFixedSize(self.widget_size[0], self.widget_size[1])
         widget.setSizePolicy(self.sizePolicy)
@@ -71,7 +74,7 @@ class Actives(QtCore.QObject):
             widget.setProperty('status', active.owner_can_afford_activation())
             widget.setProperty('active', active)
             widget.setStyleSheet('QPushButton[status = "true"]{'
-                             'background-color:green;}'
+                             'background-color:black;}'
                              'QPushButton[status = "false"]{'
                              'background-color:gray;}'
                              'QPushButton:pressed {'
@@ -127,8 +130,8 @@ class Actives(QtCore.QObject):
         self.up.pressed.connect(self.upSlot)
         self.down.pressed.connect(self.downSlot)
         self.mainWidget:QtWidgets.QGraphicsProxyWidget = self.page.gamePages.gameRoot.scene.addWidget(self.mainWidget)
+        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.resized()
-
 
     def resized(self, size = None):
         size = self.page.gamePages.gameRoot.cfg.dev_size
@@ -145,12 +148,6 @@ class Actives(QtCore.QObject):
             if targets:
                 self.setTargets.emit(targets)
 
-    def showPrxToolTip(self, widget, pos):
-        self.prxToolTip.setPos(pos.x(), pos.y() - 64)
-        self.prxToolTip.widget().setText(widget.text())
-        self.prxToolTip.setVisible(True)
-
-
     def mouseMoveEvent(self, e):
         self.mousePos = e.pos()
         if self.mainWidget.geometry().contains(e.pos()):
@@ -161,7 +158,7 @@ class Actives(QtCore.QObject):
             qr = QtCore.QRect(self.x + self.frame.x() + widget.x(), self.y + self.frame.y() + widget.y(), self.widget_size[0], self.widget_size[1])
             if qr.contains(pos.x(), pos.y()):
                 widget.setFocus()
-                self.page.showToolTip(widget.text(), pos.x() + 20, pos.y() - 20)
+                self.page.showToolTip(widget.property('active_name'), pos.x() + 20, pos.y() - 20)
                 break
             else:
                 self.page.hideToolTip()
@@ -174,16 +171,32 @@ class Actives(QtCore.QObject):
         del self.mainWidget
 
     def upSlot(self):
-        print('pressed up')
         self.frame.move(0, 0)
 
-
     def downSlot(self):
-        print('pressed down')
         self.frame.move(0, - self.mainWidget.widget().height())
 
     def isFocus(self):
-        focus = self.mainWidget.widget().geometry().contains(self.mousePos.x(), self.mousePos.y())
+        focus = self.rect.contains(self.mousePos.x(), self.mousePos.y())
         return focus
+
+    def getIcon(self, name):
+        if name == 'Standard attack':
+            name = 'active_attack.png'
+        elif name == 'move forward':
+            name = 'active_move.png'
+        elif name == 'move forward diagonally':
+            name = 'active_move_diag.png'
+        elif name == 'move to the side':
+            name = 'active_move_side.png'
+        elif name == 'move back':
+            name = 'active_move_back.png'
+        elif name == 'turn CW':
+            name = 'active_turn_cw.png'
+        elif name == 'turn CCW':
+            name = 'active_turn_ccw.png'
+        else:
+            name = 'active_move.png'
+        return QIcon(self.page.gamePages.gameRoot.cfg.getPicFile(name))
 
 
