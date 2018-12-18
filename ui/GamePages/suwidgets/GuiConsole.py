@@ -1,7 +1,6 @@
 from PySide2 import QtWidgets, QtCore
 
 
-
 class GuiConsole(QtWidgets.QPlainTextEdit):
     def __init__(self, log, *args):
         super(GuiConsole, self).__init__(*args)
@@ -10,6 +9,8 @@ class GuiConsole(QtWidgets.QPlainTextEdit):
         self.log = log
         self.state = True
         self.mousePos = QtCore.QPoint(0, 0)
+        self.widget_pos = QtCore.QPoint()
+        self.rect = QtCore.QRectF()
         self.addWidgets()
 
     def addWidgets(self):
@@ -17,17 +18,17 @@ class GuiConsole(QtWidgets.QPlainTextEdit):
         self.btn.setFixedSize(20, 20)
         buttonStyle = 'QPushButton{background-color:black;color:white;}QPushButton:pressed{background-color:white;color:black;}'
         self.btn.setStyleSheet(buttonStyle)
-        self.btn.pressed.connect(self.pressBtn)
+        self.btn.clicked.connect(self.pressBtn)
 
     def pressBtn(self):
         if self.state:
-            x = self.x() - self.btn.width() + self.width()
-            self.move(x, self.y())
+            x = self.widget_pos.x() - self.btn.width() + self.width()
             self.state = False
         else:
-            x = self.x() + self.btn.width() - self.width()
-            self.move(x, self.y())
+            x = self.widget_pos.x() + self.btn.width() - self.width()
             self.state = True
+        self.widget_pos.setX(x)
+        self.rect.setRect(self.widget_pos.x(), self.widget_pos.y(), self.width(), self.height())
 
     def timerEvent(self, e):
         if self.last_msg != self.log.msg:
@@ -36,16 +37,15 @@ class GuiConsole(QtWidgets.QPlainTextEdit):
 
     def resized(self, dev_size):
         if self.state:
-            x = dev_size[0] - self.width()
-            y = dev_size[1] - self.height()
+            self.widget_pos.setX(dev_size[0] - self.width())
         else:
-            x = dev_size[0] - self.btn.width()
-            y = dev_size[1] - self.height()
-        self.move(x, y)
+            self.widget_pos.setX(dev_size[0] - self.btn.width())
+        self.widget_pos.setY(dev_size[1] - self.height())
+        self.rect.setRect(self.widget_pos.x(), self.widget_pos.y(), self.width(), self.height())
 
     def setMousePos(self, e):
         self.mousePos = e.pos()
 
     def isFocus(self):
-        return self.geometry().contains(self.mousePos)
+        return self.rect.contains(self.mousePos)
 
