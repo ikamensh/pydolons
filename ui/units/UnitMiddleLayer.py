@@ -86,17 +86,13 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.addToGroup(self.tool)
 
     def showToolTip(self, cell, units_at, units_bf):
+        #TODO This method view one unit info from cell, in cell maybe many units
         if cell in [unit.worldPos for unit in units_at.values()]:
             if cell in units_bf.keys():
                 unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
                 self.tool.setPos(unit.pos())
-                try:
-                    self.tool.setDict(units_bf[cell].tooltip_info)
-                except Exception as e:
-                    self.tool.setVisible(False)
-                else:
-                    self.tool.setVisible(True)
-
+                self.tool.setDict(units_bf[cell][0].tooltip_info)
+                self.tool.setVisible(True)
         else:
             self.tool.setVisible(False)
 
