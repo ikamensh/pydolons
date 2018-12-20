@@ -9,6 +9,7 @@ from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.ChaPage import ChaPage
 from ui.GamePages.BackGorundPage import BackGorundPage
+from ui.GamePages.ReadmePage import ReadmePage
 
 
 class GamePages(object):
@@ -22,8 +23,6 @@ class GamePages(object):
         self.focus = False
         self.pages = {}
         self.visiblePage = True
-
-
 
     def setGameRoot(self, gameRoot):
         self.gameRoot = gameRoot
@@ -72,10 +71,13 @@ class GamePages(object):
     def setUpCharecterPage(self):
         chaPage = self.buildPage('chaPage', ChaPage)
 
+    def setUpReadmePage(self):
+        self.readme = self.buildPage('readmePage', ReadmePage)
+
     def buildPage(self, pageName, pageClass):
         page = pageClass(self)
         self.pages[pageName] = page
-        self.gameRoot.controller.keyPress.connect(page.keyPressEvent)
+        self.gameRoot.view.keyPress.connect(page.keyPressEvent)
         page.focusable.connect(self.setFocus)
         page.setUpGui()
         return page

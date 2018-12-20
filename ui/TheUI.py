@@ -67,6 +67,7 @@ class TheUI(QtWidgets.QWidget):
         self.gameRoot.setGamePages(self.gamePages)
         self.gamePages.setUpStartPage(self)
         self.gamePages.setUpLevelsPage()
+        self.gamePages.setUpReadmePage()
 
         self.view.resized.connect(self.gamePages.resized)
         self.view.setScene(self.scene)
