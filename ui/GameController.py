@@ -57,7 +57,7 @@ class GameController(QtCore.QObject):
                 if self.tr_support.floor_rect.contains(pos.x(), pos.y()):
                     self.moveCursor(pos)
                     self.itemSelect(pos)
-        self.tr_support.mouseMoveEvent(e)
+            self.tr_support.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
         self.mousePress.emit(e)
@@ -86,7 +86,8 @@ class GameController(QtCore.QObject):
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def wheelEvent(self, e):
-        self.tr_support.wheelEvent()
+        if not self.gameRoot.gamePages.isGamePage:
+            self.tr_support.wheelEvent()
         pass
 
     def moveScene(self, rect, x, y):
