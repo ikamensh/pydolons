@@ -3,6 +3,7 @@ from ui.units import UnitMiddleLayer
 from ui.units import GameVision
 from ui.units import Units, BasicUnit
 from ui.levels.BaseLevel import BaseLevel
+from ui.debug.DebugLayer import DebugLayer
 
 from game_objects import battlefield_objects as bf_objs
 from game_objects.battlefield_objects import  Obstacle
@@ -47,6 +48,8 @@ class LevelFactory:
         self.setUpUnits(self.gameRoot.game.battlefield)
         self.level.gameRoot.cfg.setWorld(self.level.world)
         self.level.gameRoot.controller.setUp(self.level.world, self.level.units, self.level.middleLayer)
+        self.level.gameRoot.controller.tr_support.initLevel(self.level)
+        self.level.debugLayer = DebugLayer(self.level)
 
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
@@ -79,6 +82,7 @@ class LevelFactory:
         scene.addItem(self.level.units)
         scene.addItem(self.level.gameVision)
         scene.addItem(self.level.middleLayer)
+        # scene.addItem(self.level.debugLayer)
 
     def removeLevelFromScene(self, scene):
         scene.removeItem(self.level.world)
@@ -95,6 +99,7 @@ class LevelFactory:
         self.level.middleLayer.level = None
         self.level.middleLayer = None
         del self.level
+
 
 
 
