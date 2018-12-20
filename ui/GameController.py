@@ -4,6 +4,7 @@ from battlefield.Facing import Facing
 
 from ui.events import UiErrorMessageEvent
 from exceptions import PydolonsException
+from ui.TransformSupport import TransformSupport
 
 
 class GameController(QtCore.QObject):
@@ -19,15 +20,20 @@ class GameController(QtCore.QObject):
         """
         self.gameRoot = None
         self.tr = QtGui.QTransform()
+        self.tr_support:TransformSupport = None
 
         self.cursor = QtWidgets.QGraphicsEllipseItem(-10, -10, 20, 20)
 
         self.last_point = Cell(0, 0)
         self.selected_point = Cell(0, 0)
         self.lost_m_pos = QtCore.QPoint()
+        self.r_mouse = False
+
 
     def setGameRoot(self, gameRoot):
-        self.gameRoot =  gameRoot
+        self.tr_support = TransformSupport(gameRoot)
+        gameRoot.view.resized.connect(self.tr_support.resized)
+        self.gameRoot = gameRoot
         self.gameRoot.controller = self
 
     def setUp(self, world, units, middleLayer):
@@ -48,22 +54,28 @@ class GameController(QtCore.QObject):
                 pos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
                 self.lost_m_pos.setX(pos.x())
                 self.lost_m_pos.setY(pos.y())
-                if self.world.floor.rect().contains(pos.x(), pos.y()):
+                if self.tr_support.floor_rect.contains(pos.x(), pos.y()):
                     self.moveCursor(pos)
                     self.itemSelect(pos)
+        self.tr_support.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
         self.mousePress.emit(e)
-        try:
-            if not self.gameRoot.gamePages.isGamePage:
-                if self.world.floor.rect().contains(self.lost_m_pos.x(), self.lost_m_pos.y()):
-                    self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
-                    self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                    self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
-        except PydolonsException as exc:
-            UiErrorMessageEvent(self.gameRoot.game, repr(exc))
+        self.tr_support.mousePressEvent(e)
+        if e.button() == QtCore.Qt.RightButton:
+            self.r_mouse = True
+            try:
+                if not self.gameRoot.gamePages.isGamePage:
+                    if self.tr_support.floor_rect.contains(self.lost_m_pos.x(), self.lost_m_pos.y()):
+                        self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                        self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                        self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+            except PydolonsException as exc:
+                UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def mouseReleaseEvent(self, e):
+        self.tr_support.mouseReleaseEvent(e)
+        self.r_mouse = False
         self.mouseRelease.emit()
 
     def keyPressEvent(self, e):
@@ -74,6 +86,7 @@ class GameController(QtCore.QObject):
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def wheelEvent(self, e):
+        self.tr_support.wheelEvent()
         pass
 
     def moveScene(self, rect, x, y):
@@ -107,8 +120,9 @@ class GameController(QtCore.QObject):
             self.gameRoot.gameMenu.setDefaultPos()
 
     def itemSelect(self, pos):
-        x = int((pos.x() / self.tr.m11()) / self.gameRoot.cfg.unit_size[0])
-        y = int((pos.y() / self.tr.m11()) / self.gameRoot.cfg.unit_size[1])
+        x = int((pos.x() - self.tr_support.tr.m31() - self.world.pos().x()) / self.gameRoot.cfg.unit_size[0])
+        y = int((pos.y() - self.tr_support.tr.m32() - self.world.pos().y()) / self.gameRoot.cfg.unit_size[1])
+
         self.last_point.x, self.last_point.y = x, y
         self.middleLayer.showToolTip(self.last_point,
                                      self.units.units_at,
