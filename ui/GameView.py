@@ -5,6 +5,8 @@ from ui.GameConfiguration import GameConfiguration
 class GameView(QtWidgets.QGraphicsView):
     resized = QtCore.Signal()
     wheel_change = QtCore.Signal()
+    keyPress = QtCore.Signal(QtCore.QEvent)
+
     def __init__(self, parent = None):
         QtWidgets.QGraphicsView.__init__(self, parent)
         # Задаем минимальный размер виджета
@@ -29,11 +31,13 @@ class GameView(QtWidgets.QGraphicsView):
         else:
             self.scale(1 / 1.05, 1 / 1.05)
         self.wheel_change.emit()
+        self.controller.wheelEvent(e)
 
 
 
     def keyPressEvent(self, e):
         super(GameView, self).keyPressEvent(e)
+        self.keyPress.emit(e)
         self.controller.keyPressEvent(e)
 
     def mouseMoveEvent(self, e):
