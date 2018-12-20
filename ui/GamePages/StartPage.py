@@ -42,6 +42,11 @@ class StartPage(AbstractPage):
         self.levels.clicked.connect(self.levelsSlot)
         laoyout.addWidget(self.levels)
 
+        self.readme = QtWidgets.QPushButton('README', mainWidget)
+        self.readme.setStyleSheet(buttonStyle)
+        self.readme.clicked.connect(self.readmeSlot)
+        laoyout.addWidget(self.readme)
+
         settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
         settings.setStyleSheet(buttonStyle)
         laoyout.addWidget(settings)
@@ -97,6 +102,10 @@ class StartPage(AbstractPage):
     def levelsSlot(self):
         self.hidePage()
         self.gamePages.levelSelect.showPage()
+
+    def readmeSlot(self):
+        self.hidePage()
+        self.gamePages.readme.showPage()
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
