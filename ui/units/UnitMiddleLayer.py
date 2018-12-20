@@ -96,7 +96,6 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         else:
             self.tool.setVisible(False)
 
-
     def removeUnitLayer(self, uid):
         self.removeFromGroup(self.unit_hps[uid])
         del self.unit_hps[uid]
