@@ -62,6 +62,8 @@ class TransformSupport:
         level.units.setTransform(self.tr)
         level.gameVision.setTransform(self.tr)
         level.middleLayer.setTransform(self.tr)
+        self.update_frame_rect()
+
 
     def updateItemsPos(self):
         self.floor_rect.setRect(self.level.world.pos().x() + self.tr.m31(),
