@@ -27,7 +27,7 @@ class GameRootNode(object):
 
     def setGameController(self, controller):
         self.controller = controller
-        self.controller.gameRoot = self
+        self.controller.setGameRoot(self)
 
     def setLevel(self, level):
         self.level = level
