@@ -8,7 +8,7 @@ class StarSearch(AStar):
         super().__init__()
         self.game = game
         self.unit = unit
-        self.fraction = self.game.fractions[self.unit]
+        self.faction = self.game.factions[self.unit]
         self.visited = []
         self.depth_limit = depth_limit
 
@@ -19,10 +19,10 @@ class StarSearch(AStar):
 
     def distance_between(self, n1, n2):
         #TODO maybe we need to ensure actual measurement on the nodes, not the fast, emulated one.
-        return n1.utility(self.fraction) - n2.utility(self.fraction)
+        return n1.utility(self.faction) - n2.utility(self.faction)
 
     def heuristic_cost_estimate(self, current, goal):
-        return -current.utility(self.fraction)
+        return -current.utility(self.faction)
 
     def is_goal_reached(self, current, goal):
         return len(self.visited) >= self.depth_limit

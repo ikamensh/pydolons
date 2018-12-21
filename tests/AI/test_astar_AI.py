@@ -34,7 +34,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
     action, target = ai.decide_step(unit)
 
     assert int(action.uid / 1e7) == imba_ability.uid
-    assert minigame.fractions[target] is not minigame.fractions[unit]
+    assert minigame.factions[target] is not minigame.factions[unit]
 
 @pytest.mark.skip(reason="not supported")
 def test_uses_enabler_abilities(minigame, enabler):

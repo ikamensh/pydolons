@@ -71,7 +71,7 @@ class Actives(QtCore.QObject):
             self.addWidget(active.name)
             widget = self.widgets[active.name]
             widget.pressed.connect(self.selectActive)
-            widget.setProperty('status', active.owner_can_afford_activation())
+            widget.setProperty('status', active.affordable())
             widget.setProperty('active', active)
             widget.setStyleSheet('QPushButton[status = "true"]{'
                              'background-color:black;}'

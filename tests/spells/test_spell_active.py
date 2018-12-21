@@ -13,12 +13,12 @@ def test_lightning_depends_on_mastery(game_hvsp, pirate_band, hero, lightning_ac
 
     lightning_active = hero.give_active(lightning_active)
 
-    game_hvsp.events_platform.collect_history()
+    spy = game_hvsp.events_platform.collect_history()
 
     hero.activate(lightning_active, pirate)
     # failed to activate - complexity mismatch
 
-    events = [a for a in game_hvsp.events_platform.history]
+    events = [a for a in spy]
     assert len(events) == 0
 
     assert mana_before == hero.mana
@@ -50,12 +50,12 @@ def test_lightning_depends_on_int(hero, game_hvsp, pirate_band, lightning_active
 
     lightning_active = hero.give_active(lightning_active)
 
-    game_hvsp.events_platform.collect_history()
-
+    spy = []
+    game_hvsp.events_platform.history.append(spy)
     hero.activate(lightning_active, pirate)
     # failed to activate - complexity mismatch
 
-    events = [a for a in game_hvsp.events_platform.history]
+    events = [a for a, happened in spy]
     assert len(events) == 0
 
     assert mana_before == hero.mana

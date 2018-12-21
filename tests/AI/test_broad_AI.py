@@ -2,7 +2,7 @@ from mechanics.AI import BroadAI
 from mechanics.actives import Active
 from DreamGame import  DreamGame
 from mechanics.AI.SimGame import SimGame
-from mechanics.fractions import Fractions
+from mechanics.factions import Faction
 from game_objects.battlefield_objects import Unit
 import pytest
 
@@ -44,7 +44,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability, hero, pirate):
 
 
     assert action is ingame_imba
-    assert minigame.fractions[target] is not minigame.fractions[hero]
+    assert minigame.factions[target] is not minigame.factions[hero]
 
 def test_chooses_imba_targets_enemy_inverse(minigame, imba_ability, hero, pirate):
     ai = BroadAI(minigame)
@@ -57,7 +57,7 @@ def test_chooses_imba_targets_enemy_inverse(minigame, imba_ability, hero, pirate
     assert minigame.delta((ingame_imba, pirate)) < 0
 
     assert action is ingame_imba
-    assert minigame.fractions[target] is not minigame.fractions[pirate]
+    assert minigame.factions[target] is not minigame.factions[pirate]
 
 def test_uses_enabler_abilities(minigame, enabler):
 
@@ -74,23 +74,23 @@ def test_uses_enabler_abilities(minigame, enabler):
 @pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
 def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype):
     _game = SimGame(simple_battlefield)
-    _game.add_unit(mud_golem, 3+3j, Fractions.ENEMY, 1j)
-    _game.add_unit(hero, 3 + 4j, Fractions.PLAYER, 1+0j)
+    _game.add_unit(mud_golem, 3 + 3j, Faction.ENEMY, 1j)
+    _game.add_unit(hero, 3 + 4j, Faction.PLAYER, 1 + 0j)
 
     pirate1 = Unit(pirate_basetype)
     pirate2 = Unit(pirate_basetype)
     pirate3 = Unit(pirate_basetype)
 
 
-    _game.add_unit(pirate1, 4 + 4j, Fractions.ENEMY, -1+0j)
-    _game.add_unit(pirate2, 4 + 5j, Fractions.ENEMY, -1+0j)
-    _game.add_unit(pirate3, 5 + 3j, Fractions.ENEMY, 1+0j)
+    _game.add_unit(pirate1, 4 + 4j, Faction.ENEMY, -1 + 0j)
+    _game.add_unit(pirate2, 4 + 5j, Faction.ENEMY, -1 + 0j)
+    _game.add_unit(pirate3, 5 + 3j, Faction.ENEMY, 1 + 0j)
 
     for i in range(10):
 
         active_unit = _game.turns_manager.get_next()
         active, target = _game.enemy_ai.decide_step(active_unit)
         if isinstance(target, Unit):
-            if _game.fractions[target] is _game.fractions[active_unit]:
+            if _game.factions[target] is _game.factions[active_unit]:
                 assert False
         active_unit.activate(active, target)

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from battlefield.Battlefield import Battlefield, Cell
 from mechanics.turns import AtbTurnsManager
-from mechanics.fractions import Fractions
+from mechanics.factions import Faction
 from mechanics.AI import BruteAI, RandomAI
 from mechanics.events import EventsPlatform, NextUnitEvent
 from ui.events import LevelStatusEvent
@@ -31,7 +31,7 @@ class DreamGame:
         self.random = random.Random(seed) if seed else random.Random(100)
         self.battlefield : Battlefield = bf or Battlefield(8,8)
         self.the_hero : Unit= None
-        self.fractions : Dict[Unit,Fractions] = {}
+        self.factions : Dict[Unit, Faction] = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
         self.gamelog = GameLog(LogTargets.PRINT)
@@ -57,33 +57,33 @@ class DreamGame:
 
         game.the_hero = hero
 
-        fractions = {unit:Fractions.ENEMY for unit in unit_locations if not unit.is_obstacle}
-        fractions[hero] = Fractions.PLAYER
+        factions = {unit:Faction.ENEMY for unit in unit_locations if not unit.is_obstacle}
+        factions[hero] = Faction.PLAYER
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
                                 if not unit.is_obstacle]
         game.turns_manager = AtbTurnsManager(game, units_who_make_turns)
 
-        game.add_many(unit_locations.keys(), unit_locations, fractions)
+        game.add_many(unit_locations.keys(), unit_locations, factions)
 
 
         return game
 
-    def add_many(self, units, locations, fractions, facings = None):
+    def add_many(self, units, locations, factions, facings = None):
         facings = facings or {unit: 1j for unit in units}
         for unit in units:
             if unit.is_obstacle:
                 self.add_obstacle(unit, locations[unit])
             else:
-                self.add_unit(unit, locations[unit], fractions[unit], facings.get(unit, 1j))
+                self.add_unit(unit, locations[unit], factions[unit], facings.get(unit, 1j))
 
 
 
-    def add_unit(self, unit: Unit, cell,  fraction=Fractions.NEUTRALS, facing = None):
+    def add_unit(self, unit: Unit, cell, fraction=Faction.NEUTRALS, facing = None):
         unit.game = self
         for a in unit.actives:
             a.game = self
-        self.fractions[unit] = fraction
+        self.factions[unit] = fraction
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
         unit.alive = True
@@ -125,7 +125,7 @@ class DreamGame:
 
 
             active_unit = self.turns_manager.get_next()
-            if self.fractions[active_unit] == Fractions.PLAYER:
+            if self.factions[active_unit] == Faction.PLAYER:
                 self.player_turn_lock = True
 
                 while self.player_turn_lock and self.loop_state :
@@ -147,8 +147,8 @@ class DreamGame:
 
 
     def game_over(self):
-        own_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.PLAYER and unit.alive]
-        enemy_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.ENEMY and unit.alive]
+        own_units = [unit for unit in self.factions if self.factions[unit] is Faction.PLAYER and unit.alive]
+        enemy_units = [unit for unit in self.factions if self.factions[unit] is Faction.ENEMY and unit.alive]
 
         if len(own_units) == 0:
             LevelStatusEvent(self, "DEFEAT")
@@ -209,6 +209,7 @@ class DreamGame:
     # refactor?
     def order_move(self, unit: Unit, target_cell: Cell, AI_assist=True):
 
+        target_cell = Cell.maybe_complex(target_cell)
 
         if not 0 <= target_cell.x < self.battlefield.w or not 0 <= target_cell.y < self.battlefield.h:
             raise PydolonsException("Can't move there!")
@@ -223,7 +224,7 @@ class DreamGame:
                 raise PydolonsException("The hero is immobilized.")
 
 
-        affordable_actives = [a for a in actives if a.owner_can_afford_activation()]
+        affordable_actives = [a for a in actives if a.affordable()]
 
         if not affordable_actives:
             self._complain_missing(unit, actives, "move")
@@ -270,7 +271,7 @@ class DreamGame:
         else:
             unit_target = _target
 
-        affordable_actives = [a for a in actives if a.owner_can_afford_activation()]
+        affordable_actives = [a for a in actives if a.affordable()]
 
         if not affordable_actives:
             self._complain_missing(unit, actives, "attack")

@@ -3,7 +3,7 @@ from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
 
 
-from cntent.actives.callbacks.callbacks import ranged_attack_cb
+from cntent.actives.std.callbacks.callbacks import ranged_attack_cb
 from cntent.actives.conditions.conditions import range_condition, within_angle
 
 

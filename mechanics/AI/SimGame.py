@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from typing import Tuple, Union
     from mechanics.actives import Active
     from battlefield import Cell
-    from mechanics.fractions import Fractions
+    from mechanics.factions import Faction
 
 class SimGame(DreamGame):
 
@@ -53,13 +53,13 @@ class SimGame(DreamGame):
         return sim
 
 
-    def fake_measure(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction: Fractions, use_position=True):
+    def fake_measure(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction: Faction, use_position=True):
         active, target = choice
         with active.simulate(target):
             return self.utility(fraction, use_position=use_position)
 
     def delta(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction = None):
-        _fraction = fraction or self.fractions[choice[0].owner]
+        _fraction = fraction or self.factions[choice[0].owner]
         _delta = self.get_neighbour(choice).utility(_fraction) - self.utility(_fraction)
         return _delta
 
@@ -69,8 +69,8 @@ class SimGame(DreamGame):
     def utility(self, fraction, use_position=True):
         total = 0
 
-        own_units = [unit for unit in self.units if self.fractions[unit] is fraction]
-        opponent_units = [unit for unit in self.units if self.fractions[unit] is not fraction]
+        own_units = [unit for unit in self.units if self.factions[unit] is fraction]
+        opponent_units = [unit for unit in self.units if self.factions[unit] is not fraction]
 
         total += sum([self.unit_utility(unit) for unit in own_units])
         total -= sum([self.unit_utility(unit) for unit in opponent_units])
@@ -116,10 +116,17 @@ class SimGame(DreamGame):
 
     @staticmethod
     def unit_utility(unit: Unit):
+
         hp_factor = 1 + unit.health
         other_factors = 1 # + (unit.mana + unit.stamina + unit.readiness*3) * len(unit.actives) / 1000
         magnitude = sum([unit.str, unit.end, unit.agi, unit.prc, unit.int, unit.cha])
-        return magnitude * hp_factor * 1 * other_factors
+
+        utility = magnitude * hp_factor * 1 * other_factors
+
+        if hasattr(unit, "utility_factor"):
+            utility *= unit.utility_factor
+
+        return utility
 
 
 
@@ -130,7 +137,7 @@ class SimGame(DreamGame):
 
         choices = []
         for a in actives:
-            if a.owner_can_afford_activation():
+            if a.affordable():
                 tgts = self.get_possible_targets(a)
                 if tgts:
                     choices += [(a, tgt) for tgt in tgts]

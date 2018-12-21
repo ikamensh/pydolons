@@ -2,7 +2,7 @@ from __future__ import annotations
 from cmath import phase, pi
 import functools
 from math import hypot
-from typing import Union
+from typing import Union, List
 
 class Cell:
     def __init__(self, x, y):
@@ -47,7 +47,7 @@ class Cell:
 
     @staticmethod
     @functools.lru_cache()
-    def get_neighbours(cell_or_complex, distance, w=1000, h=1000):
+    def get_neighbours(cell_or_complex, distance, w=1000, h=1000) -> List[Cell]:
         c = Cell.maybe_complex(cell_or_complex)
 
         neighbours = []

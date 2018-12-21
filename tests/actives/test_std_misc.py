@@ -1,4 +1,4 @@
-from cntent.actives.std_misc import onguard_active, rest_active, wait_active
+from cntent.actives.std.std_misc import onguard_active, rest_active, wait_active
 
 
 def test_wait(empty_game, hero):

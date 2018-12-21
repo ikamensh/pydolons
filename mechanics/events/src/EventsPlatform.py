@@ -1,4 +1,4 @@
-from mechanics.events import ActiveEvent, EventsChannels, NextUnitEvent
+from mechanics.events import EventsChannels
 
 class EventsPlatform:
 
@@ -6,7 +6,7 @@ class EventsPlatform:
         self.gamelog = gamelog
         self.interrupts = { ch: set() for ch in EventsChannels }
         self.triggers = { ch: set() for ch in EventsChannels }
-        self.history = None
+        self.history = []
 
     def process_event(self, event):
 
@@ -19,8 +19,9 @@ class EventsPlatform:
 
         if not event.interrupted and event.check_conditions():
 
-            if self.history is not None:
-                self.history.append( (event, True) )
+            if self.history:
+                for spy in self.history:
+                    spy.append( (event, True) )
 
             if event.logging:
                 self.gamelog(event)
@@ -29,12 +30,15 @@ class EventsPlatform:
                 trigger.try_on_event(event)
 
         else:
-            if self.history is not None:
-                self.history.append( (event, False) )
+            if self.history:
+                for spy in self.history:
+                    spy.append( (event, False) )
             self.gamelog(f"{event}: INTERRUPTED")
 
-    def collect_history(self):
-        self.history = []
 
-    def stop_collect(self):
-        self.history = None
+    def collect_history(self):
+        spy = []
+        self.history.append(spy)
+        return spy
+
+

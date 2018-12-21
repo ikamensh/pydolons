@@ -1,7 +1,7 @@
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
 
-from cntent.actives.callbacks.callbacks_misc import onguard_callback, rest_callback
+from cntent.actives.std.callbacks.callbacks_misc import onguard_callback, rest_callback
 
 
 

@@ -10,7 +10,7 @@ from game_objects.battlefield_objects import Unit, BaseType, Obstacle
 from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
 from mechanics.chances import ChanceCalculator
-from mechanics.fractions import Fractions
+from mechanics.factions import Faction
 from cntent.base_types.mud_golem import mud_golem_basetype
 from game_objects.battlefield_objects import Obstacle
 
@@ -114,7 +114,7 @@ def empty_game(simple_battlefield):
 def hero_only_game(battlefield8, hero):
 
     _game = DreamGame(battlefield8)
-    _game.add_unit(hero, 1+1j, Fractions.PLAYER)
+    _game.add_unit(hero, 1 + 1j, Faction.PLAYER)
     _game.the_hero = hero
 
     return _game
@@ -128,10 +128,10 @@ def game_hvsp(battlefield8, hero, pirate_band):
 
     units_locations[hero] = Cell(1, 1)
 
-    fractions = {unit: Fractions.ENEMY for unit in units_locations if not unit.is_obstacle}
-    fractions[hero] = Fractions.PLAYER
+    factions = {unit: Faction.ENEMY for unit in units_locations if not unit.is_obstacle}
+    factions[hero] = Faction.PLAYER
 
-    _game.add_many(units_locations.keys(), units_locations, fractions)
+    _game.add_many(units_locations.keys(), units_locations, factions)
 
 
 

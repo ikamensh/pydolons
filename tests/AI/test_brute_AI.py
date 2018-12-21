@@ -2,6 +2,7 @@ from mechanics.AI import BruteAI
 from mechanics.actives import Active, ActiveTags
 from game_objects.battlefield_objects import Unit
 import pytest
+from cntent.actives.std.std_misc import wait_active
 
 
 def test_returns_actions(minigame):
@@ -12,6 +13,17 @@ def test_returns_actions(minigame):
     action, target = ai.decide_step(unit)
     assert isinstance(action, Active)
 
+
+def test_basetype_gives_valid_actives(sim_game, pirate_basetype):
+
+    pirate_basetype.actives += [wait_active]
+
+    pirate = Unit(pirate_basetype, game=sim_game)
+    ai = BruteAI(sim_game)
+
+    sim_game.add_unit(pirate, 6+6j)
+    action, target = ai.decide_step(pirate)
+    assert isinstance(action, Active)
 
 def test_is_deterministic(minigame, hero):
 
@@ -49,7 +61,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability):
     action, target = ai.decide_step(unit, epsilon=0)
 
     assert int(action.uid / 1e7) == imba_ability.uid
-    assert minigame.fractions[target] is not minigame.fractions[unit]
+    assert minigame.factions[target] is not minigame.factions[unit]
 
 # @pytest.mark.skip(reason="non-deterministic ai does not guarantee this.")
 def test_no_suicide(sim_game):
@@ -59,7 +71,7 @@ def test_no_suicide(sim_game):
         active_unit = sim_game.turns_manager.get_next()
         active, target = sim_game.enemy_ai.decide_step(active_unit)
         if isinstance(target, Unit):
-            if sim_game.fractions[target] is sim_game.fractions[active_unit]:
+            if sim_game.factions[target] is sim_game.factions[active_unit]:
                 assert False
         active_unit.activate(active, target)
 
@@ -164,7 +176,7 @@ def avoids_punishing_action(take_punishment, minigame, hero):
 
 import pytest
 
-from DreamGame import Fractions
+from DreamGame import Faction
 from mechanics.AI.SimGame import SimGame
 from mechanics.actives import Active, ActiveTags
 from battlefield.Facing import Facing
@@ -176,7 +188,7 @@ import copy
 def just_hero_game(simple_battlefield, hero):
 
     _game = SimGame(simple_battlefield)
-    _game.add_unit(hero, (3+3j), Fractions.PLAYER)
+    _game.add_unit(hero, (3+3j), Faction.PLAYER)
     _game.the_hero = hero
 
 
@@ -188,10 +200,10 @@ def test_attacks(just_hero_game, hero, pirate):
     pirates = [copy.deepcopy(pirate) for _ in range(3)]
     pirate2, pirate3, pirate4 = pirates
 
-    g.add_unit(pirate, (3 + 4j), Fractions.ENEMY, facing=Facing.NORTH)
-    g.add_unit(pirate2, (4 + 3j), Fractions.ENEMY, facing=Facing.WEST)
-    g.add_unit(pirate3, (3 + 2j), Fractions.ENEMY, facing=Facing.SOUTH)
-    g.add_unit(pirate4, (2 + 3j), Fractions.ENEMY, facing=Facing.EAST)
+    g.add_unit(pirate, (3 + 4j), Faction.ENEMY, facing=Facing.NORTH)
+    g.add_unit(pirate2, (4 + 3j), Faction.ENEMY, facing=Facing.WEST)
+    g.add_unit(pirate3, (3 + 2j), Faction.ENEMY, facing=Facing.SOUTH)
+    g.add_unit(pirate4, (2 + 3j), Faction.ENEMY, facing=Facing.EAST)
 
     ai = BruteAI(g)
 

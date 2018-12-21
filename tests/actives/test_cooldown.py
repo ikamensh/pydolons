@@ -1,4 +1,4 @@
-from cntent.actives.std_misc import wait_active
+from cntent.actives.std.std_misc import wait_active
 from mechanics.events import TimePassedEvent
 
 

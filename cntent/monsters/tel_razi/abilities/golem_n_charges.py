@@ -1,6 +1,6 @@
-from cntent.abilities.golem.trigger import charge_drop_trigger
+from cntent.monsters.tel_razi.triggers.charge_drop import charge_drop_trigger
 from mechanics.buffs import Ability
-from game_objects.attributes import Bonus, Attribute
+from game_objects.attributes import Bonus
 from game_objects.battlefield_objects import CharAttributes as ca
 from mechanics.damage import Armor
 
