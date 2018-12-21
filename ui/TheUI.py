@@ -103,8 +103,8 @@ class TheUI(QtWidgets.QWidget):
         # self.game = self.lengine.getGame('walls_level')
         # self.game = self.lengine.getGame('pirate_level')
 
-    def setGame(self, name):
-        self.gameRoot.game = self.lengine.getGame(name)
+    def setGame(self, dungeon):
+        self.gameRoot.game = self.lengine.getGame(dungeon)
 
     def startGame(self):
         self.loadGame()

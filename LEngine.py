@@ -18,32 +18,19 @@ class LEngine:
     LogicEngine
     """
     def __init__(self):
-        self.dungeons = {}
-        self.dungeons[demo_dungeon.name] = demo_dungeon
-        self.dungeons[walls_dungeon.name] = walls_dungeon
-        self.dungeons[pirate_lair.name] = pirate_lair
-        self.dungeons[small_graveyard.name] = small_graveyard
-        self.dungeons[small_orc_cave.name] = small_orc_cave
         self.character:Character = None
         self.the_hero  = None
         self.dungeon = None
 
-    def getDungeon(self, levelName):
-        """ В этом методе можно установить дополнительные условия для нужного подземелья
-        """
-        return self.dungeons[levelName]
-
-    def getGame(self, levelName):
+    def getGame(self, dungeon):
         if self.character is None or self.the_hero is None:
             self.character = Character(demohero_basetype)
             self.the_hero = self.character.unit
-            game = self._getGame(levelName)
-            return game
-        else:
-            return self._getGame(levelName)
 
-    def _getGame(self, levelName):
-        game = SimGame.start_dungeon(self.getDungeon(levelName), self.the_hero)
+        return self._getGame(dungeon)
+
+    def _getGame(self, dungeon):
+        game = SimGame.start_dungeon(dungeon, self.the_hero)
         self.setUpTriggers(game)
         game.character = self.character
         return game

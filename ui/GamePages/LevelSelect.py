@@ -7,6 +7,8 @@ from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from cntent.dungeons.small_graveyard import small_graveyard
+from cntent.dungeons.tel_razi_temple import tel_razi_temple
+
 
 from DreamGame import DreamGame
 
@@ -21,7 +23,7 @@ class LevelSelect(AbstractPage):
         self.x = 24
         self.dungeon_widgets = []
         self.fake_btns = []
-        self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon])
+        self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon, tel_razi_temple])
         self.defaultGame = True
         self.isService = True
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
@@ -89,7 +91,7 @@ class LevelSelect(AbstractPage):
             name = dungeon.name
             print('start:', name)
             self.hidePage()
-            self.gamePages.gameRoot.ui.setGame(name)
+            self.gamePages.gameRoot.ui.setGame(dungeon)
             self.gamePages.gameRoot.ui.startGame()
 
         frame:QtWidgets.QFrame = QtWidgets.QFrame(parent=parent)
