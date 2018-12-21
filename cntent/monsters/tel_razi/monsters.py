@@ -36,7 +36,7 @@ class tel_razi_sound_map:
 tel_razi_scrub_bt = BaseType({'str':5, 'end':8, 'prc':16, 'agi':12, 'int':21, 'cha':12},
                     actives=[tel_razi_electrify],
                     abilities=[teleport_on_hit(3, 0.8, Cost(stamina=1, mana=5, readiness=0.1))],
-                     type_name="Tel'Razi Scrub", icon=["wormface.png"], sound_map=tel_razi_sound_map)
+                     type_name="Tel'Razi Scrub", icon=["wormface.jpg"], sound_map=tel_razi_sound_map)
 
 tel_razi_scrub = Monster(tel_razi_scrub_bt,
                       [
@@ -47,7 +47,7 @@ tel_razi_scrub = Monster(tel_razi_scrub_bt,
 tel_razi_zealot_bt = BaseType({'str':15, 'end':16, 'prc':16, 'agi':21, 'int':12, 'cha':12},
                     actives=[tel_razi_electrify],
                     abilities=[teleport_on_hit(2, 0.5, Cost(stamina=1, mana=5, readiness=0.1))],
-                     type_name="Tel'Razi Zealot", icon=["wormface2.png"], sound_map=tel_razi_sound_map)
+                     type_name="Tel'Razi Zealot", icon=["wormface2.jpg"], sound_map=tel_razi_sound_map)
 
 tel_razi_zealot = Monster(tel_razi_zealot_bt,
                       [

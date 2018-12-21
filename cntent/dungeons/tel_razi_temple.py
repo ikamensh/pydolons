@@ -10,4 +10,4 @@ def build_unit_locations(g):
     return unit_locations
 
 
-tel_razi_temple = Dungeon("Tel'Razi Temple", 9, 9, unit_locations=build_unit_locations, hero_entrance=Cell(8, 4), icon="greenskins.png")
+tel_razi_temple = Dungeon("Tel'Razi Temple", 9, 9, unit_locations=build_unit_locations, hero_entrance=Cell(8, 4), icon="wormface2.jpg")
