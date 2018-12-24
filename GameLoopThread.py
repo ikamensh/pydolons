@@ -1,6 +1,7 @@
 
 from PySide2 import QtCore
 
+
 class ProxyEmit(object):
     """
     Этот класс проксирует вызов сизнала в логический движок the_game.
@@ -67,6 +68,7 @@ class GameLoopThread(QtCore.QThread):
         self.play_perish_anim.connect(self.the_ui.gameRoot.level.units.unitDiedSlot)
         self.play_trun_anim.connect(self.the_ui.gameRoot.level.units.unitTurnSlot)
         self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.updateUnitStack)
+        self.play_nextunit_anim.connect(self.the_ui.gameRoot.level.units.update_heaps)
         self.play_levelstatus.connect(self.the_ui.gameRoot.level.setStatus)
 
     def run(self):

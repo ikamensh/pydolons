@@ -1,4 +1,5 @@
 from PySide2 import QtWidgets
+from ui.units.UnitsHeap import UnitsHeap
 
 
 class Units(QtWidgets.QGraphicsItemGroup):
@@ -6,11 +7,13 @@ class Units(QtWidgets.QGraphicsItemGroup):
         super(Units, self).__init__(*arg)
         self.active_unit = None
         self.units_at = {}
+        self.units_pos = {}
         self.groups_at = {}
+        self.units_heaps = {}
         self.level = None
 
     def setLevel(self, level):
-        self.level =  level
+        self.level = level
         self.level.units = self
 
     def getUitsLocations(self):
@@ -23,7 +26,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
             self.updateVision()
         x, y = cell_to.x, cell_to.y
         self.units_at[unit.uid].setWorldPos(x, y)
-
 
     def unitDied(self, unit):
         unit = self.units_at[unit.uid]
@@ -94,3 +96,24 @@ class Units(QtWidgets.QGraphicsItemGroup):
         hero = self.level.gameRoot.game.the_hero
         bf = self.level.gameRoot.game.battlefield
         self.level.gameVision.setSeenCells(bf.vision.std_seen_cells(hero))
+
+    def update_heaps(self):
+        for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
+            if len(units) > 1:
+                if cell in self.units_heaps.keys():
+                    self.units_heaps[cell].info()
+                    print('for update', units)
+                    print('for update ui ', set(self.units_from_(units)))
+                    self.units_heaps[cell].update_units(set(self.units_from_(units)))
+                    self.units_heaps[cell].info()
+                else:
+                    self.units_heaps[cell] = UnitsHeap()
+                    for unit in units:
+                        self.units_heaps[cell].add(self.units_at[unit.uid])
+
+    def units_from_(self, units):
+        for unit in units:
+            yield self.units_at[unit.uid]
+
+
+

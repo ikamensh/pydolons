@@ -5,10 +5,10 @@ QObject = QtCore.QObject
 from ui.gamecore import GameObject
 from ui.GameAnimation import Direction
 
-
 from battlefield.Facing import Facing
 
 from ui.GameAnimation import SmoothAnimation
+
 
 class BasicUnit(QObject, GameObject):
     """docstring for BasicUnit."""
@@ -27,14 +27,15 @@ class BasicUnit(QObject, GameObject):
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
         """
-        self.direction = Direction()
-        self.direction.setParentItem(self)
-        self.direction.setPixmap(self.gameconfig.getPicFile('DIRECTION POINTER.png'))
-        self.direction.setTransformOriginPoint(self.direction.boundingRect().width()/2, - self.h/2 + self.direction.boundingRect().height())
-        dirY = self.h - self.direction.boundingRect().height()
-        dirX = (self.w / 2) - (self.direction.boundingRect().width() / 2)
-        self.direction.setPos(dirX, dirY)
-        self.dirAni = SmoothAnimation(self.direction, self.direction.setRotation)
+        if not self.gameconfig is None:
+            self.direction = Direction()
+            self.direction.setParentItem(self)
+            self.direction.setPixmap(self.gameconfig.getPicFile('DIRECTION POINTER.png'))
+            self.direction.setTransformOriginPoint(self.direction.boundingRect().width()/2, - self.h/2 + self.direction.boundingRect().height())
+            dirY = self.h - self.direction.boundingRect().height()
+            dirX = (self.w / 2) - (self.direction.boundingRect().width() / 2)
+            self.direction.setPos(dirX, dirY)
+            self.dirAni = SmoothAnimation(self.direction, self.direction.setRotation)
 
 
     dir_dict = {(Facing.SOUTH, Facing.EAST) : (360., 270.),
@@ -47,6 +48,7 @@ class BasicUnit(QObject, GameObject):
                 (Facing.EAST, Facing.NORTH): (270., 180.),
                 (Facing.WEST, Facing.NORTH): (90., 180.),
                 }
+
     def setDirection(self, turn):
         if turn != self.dir_angle:
             start, end = BasicUnit.dir_dict[(self.dir_angle, turn)]
@@ -57,10 +59,10 @@ class BasicUnit(QObject, GameObject):
         if self is other: return True
         if other is None: return False
         if self.__class__ != other.__class__: return False
-        return self.worldPos == other.worldPos.x
+        return self.__hash__() == other.__hash__()
 
     def __hash__(self):
-        return hash(self.worldPos)*3
+        return hash(self.worldPos.x * 2 + self.worldPos.y * 3 + self.uid*4)*3
 
     def __repr__(self):
         return f"{self.worldPos} -> BasicUnit {self.uid} "
