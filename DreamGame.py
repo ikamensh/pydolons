@@ -79,17 +79,16 @@ class DreamGame:
 
 
 
-    def add_unit(self, unit: Unit, cell, fraction=Faction.NEUTRALS, facing = None):
+    def add_unit(self, unit: Unit, cell, faction=Faction.NEUTRALS, facing = None):
         unit.game = self
         for a in unit.actives:
             a.game = self
-        self.factions[unit] = fraction
+        self.factions[unit] = faction
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
         unit.alive = True
 
-        for a in unit.abilities:
-            a.apply_to(unit)
+        unit.update()
 
 
 

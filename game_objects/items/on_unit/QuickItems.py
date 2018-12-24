@@ -21,6 +21,9 @@ class QuickItems:
         count = sum([1 for slot in self.all if slot.content])
         return count
 
+    def __iter__(self):
+        return iter(self.all)
+
     @property
     def empty_slots(self):
         return [slot for slot in self.all if not slot.content]

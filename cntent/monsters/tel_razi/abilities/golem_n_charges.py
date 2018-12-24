@@ -12,7 +12,8 @@ def trig_factory( ability: Ability):
 
 def golem_n_charges(n):
     def _():
-        a = Ability(bonus=Bonus({ca.ARMOR: Armor(40)}),
+        a = Ability(name=f"Golem with {n} charges",
+                    bonus=Bonus({ca.ARMOR: Armor(40)}),
                     trigger_factories=[trig_factory])
         a.max_golem_charges = n
         return a

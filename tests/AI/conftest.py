@@ -9,6 +9,10 @@ from game_objects.battlefield_objects import BattlefieldObject
 
 
 
+@pytest.fixture()
+def empty_simgame(simple_battlefield):
+    return SimGame(simple_battlefield)
+
 
 @pytest.fixture()
 def minigame(simple_battlefield, pirate,  hero):

@@ -1,4 +1,5 @@
 from cntent.monsters.tel_razi.monsters import golem
+from mechanics.events.ActiveEvent import EventsChannels
 import pytest
 
 
@@ -7,6 +8,10 @@ def just_a_golem(empty_game):
     gol = golem.create(empty_game)
     empty_game.add_unit(gol, 1+1j)
     return gol
+
+def test_one_trigger(just_a_golem, empty_game):
+    assert len(empty_game.events_platform.triggers[EventsChannels.ActiveChannel]) == 1
+    assert len(empty_game.events_platform.interrupts[EventsChannels.ActiveChannel]) == 0
 
 
 def test_discharges(just_a_golem, monkeypatch):

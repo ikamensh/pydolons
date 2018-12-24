@@ -67,17 +67,22 @@ class Unit(BattlefieldObject):
 
         masteries = masteries or Masteries(base_type.xp)
 
+        self.base_type = base_type
+        self.masteries = masteries
+
         self.update(base_type, masteries)
 
 
-    def update(self, base_type, masteries):
+    def update(self, base_type = None, masteries = None):
+        base_type = base_type or self.base_type
         self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
         self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
         self.prc_base = Attribute.attribute_or_none(base_type.attributes[ca.PERCEPTION])
         self.agi_base = Attribute.attribute_or_none(base_type.attributes[ca.AGILITY])
         self.int_base = Attribute.attribute_or_none(base_type.attributes[ca.INTELLIGENCE])
         self.cha_base = Attribute.attribute_or_none(base_type.attributes[ca.CHARISMA])
-        self.masteries = masteries
+        self.masteries = masteries or self.masteries
+
 
         self.type_name = base_type.type_name
 
@@ -87,8 +92,8 @@ class Unit(BattlefieldObject):
         self.resists_base = Resistances(base_type.resists)
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
 
-        if hasattr(self, "_abilities"):
-            for a in self._abilities:
+        if self.abilities:
+            for a in self.abilities:
                 self.remove_ability(a)
 
         self.abilities = []
@@ -105,6 +110,16 @@ class Unit(BattlefieldObject):
         self.actives: List[Active] = []
         for active in base_type.actives:
             self.give_active(active)
+
+        for slot in self.equipment:
+            if slot.content:
+                slot.content.on_equip(slot)
+
+        for slot in self.quick_items:
+            if slot.content:
+                slot.content.on_equip(slot)
+
+
 
         self.turn_ccw_active = self.give_active(turn_ccw)
         self.turn_ccw = lambda: self.activate(self.turn_ccw_active)
