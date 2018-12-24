@@ -6,8 +6,8 @@ from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics import events
 from mechanics.actives import ActiveTags, Active
-from cntent.actives.std_movements import std_movements, turn_ccw, turn_cw
-from cntent.actives.std_melee_attack import std_attacks
+from cntent.actives.std.std_movements import std_movements, turn_ccw, turn_cw
+from cntent.actives.std.std_melee_attack import std_attacks
 from character.masteries.Masteries import Masteries, MasteriesEnum
 from typing import Set, TYPE_CHECKING, List
 if TYPE_CHECKING:
@@ -67,28 +67,33 @@ class Unit(BattlefieldObject):
 
         masteries = masteries or Masteries(base_type.xp)
 
+        self.base_type = base_type
+        self.masteries = masteries
+
         self.update(base_type, masteries)
 
 
-    def update(self, base_type, masteries):
+    def update(self, base_type = None, masteries = None):
+        base_type = base_type or self.base_type
         self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
         self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
         self.prc_base = Attribute.attribute_or_none(base_type.attributes[ca.PERCEPTION])
         self.agi_base = Attribute.attribute_or_none(base_type.attributes[ca.AGILITY])
         self.int_base = Attribute.attribute_or_none(base_type.attributes[ca.INTELLIGENCE])
         self.cha_base = Attribute.attribute_or_none(base_type.attributes[ca.CHARISMA])
-        self.masteries = masteries
+        self.masteries = masteries or self.masteries
+
 
         self.type_name = base_type.type_name
-        self.actives: Set[Active] = set(base_type.actives)
+
 
         self.unarmed_damage_type = base_type.unarmed_damage_type
         self.unarmed_chances = base_type.unarmed_chances
         self.resists_base = Resistances(base_type.resists)
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
 
-        if hasattr(self, "_abilities"):
-            for a in self._abilities:
+        if self.abilities:
+            for a in self.abilities:
                 self.remove_ability(a)
 
         self.abilities = []
@@ -101,6 +106,20 @@ class Unit(BattlefieldObject):
             self.icon = random.choice(base_type.icon)
 
         self.sound_map = base_type.sound_map
+
+        self.actives: List[Active] = []
+        for active in base_type.actives:
+            self.give_active(active)
+
+        for slot in self.equipment:
+            if slot.content:
+                slot.content.on_equip(slot)
+
+        for slot in self.quick_items:
+            if slot.content:
+                slot.content.on_equip(slot)
+
+
 
         self.turn_ccw_active = self.give_active(turn_ccw)
         self.turn_ccw = lambda: self.activate(self.turn_ccw_active)
@@ -156,7 +175,7 @@ class Unit(BattlefieldObject):
 
     @property
     def max_health_base(self):
-        return Attribute(self.str * Constants.HP_PER_STR, 100, 0)
+        return Attribute(self.end * Constants.HP_PER_END, 100, 0)
 
     @property
     def max_mana_base(self):
@@ -164,7 +183,7 @@ class Unit(BattlefieldObject):
 
     @property
     def max_stamina_base(self):
-        return Attribute(self.end * Constants.STAMINA_PER_END, 100, 0)
+        return Attribute(self.str * Constants.STAMINA_PER_STR, 100, 0)
 
     @property
     def initiative_base(self):
@@ -174,7 +193,7 @@ class Unit(BattlefieldObject):
     @lru_cache()
     def __initiative_formula(agi, intel, stamina):
         return Attribute(1 + 9 * ((0.4 + agi / 25 + intel / 25) ** (3 / 5)) * ((stamina / (
-                10*Constants.STAMINA_PER_END)) ** (1 / 4)), 100, 0)
+                10*Constants.STAMINA_PER_STR)) ** (1 / 4)), 100, 0)
 
     @property
     def initiative(self):
@@ -224,7 +243,7 @@ class Unit(BattlefieldObject):
     def give_active(self, active) -> Active:
         cpy = copy.deepcopy(active)
         cpy.game = self.game
-        self.actives.add(cpy)
+        self.actives.append(cpy)
         cpy.owner = self
         cpy.uid = int(cpy.uid * 1e7 + self.uid)
         return cpy

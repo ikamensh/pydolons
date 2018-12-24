@@ -18,13 +18,11 @@ def test_impassible_action(obstacle, hero, empty_game):
 
     tgt_cell = Cell(1,2)
     valid_action = None
-    for a in hero.actives:
+    for a in hero.movement_actives:
         if a.check_target(tgt_cell):
             valid_action = a
 
-    hero.activate(valid_action,tgt_cell)
-
-    assert empty_game.battlefield.unit_locations[hero] == 1+1j
+    assert valid_action is None
 
 
 from battlefield import Cell

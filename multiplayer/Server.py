@@ -7,7 +7,7 @@ from cntent.base_types.demo_hero import demohero_basetype
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from mechanics.AI.SimGame import SimGame as DreamGame
 from mechanics.events import Trigger
-from mechanics.fractions import Fractions
+from mechanics.factions import Faction
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
 from multiplayer.events.ServerOrderReceivedEvent import ServerOrderRecievedEvent
 from multiplayer.network.ServerSocket import ServerSocket
@@ -16,7 +16,7 @@ from multiplayer.network.ServerSocket import ServerSocket
 def order_recieved_cb(t, e: ServerOrderRecievedEvent):
     g: DreamGame = e.game
     next_unit = g.turns_manager.get_next()
-    fraction = g.fractions[next_unit]
+    fraction = g.factions[next_unit]
     if e.fraction == fraction:
         unit = g.find_unit_by_uid(e.unit_uid)
         active = g.find_active_by_uid(e.active_uid)
@@ -56,8 +56,8 @@ class PydolonsServer:
         character  = Character(demohero_basetype)
         self.game = DreamGame.start_dungeon(demo_dungeon, character.unit)
         self.game.character = character
-        self.server_socket = ServerSocket(self.game, set(self.game.fractions.values()) - {Fractions.ENEMY,
-                                                                                          Fractions.NEUTRALS})
+        self.server_socket = ServerSocket(self.game, set(self.game.fractions.values()) - {Faction.ENEMY,
+                                                                                          Faction.NEUTRALS})
 
         order_issued_trigger(self.game, self.server_socket)
         order_recieved_trigger(self.game)

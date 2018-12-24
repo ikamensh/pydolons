@@ -37,7 +37,7 @@ class BaseType:
         self.unarmed_damage_type = unarmed_damage_type
         self.unarmed_chances = unarmed_chances
 
-        self.actives = actives or set()
+        self.actives = actives or list()
         self.abilities = abilities or list()
 
         self.resists = resists or {}

@@ -1,5 +1,5 @@
-from cntent.actives.std_movements import move_forward, move_back, move_diag, move_side
-from mechanics.events import ActiveEvent, MovementEvent
+from cntent.actives.std.std_movements import move_forward, move_back, move_diag, move_side
+from mechanics.events import ActiveEvent
 from battlefield.Facing import Facing
 from battlefield.Battlefield import Cell
 import pytest

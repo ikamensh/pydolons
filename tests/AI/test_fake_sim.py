@@ -4,7 +4,7 @@ def test_results_match(minigame, hero):
     count_simulated = 0
 
     choices = minigame.get_all_choices(hero)
-    fraction = minigame.fractions[hero]
+    fraction = minigame.factions[hero]
 
     mismatches = []
 

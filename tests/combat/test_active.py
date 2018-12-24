@@ -1,6 +1,6 @@
 from DreamGame import DreamGame
 from battlefield.Battlefield import Battlefield, Cell
-from cntent.actives.std_melee_attack import attack_cell_active, attack_unit_active
+from cntent.actives.std.std_melee_attack import attack_cell_active, attack_unit_active
 from game_objects.battlefield_objects import Unit
 
 

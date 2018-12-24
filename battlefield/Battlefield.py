@@ -55,12 +55,12 @@ class Battlefield:
 
 
 
-    def neighbours_exclude_center(self, cell, distance=1):
+    def neighbours_exclude_center(self, cell, distance=1) -> List[Cell]:
         neighbours = set(self.get_cells_within_dist(cell, distance))
         neighbours.remove(cell)
-        return neighbours
+        return list(neighbours)
 
-    def get_cells_within_dist(self, cell, distance):
+    def get_cells_within_dist(self, cell, distance) -> List[Cell]:
         return Cell.get_neighbours(cell,distance, self.w, self.h)
 
     def get_nearest_cell(self, candidates, target):

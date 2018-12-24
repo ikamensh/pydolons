@@ -1,27 +1,40 @@
 
 
-def test_usage_ranged_attack(hero, bow, empty_game, pirate, monkeypatch):
+def test_usage_ranged_attack(hero, bow, empty_game, pirate, no_chances):
 
     actives_no_potion = set(hero.actives)
     hero.equipment.equip_item(bow)
 
-    new_active = list( set(hero.actives) - actives_no_potion )[0]
+    ranged_attack_active = list( set(hero.actives) - actives_no_potion )[0]
 
     empty_game.add_unit(hero, (1+1j), facing=1j)
     empty_game.add_unit(pirate, (2+3j), facing=1j)
 
-    from mechanics.combat import RangedAttack
+    from mechanics.events import RangedAttackEvent
 
-    spy = []
-    def spy_lambda(source, target):
-        spy.append( (source, target) )
+    spy = empty_game.events_platform.collect_history()
 
-    monkeypatch.setattr(RangedAttack, 'ranged_attack', spy_lambda)
+    hero.activate(ranged_attack_active, pirate)
 
-    hero.activate(new_active, pirate)
+    ranged_attack_event = None
+    for e, happened in spy:
+        if isinstance(e, RangedAttackEvent):
+            ranged_attack_event = e
 
-    assert spy
-    assert spy[0] == (hero, pirate)
+
+    assert ranged_attack_event is not None
+    assert ranged_attack_event.target is pirate
+    assert ranged_attack_event.source is hero
+
+    from mechanics.events import DamageEvent
+    damage_event = None
+    for e, happened in spy:
+        if isinstance(e, DamageEvent):
+            damage_event = e
+
+    assert damage_event
+    assert pirate.health < pirate.max_health
+
 
 def test_too_close(hero, bow, empty_game, pirate, monkeypatch):
 

@@ -15,7 +15,7 @@ class RandomAI:
 
         targets = {}
         for a in actives:
-            if a.owner_can_afford_activation():
+            if a.affordable():
                 tgts = self.game.get_possible_targets(a)
                 if tgts:
                     targets[a] = tgts

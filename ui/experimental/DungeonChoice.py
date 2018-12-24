@@ -10,6 +10,8 @@ from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.demo_dungeon import demo_dungeon
 from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from cntent.dungeons.small_graveyard import small_graveyard
+from cntent.dungeons.tel_razi_temple import tel_razi_temple
+
 
 from ui.experimental.DungeonWidget import DungeonWidget
 
@@ -73,6 +75,6 @@ if __name__ == "__main__":
     qt_app = QApplication(sys.argv)
     gc = GameConfiguration()
 
-    app = DungeonChoice([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon], gc=gc)
+    app = DungeonChoice([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon, tel_razi_temple], gc=gc)
     app.show()
     qt_app.exec_()

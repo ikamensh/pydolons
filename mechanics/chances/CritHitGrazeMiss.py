@@ -9,6 +9,7 @@ class ImpactFactor(NameEnum):
     GRAZE = auto()
     MISS = auto()
 
+
 @dataclass(frozen=True)
 class ImpactChances:
     crit:float

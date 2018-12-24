@@ -27,7 +27,7 @@ kris = WeaponBlueprint("kris", weapon_type=WeaponTypes.DAGGER, material_type=Mat
 ritual_dagger = WeaponBlueprint("ritual dagger", weapon_type=WeaponTypes.DAGGER, material_type=MaterialTypes.STONE, rarity=1.3, damage=1.2, durability=0.5)
 
 
-from cntent.actives.std_ranged_attack import bow_shot_active, crossbow_shot_active
+from cntent.actives.std.std_ranged_attack import bow_shot_active, crossbow_shot_active
 
 bow = WeaponBlueprint("bow",
                       weapon_type=WeaponTypes.BOW,

@@ -1,6 +1,6 @@
 from battlefield.Battlefield import Battlefield, Cell
 from mechanics.turns import AtbTurnsManager
-from mechanics.fractions import Fractions
+from mechanics.factions import Faction
 import time
 import random
 
@@ -47,8 +47,8 @@ class DreamGame:
 
         self.the_hero = hero
 
-        self.fractions = {unit:Fractions.ENEMY for unit in unit_locations if not unit.is_obstacle}
-        self.fractions[hero] = Fractions.PLAYER
+        self.faction = {unit:Faction.ENEMY for unit in unit_locations if not unit.is_obstacle}
+        self.faction[hero] = Faction.PLAYER
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
                                 if not unit.is_obstacle]
@@ -57,7 +57,7 @@ class DreamGame:
         self.turns_manager.unit = self.the_hero
         self.turns_manager.setUnits(unit_locations)
 
-        self.add_many(unit_locations.keys(), unit_locations, self.fractions)
+        self.add_many(unit_locations.keys(), unit_locations, self.faction)
 
 
     def add_many(self, units, locations, fractions, facings = None):
@@ -68,11 +68,11 @@ class DreamGame:
             else:
                 self.add_unit(unit, locations[unit], fractions[unit], facings.get(unit, 1j))
 
-    def add_unit(self, unit, cell, fraction=Fractions.NEUTRALS, facing=None):
+    def add_unit(self, unit, cell, fraction=Faction.NEUTRALS, facing=None):
         unit.game = self
         for a in unit.actives:
             a.game = self
-        self.fractions[unit] = fraction
+        self.faction[unit] = fraction
         self.battlefield.place(unit, cell, facing)
         # self.turns_manager.add_unit(unit)
         unit.alive = True

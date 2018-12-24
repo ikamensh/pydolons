@@ -17,8 +17,8 @@ class BroadAI:
         for node in circle1:
             circle2 += node.get_all_neighbouring_states(active_unit)
 
-        fraction = self.game.fractions[active_unit]
-        utilities = {node:(node.utility(fraction) + node.node_from.utility(fraction)) for node in circle2}
+        faction = self.game.factions[active_unit]
+        utilities = {node:(node.utility(faction) + node.node_from.utility(faction)) for node in circle2}
         # this bug a lot of taps
         best_node2 = max(circle2, key=lambda x: utilities[x])
         best_node1 = best_node2.node_from

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mechanics.actives import Active
 
-from cntent.actives.buffs.std_buffs import rest_buff, onguard_buff
+from cntent.actives.std.buffs.std_buffs import rest_buff, onguard_buff
 
 
 

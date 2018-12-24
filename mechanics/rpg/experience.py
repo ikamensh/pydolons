@@ -1,6 +1,6 @@
 from mechanics.events.src.Trigger import Trigger
 from mechanics.events import UnitDiedEvent
-from mechanics.fractions import Fractions
+from mechanics.factions import Faction
 
 from my_utils.utils import tractable_value
 
@@ -15,8 +15,8 @@ def condition(t,e):
         return False
 
     return \
-        e.game.fractions[e.unit] is Fractions.ENEMY and \
-        e.game.fractions[e.killer] is Fractions.PLAYER
+        e.game.factions[e.unit] is Faction.ENEMY and \
+        e.game.factions[e.killer] is Faction.PLAYER
 
 def grant_xp_callback(t, e):
     e.killer.xp += compute_exp_gain(e.killer, e.unit)

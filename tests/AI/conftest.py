@@ -1,6 +1,6 @@
 import pytest
 
-from DreamGame import Fractions
+from DreamGame import Faction
 from mechanics.AI.SimGame import SimGame
 from battlefield import Cell, Battlefield
 from mechanics.actives import Active, ActiveTags
@@ -9,13 +9,17 @@ from game_objects.battlefield_objects import BattlefieldObject
 
 
 
+@pytest.fixture()
+def empty_simgame(simple_battlefield):
+    return SimGame(simple_battlefield)
+
 
 @pytest.fixture()
 def minigame(simple_battlefield, pirate,  hero):
 
     _game = SimGame(simple_battlefield)
-    _game.add_unit(hero, (2+2j), Fractions.PLAYER)
-    _game.add_unit(pirate, (4 + 4j), Fractions.ENEMY)
+    _game.add_unit(hero, (2+2j), Faction.PLAYER)
+    _game.add_unit(pirate, (4 + 4j), Faction.ENEMY)
 
 
     return _game
@@ -31,8 +35,8 @@ def sim_game(battlefield8, hero, pirate_band):
 
     units_locations[hero] = Cell(1, 1)
 
-    fractions = {unit: Fractions.ENEMY for unit in units_locations if not unit.is_obstacle}
-    fractions[hero] = Fractions.PLAYER
+    fractions = {unit: Faction.ENEMY for unit in units_locations if not unit.is_obstacle}
+    fractions[hero] = Faction.PLAYER
 
     _game.add_many(units_locations.keys(), units_locations, fractions)
     return _game

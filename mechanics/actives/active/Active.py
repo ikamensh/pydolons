@@ -53,19 +53,18 @@ class Active:
     def activate(self, target=None):
         from game_objects import battlefield_objects as bf_objs
 
-        if self.targeting_cls in [Cell, bf_objs.Unit, bf_objs.BattlefieldObject]:
+        if self.targeting_cls in [bf_objs.Unit, bf_objs.BattlefieldObject]:
             assert isinstance(target, self.targeting_cls)
         assert self.owner is not None
 
-        if self.owner_can_afford_activation() and self.check_target(target):
+        if self.affordable() and self.check_target(target):
             self.remaining_cd = self.cooldown
             self.owner.pay(self.cost)
-            ActiveEvent(self, target)
-            return True
+            return ActiveEvent(self, target)
         else:
-            return False
+            return None
 
-    def owner_can_afford_activation(self):
+    def affordable(self):
         if self.spell:
             if not self.spell.complexity_check(self.owner):
                 return False

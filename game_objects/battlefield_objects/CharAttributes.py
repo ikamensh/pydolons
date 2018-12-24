@@ -37,8 +37,8 @@ def get_attrib_by_enum(unit, enum):
     return getattr(unit, name)
 
 class Constants:
-    HP_PER_STR = 25
-    STAMINA_PER_END = 5
+    HP_PER_END = 25
+    STAMINA_PER_STR = 5
     MANA_PER_INT = 10
     UNARMED_DAMAGE_PER_STR = 3
 
@@ -51,8 +51,8 @@ value_norms = {
     c.PERCEPTION: std_bonus*1,
     c.INTELLIGENCE: std_bonus*1,
     c.CHARISMA: std_bonus*1,
-    c.HEALTH : std_bonus*2*Constants.HP_PER_STR,
+    c.HEALTH : std_bonus*2*Constants.HP_PER_END,
     c.MANA: std_bonus*2*Constants.MANA_PER_INT,
-    c.STAMINA: std_bonus*2*Constants.STAMINA_PER_END,
+    c.STAMINA: std_bonus*2*Constants.STAMINA_PER_STR,
     c.INITIATIVE : std_bonus*0.2
 }

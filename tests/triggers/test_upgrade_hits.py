@@ -16,7 +16,8 @@ def test_undead_n_hits(game_hvsp, hero, n):
         hp_before = hero.health
         DamageEvent(dmg, hero, source=hero, impact_factor=ImpactFactor.HIT)
         hp_after = hero.health
-        assert hp_before - hp_after > damage_amount
+        if hp_before > damage_amount:
+            assert hp_before - hp_after > damage_amount
 
     hp_before = hero.health
     DamageEvent(dmg, hero, source=hero, impact_factor=ImpactFactor.HIT)
