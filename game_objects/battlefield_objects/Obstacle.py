@@ -7,9 +7,7 @@ from ui.sounds import sound_maps
 
 class Obstacle(BattlefieldObject):
 
-
     sound_map = sound_maps.std_sound_map #TODO specific obstacle sound maps
-
     health = DynamicParameter("max_health", [lambda u : ObstacleDestroyedEvent(u)])
 
     is_obstacle = True
@@ -29,7 +27,16 @@ class Obstacle(BattlefieldObject):
 
 
     def lose_health(self, dmg_amount, source=None):
+
         assert dmg_amount >= 0
         if source:
             self.last_damaged_by = source
         self.health -= dmg_amount
+
+
+    @property
+    def tooltip_info(self):
+        return {'name':f"{self.name}_{self.uid}",
+                'hp':str(int(self.health)),
+                'armor': repr(self.armor),
+                'defence':str(self.melee_evasion)}

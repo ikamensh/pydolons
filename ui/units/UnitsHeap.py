@@ -36,7 +36,9 @@ class UnitsHeap(QObject, GameObject):
 
     def update_units(self, new_units):
         if self.units != new_units:
+
             diff = self.units.difference(new_units)
+
             if diff == set():
                 for unit in new_units.difference(self.units):
                     self.add(unit)
