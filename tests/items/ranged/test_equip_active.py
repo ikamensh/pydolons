@@ -16,10 +16,11 @@ def test_gives_active_crossbow(hero, crossbow):
 def test_unequip(hero, crossbow):
 
     hero.equipment.equip_item(crossbow)
-
     actives_before = len(hero.actives)
-    hero.equipment.unequip_item(crossbow)
 
+    from game_objects.items import EquipmentSlotUids
+
+    hero.equipment.unequip_slot(EquipmentSlotUids.HANDS)
     assert len(hero.actives) < actives_before
 
 

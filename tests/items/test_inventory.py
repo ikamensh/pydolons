@@ -11,13 +11,6 @@ def full_inventory(weapon):
 
     yield inv
 
-def test_len(weapon):
-    inv = Inventory(10, None)
-    assert len(inv) == 0
-
-    item = weapon
-    inv.add(item)
-    assert len(inv) == 1
 
 
 def test_limited_size(weapon):
@@ -28,7 +21,7 @@ def test_limited_size(weapon):
         added = inv.add(item)
         assert added == True
 
-    assert len(inv) == 3
+    assert len(inv.all_items) == 3
 
     item = weapon
     added = inv.add(item)

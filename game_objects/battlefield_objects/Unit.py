@@ -1,7 +1,7 @@
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 from game_objects.battlefield_objects.CharAttributes import Constants
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.items import Inventory, Equipment, Weapon, QuickItems
+from game_objects.items import Inventory, Equipment, Weapon, QuickItems, EquipmentSlotUids
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics import events
@@ -167,7 +167,7 @@ class Unit(BattlefieldObject):
 
     @property
     def armor_base(self):
-        body_armor = self.equipment["body"]
+        body_armor = self.equipment[EquipmentSlotUids.BODY]
         if body_armor:
             return body_armor.armor + self.natural_armor
         else:
@@ -274,14 +274,14 @@ class Unit(BattlefieldObject):
 
 
     def get_melee_weapon(self):
-        weapon = self.equipment["hands"]
+        weapon = self.equipment[EquipmentSlotUids.HANDS]
         if weapon and not weapon.is_ranged:
             return weapon
         else:
             return self.get_unarmed_weapon()
 
     def get_ranged_weapon(self):
-        weapon = self.equipment["hands"]
+        weapon = self.equipment[EquipmentSlotUids.HANDS]
         if weapon and weapon.is_ranged:
             return weapon
 

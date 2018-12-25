@@ -1,14 +1,21 @@
-from game_objects.items import Item, ItemTypes
+from __future__ import annotations
+from game_objects.items import Item
+from typing import TYPE_CHECKING
+from mechanics.events import ItemDroppedEvent
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
+    from game_objects.items import ItemTypes
+
 
 class Slot:
-    def __init__(self, name, item_type = None, owner = None):
+    def __init__(self, name:str, item_type : ItemTypes = None, owner: Unit = None):
         self.name = name
         self.item_type = item_type
         self.owner = owner
         self._content = None
 
     @property
-    def content(self):
+    def content(self) -> Item:
         return self._content
 
     @content.setter
@@ -32,6 +39,10 @@ class Slot:
             except AttributeError:
                 pass
 
+    def drop(self):
+        if self.content:
+            item = self.pop_item()
+            ItemDroppedEvent(item)
 
 
     def swap_item(self, other_slot):
@@ -46,28 +57,13 @@ class Slot:
         if self.owner:
             if hasattr(item, "on_unequip"):
                 item.on_unequip(self)
+            self.owner.recalc()
         item.owner = None
         return item
+
+
 
     def __repr__(self):
         return f"{self.owner}'s {self.name} slot with {self.content}"
 
-
-class StandardSlots:
-
-    std_slots = [
-        ("head", ItemTypes.HELMET),
-        ("body", ItemTypes.BODY_ARMOR),
-        ("hands", ItemTypes.WEAPON),
-        ("feet", ItemTypes.BOOTS),
-        ("ring1", ItemTypes.RING),
-        ("ring2", ItemTypes.RING)
-    ]
-
-    @staticmethod
-    def get_standard_slots(owner):
-        result = []
-        for name, type in StandardSlots.std_slots:
-            result.append(Slot(name, type, owner))
-        return result
 

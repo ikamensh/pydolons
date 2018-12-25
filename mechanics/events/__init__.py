@@ -7,9 +7,9 @@ from mechanics.events.src.Interrupt import CounteredInterrupt, PermanentInterrup
 
 from mechanics.events.combat.UnitDiedEvent import UnitDiedEvent
 from mechanics.events.combat.ObstacleDestroyedEvent import ObstacleDestroyedEvent
-from mechanics.events.ItemDestroyedEvent import ItemDestroyedEvent
-from mechanics.events.ItemUsedUpEvent import ItemUsedUpEvent
-
+from mechanics.events.items.ItemDestroyedEvent import ItemDestroyedEvent
+from mechanics.events.items.ItemUsedUpEvent import ItemUsedUpEvent
+from mechanics.events.items.ItemDroppedEvent import ItemDroppedEvent
 
 from mechanics.events.magic.BuffAppliedEvent import BuffAppliedEvent
 from mechanics.events.magic.BuffDetachedEvent import BuffDetachedEvent
@@ -17,7 +17,7 @@ from mechanics.events.magic.BuffExpiredEvent import BuffExpiredEvent
 from mechanics.events.magic.BuffDispelledEvent import BuffDispelledEvent
 
 
-from mechanics.events.HealingEvent import HealingEvent
+from mechanics.events.combat.HealingEvent import HealingEvent
 from mechanics.events.ActiveEvent import ActiveEvent
 from mechanics.events.combat.DamageEvent import DamageEvent
 from mechanics.events.combat.AttackEvent import AttackEvent
