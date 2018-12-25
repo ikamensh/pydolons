@@ -51,7 +51,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def createHPBar(self, unit, unit_bf):
         hp = HealthBar()
         hp.setBrush(QtCore.Qt.cyan)
-        hp.setRect(0, self.h , self.w, 32)
+        hp.setRect(0, self.h, self.w, 32)
         hp.setPos(unit.pos())
         hp.setHP(self.getHPprec(unit_bf))
         self.unit_hps[unit.uid] = hp
@@ -75,7 +75,16 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
 
     def moveSupport(self, unit):
         self.unit_hptxts[unit.uid].setUnitPos(unit.pos())
+        # self.unit_hps[unit.uid].setPos(unit.pos())
+        self.update_gui_support(unit)
+
+    def update_gui_support(self, unit):
+        self.unit_hps[unit.uid].setScale(unit.scale())
         self.unit_hps[unit.uid].setPos(unit.pos())
+        if unit.offset().x() != 0.:
+            m = unit.offset().x() / 20
+            self.unit_hps[unit.uid].moveBy(unit.offset().x() - m*10, unit.offset().y() - m*10)
+        pass
 
     def updateSupport(self, unit, amount):
         self.unit_hps[unit.uid].setHP(self.getHPprec(unit))
@@ -113,8 +122,8 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def addTarget(self, item):
         target = Target()
         target.setBrush(QtCore.Qt.green)
-        target.w = self.w * self.transform().m11()
-        target.h = self.h * self.transform().m11()
+        target.w = self.w
+        target.h = self.h
         target.setRect(0, 0, target.w, target.h)
         target.setWorldPos(item.x, item.y)
         self.targets.append(target)

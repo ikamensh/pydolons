@@ -24,8 +24,8 @@ class TestBasicUnit(UsesQApp):
         self.unit_d.worldPos.y = 7
         self.unit_d.uid = 55
 
-        self.set_a = {self.unit_a, self.unit_b, self.unit_c}
-        self.set_b = {self.unit_a, self.unit_d}
+        self.set_a = [self.unit_a, self.unit_b, self.unit_c]
+        self.set_b = [self.unit_a, self.unit_d]
 
         self.heap_1 = UnitsHeap()
         for u in self.set_a:
@@ -33,11 +33,11 @@ class TestBasicUnit(UsesQApp):
         pass
 
     def test_add_to_heap(self):
-        self.assertEqual(self.heap_1.len, len(self.set_a))
+        self.assertEqual(self.heap_1.units, self.set_a)
 
     def test_remove_from_heap(self):
         self.heap_1.remove(self.unit_b)
-        self.assertEqual(self.heap_1.units, {self.unit_a, self.unit_c})
+        self.assertEqual(self.heap_1.units, [self.unit_a, self.unit_c])
 
     def test_update_to_heap(self):
         self.heap_1.update_units(self.set_b)
