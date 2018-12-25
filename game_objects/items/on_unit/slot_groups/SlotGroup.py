@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import List, TYPE_CHECKING
+from mechanics.events import ItemDroppedEvent
 if TYPE_CHECKING:
     from game_objects.items import Slot
     from game_objects.battlefield_objects import Unit
@@ -33,6 +34,7 @@ class SlotGroup:
 
     def add(self, item):
         if not self.empty_slots:
+            ItemDroppedEvent(item)
             return False
         slot = self.empty_slots[0]
         slot.content = item

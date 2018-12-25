@@ -26,6 +26,8 @@ class ItemDroppedEvent(Event):
         return True
 
     def resolve(self):
+        if self.item.slot:
+            self.item.slot.pop_item()
         pass
         # TODO enable pickup of dropped items
 
