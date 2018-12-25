@@ -118,17 +118,17 @@ class Battlefield:
         return Cell._distance(p1, p2)
 
     @property
-    def all_cells(self):
+    def all_cells(self) -> List[Cell]:
         if hasattr(self, "_all_cells"):
-            return self._all_cells
+            return list(self._all_cells)
 
-        result = set()
+        result = []
         for i in range(self.w):
             for j in range(self.h):
-                result.add(Cell(i, j))
+                result.append(Cell(i, j))
 
         self._all_cells = result
-        return result
+        return list(result)
 
     @property
     def all_units(self) -> List[Unit]:

@@ -2,7 +2,8 @@ from __future__ import annotations
 from mechanics.events import ActiveEvent
 from mechanics.actives import ActiveTags
 from battlefield import Cell
-import copy
+
+import traceback
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -102,7 +103,9 @@ class Active:
     def cost(self) -> Cost:
         try:
             return self._cost(self)
-        except TypeError:
+        except TypeError as e:
+            # traceback.print_exc()
+            # print(e)
             return self._cost
 
     def __repr__(self):

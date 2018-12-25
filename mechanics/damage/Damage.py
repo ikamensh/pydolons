@@ -14,6 +14,7 @@ class Damage:
     }
 
     def __init__(self, amount, type):
+        assert amount > 0
         self.amount = amount
         self.type = type
 
@@ -63,7 +64,8 @@ class Damage:
         assert damage_initial > 0
         assert damage_final >= 0
         reduction = damage_initial * Damage.effect_coef[impact_factor] - damage_final
-        reduction_over_threshold = reduction - 0.33 * damage_initial
+        threshold = 0.33 * damage_initial # if reduction is greater than the threshold, the weapon is damaged.
+        reduction_over_threshold = reduction - threshold
         if reduction_over_threshold > 0:
             return int(5 * (reduction_over_threshold / damage_initial))
         else:

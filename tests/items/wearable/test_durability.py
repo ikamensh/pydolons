@@ -3,8 +3,9 @@ from mechanics.events import AttackEvent
 
 def test_loses_durability(game_hvsp, hero, weapon, pirate, armor, no_chances, monkeypatch):
     game_hvsp.add_unit(pirate, 7+7j)
-    hero.equipment["hands"] = weapon
-    pirate.equipment["body"] = armor
+
+    hero.equipment.equip_item( weapon )
+    pirate.equipment.equip_item( armor )
 
     weapon_dur_before = weapon.durability
     armor_dur_before = armor.durability

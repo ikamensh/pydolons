@@ -19,6 +19,10 @@ class Perk:
     def abils(self):
         return self.level_to_abils.get(self.current_level, list())
 
+    @property
+    def tooltip_info(self):
+        return {'name': f"{repr(self)}" }
+
     def __repr__(self):
         if self.current_level == 0:
             return f"not learned {self.name[self.current_level+1]}"

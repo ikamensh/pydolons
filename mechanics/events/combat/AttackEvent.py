@@ -32,7 +32,7 @@ class AttackEvent(Event):
         if self.impact is not ImpactFactor.MISS:
             dmg_event = DamageEvent( self.weapon.damage, self.target, source=self.source, impact_factor = self.impact)
 
-            if self.weapon and self.weapon.durability:
+            if not dmg_event.interrupted and self.weapon and self.weapon.durability:
                 self.weapon.durability -= dmg_event.weapon_dur_dmg
         else:
             self.game.gamelog(f"{self.source} misses {self.target}")

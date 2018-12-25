@@ -30,7 +30,7 @@ class Masteries:
     @staticmethod
     def achieved_level(exp):
         level = 0
-        while exp > Masteries.cumulative_cost(level+1):
+        while exp >= Masteries.cumulative_cost(level+1):
             level += 1
 
         return level
@@ -83,8 +83,14 @@ class Masteries:
 
 
 if __name__ == "__main__":
-    # for i in range(512):
-    #     print(i, masteries.increment_cost(i))
+    masteries = Masteries()
+    total = 0
+    for i in range(512):
+        ic = masteries.increment_cost(i)
+        total += ic
+        al = masteries.achieved_level(total)
+        print(i, al, ic)
+
     #
     # for m in MasteriesEnum:
     #     print(m, masteries.requirements(m,100))

@@ -22,20 +22,13 @@ class ItemTransactions:
     def take_from(self, slot):
         self.manipulation_slot.swap_item(slot)
 
-    def equip(self, slot):
-        assert slot in self.inventory.all
-        self.equipment.equip(slot)
-
-    def drop_item(self, slot):
-        # gamelog("{} dropped {}.".format(self.owner, slot.pop_item()))
-        print("{} dropped {}.".format(self.owner, slot.pop_item()))
 
     def stop_manipulation(self):
         if self.manipulation_slot:
             if self.pickup(self.manipulation_slot):
                 pass
             else:
-                self.drop_item(self.manipulation_slot)
+                self.manipulation_slot.drop()
 
     def __enter__(self):
         return self

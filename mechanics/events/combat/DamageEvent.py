@@ -3,6 +3,7 @@ from mechanics.events import EventsChannels
 from mechanics.events.src.Event import Event
 from mechanics.chances import ImpactFactor
 from mechanics.damage import Damage
+from game_objects.items import EquipmentSlotUids
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -21,8 +22,6 @@ class DamageEvent(Event):
 
         self.weapon_dur_dmg = 0
 
-        _, _, self.weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target,
-                                                                       self.impact_factor)
 
         super().__init__(target.game, fire, logging=True)
 
@@ -33,14 +32,14 @@ class DamageEvent(Event):
 
 
     def check_conditions(self):
-        return self.target.alive and self.amount > 0
+        return self.target.alive
 
     def resolve(self):
 
         _, armor_dur_dmg, weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target, self.impact_factor)
 
         if not self.target.is_obstacle:
-            body_armor = self.target.equipment["body"]
+            body_armor = self.target.equipment[EquipmentSlotUids.BODY]
             if body_armor and body_armor.durability:
                 body_armor.durability -= armor_dur_dmg
 
