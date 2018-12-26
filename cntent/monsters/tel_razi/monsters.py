@@ -14,10 +14,25 @@ class golems_sound_map:
 
 
 
-golem_bt = BaseType({'str':24, 'end':15, 'prc':0, 'agi':2, 'int':2, 'cha':1},
+golem_bt = BaseType({'str':24, 'end':15, 'prc':0, 'agi':2, 'int':2, 'cha':8},
                      "Crude Golem", abilities=[golem_n_charges(15), fat], icon=["golem.png"], sound_map=golems_sound_map)
 
 golem = Monster(golem_bt,
+                      [
+
+                      ])
+
+
+from cntent.monsters.tel_razi.abilities.zone_control import zone_control_damage
+from cntent.monsters.tel_razi.actives import sentinel_shot
+
+
+sentinel_bt = BaseType({'str':9, 'end':13, 'prc':18, 'agi':12, 'int':12, 'cha':8},
+                        "Sentinel", abilities=[golem_n_charges(12), zone_control_damage(3, 0.5)],
+                        actives=[sentinel_shot],
+                        icon=["sentinel.jpg"], sound_map=golems_sound_map)
+
+sentinel = Monster(sentinel_bt,
                       [
 
                       ])

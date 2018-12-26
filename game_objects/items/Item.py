@@ -19,7 +19,8 @@ class Item:
 
     @property
     def tooltip_info(self):
-        return {"name": f"{self.name}"}
+        return {"name": f"{self.name}",
+                "type": f"{self.item_type}"}
 
     def __repr__(self):
         return f"Item: {self.name}"

@@ -18,6 +18,26 @@ tel_razi_electrify = Active(BattlefieldObject,
                             name="Electify",
                             cooldown=5)
 
+from cntent.monsters.tel_razi.callbacks import stun_bolt
+
+from mechanics.conditions import ActiveCondition
+
+
+
+no_direct_activation_cond = ActiveCondition("No direct activation",
+                                            lambda a, t: a.owner.readiness < 1,
+                                            "This ability can't be activated on the owners turn.")
+
+
+sentinel_shot = Active(BattlefieldObject,
+                       [proximity_condition(3), within_angle(130), no_direct_activation_cond],
+                       Cost(stamina=1, mana=20),
+                       game=None,
+                       callbacks=[stun_bolt(40, 0.2)],
+                       tags=[ActiveTags.ATTACK, ActiveTags.RANGED],
+                       name="Electify",
+                       cooldown=4)
+
 
 
 

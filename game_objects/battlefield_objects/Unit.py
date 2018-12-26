@@ -92,9 +92,7 @@ class Unit(BattlefieldObject):
         self.resists_base = Resistances(base_type.resists)
         self.natural_armor = Armor(base_type.armor_base, base_type.armor_dict)
 
-        if self.abilities:
-            for a in self.abilities:
-                self.remove_ability(a)
+        self.deactivate_abilities()
 
         self.abilities = []
         for abil in base_type.abilities:
@@ -133,6 +131,10 @@ class Unit(BattlefieldObject):
         for active in std_movements:
             self.give_active(active)
 
+    def deactivate_abilities(self):
+        if self.abilities:
+            for a in list(self.abilities):
+                self.remove_ability(a)
 
     def add_ability(self, ability):
         if self.game:
