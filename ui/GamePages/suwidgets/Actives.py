@@ -4,6 +4,7 @@ from PySide2.QtGui import QIcon
 
 class Actives(QtCore.QObject):
     setTargets = QtCore.Signal(list)
+    action_on = QtCore.Signal(dict)
 
     def __init__(self, page, parent = None, widget_size = (64, 64), margin = 10, columns = 3):
         super(Actives, self).__init__(parent)
@@ -12,7 +13,7 @@ class Actives(QtCore.QObject):
         self.mousePos = QtCore.QPoint(0, 0)
         self.page = page
         self.hero = None
-        self.names = None
+        self.active_names = ['turn CCW', 'turn CW']
         self.frame = None
         self.widget_size = widget_size
         self.widgets = {}
@@ -81,7 +82,6 @@ class Actives(QtCore.QObject):
                              'background-color: white;'
                              'color:black}')
 
-
     def setNames(self):
         self.names = ['run',
                       'back',
@@ -143,8 +143,14 @@ class Actives(QtCore.QObject):
 
     def selectActive(self):
         active = self.frame.focusWidget().property('active')
+        if active.name == 'turn CCW':
+            self.page.gamePages.gameRoot.game.order_turn_ccw()
+            return
+        if active.name == 'turn CW':
+            self.page.gamePages.gameRoot.game.order_turn_cw()
+            return
         targets = self.page.gamePages.gameRoot.game.get_possible_targets(active)
-        if not targets is None:
+        if targets is not None:
             if targets:
                 self.setTargets.emit(targets)
 
