@@ -95,13 +95,19 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.addToGroup(self.tool)
 
     def showToolTip(self, cell, units_at, units_bf):
-        #TODO This method view one unit info from cell, in cell maybe many units
-        if cell in [unit.worldPos for unit in units_at.values()]:
-            if cell in units_bf.keys():
-                unit = [unit for unit in units_at.values() if unit.worldPos == cell][0]
-                self.tool.setPos(unit.pos())
-                self.tool.setDict(units_bf[cell][0].tooltip_info)
-                self.tool.setVisible(True)
+        units = units_bf.get(cell)
+        if units is not None:
+            if len(units) == 1:
+                if units_at[units[-1].uid].isVisible():
+                    self.tool.setPos(units_at[units[-1].uid].pos())
+                    self.tool.setDict(units[-1].tooltip_info)
+                    self.tool.setVisible(True)
+            else:
+                for u in units:
+                    if u.uid == self.level.units.units_heaps[cell].units[-1].uid and self.level.units.units_heaps[cell].units[-1].isVisible():
+                        self.tool.setPos(self.level.units.units_heaps[cell].units[-1].pos())
+                        self.tool.setDict(u.tooltip_info)
+                        self.tool.setVisible(True)
         else:
             self.tool.setVisible(False)
 
@@ -125,9 +131,9 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         target.w = self.w
         target.h = self.h
         target.setRect(0, 0, target.w, target.h)
-        target.setWorldPos(item.x, item.y)
         self.targets.append(target)
         self.addToGroup(target)
+        target.setWorldPos(item.x, item.y)
         self.targeted = True
 
     def removeTargets(self):
