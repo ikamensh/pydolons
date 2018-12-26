@@ -125,9 +125,9 @@ class GameController(QtCore.QObject):
         y = int((pos.y() - self.tr_support.tr.m32() - self.world.pos().y()) / self.gameRoot.cfg.unit_size[1])
 
         self.last_point.x, self.last_point.y = x, y
-        # self.middleLayer.showToolTip(self.last_point,
-        #                              self.units.units_at,
-        #                              self.gameRoot.game.battlefield.units_at)
+        self.middleLayer.showToolTip(self.last_point,
+                                     self.units.units_at,
+                                     self.gameRoot.game.battlefield.units_at)
         self.middleLayer.selectItem(x, y)
 
     orientations = {
