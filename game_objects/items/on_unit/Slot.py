@@ -61,7 +61,13 @@ class Slot:
         item.owner = None
         return item
 
-
+    @property
+    def tooltip_info(self):
+        if self.content:
+            return self.content.tooltip_info
+        else:
+            return {"Slot": f"{self.name}",
+                    "Type": f"{self.item_type}"}
 
     def __repr__(self):
         return f"{self.owner}'s {self.name} slot with {self.content}"

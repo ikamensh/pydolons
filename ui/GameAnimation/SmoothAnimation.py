@@ -24,7 +24,6 @@ class SmoothAnimation:
         self.queue = deque()
 
     def _keep_playing(self, state):
-        print(state, self.queue)
 
         if state == QtCore.QAbstractAnimation.Stopped:
             if self.queue:

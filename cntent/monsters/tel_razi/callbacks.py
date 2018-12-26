@@ -21,3 +21,15 @@ def give_charges_callback(n):
             DamageEvent(dmg, target, source=active.owner)
     return _
 
+
+def stun_bolt(n_dmg, stun_amount):
+
+    def _(active  :Active, target :Unit):
+
+        dmg = Damage(n_dmg, DamageTypes.LIGHTNING)
+        e = DamageEvent(dmg, target, source=active.owner)
+        if not e.interrupted and e.amount > 0:
+            target.readiness -= stun_amount
+
+    return _
+

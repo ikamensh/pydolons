@@ -96,6 +96,8 @@ class DreamGame:
         self.battlefield.remove(unit)
         self.turns_manager.remove_unit(unit)
         unit.alive = False
+        unit.deactivate_abilities()
+
 
 
     def obstacle_destroyed(self, obstacle: Obstacle):
