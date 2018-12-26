@@ -97,42 +97,32 @@ class Units(QtWidgets.QGraphicsItemGroup):
         hero = self.level.gameRoot.game.the_hero
         bf = self.level.gameRoot.game.battlefield
         self.level.gameVision.setSeenCells(bf.vision.std_seen_cells(hero))
+        for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
+            if cell not in bf.vision.std_seen_cells(hero):
+                for u in units:
+                    self.units_at[u.uid].setVisible(False)
+            else:
+                for u in units:
+                    self.units_at[u.uid].setVisible(True)
 
     def update_heaps(self):
-        for cell in list(self.units_heaps.keys()):
-            if not cell in self.level.gameRoot.game.battlefield.units_at.keys():
-                del self.units_heaps[cell]
         for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
             if len(units) > 1:
                 if cell in self.units_heaps.keys():
                     self.units_heaps[cell].info()
                     self.units_heaps[cell].update_units(list(self.units_from_(units)))
                 else:
-                    self.units_heaps[cell] = UnitsHeap()
+                    self.units_heaps[cell] = UnitsHeap(gameRoot=self.level.gameRoot)
+                    self.level.gameRoot.controller.mouseMove.connect(self.units_heaps[cell].mouseMoveEvent)
+                    self.level.gameRoot.controller.mousePress.connect(self.units_heaps[cell].mousePressEvent)
                     self.units_heaps[cell].updated_gui.connect(self.level.middleLayer.update_gui_support)
                     self.units_heaps[cell].update_units(list(self.units_from_(units)))
             elif self.units_at[units[0].uid].scale != 1.:
+                    if self.units_heaps.get(cell) is not None:
+                        del self.units_heaps[cell]
                     self.units_at[units[0].uid].setScale(1.)
                     self.units_at[units[0].uid].setOffset(0., 0.)
                     self.level.middleLayer.update_gui_support(self.units_at[units[0].uid])
-
-    # def _update_heaps(self, cell_to):
-    #     units = self.level.gameRoot.game.battlefield.units_at.get(cell_to)
-    #     if units is not None:
-    #         if len(units)>1:
-    #             print('->>>>>-Update heaps-<<<<<-')
-    #             if cell_to in self.units_heaps.keys():
-    #                 self.units_heaps[cell_to].info()
-    #                 self.units_heaps[cell_to].update_units(list(self.units_from_(units)))
-    #             else:
-    #                 self.units_heaps[cell_to] = UnitsHeap()
-    #                 self.units_heaps[cell_to].updated_gui.connect(self.level.middleLayer.update_gui_support)
-    #                 self.units_heaps[cell_to].update_units(list(self.units_from_(units)))
-    #         elif self.units_at[units[0].uid].scale != 1.:
-    #             self.units_at[units[0].uid].setScale(1.)
-    #             self.units_at[units[0].uid].setOffset(0., 0.)
-    #             self.level.middleLayer.update_gui_support(self.units_at[units[0].uid])
-    #     pass
 
     def units_from_(self, units):
         for unit in units:
