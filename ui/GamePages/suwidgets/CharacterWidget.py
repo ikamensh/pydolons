@@ -24,9 +24,8 @@ class CharacterWidget(QtWidgets.QWidget):
 
         self.setLayout(mainLayout)
 
-
     def getHeroLayout(self, parent):
-        hero = self.gamePages.gameRoot.game.the_hero
+        hero = self.gamePages.gameRoot.lengine.the_hero
         layout = QtWidgets.QGridLayout()
         layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         layout.setVerticalSpacing(0)
@@ -95,7 +94,7 @@ class CharacterWidget(QtWidgets.QWidget):
         return layout
 
     def updatePage(self):
-        hero = self.gamePages.gameRoot.game.the_hero
+        hero = self.gamePages.gameRoot.lengine.the_hero
         self.healthBar.setMaximum(hero.max_health)
         self.healthBar.setValue(hero.health)
         self.healthBar.property('label').setText(str(int(hero.health)))
