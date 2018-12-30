@@ -46,6 +46,11 @@ class QPerkTree(QWidget):
         self.total_spent.setText(str(self.perk_tree.spent_xp))
         self.xp_changed(self.character.free_xp)
 
+    def updatePage(self):
+        self.total_spent.setText(str(self.perk_tree.spent_xp))
+        self.xp_changed(self.character.free_xp)
+        pass
+
 
 if __name__ == "__main__":
     from PySide2.QtWidgets import QApplication
