@@ -47,9 +47,15 @@ class StartPage(AbstractPage):
         self.readme.clicked.connect(self.readmeSlot)
         laoyout.addWidget(self.readme)
 
-        settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
-        settings.setStyleSheet(buttonStyle)
-        laoyout.addWidget(settings)
+        self.settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
+        self.settings.setStyleSheet(buttonStyle)
+        self.settings.clicked.connect(self.settingsSlot)
+        laoyout.addWidget(self.settings)
+
+        exit = QtWidgets.QPushButton('EXIT', mainWidget)
+        exit.setStyleSheet(buttonStyle)
+        exit.clicked.connect(self.exitSlot)
+        laoyout.addWidget(exit)
 
         mainWidget.setLayout(laoyout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
@@ -106,6 +112,13 @@ class StartPage(AbstractPage):
     def readmeSlot(self):
         self.hidePage()
         self.gamePages.readme.showPage()
+
+    def settingsSlot(self):
+        self.hidePage()
+        self.gamePages.settigsPage.showPage()
+
+    def exitSlot(self):
+        QtWidgets.QApplication.closeAllWindows()
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
