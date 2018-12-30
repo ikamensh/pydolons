@@ -122,7 +122,9 @@ class StartPage(AbstractPage):
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
-            self.showPage()
+            page = self.gamePages.pages.get('chaPage')
+            if not page:
+                self.showPage()
         pass
 
     def updatePos(self):
