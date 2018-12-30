@@ -1,4 +1,5 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
+
 
 class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
     """docstring for ToolTip.
