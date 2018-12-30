@@ -1,4 +1,4 @@
-from PySide2 import QtGui, QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
 from ui.GamePages.suwidgets.CharacterWidget import CharacterWidget
@@ -37,12 +37,12 @@ class ChaPage(AbstractPage):
 
         self.charWidget = CharacterWidget(self, parent = mainWidget)
         self.masteriWidget = MasteriesWidget(self, parent = mainWidget)
-        self.perkWidget =  QPerkTree(self.gamePages.gameRoot.cfg, self.character.perk_trees[0], self.character, mainWidget)
+        self.perkWidget = QPerkTree(self.gamePages.gameRoot.cfg, self.character.perk_trees[0], self.character, mainWidget)
 
         mainLayout.addWidget(self.charWidget, 0, 0, 1, 1)
         mainLayout.addWidget(self.perkWidget, 0, 3, 3, 1)
         mainLayout.addWidget(self.masteriWidget, 1, 0, 1, 3)
-        mainLayout.addLayout(self.getPageBtnLayout(mainWidget), 2, 0, 1, 1)
+        mainLayout.addLayout(self.getPageBtnLayout(mainWidget), 2, 3, 1, 1, alignment = QtCore.Qt.AlignRight)
 
         mainWidget.setLayout(mainLayout)
 
@@ -56,11 +56,13 @@ class ChaPage(AbstractPage):
         msgBox.setInformativeText('Change character elements and up hero')
         self.msgBox = self.gamePages.gameRoot.scene.addWidget(msgBox)
         self.gamePages.gameRoot.scene.removeItem(self.msgBox)
+        self.updatePage()
         self.resized()
 
     def setUpGui(self):
-        self.save.clicked.connect(self.saveSlot)
         self.ok.clicked.connect(self.okSlot)
+        self.save.clicked.connect(self.saveSlot)
+        self.reset.clicked.connect(self.resetSlot)
 
     def getHeroLayout(self, parent):
         hero = self.gamePages.gameRoot.lengine.the_hero
@@ -133,26 +135,34 @@ class ChaPage(AbstractPage):
 
     def getPageBtnLayout(self, parent):
         btnLayout = QtWidgets.QHBoxLayout()
-
-        self.ok = QtWidgets.QPushButton("ok", parent)
+        self.ok = QtWidgets.QPushButton("Ok", parent)
         self.ok.setStyleSheet(self.buttonStyle)
         btnLayout.addWidget(self.ok)
 
-        self.save = QtWidgets.QPushButton("save", parent)
+        self.save = QtWidgets.QPushButton("Save", parent)
         self.save.setStyleSheet(self.buttonStyle)
         btnLayout.addWidget(self.save)
+
+        self.reset = QtWidgets.QPushButton("Reset", parent)
+        self.reset.setStyleSheet(self.buttonStyle)
+        btnLayout.addWidget(self.reset)
 
         return btnLayout
 
     def updatePage(self):
         self.charWidget.updatePage()
         self.masteriWidget.updatePage()
+        self.perkWidget.updatePage()
         pass
 
     def okSlot(self):
         self.comitToChacracter()
-        self.focusable.emit(False)
+        self.updatePage()
         self.hidePage()
+
+    def resetSlot(self):
+        self.resetPage()
+        self.updatePage()
 
     def saveSlot(self):
         self.comitToChacracter()
@@ -160,11 +170,11 @@ class ChaPage(AbstractPage):
 
     def resized(self):
         super().resized()
+        self.w = self.mainWidget.widget().width()
+        self.h = self.mainWidget.widget().height()
         self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
         self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
         self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
-        self.w = self.mainWidget.widget().width()
-        self.h = self.mainWidget.widget().height()
         self.resizeBackground(self.background)
         pass
 
@@ -184,15 +194,19 @@ class ChaPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
     def keyPressEvent(self, e):
-        if e.key() == QtCore.Qt.Key_O:
+        if e.key() == QtCore.Qt.Key_Escape:
             if self.state:
                 self.focusable.emit(False)
                 self.hidePage()
-                self.resetPage()
-            else:
-                self.updatePage()
-                self.showPage()
-                self.focusable.emit(True)
+        # if e.key() == QtCore.Qt.Key_O:
+        #     if self.state:
+        #         self.focusable.emit(False)
+        #         self.hidePage()
+        #         self.resetPage()
+        #     else:
+        #         self.updatePage()
+        #         self.showPage()
+        #         self.focusable.emit(True)
 
     def destroy(self):
         self.mainWidget.widget().destroy()
