@@ -55,7 +55,7 @@ class ChaPage(AbstractPage):
         self.ok.clicked.connect(self.okSlot)
 
     def getHeroLayout(self, parent):
-        hero = self.gamePages.gameRoot.game.the_hero
+        hero = self.gamePages.gameRoot.lengine.the_hero
         layout = QtWidgets.QGridLayout()
         layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         layout.setVerticalSpacing(0)
