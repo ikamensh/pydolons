@@ -10,7 +10,6 @@ class GameView(QtWidgets.QGraphicsView):
     def __init__(self, parent = None):
         QtWidgets.QGraphicsView.__init__(self, parent)
         # Задаем минимальный размер виджета
-        self.setMinimumSize(800, 600)
         # Отключаем полосы прокрутки
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -32,8 +31,6 @@ class GameView(QtWidgets.QGraphicsView):
             self.scale(1 / 1.05, 1 / 1.05)
         self.wheel_change.emit()
         self.controller.wheelEvent(e)
-
-
 
     def keyPressEvent(self, e):
         super(GameView, self).keyPressEvent(e)
@@ -58,6 +55,15 @@ class GameView(QtWidgets.QGraphicsView):
 
     def slotAlarmTimer(self):
         w, h = self.width(), self.height()
+        if self.gameconfig.user_cfg.read_config['window']['fullscreen']:
+            self.changeResolution(w, h)
+        else:
+            w = self.gameconfig.user_cfg.read_config['window']['resolution']['width']
+            h = self.gameconfig.user_cfg.read_config['window']['resolution']['height']
+            self.changeResolution(w, h)
+
+    def changeResolution(self, w, h):
         self.gameconfig.updateScreenSize(w, h)
+        self.setMinimumSize(w, h)
         self.scene().setSceneRect(0, 0, w, h)
         self.resized.emit()
