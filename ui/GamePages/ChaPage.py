@@ -4,6 +4,7 @@ from ui.GamePages import AbstractPage
 from ui.GamePages.suwidgets.CharacterWidget import CharacterWidget
 from ui.GamePages.suwidgets.MasteriesWidget import MasteriesWidget
 from ui.GamePages.suwidgets.perk_tree.QPerkTree import QPerkTree
+from ui.GamePages.suwidgets.GameMsgBox import GameMsgBox
 
 from game_objects.battlefield_objects import base_attributes
 
@@ -48,6 +49,13 @@ class ChaPage(AbstractPage):
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
         self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+
+        msgBox = GameMsgBox()
+        msgBox.setGameConfig(self.gamePages.gameRoot.cfg)
+        msgBox.setText('This character page')
+        msgBox.setInformativeText('Change character elements and up hero')
+        self.msgBox = self.gamePages.gameRoot.scene.addWidget(msgBox)
+        self.gamePages.gameRoot.scene.removeItem(self.msgBox)
         self.resized()
 
     def setUpGui(self):
@@ -166,6 +174,7 @@ class ChaPage(AbstractPage):
         self.gamePages.visiblePage = True
         self.gamePages.gameRoot.scene.addItem(self)
         self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+        self.gamePages.gameRoot.scene.addItem(self.msgBox)
 
     def hidePage(self):
         self.state = False
