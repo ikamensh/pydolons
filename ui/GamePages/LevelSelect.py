@@ -29,11 +29,6 @@ class LevelSelect(AbstractPage):
         self.isService = True
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
-
-    def setUpGui(self):
-        self.cancel.pressed.connect(self.cancelSlot)
-
-
     def setUpWidgets(self, dung_list):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
@@ -54,8 +49,6 @@ class LevelSelect(AbstractPage):
         scrollArea = QtWidgets.QScrollArea(parent=mainWidget)
         scrollArea.setFixedWidth(420)
 
-
-
         for i, dungeon in enumerate(dung_list):
             dung_widg = self.getWidget(dungeon, mainWidget)
             layout.addWidget(dung_widg, i // 2, i % 2)
@@ -64,10 +57,6 @@ class LevelSelect(AbstractPage):
             # dung_widg.selected.connect(self.select_dungeon)
             # dung_widg.deselected.connect(self.disable_start)
 
-        self.cancel = QtWidgets.QPushButton("X", mainWidget)
-        self.cancel.setStyleSheet(self.buttonStyle)
-
-        # layout.addWidget(self.cancel)
         self.frame.setLayout(layout)
         scrollArea.setWidget(self.frame)
         mainLayout.addWidget(scrollArea)
