@@ -51,8 +51,11 @@ class TheUI(QtWidgets.QWidget):
         self.gameRoot.setGameConfig(self.view.gameconfig)
         self.layout.addWidget(self.view)
         self.layout.setMargin(2)
-
-        self.scene = QtWidgets.QGraphicsScene(0, 0, 500, 500)
+        size = self.gameconfig.dev_cfg_size
+        if size is not None:
+            self.scene = QtWidgets.QGraphicsScene(0, 0, self.gameconfig.dev_cfg_size[0], self.gameconfig.dev_cfg_size[1])
+        else:
+            self.scene = QtWidgets.QGraphicsScene(0, 0, 500, 500)
         self.gameRoot.setScene(self.scene)
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtCore.Qt.black)
@@ -68,13 +71,18 @@ class TheUI(QtWidgets.QWidget):
         self.gamePages.setUpStartPage(self)
         self.gamePages.setUpLevelsPage()
         self.gamePages.setUpReadmePage()
+        self.gamePages.setUpSettingsPage()
 
         self.view.resized.connect(self.gamePages.resized)
         self.view.setScene(self.scene)
-
-        self.showMaximized()
+        self.window_config()
         print('cfg ===> init TheUI', datetime.now())
 
+    def window_config(self):
+        if self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen']:
+            self.showFullScreen()
+        else:
+            self.show()
 
     def changeTo(self):
         self.scene.update(-self.gameconfig.ava_ha_size[0],
@@ -103,6 +111,10 @@ class TheUI(QtWidgets.QWidget):
         # self.game = self.lengine.getGame('walls_level')
         # self.game = self.lengine.getGame('pirate_level')
 
+    def changeCharacters(self):
+        hero = self.lengine.getHero()
+        self.gamePages.setUpCharecterPage()
+
     def setGame(self, dungeon):
         self.gameRoot.game = self.lengine.getGame(dungeon)
 
@@ -123,7 +135,6 @@ class TheUI(QtWidgets.QWidget):
         self.initLevel()
         self.gamePages.setUpPages()
         self.gamePages.resized()
-        # self.showPage()
         self.gamePages.page = self.gamePages.gameMenu
         self.view.controller = self.controller
 
