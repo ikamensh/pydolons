@@ -10,6 +10,7 @@ from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.ChaPage import ChaPage
 from ui.GamePages.BackGorundPage import BackGorundPage
 from ui.GamePages.ReadmePage import ReadmePage
+from ui.GamePages.SettingsPage import SettingsPage
 
 
 class GamePages(object):
@@ -70,9 +71,13 @@ class GamePages(object):
 
     def setUpCharecterPage(self):
         chaPage = self.buildPage('chaPage', ChaPage)
+        chaPage.showPage()
 
     def setUpReadmePage(self):
         self.readme = self.buildPage('readmePage', ReadmePage)
+
+    def setUpSettingsPage(self):
+        self.settigsPage = self.buildPage('settigsPage', SettingsPage)
 
     def buildPage(self, pageName, pageClass):
         page = pageClass(self)
@@ -104,6 +109,8 @@ class GamePages(object):
         if self.startPage.state:
             return True
         if self.levelSelect.state:
+            return True
+        if self.settigsPage.state:
             return True
         if not self.pages.get('chaPage') is None:
             if self.pages.get('chaPage').state:
