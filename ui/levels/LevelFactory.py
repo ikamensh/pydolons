@@ -29,10 +29,6 @@ class LevelFactory:
         self.z_values = [i for i in range(self.gameRoot.game.battlefield.w)]
         self.setUpLevel()
 
-
-    def removeLevel(self):
-        pass
-
     def saveLevelState(self):
         pass
 
@@ -92,8 +88,11 @@ class LevelFactory:
 
     def removeLevel(self):
         print('level --destroy')
+        self.gameRoot.level = None
+        self.gameRoot.controller.tr_support.level = None
         self.level.world.level = None
         self.level.world = None
+        self.level.units.units_heaps.clear()
         self.level.units.level = None
         self.level.units = None
         self.level.middleLayer.level = None
