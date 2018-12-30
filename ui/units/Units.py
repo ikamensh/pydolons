@@ -100,10 +100,14 @@ class Units(QtWidgets.QGraphicsItemGroup):
         for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
             if cell not in bf.vision.std_seen_cells(hero):
                 for u in units:
-                    self.units_at[u.uid].setVisible(False)
+                    unit = self.units_at.get(u.uid)
+                    if unit is not None:
+                        unit.setVisible(False)
             else:
                 for u in units:
-                    self.units_at[u.uid].setVisible(True)
+                    unit = self.units_at.get(u.uid)
+                    if unit is not None:
+                        unit.setVisible(True)
 
     def update_heaps(self):
         for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
