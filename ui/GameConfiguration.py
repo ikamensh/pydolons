@@ -1,11 +1,13 @@
 import os
 from PySide2 import QtGui, QtWidgets, QtMultimedia
 from ui.GameSizeConfig import gameItemsSizes
+from ui.UserConfig import UserConfig, DEFAULT_CONFIG
 
 from config import pydolons_rootdir
 from mechanics.damage import DamageTypes
 
 from datetime import datetime
+from copy import copy
 
 class GameConfiguration:
     """docstring for GameConfiguration.
@@ -24,7 +26,7 @@ class GameConfiguration:
         self.sound_formats = ('wav', 'mp3')
         self.sound_file_paths = {}
         self.sound_maps = {}
-
+        self.setUpUserConfig()
         self.setUpScreen()
         print('cfg ===> setUpScreen', datetime.now())
         self.setUpUnits()
@@ -37,7 +39,7 @@ class GameConfiguration:
         self.setUpSounds()
         print('cfg ===> setUpSounds', datetime.now())
         self.gameRoot = None
-        self.tr = QtGui.QTransform()
+        # self.tr = QtGui.QTransform()
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -58,24 +60,43 @@ class GameConfiguration:
         :atribute ava_ha_size  - доступный размер деленый на 2
         :atribute dev_size  - размер устройства деленый на 2
         """
-        self.desktop =  QtWidgets.QDesktopWidget()
+        self.desktop = QtWidgets.QDesktopWidget()
         self.dev_size = self.desktop.screenGeometry().width(), self.desktop.screenGeometry().height()
+        self.device_resolution = self.dev_size[0], self.dev_size[1]
         if self.dev_size[1] < 900:
             self.rez_step = 0
         else:
             self.rez_step = 1
             if self.dev_size[1] > 1079:
                 self.rez_step = 2
-        self.dev_ha_size = int(self.dev_size[0] / 2), int(self.dev_size[1] / 2)
-        self.ava_size = self.desktop.availableGeometry().width(), self.desktop.availableGeometry().height()
-        self.ava_ha_size = int(self.ava_size[0] / 2), int(self.ava_size[1] / 2)
-        self.correct_size = self.ava_ha_size[0] - 3, self.ava_ha_size[1] - 17
+        # self.dev_ha_size = int(self.dev_size[0] / 2), int(self.dev_size[1] / 2)
+        # self.ava_size = self.desktop.availableGeometry().width(), self.desktop.availableGeometry().height()
+        # self.ava_ha_size = int(self.ava_size[0] / 2), int(self.ava_size[1] / 2)
+        # self.correct_size = self.ava_ha_size[0] - 3, self.ava_ha_size[1] - 17
+        self.resolutions = ((800, 600),
+                            (1024, 768),
+                            (1280, 800),
+                            (1280, 1024),
+                            (1280, 720),
+                            (1360, 768),
+                            (1366, 768),
+                            (1440, 900),
+                            (1536, 864),
+                            (1600, 900),
+                            (1680, 1050),
+                            (1920, 1200),
+                            (1920, 1080),
+                            (2560, 1080),
+                            (2560, 1440),
+                            (3440, 1440),
+                            (3840, 2160))
+        if self.device_resolution not in self.resolutions:
+            self.device_resolution = self.resolutions[0]
 
     def updateScreenSize(self, w, h):
-        self.screenSize = (w, h)
-        self.dev_size = self.screenSize
-        self.tr.reset()
-        self.tr.translate(w/2, h/2)
+        self.dev_size = (w, h)
+        # self.tr.reset()
+        # self.tr.translate(w/2, h/2)
 
     def setUpUnits(self):
         """
@@ -160,6 +181,13 @@ class GameConfiguration:
             except Exception as e:
                 print(e)
 
+    def setUpUserConfig(self):
+        self.user_cfg = UserConfig()
+        try:
+            self.user_cfg.readSetting()
+        except Exception as e:
+            self.user_cfg.read_config = copy(DEFAULT_CONFIG)
+
     def getSize(self, id):
         size = gameItemsSizes.get(id)
         if size is None:
@@ -167,6 +195,15 @@ class GameConfiguration:
             return (64, 64)
         else:
             return size[self.rez_step]
+
+    @property
+    def dev_cfg_size(self):
+        if not self.user_cfg.read_config['window']['fullscreen']:
+            return self.user_cfg.read_config['window']['resolution']['width'],\
+                    self.user_cfg.read_config['window']['resolution']['height']
+
+
+
 
 
 
