@@ -20,11 +20,11 @@ class StartPage(AbstractPage):
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
-        mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
+        mainWidget = QtWidgets.QWidget()
         mainWidget.resize(self.w, self.h)
         mainWidget.setStyleSheet('background-color: rgba(0, 0, 0, 0);')
 
-        laoyout :QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout(mainWidget)
+        laoyout = QtWidgets.QVBoxLayout(mainWidget)
         buttonStyle = 'QPushButton{background-color:black;color:white;}QPushButton:pressed{background-color:white;color:black;}'
 
         self.newGame = QtWidgets.QPushButton('New Game', mainWidget)
