@@ -156,7 +156,7 @@ class TransformSupport:
     def resized(self):
         self.scr_w = self.cfg.dev_size[0]
         self.scr_h = self.cfg.dev_size[1]
-        if not self.level is None:
+        if self.level is not None:
             self.initLevel(self.level)
             self.update_frame_rect()
         # self.updateGameField()
