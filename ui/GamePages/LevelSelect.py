@@ -94,6 +94,7 @@ class LevelSelect(AbstractPage):
             self.hidePage()
             self.gamePages.gameRoot.ui.setGame(dungeon)
             self.gamePages.gameRoot.ui.startGame()
+            self.gamePages.gameRoot.ui.changeCharacters()
 
         frame:QtWidgets.QFrame = QtWidgets.QFrame(parent=parent)
         frame.setProperty('dungeon',  dungeon)
@@ -117,7 +118,7 @@ class LevelSelect(AbstractPage):
 
         start = QtWidgets.QPushButton('start', parent)
         start.setStyleSheet(self.buttonStyle)
-        start.pressed.connect(startGame)
+        start.clicked.connect(startGame)
         form_layout.addRow(start)
         self.fake_btns.append(start)
 
