@@ -22,6 +22,14 @@ class LEngine:
         self.the_hero  = None
         self.dungeon = None
 
+    def getHero(self):
+        if self.character is None or self.the_hero is None:
+            self.character = Character(demohero_basetype)
+            self.the_hero = self.character.unit
+            return self.the_hero
+        else:
+            return self.the_hero
+
     def getGame(self, dungeon):
         if self.character is None or self.the_hero is None:
             self.character = Character(demohero_basetype)
