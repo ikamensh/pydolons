@@ -31,7 +31,6 @@ class GamePages(object):
 
     def setUpPages(self):
         self.setUpBackgrounPage()
-        self.setUpCharecterPage()
         self.setUpGameMenu()
 
     def destroyPages(self):
