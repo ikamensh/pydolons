@@ -54,7 +54,6 @@ class GamePages(object):
     def setUpStartPage(self, ui):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
-        # self.startPage.newGame.pressed.connect(ui.setDefaultGame)
         self.startPage.stop.pressed.connect(ui.stopGame)
 
     def setUpLevelsPage(self):
