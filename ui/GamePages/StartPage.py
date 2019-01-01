@@ -1,6 +1,8 @@
 from PySide2 import QtGui, QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
+from ui.GameAnimation.AnimatedItem import AnimatedItem
+
 
 class StartPage(AbstractPage):
     """docstring for StartPage."""
@@ -14,8 +16,10 @@ class StartPage(AbstractPage):
         self.defaultGame = True
         self.isService = True
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
+        self.button_id = 0
 
     def setUpWidgets(self):
+        self.buttons = []
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
@@ -30,37 +34,76 @@ class StartPage(AbstractPage):
         self.newGame = QtWidgets.QPushButton('New Game', mainWidget)
         self.newGame.setStyleSheet(buttonStyle)
         self.newGame.clicked.connect(self.startNewGame)
+        self.buttons.append(self.newGame)
         laoyout.addWidget(self.newGame)
 
         self.stop = QtWidgets.QPushButton('STOP', mainWidget)
         self.stop.setStyleSheet(buttonStyle)
         self.stop.clicked.connect(self.stopSlot)
+        self.buttons.append(self.stop)
         laoyout.addWidget(self.stop)
 
         self.levels = QtWidgets.QPushButton('Levels', mainWidget)
         self.levels.setStyleSheet(buttonStyle)
         self.levels.clicked.connect(self.levelsSlot)
+        self.buttons.append(self.levels)
         laoyout.addWidget(self.levels)
 
         self.readme = QtWidgets.QPushButton('README', mainWidget)
         self.readme.setStyleSheet(buttonStyle)
         self.readme.clicked.connect(self.readmeSlot)
+        self.buttons.append(self.readme)
         laoyout.addWidget(self.readme)
 
         self.settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
         self.settings.setStyleSheet(buttonStyle)
         self.settings.clicked.connect(self.settingsSlot)
+        self.buttons.append(self.settings)
         laoyout.addWidget(self.settings)
 
-        exit = QtWidgets.QPushButton('EXIT', mainWidget)
-        exit.setStyleSheet(buttonStyle)
-        exit.clicked.connect(self.exitSlot)
-        laoyout.addWidget(exit)
-
+        self.exit = QtWidgets.QPushButton('EXIT', mainWidget)
+        self.exit.setStyleSheet(buttonStyle)
+        self.exit.clicked.connect(self.exitSlot)
+        self.buttons.append(self.exit)
+        laoyout.addWidget(self.exit)
         mainWidget.setLayout(laoyout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
         self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.resized()
+        self.setUpAnim()
+
+    def setUpAnim(self):
+        self.fire_one = AnimatedItem(gameconfig=self.gamePages.gameRoot.cfg)
+        self.addToGroup(self.fire_one)
+        self.fire_one.setPics('fire_plate')
+        self.fire_one.animation(mode=True, framerate=25)
+
+        self.fire_two = AnimatedItem(gameconfig=self.gamePages.gameRoot.cfg)
+        self.addToGroup(self.fire_two)
+        self.fire_two.setPics('fire_plate')
+        self.fire_two.animation(mode=True, framerate=25)
+
+        self.setButtonPos()
+        self.setAnimPos(0)
+
+    def setButtonPos(self):
+        self.buttons_pos = []
+        self.buttons_pos.append(self.getButtonPos(self.newGame))
+        self.buttons_pos.append(self.getButtonPos(self.stop))
+        self.buttons_pos.append(self.getButtonPos(self.levels))
+        self.buttons_pos.append(self.getButtonPos(self.readme))
+        self.buttons_pos.append(self.getButtonPos(self.settings))
+        self.buttons_pos.append(self.getButtonPos(self.exit))
+
+    def getButtonPos(self, button):
+        x1 = self.mainWidget.pos().x() + button.pos().x() - 68
+        x2 = self.mainWidget.pos().x() + button.pos().x() + button.width()
+        y = self.mainWidget.pos().y() + button.pos().y() - 48
+        return x1, x2, y
+
+    def setAnimPos(self, button_id):
+        self.fire_one.setPos(self.buttons_pos[button_id][0], self.buttons_pos[button_id][2])
+        self.fire_two.setPos(self.buttons_pos[button_id][1], self.buttons_pos[button_id][2])
 
     def showPage(self):
         if self.state:
@@ -78,7 +121,6 @@ class StartPage(AbstractPage):
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
-
 
     def hidePage(self):
         self.state = False
@@ -120,11 +162,26 @@ class StartPage(AbstractPage):
     def exitSlot(self):
         QtWidgets.QApplication.closeAllWindows()
 
+    def mouseMoveEvent(self, e):
+        print(e)
+
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
             page = self.gamePages.pages.get('chaPage')
             if not page:
                 self.showPage()
+        elif e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
+            self.buttons[self.button_id].clicked.emit()
+        elif e.key() == QtCore.Qt.Key_Up:
+            self.button_id -= 1
+            if self.button_id < 0:
+                self.button_id = 5
+            self.setAnimPos(self.button_id)
+        elif e.key() == QtCore.Qt.Key_Down:
+            self.button_id += 1
+            if self.button_id > 5:
+                self.button_id = 0
+            self.setAnimPos(self.button_id)
         pass
 
     def updatePos(self):
