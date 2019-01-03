@@ -1,7 +1,7 @@
-from ui.GameWorld import GameWorld, ObstacleUnit
+from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from ui.units import GameVision
-from ui.units import Units, BasicUnit
+from ui.units import Units, BasicUnit, ObstacleUnit
 from ui.levels.BaseLevel import BaseLevel
 from ui.debug.DebugLayer import DebugLayer
 
@@ -53,6 +53,7 @@ class LevelFactory:
             if isinstance(unit, bf_objs.Unit):
                 gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg)
                 if unit.icon == 'hero.png':
+                    gameUnit.is_hero = True
                     self.active_unit = True
                 gameUnit.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
                 gameUnit.setDirection(battlefield.unit_facings[unit])
@@ -62,11 +63,15 @@ class LevelFactory:
                 # добавили gameunit
                 self.level.units.units_at[unit.uid] = gameUnit
             elif isinstance(unit, Obstacle):
-                obstacle:ObstacleUnit = ObstacleUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1])
+                obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
+                                        self.gameRoot.cfg.unit_size[1],
+                                        name = unit.name)
                 obstacle.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
                 obstacle.setWorldPos(unit_pos.x, unit_pos.y)
                 obstacle.uid = unit.uid
                 self.level.world.addToGroup(obstacle)
+                if obstacle.name == 'Wooden door':
+                    self.level.units.units_at[unit.uid] = obstacle
                 self.level.world.obstacles[unit.uid] = obstacle
 
         self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
