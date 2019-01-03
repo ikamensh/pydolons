@@ -1,9 +1,9 @@
 from PySide2 import QtCore, QtWidgets
-from PySide2.QtGui import QPolygon
 
 from ui.gamecore.GameObject import GameObject
 from ui.GamePages.suwidgets.GuiConsole import GuiConsole
 from ui.GamePages.suwidgets.Actives import Actives
+from ui.GamePages.suwidgets.SupportPanel import SupportPanel
 from ui.GamePages import AbstractPage
 
 
@@ -22,8 +22,6 @@ class GameMenuPage(AbstractPage):
         self.actives.setTargets.connect(self.gamePages.gameRoot.level.middleLayer.getTargets)
 
         self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
-        self.gamePages.gameRoot.controller.mouseMove.connect(self.mouseMove)
-
         self.notify = self.gamePages.gameRoot.suwidgetFactory.getNotifyText(self.gamePages.gameRoot)
         self.addToGroup(self.notify)
 
@@ -40,6 +38,10 @@ class GameMenuPage(AbstractPage):
             self.createUnitStack()
             self.updateUnitStack()
 
+        sup_panel = SupportPanel(page=self, gameconfig=self.gamePages.gameRoot.cfg)
+        sup_panel.setUpWidgets()
+        self.sup_panel = self.gamePages.gameRoot.scene.addWidget(sup_panel)
+        self.sup_panel.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.createToolTip()
 
     def createUnitStack(self):
@@ -123,11 +125,14 @@ class GameMenuPage(AbstractPage):
         super().updatePos()
         self.upateActivesPos()
         self.updateGuiConsolePos()
+        self.updadteSupPanlePos()
 
     def upateActivesPos(self):
         self.actives.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.actives.x, self.actives.y))
 
-    def mouseMove(self, e):
-        pass
+    def updadteSupPanlePos(self):
+        self.sup_panel.setPos(self.gamePages.gameRoot.view.mapToScene(self.sup_panel.widget().widget_x, \
+                                                                      self.sup_panel.widget().widget_y))
+
 
 
