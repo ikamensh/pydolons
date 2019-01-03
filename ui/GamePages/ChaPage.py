@@ -198,15 +198,7 @@ class ChaPage(AbstractPage):
             if self.state:
                 self.focusable.emit(False)
                 self.hidePage()
-        # if e.key() == QtCore.Qt.Key_O:
-        #     if self.state:
-        #         self.focusable.emit(False)
-        #         self.hidePage()
-        #         self.resetPage()
-        #     else:
-        #         self.updatePage()
-        #         self.showPage()
-        #         self.focusable.emit(True)
+                self.gamePages.startPage.hidePage()
 
     def destroy(self):
         self.mainWidget.widget().destroy()
