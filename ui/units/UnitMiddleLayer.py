@@ -50,7 +50,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
 
     def createHPBar(self, unit, unit_bf):
         hp = HealthBar()
-        hp.setBrush(QtCore.Qt.cyan)
+        hp.setColor(unit)
         hp.setRect(0, self.h, self.w, 32)
         hp.setPos(unit.pos())
         hp.setHP(self.getHPprec(unit_bf))
@@ -98,18 +98,20 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         units = units_bf.get(cell)
         if units is not None:
             if len(units) == 1:
-                if units_at[units[-1].uid].isVisible():
-                    self.tool.setPos(units_at[units[-1].uid].pos())
-                    self.tool.setDict(units[-1].tooltip_info)
+                if units_at[units[0].uid].isVisible():
+                    self.tool.setPos(units_at[units[0].uid].pos())
+                    self.tool.setDict(units[0].tooltip_info)
                     self.tool.setVisible(True)
             else:
                 for u in units:
-                    if u.uid == self.level.units.units_heaps[cell].units[-1].uid and self.level.units.units_heaps[cell].units[-1].isVisible():
+                    if u.uid == self.level.units.units_heaps[cell].units[-1].uid:
                         self.tool.setPos(self.level.units.units_heaps[cell].units[-1].pos())
                         self.tool.setDict(u.tooltip_info)
                         self.tool.setVisible(True)
         else:
             self.tool.setVisible(False)
+
+        pass
 
     def removeUnitLayer(self, uid):
         self.removeFromGroup(self.unit_hps[uid])
