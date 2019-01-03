@@ -37,6 +37,7 @@ class GameLoopThread(QtCore.QThread):
     play_trun_anim = QtCore.Signal(dict)
     play_nextunit_anim = QtCore.Signal()
     play_levelstatus = QtCore.Signal(str)
+    obstacle_destroyed = QtCore.Signal(dict)
     def __init__(self, parent=None):
         super(GameLoopThread, self).__init__(parent)
         self.game = None
@@ -57,6 +58,7 @@ class GameLoopThread(QtCore.QThread):
         proxy_cls.play_trun_anim = self.play_trun_anim
         proxy_cls.play_nextunit_anim = self.play_nextunit_anim
         proxy_cls.play_levelstatus = self.play_levelstatus
+        proxy_cls.obstacle_estroyed = self.obstacle_destroyed
         # Здесь происходит присоединение слотов к сигналам
         self.setConnection()
 
@@ -68,9 +70,12 @@ class GameLoopThread(QtCore.QThread):
         self.play_perish_anim.connect(self.the_ui.gameRoot.level.units.unitDiedSlot)
         self.play_trun_anim.connect(self.the_ui.gameRoot.level.units.unitTurnSlot)
         self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.updateUnitStack)
-        self.play_nextunit_anim.connect(self.the_ui.gameRoot.level.units.update_heaps)
         self.play_levelstatus.connect(self.the_ui.gameRoot.level.setStatus)
+        self.obstacle_destroyed.connect(self.debug)
 
     def run(self):
         self.game.loop()
+
+    def debug(self, msg):
+        print('DEBUG MSG', msg)
 
