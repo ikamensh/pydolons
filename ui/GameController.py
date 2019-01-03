@@ -136,10 +136,10 @@ class GameController(QtCore.QObject):
         QtCore.Qt.Key_S: Facing.WEST,
         QtCore.Qt.Key_D: Facing.SOUTH,
 
-        QtCore.Qt.Key_Up: Facing.EAST,
-        QtCore.Qt.Key_Left: Facing.NORTH,
-        QtCore.Qt.Key_Down: Facing.WEST,
-        QtCore.Qt.Key_Right: Facing.SOUTH,
+        # QtCore.Qt.Key_Up: Facing.EAST,
+        # QtCore.Qt.Key_Left: Facing.NORTH,
+        # QtCore.Qt.Key_Down: Facing.WEST,
+        # QtCore.Qt.Key_Right: Facing.SOUTH,
     }
 
     def order_from_hotkey(self, e):
