@@ -76,6 +76,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
     def unitDiedSlot(self, msg):
+        self.update_heaps()
         self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.level.middleLayer.removeUnitLayer(msg.get('unit').uid)
