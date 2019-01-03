@@ -23,6 +23,8 @@ class BasicUnit(QObject, GameObject):
         self.dir_angle = Facing.SOUTH
         self.count = 0
         self.count_max = 1
+        self.is_hero = False
+        self.is_obstacle = False
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
