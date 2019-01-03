@@ -1,10 +1,21 @@
 from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QColor
+
 
 class HealthBar(QtWidgets.QGraphicsRectItem):
     """docstring for HealtBar."""
+    orange = QColor(255, 102, 0)
     def __init__(self):
         super(HealthBar, self).__init__()
+        self.setBrush(Qt.red)
         self.setOpacity(0.6)
+
+    def setColor(self, unit):
+        if unit.is_obstacle:
+            self.setBrush(self.orange)
+        elif unit.is_hero:
+            self.setBrush(Qt.cyan)
 
     def setHP(self, hp):
         """ По указанным процентам устанавливает длину HealtBar
