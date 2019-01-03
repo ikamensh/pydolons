@@ -14,6 +14,8 @@ class GameObject(QtWidgets.QGraphicsPixmapItem):
         self.worldPos = Cell(0, 0)
         self.w = w
         self.h = h
+        self.is_hero = False
+        self.is_obstacle = False
 
     def setWorldX(self, x):
         self.worldPos.x = x
