@@ -1,6 +1,7 @@
 from PySide2 import QtGui, QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
+from ui.GamePages.suwidgets.GameButton import GameButton
 from ui.GameAnimation.AnimatedItem import AnimatedItem
 
 
@@ -31,39 +32,45 @@ class StartPage(AbstractPage):
         laoyout = QtWidgets.QVBoxLayout(mainWidget)
         buttonStyle = 'QPushButton{background-color:black;color:white;}QPushButton:pressed{background-color:white;color:black;}'
 
-        self.newGame = QtWidgets.QPushButton('New Game', mainWidget)
+        self.newGame = GameButton('New Game', mainWidget)
         self.newGame.setStyleSheet(buttonStyle)
         self.newGame.clicked.connect(self.startNewGame)
+        self.newGame.hovered.connect(self.get_wig)
         self.buttons.append(self.newGame)
         laoyout.addWidget(self.newGame)
 
-        self.stop = QtWidgets.QPushButton('STOP', mainWidget)
+        self.stop = GameButton('STOP', mainWidget)
         self.stop.setStyleSheet(buttonStyle)
         self.stop.clicked.connect(self.stopSlot)
+        self.stop.hovered.connect(self.get_wig)
         self.buttons.append(self.stop)
         laoyout.addWidget(self.stop)
 
-        self.levels = QtWidgets.QPushButton('Levels', mainWidget)
+        self.levels = GameButton('Levels', mainWidget)
         self.levels.setStyleSheet(buttonStyle)
         self.levels.clicked.connect(self.levelsSlot)
+        self.levels.hovered.connect(self.get_wig)
         self.buttons.append(self.levels)
         laoyout.addWidget(self.levels)
 
-        self.readme = QtWidgets.QPushButton('README', mainWidget)
+        self.readme = GameButton('README', mainWidget)
         self.readme.setStyleSheet(buttonStyle)
         self.readme.clicked.connect(self.readmeSlot)
+        self.readme.hovered.connect(self.get_wig)
         self.buttons.append(self.readme)
         laoyout.addWidget(self.readme)
 
-        self.settings = QtWidgets.QPushButton('SETTINGS', mainWidget)
+        self.settings = GameButton('SETTINGS', mainWidget)
         self.settings.setStyleSheet(buttonStyle)
         self.settings.clicked.connect(self.settingsSlot)
+        self.settings.hovered.connect(self.get_wig)
         self.buttons.append(self.settings)
         laoyout.addWidget(self.settings)
 
-        self.exit = QtWidgets.QPushButton('EXIT', mainWidget)
+        self.exit = GameButton('EXIT', mainWidget)
         self.exit.setStyleSheet(buttonStyle)
         self.exit.clicked.connect(self.exitSlot)
+        self.exit.hovered.connect(self.get_wig)
         self.buttons.append(self.exit)
         laoyout.addWidget(self.exit)
         mainWidget.setLayout(laoyout)
@@ -167,9 +174,7 @@ class StartPage(AbstractPage):
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
-            page = self.gamePages.pages.get('chaPage')
-            if not page:
-                self.showPage()
+            self.showPage()
         elif e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
             self.buttons[self.button_id].clicked.emit()
         elif e.key() == QtCore.Qt.Key_Up:
@@ -188,5 +193,8 @@ class StartPage(AbstractPage):
         super().updatePos()
         self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
 
+    def get_wig(self, button):
+        self.button_id = self.buttons.index(button)
+        self.setAnimPos(self.button_id)
 
 
