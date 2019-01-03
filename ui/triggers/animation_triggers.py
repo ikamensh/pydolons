@@ -1,4 +1,4 @@
-from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent
+from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent, ObstacleDestroyedEvent
 from ui.events import UiErrorMessageEvent, LevelStatusEvent
 from ui.triggers.no_sim_condition import no_sim_condition
 from GameLoopThread import ProxyEmit
@@ -105,3 +105,17 @@ def ui_error_message_trigger(game):
                    platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[display_ui_error])
+
+########### ObstacleDestroy #################
+
+
+def obstacle_destroyed(t, e):
+    ProxyEmit.obstacle_estroyed.emit({'unit':e.unit})
+
+
+def obstacle_destroy_trigger(game):
+    return Trigger(ObstacleDestroyedEvent,
+                   platform=game.events_platform,
+                   conditions={no_sim_condition},
+                   callbacks=[obstacle_destroyed])
+
