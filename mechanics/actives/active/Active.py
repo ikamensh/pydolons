@@ -15,8 +15,7 @@ if TYPE_CHECKING:
 from mechanics.conditions.ActiveCheck import ActiveCheck
 from mechanics.conditions.ActiveCondition import ActiveCondition
 
-cooldown_condition = ActiveCondition("Cooldown", lambda a, t: a.remaining_cd == 0,
-                                     "{active} is on cooldown for next {active.remaining_cd} seconds")
+
 
 
 class Active:
@@ -29,7 +28,6 @@ class Active:
         self.game = game
         self.targeting_cls = targeting_cls
         self.checker = ActiveCheck(conditions)
-        self.checker.append(cooldown_condition)
         self._cost = cost or Cost()
         self.callbacks = callbacks
         self.owner: Unit = None
@@ -66,10 +64,27 @@ class Active:
             return None
 
     def affordable(self):
+        if self.remaining_cd > 0:
+            return False
         if self.spell:
             if not self.spell.complexity_check(self.owner):
                 return False
         return self.owner.can_pay(self.cost)
+
+
+    def why_not_affordable(self) -> str:
+        if self.spell:
+            if not self.spell.complexity_check(self.owner):
+                return f"This spell is too complex for {self.owner}"
+        if not self.owner.can_pay(self.cost):
+            return self.cost.complain(self.owner)
+        if self.remaining_cd > 0:
+            return "Active is on cooldown."
+        else:
+            return "Why not?! it is affordable."
+
+    def why_wrong_target(self, target):
+        return self.checker.complain(self, target)
 
     def resolve(self, targeting):
         for callback in self.callbacks:
