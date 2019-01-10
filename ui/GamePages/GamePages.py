@@ -8,9 +8,11 @@ from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.ChaPage import ChaPage
+from ui.GamePages.InventoryPage import InventoryPage
 from ui.GamePages.BackGorundPage import BackGorundPage
 from ui.GamePages.ReadmePage import ReadmePage
 from ui.GamePages.SettingsPage import SettingsPage
+from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
 
 
 class GamePages(object):
@@ -32,6 +34,7 @@ class GamePages(object):
     def setUpPages(self):
         self.setUpBackgrounPage()
         self.setUpGameMenu()
+        self.setUpInventoryPage()
 
     def destroyPages(self):
         pages = list(self.pages.values())[:]
@@ -55,6 +58,9 @@ class GamePages(object):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
         self.startPage.stop.pressed.connect(ui.stopGame)
+        self.toolTip = SuWidgetFactory.getToolTip(w = 128, h = 0, opacity=1.)
+        self.toolTip.setZValue(500)
+        self.gameRoot.scene.addItem(self.toolTip)
 
     def setUpLevelsPage(self):
         self.levelSelect = self.buildPage('levelSelect', LevelSelect)
@@ -70,6 +76,9 @@ class GamePages(object):
     def setUpCharecterPage(self):
         chaPage = self.buildPage('chaPage', ChaPage)
         chaPage.showPage()
+
+    def setUpInventoryPage(self):
+        inventoryPage = self.buildPage('inventoryPage', InventoryPage)
 
     def setUpReadmePage(self):
         self.readme = self.buildPage('readmePage', ReadmePage)
