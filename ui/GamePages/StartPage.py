@@ -121,6 +121,7 @@ class StartPage(AbstractPage):
                 self.gamePages.visiblePage = False
                 self.gamePages.gameRoot.scene.removeItem(self)
                 self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+                self.mainWidget.show()
         else:
             self.state = True
             self.focusable.emit(True)
@@ -128,6 +129,7 @@ class StartPage(AbstractPage):
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+            self.mainWidget.hide()
 
     def hidePage(self):
         self.state = False
@@ -136,6 +138,7 @@ class StartPage(AbstractPage):
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.mainWidget.hide()
 
     def resized(self):
         super().resized()
