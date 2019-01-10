@@ -27,6 +27,7 @@ class TheUI(QtWidgets.QWidget):
 
     def __init__(self, lengine:LEngine, game = None):
         super().__init__()
+        self.setAcceptDrops(True)
         print('cfg ===> newGame init TheUI', datetime.now())
         # work level
         self.lengine = lengine
