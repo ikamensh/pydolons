@@ -61,6 +61,8 @@ class GamePages(object):
         self.toolTip = SuWidgetFactory.getToolTip(w = 128, h = 0, opacity=1.)
         self.toolTip.setZValue(500)
         self.gameRoot.scene.addItem(self.toolTip)
+        self.notify = SuWidgetFactory.getNotifyText(self.gameRoot)
+        self.gameRoot.scene.addItem(self.notify)
 
     def setUpLevelsPage(self):
         self.levelSelect = self.buildPage('levelSelect', LevelSelect)
@@ -79,6 +81,8 @@ class GamePages(object):
 
     def setUpInventoryPage(self):
         inventoryPage = self.buildPage('inventoryPage', InventoryPage)
+        self.gameRoot.controller.mouseMove.connect(inventoryPage.mouseMoveEvent)
+
 
     def setUpReadmePage(self):
         self.readme = self.buildPage('readmePage', ReadmePage)
