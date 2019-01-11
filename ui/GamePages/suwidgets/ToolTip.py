@@ -17,6 +17,8 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
         self.textItem.setParentItem(self)
         self.minimuWidth = 100
         self.minimumLeters = 16
+        self.setZValue(10)
+
 
     def setDefaultTextColor(self, color):
         self.textItem.setDefaultTextColor(color)
@@ -35,7 +37,6 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
         self.textItem.setPlainText(text)
         h = self.textItem.boundingRect().height()
         self.setRect(self.textItem.x(), self.textItem.y(), self.minimuWidth, h)
-        self.setZValue(10)
 
     def setDict(self, data):
         result = ''
