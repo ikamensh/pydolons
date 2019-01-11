@@ -1,5 +1,6 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 from game_objects.items.on_unit.EquipmentSlotUids import EquipmentSlotUids
+from ui.GamePages.suwidgets.items.GropsTypes import GropusTypes
 
 
 class SlotWidget(QtWidgets.QLabel):
@@ -7,9 +8,11 @@ class SlotWidget(QtWidgets.QLabel):
     hover_out = QtCore.Signal(QtCore.QObject)
     slot_changed = QtCore.Signal(QtWidgets.QLabel, QtWidgets.QLabel)
 
-    def __init__(self, *args, parent = None):
+    def __init__(self, *args, page, type, parent = None):
         super(SlotWidget, self).__init__(*args, parent=parent)
+        self.page = page
         self.name = None
+        self.type = type
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.start_point = QtCore.QPoint()
         self.dragStart = QtCore.QPoint()
@@ -37,9 +40,13 @@ class SlotWidget(QtWidgets.QLabel):
         # mimeData.setData('slot', self.property('slot'))
         drag.setMimeData(mimeData)
         result = drag.exec_(QtCore.Qt.CopyAction|QtCore.Qt.MoveAction)
+        if drag.target() == self:
+            return
         if result == QtCore.Qt.CopyAction or result == QtCore.Qt.MoveAction:
             self.slot_changed.emit(self, drag.target())
             self.clearSlot()
+        elif result == QtCore.Qt.IgnoreAction:
+            self.page.drop(self.property('slot'))
 
     def dragEnterEvent(self, ev:QtGui.QDragEnterEvent):
         formats = ev.mimeData().formats()
@@ -67,8 +74,11 @@ class SlotWidget(QtWidgets.QLabel):
         elif event.type() == QtCore.QEvent.HoverLeave:
             watched.hover_out.emit(watched)
             self.isHover = False
-        elif event.type() == QtCore.QEvent.ContextMenu:
-            self.showContextMenu(event.globalPos())
+        elif event.type() == QtCore.QEvent.MouseButtonPress:
+            if event.buttons() == QtCore.Qt.RightButton:
+                self.pressRighBtn()
+        # elif event.type() == QtCore.QEvent.ContextMenu:
+        #     self.showContextMenu(event.globalPos())
         return super(SlotWidget, self).eventFilter(watched, event)
 
     def showContextMenu(self, pos):
@@ -77,5 +87,9 @@ class SlotWidget(QtWidgets.QLabel):
     def clearSlot(self):
         self.setText('empty')
         self.setPixmap(self.empty_pix)
+
+    def pressRighBtn(self):
+        if self.type == GropusTypes.INVENTORY:
+            self.page.equip(self.property('slot'))
 
 
