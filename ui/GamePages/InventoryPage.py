@@ -1,6 +1,7 @@
 from PySide2 import QtCore, QtWidgets
 
-from game_objects.items import ItemTransactions, Slot
+from game_objects.items import ItemTransactions, Slot, Equipment, Slot, EquipmentSlotUids
+
 
 from ui.GamePages import AbstractPage
 from ui.GamePages.suwidgets.items.InventoryWidget import InventoryWidget
@@ -86,11 +87,21 @@ class InventoryPage(AbstractPage):
         print(self.the_hero.equipment.all_slots)
 
     def slot_change(self, source, target):
-        print(source.property('slot'))
-        print(target.property('slot'))
+        print('Start trasaction')
+        print('source = ', source.property('slot'))
+        print('target = ', target.property('slot'))
+        print('source_IT = ', source.property('slot').item_type)
+        print('target_IT = ', target.property('slot').item_type)
         if source.property('slot').content is None:
             return
+        # if target.property('slot').content is None:
+        #     with ItemTransactions(self.the_hero) as trans:
+        #         print(self.the_hero.equipment.equip(source.property('slot')))
+        #     return
         with ItemTransactions(self.the_hero) as trans:
-            self.the_hero.equipment.equip_item(source.property('slot').content)
-        print('Equipment', self.the_hero.equipment.all_items)
-        print('inventory', self.the_hero.inventory.all_items)
+            source.property('slot').swap_item(target.property('slot'))
+            # print(self.the_hero.equipment.equip(source.property('slot')))
+
+        print(self.the_hero.equipment[EquipmentSlotUids.HANDS])
+        print('Equipments ---> ', self.the_hero.equipment.all_items)
+        print('inventorys --->', self.the_hero.inventory.all_items)
