@@ -24,6 +24,8 @@ class Slot:
             assert isinstance(item, Item)
             if self.item_type:
                 assert item.item_type is self.item_type
+            else:
+                self.item_type = item.item_type
         if self.content:
             raise Exception("Remove existing item first.")
 
