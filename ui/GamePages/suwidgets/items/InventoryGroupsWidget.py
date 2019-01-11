@@ -1,6 +1,7 @@
 from PySide2 import QtWidgets
 from ui.GamePages.suwidgets.items.on_unit.EquipmentWidget import EquipmentWidget
 from ui.GamePages.suwidgets.items.on_unit.InventoryWidget import InventoryWidget
+from ui.GamePages.suwidgets.items.on_unit.QuickItems import QuickItems
 
 
 class InventoryGroupsWidget(QtWidgets.QWidget):
@@ -25,6 +26,8 @@ class InventoryGroupsWidget(QtWidgets.QWidget):
         group = QtWidgets.QTabWidget(self)
         self.equimpment = EquipmentWidget(page=self.page, parent=group)
         group.addTab(self.equimpment,'Equipment')
+        self.quick_items = QuickItems(page=self.page, parent=group)
+        group.addTab(self.quick_items,'Quick items')
         return group
 
     def testAddItem(self):
