@@ -58,12 +58,6 @@ class InventoryWidget(QtWidgets.QWidget):
             pixmap = self.cfg.getPicFile(game_slot.content.icon,101005001)
         slot.setPixmap(pixmap)
 
-    def info(self, slot):
-        if slot.property('slot').content is None:
-            return 'Slot empty'
-        else:
-            return str(slot.property('slot').content)
-
     def getInventoryGroup(self):
         group = QtWidgets.QTabWidget(self)
         group.addTab(EquipmentWidget(page=self.page, parent=group),'Equipment')
@@ -73,11 +67,23 @@ class InventoryWidget(QtWidgets.QWidget):
         x = widget.x() + self.x() + self.page.mainWidget.pos().x()
         y = widget.y() + self.y() + self.page.mainWidget.pos().y()
         self.page.gamePages.toolTip.setPos(x, y)
-        self.page.gamePages.toolTip.setText(self.info(widget))
+        if widget.property('slot').content is None:
+            self.page.gamePages.toolTip.setText('Slot empty')
+        else:
+            self.page.gamePages.toolTip.setDict(widget.property('slot').tooltip_info)
         self.page.gamePages.toolTip.show()
         pass
 
     def testAddItem(self):
         from cntent.items.blueprints.weapons.weapons import short_sword
+        from cntent.items.blueprints.armor.body_armor import leather_outfit, cuirass
+        from game_objects.items import ItemTypes
+
+
+        short_sword.item_type = ItemTypes.WEAPON
         self.the_hero.inventory.add(short_sword)
+        leather_outfit.item_type = ItemTypes.BODY_ARMOR
+        self.the_hero.inventory.add(leather_outfit)
+        cuirass.item_type = ItemTypes.BODY_ARMOR
+        self.the_hero.inventory.add(cuirass)
         pass
