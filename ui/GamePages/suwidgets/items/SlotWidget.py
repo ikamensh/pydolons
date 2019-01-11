@@ -19,12 +19,17 @@ class SlotWidget(QtWidgets.QLabel):
         self.setAcceptDrops(True)
         self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
         self.isHover = False
-        self.isDragLeave = True
+        self.simple_drag = False
         self.setAttribute(QtCore.Qt.WA_Hover)
         self.installEventFilter(self)
+        self.state = False
 
-    def mousePressEvent(self, ev):
-        self.dragStart = ev.pos()
+    def mousePressEvent(self, event):
+        self.dragStart = event.pos()
+        if event.buttons() == QtCore.Qt.RightButton:
+            self.pressRighBtn()
+        elif event.buttons() == QtCore.Qt.LeftButton:
+            self.page.startDrag(self)
         pass
 
     def mouseMoveEvent(self, ev):
@@ -37,14 +42,21 @@ class SlotWidget(QtWidgets.QLabel):
         mimeData = QtCore.QMimeData()
         mimeData.setText(self.text())
         mimeData.setImageData(self.pixmap())
+        drag.setPixmap(self.pixmap())
         # mimeData.setData('slot', self.property('slot'))
         drag.setMimeData(mimeData)
-        result = drag.exec_(QtCore.Qt.CopyAction|QtCore.Qt.MoveAction)
+        # result = drag.exec_(QtCore.Qt.CopyAction|QtCore.Qt.MoveAction)
+        result = drag.exec_()
         if drag.target() == self:
             return
+        if self.property('slot').content is None:
+            return
         if result == QtCore.Qt.CopyAction or result == QtCore.Qt.MoveAction:
-            self.slot_changed.emit(self, drag.target())
-            self.clearSlot()
+            # Step 2
+            self.state = self.page.swap_item(self, drag.target())
+            if self.state:
+                self.setData(mimeData, drag.target())
+                self.clearSlot()
         elif result == QtCore.Qt.IgnoreAction:
             self.page.drop(self.property('slot'))
 
@@ -58,27 +70,25 @@ class SlotWidget(QtWidgets.QLabel):
             ev.setAccepted(True)
 
     def dropEvent(self, ev:QtGui.QDropEvent):
+        # Step 1
         if ev.dropAction() != QtCore.Qt.IgnoreAction:
-            self.setText(ev.mimeData().text())
-            self.setPixmap(ev.mimeData().imageData())
-            if self.name == EquipmentSlotUids.HANDS.name:
-                self.property('hand').setText(ev.mimeData().text())
-                self.property('hand').setPixmap(ev.mimeData().imageData())
             ev.acceptProposedAction()
+        pass
+
+    def setData(self, mimeData, target):
+        target.setText(mimeData.text())
+        target.setPixmap(mimeData.imageData())
+        if target.name == EquipmentSlotUids.HANDS.name:
+            target.property('hand').setText(mimeData.text())
+            target.property('hand').setPixmap(mimeData.imageData())
 
     def eventFilter(self, watched:QtCore.QObject, event:QtCore.QEvent):
         if event.type() == QtCore.QEvent.HoverEnter:
             watched.hovered.emit(watched)
             self.isHover = True
-            pass
         elif event.type() == QtCore.QEvent.HoverLeave:
             watched.hover_out.emit(watched)
             self.isHover = False
-        elif event.type() == QtCore.QEvent.MouseButtonPress:
-            if event.buttons() == QtCore.Qt.RightButton:
-                self.pressRighBtn()
-        # elif event.type() == QtCore.QEvent.ContextMenu:
-        #     self.showContextMenu(event.globalPos())
         return super(SlotWidget, self).eventFilter(watched, event)
 
     def showContextMenu(self, pos):
@@ -91,5 +101,9 @@ class SlotWidget(QtWidgets.QLabel):
     def pressRighBtn(self):
         if self.type == GropusTypes.INVENTORY:
             self.page.equip(self.property('slot'))
+
+    def pressLeftBtn(self):
+        print('Press left btn')
+        pass
 
 
