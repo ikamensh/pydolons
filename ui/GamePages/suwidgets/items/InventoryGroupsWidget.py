@@ -15,15 +15,16 @@ class InventoryGroupsWidget(QtWidgets.QWidget):
 
     def setUpWidgets(self):
         layout = QtWidgets.QGridLayout(self)
-        bagpack = InventoryWidget(page=self.page, parent=self)
-        layout.addWidget(bagpack, 0, 0)
+        self.inventory = InventoryWidget(page=self.page, parent=self)
+        layout.addWidget(self.inventory, 0, 0)
         group = self.getInventoryGroup()
         layout.addWidget(group, 0, 1)
         self.setLayout(layout)
 
     def getInventoryGroup(self):
         group = QtWidgets.QTabWidget(self)
-        group.addTab(EquipmentWidget(page=self.page, parent=group),'Equipment')
+        self.equimpment = EquipmentWidget(page=self.page, parent=group)
+        group.addTab(self.equimpment,'Equipment')
         return group
 
     def testAddItem(self):
@@ -37,3 +38,7 @@ class InventoryGroupsWidget(QtWidgets.QWidget):
         self.the_hero.inventory.add(cuirass_usual)
         self.the_hero.inventory.add(jacket_cheap)
         pass
+
+    def upateSlots(self):
+        self.inventory.updateWidget()
+        self.equimpment.updateWidget()
