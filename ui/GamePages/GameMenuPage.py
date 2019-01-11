@@ -15,15 +15,13 @@ class GameMenuPage(AbstractPage):
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def showNotify(self, text):
-        self.notify.showText(text)
+        self.gamePages.notify.showText(text)
 
     def setUpGui(self):
         self.actives = Actives(self, columns=6)
         self.actives.setTargets.connect(self.gamePages.gameRoot.level.middleLayer.getTargets)
 
         self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
-        self.notify = self.gamePages.gameRoot.suwidgetFactory.getNotifyText(self.gamePages.gameRoot)
-        self.addToGroup(self.notify)
 
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
