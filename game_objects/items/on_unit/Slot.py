@@ -20,14 +20,12 @@ class Slot:
 
     @content.setter
     def content(self, item):
-        if item:
-            assert isinstance(item, Item)
-            if self.item_type:
-                assert item.item_type is self.item_type
-            else:
-                self.item_type = item.item_type
+
         if self.content:
             raise Exception("Remove existing item first.")
+
+        if not self.check_type_match(item):
+            raise Exception("Invalid item type")
 
         self._content = item
         item.slot = self
@@ -46,9 +44,21 @@ class Slot:
             item = self.pop_item()
             ItemDroppedEvent(item)
 
+    def check_type_match(self, item):
+        if self.item_type is None:
+            return True
+        elif item is None:
+            return True
+        else:
+            return self.item_type is item.item_type
 
-    def swap_item(self, other_slot):
-        self._content, other_slot._content = other_slot.pop_item(), self.pop_item()
+
+    def swap_item(self, other_slot: Slot):
+        if self.check_type_match(other_slot.content) and other_slot.check_type_match(self.content):
+            self._content, other_slot._content = other_slot.pop_item(), self.pop_item()
+            return True
+        else:
+            return False
 
     def pop_item(self):
         if self.content is None:
