@@ -18,6 +18,7 @@ class Blueprint(Item):
         self.material_type = material_type
 
         self.value = self.rarity ** 2.2 * (1+ (durability or 1) ) ** 2/3
+        self.bonuses = []
 
 
 
