@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtCore, QtGui
-from game_objects.items import Slot
+from game_objects.items.on_unit.EquipmentSlotUids import EquipmentSlotUids
 
 
 class SlotWidget(QtWidgets.QLabel):
@@ -9,6 +9,8 @@ class SlotWidget(QtWidgets.QLabel):
 
     def __init__(self, *args, parent = None):
         super(SlotWidget, self).__init__(*args, parent=parent)
+        self.name = None
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.start_point = QtCore.QPoint()
         self.dragStart = QtCore.QPoint()
         self.setAcceptDrops(True)
@@ -52,6 +54,9 @@ class SlotWidget(QtWidgets.QLabel):
         if ev.dropAction() != QtCore.Qt.IgnoreAction:
             self.setText(ev.mimeData().text())
             self.setPixmap(ev.mimeData().imageData())
+            if self.name == EquipmentSlotUids.HANDS.name:
+                self.property('hand').setText(ev.mimeData().text())
+                self.property('hand').setPixmap(ev.mimeData().imageData())
             ev.acceptProposedAction()
 
     def eventFilter(self, watched:QtCore.QObject, event:QtCore.QEvent):
@@ -62,7 +67,12 @@ class SlotWidget(QtWidgets.QLabel):
         elif event.type() == QtCore.QEvent.HoverLeave:
             watched.hover_out.emit(watched)
             self.isHover = False
+        elif event.type() == QtCore.QEvent.ContextMenu:
+            self.showContextMenu(event.globalPos())
         return super(SlotWidget, self).eventFilter(watched, event)
+
+    def showContextMenu(self, pos):
+        print('showContextMenu pos', pos)
 
     def clearSlot(self):
         self.setText('empty')
