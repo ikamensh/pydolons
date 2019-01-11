@@ -7,6 +7,7 @@ class SlotGroupWidget(QtWidgets.QWidget):
     def __init__(self, page, parent=None, ):
         super(SlotGroupWidget, self).__init__(parent)
         self.page = page
+        self.type = None
         self.cfg = page.gamePages.gameRoot.cfg
         self.the_hero = page.the_hero
         self.slot_style = 'background-color:rgba(127, 127, 127, 100);'
@@ -16,7 +17,7 @@ class SlotGroupWidget(QtWidgets.QWidget):
         pass
 
     def getSlotWiget(self, game_slot, name, w = 64, h = 64):
-        slot = SlotWidget(name, parent=self)
+        slot = SlotWidget(name, page=self.page, type=self.type, parent=self)
         slot.hovered.connect(self.toolTipShow)
         slot.hover_out.connect(self.page.toolTipHide)
         slot.slot_changed.connect(self.page.slot_change)
@@ -51,3 +52,11 @@ class SlotGroupWidget(QtWidgets.QWidget):
             self.page.gamePages.toolTip.setDict(widget.property('slot').tooltip_info)
         self.page.gamePages.toolTip.show()
         pass
+
+    def updateWidget(self):
+        for slot in self.slots.values():
+            self.updateSlot(slot)
+
+    def updateSlot(self, slot):
+        self.setPicSlot(slot.property('slot'), slot)
+
