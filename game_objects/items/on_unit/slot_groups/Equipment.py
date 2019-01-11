@@ -29,8 +29,8 @@ class Equipment(SlotGroup):
         :return: boolean: success?
         """
 
-        if not isinstance(item, WearableItem):
-            return False # item can't be equiped
+        # if not isinstance(item, WearableItem):
+        #     return False # item can't be equiped
 
         slot_type = item.item_type
 
@@ -58,7 +58,7 @@ class Equipment(SlotGroup):
 
     def equip(self, slot_from: Slot):
         item = slot_from.pop_item()
-        self.equip_item(item)
+        return self.equip_item(item)
 
 
     def unequip_slot(self, slot):
