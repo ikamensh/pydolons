@@ -4,7 +4,7 @@ from game_objects.items import ItemTransactions, Slot, Equipment, Slot, Equipmen
 
 
 from ui.GamePages import AbstractPage
-from ui.GamePages.suwidgets.items.InventoryWidget import InventoryWidget
+from ui.GamePages.suwidgets.items.InventoryGroupsWidget import InventoryGroupsWidget
 
 
 class InventoryPage(AbstractPage):
@@ -18,7 +18,7 @@ class InventoryPage(AbstractPage):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
-        mainWidget = InventoryWidget(page=self)
+        mainWidget = InventoryGroupsWidget(page=self)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
         self.mainWidget.widget().setParent(self.gamePages.gameRoot.ui)
         self.mainWidget.widget().hide()
@@ -90,17 +90,15 @@ class InventoryPage(AbstractPage):
         print('Start trasaction')
         print('source = ', source.property('slot'))
         print('target = ', target.property('slot'))
-        print('source_IT = ', source.property('slot').item_type)
-        print('target_IT = ', target.property('slot').item_type)
+
         if source.property('slot').content is None:
             return
-        # if target.property('slot').content is None:
-        #     with ItemTransactions(self.the_hero) as trans:
-        #         print(self.the_hero.equipment.equip(source.property('slot')))
-        #     return
+
+        print('source_IT = ', source.property('slot').content.item_type)
+        print('target_IT = ', target.property('slot').item_type)
+
         with ItemTransactions(self.the_hero) as trans:
             source.property('slot').swap_item(target.property('slot'))
-            # print(self.the_hero.equipment.equip(source.property('slot')))
 
         print(self.the_hero.equipment[EquipmentSlotUids.HANDS])
         print('Equipments ---> ', self.the_hero.equipment.all_items)
