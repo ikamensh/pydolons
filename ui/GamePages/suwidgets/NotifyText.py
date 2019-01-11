@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 
 class NotifyText(QtWidgets.QGraphicsTextItem):
@@ -8,6 +8,7 @@ class NotifyText(QtWidgets.QGraphicsTextItem):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.timerSlot)
         self.setVisible(False)
+        self.setZValue(20)
 
     def showText(self, text):
         self.setOpacity(1.0)
