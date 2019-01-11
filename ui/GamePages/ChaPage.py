@@ -185,6 +185,7 @@ class ChaPage(AbstractPage):
         self.gamePages.gameRoot.scene.addItem(self)
         self.gamePages.gameRoot.scene.addItem(self.mainWidget)
         self.gamePages.gameRoot.scene.addItem(self.msgBox)
+        self.mainWidget.widget().show()
 
     def hidePage(self):
         self.state = False
@@ -192,6 +193,7 @@ class ChaPage(AbstractPage):
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.mainWidget.widget().hide()
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
