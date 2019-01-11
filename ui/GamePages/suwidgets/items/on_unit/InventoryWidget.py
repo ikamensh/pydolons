@@ -1,5 +1,4 @@
 from PySide2 import QtWidgets
-from ui.GamePages.suwidgets.items.SlotWidget import SlotWidget
 from ui.GamePages.suwidgets.items.on_unit.SlotGroupWidget import SlotGroupWidget
 from ui.GamePages.suwidgets.items.GropsTypes import GropusTypes
 
