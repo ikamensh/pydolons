@@ -20,7 +20,6 @@ class SlotGroupWidget(QtWidgets.QWidget):
         slot = SlotWidget(name, page=self.page, type=self.type, parent=self)
         slot.hovered.connect(self.toolTipShow)
         slot.hover_out.connect(self.page.toolTipHide)
-        slot.slot_changed.connect(self.page.slot_change)
         slot.setProperty('item_type', game_slot.item_type)
         slot.name = name
         slot.setProperty('slot', game_slot)
