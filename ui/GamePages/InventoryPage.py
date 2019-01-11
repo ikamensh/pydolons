@@ -5,6 +5,7 @@ from game_objects.items import ItemTransactions, Slot, Equipment, Slot, Equipmen
 
 from ui.GamePages import AbstractPage
 from ui.GamePages.suwidgets.items.InventoryGroupsWidget import InventoryGroupsWidget
+from ui.GamePages.suwidgets.items.Item import Item
 
 
 class InventoryPage(AbstractPage):
@@ -12,7 +13,26 @@ class InventoryPage(AbstractPage):
         super(InventoryPage, self).__init__(gamePages)
         self.w, self.h = 700, 550
         self.the_hero = self.gamePages.gameRoot.lengine.the_hero
+        self.dragSetUp()
         self.setUpWidgets()
+
+    def dragSetUp(self):
+        self.source = None
+        self.target = None
+        self.item = Item(page=self)
+
+    def startDrag(self, slot):
+        if self.source is None:
+            self.source = slot
+            self.item.setSlot(self.source)
+            return
+        else:
+            self.target = slot
+        self.swap_item(self.source, self.target)
+        self.item.removeSlot()
+        self.target = None
+        self.source = None
+        self.updatePage()
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
@@ -55,6 +75,7 @@ class InventoryPage(AbstractPage):
         self.gamePages.gameRoot.scene.addItem(self)
         self.gamePages.gameRoot.scene.addItem(self.mainWidget)
         self.mainWidget.widget().show()
+        self.gamePages.gameRoot.scene.addItem(self.item)
 
     def hidePage(self):
         self.state = False
@@ -63,6 +84,7 @@ class InventoryPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         self.mainWidget.widget().hide()
+        self.gamePages.gameRoot.scene.removeItem(self.item)
 
     def updatePos(self):
         super().updatePos()
@@ -86,7 +108,7 @@ class InventoryPage(AbstractPage):
             if state:
                 self.updatePage()
             else:
-                print(msg)
+                self.gamePages.notify.showText(msg)
 
     def drop(self, game_slot):
         with ItemTransactions(self.the_hero) as trans:
@@ -97,9 +119,14 @@ class InventoryPage(AbstractPage):
         self.mainWidget.widget().upateSlots()
         self.update(0, 0, self.gamePages.gameRoot.cfg.dev_size[0],self.gamePages.gameRoot.cfg.dev_size[1])
 
-    def slot_change(self, source, target):
-        if source.property('slot').content is None:
-            return
+    def swap_item(self, source, target):
         with ItemTransactions(self.the_hero) as trans:
             state = source.property('slot').swap_item(target.property('slot'))
+            if not state:
+                self.gamePages.notify.showText('Not add item')
+            return state
+        return False
 
+    def mouseMoveEvent(self, e):
+        if self.item.isVisible():
+            self.item.setMousePos(e.pos().x(), e.pos().y())
