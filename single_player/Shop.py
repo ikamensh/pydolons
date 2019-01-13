@@ -6,14 +6,14 @@ if TYPE_CHECKING:
     from game_objects.items import Blueprint, Material, QualityLevel
 
 
-def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTypes:List[Material]], quality_levels: List[QualityLevel]):
+def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTypes:List[Material]], quality_levels: List[QualityLevel], n=100):
 
     for bp in blueprints:
         assert bp.material_type in materials
 
     assortment = []
 
-    for i in range(100):
+    for i in range(n):
         bp = random.choice(blueprints)
         matching_materials = materials[bp.material_type]
         material = random.choice(matching_materials)
@@ -47,7 +47,7 @@ def total_value(items, mod):
     return sum([mod(i.value) for i in items])
 
 
-from my_utils.utils import tractable_value
+from my_utils.utils import tractable_value, kmb_number_display as kmb
 
 def price_buy(orig_price, trust,  baseline):
     expensive_factor = orig_price / baseline
@@ -85,18 +85,39 @@ class Shop:
         self.trust = trust
         self.baseline = baseline
 
-    def _price_sell(self, price):
+    def price_sell(self, price):
         return price_sell(price, self.trust, self.baseline)
 
-    def _price_buy(self, price):
+    def price_buy(self, price):
         return price_buy(price, self.trust, self.baseline)
 
     def display_inventory(self):
-        for item in self.inventory.all_items():
-            print(item, item.price, self._price_buy(item.price), self._price_sell(item.price))
+        for item in self.inventory.all_items:
+            print(item, kmb(item.price), kmb( self.price_buy(item.price)), kmb( self.price_sell(item.price)))
 
 
+if __name__ == "__main__":
 
+    shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500)
+    shop.display_inventory()
 
-shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500)
-shop.display_inventory()
+    from character.Character import Character
+    from cntent.base_types import demohero_basetype
+
+    char = Character(demohero_basetype)
+
+    def buy_item(inventory_slot):
+        assert inventory_slot in shop.inventory
+
+        item = inventory_slot.content
+        assert item is not None
+
+        price = shop.price_sell(item.price)
+
+        if char.gold >= price and char.unit.inventory.empty_slots:
+            char.gold -= price
+            item = inventory_slot.pop()
+            char.unit.inventory.add(item)
+
+    def sell_item():
+        
