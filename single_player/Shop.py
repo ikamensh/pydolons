@@ -4,6 +4,7 @@ from game_objects.items.materials.MaterialTypes import MaterialTypes
 from typing import TYPE_CHECKING, List, Dict
 if TYPE_CHECKING:
     from game_objects.items import Blueprint, Material, QualityLevel
+    from game_objects.items import Slot
 
 
 def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTypes:List[Material]], quality_levels: List[QualityLevel], n=100):
@@ -41,12 +42,11 @@ all_materials = {mt.STONE: Stones.all, mt.METAL: Metals.all, mt.WOOD: Woods.all,
 #     print(item, item.price)
 
 
+
+# def total_value(items, mod):
+#     return sum([mod(i.value) for i in items])
+
 from game_objects.items import Inventory
-
-def total_value(items, mod):
-    return sum([mod(i.value) for i in items])
-
-
 from my_utils.utils import tractable_value, kmb_number_display as kmb
 
 def price_buy(orig_price, trust,  baseline):
@@ -76,48 +76,64 @@ def price_sell(orig_price, trust, baseline):
 
 class Shop:
 
-    def __init__(self, assortment, trust, baseline):
+    def __init__(self, assortment, trust, baseline, customer: Character = None):
 
-        self.inventory = Inventory(len(assortment) * 2 + 50, self)
+        self.inventory = Inventory(len(assortment) * 2 + 50, None)
         for item in assortment:
             self.inventory.add(item)
 
         self.trust = trust
         self.baseline = baseline
+        self.customer = customer
 
-    def price_sell(self, price):
+    def price_high(self, price):
         return price_sell(price, self.trust, self.baseline)
 
-    def price_buy(self, price):
+    def price_low(self, price):
         return price_buy(price, self.trust, self.baseline)
 
     def display_inventory(self):
         for item in self.inventory.all_items:
-            print(item, kmb(item.price), kmb( self.price_buy(item.price)), kmb( self.price_sell(item.price)))
+            print(item, kmb(item.price), kmb(self.price_low(item.price)), kmb(self.price_high(item.price)))
+
+
+    def buy(self, inventory_slot: Slot):
+        assert inventory_slot in self.inventory
+
+        item = inventory_slot.content
+        assert item is not None
+
+        price = self.price_high(item.price)
+
+        if self.customer.gold >= price and self.customer.unit.inventory.empty_slots:
+            self.customer.gold -= price
+            item = inventory_slot.pop_item()
+            self.customer.unit.inventory.add(item)
+
+    def sell(self, inventory_slot: Slot):
+        assert inventory_slot in self.customer.unit.inventory
+
+        item = inventory_slot.content
+        assert item is not None
+
+        price = self.price_low(item.price)
+
+        self.customer.gold += price
+        item = inventory_slot.pop_item()
+        self.inventory.add(item)
 
 
 if __name__ == "__main__":
-
-    shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500)
-    shop.display_inventory()
 
     from character.Character import Character
     from cntent.base_types import demohero_basetype
 
     char = Character(demohero_basetype)
+    char.gold = 1e6
 
-    def buy_item(inventory_slot):
-        assert inventory_slot in shop.inventory
+    shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500, customer=char)
+    shop.display_inventory()
 
-        item = inventory_slot.content
-        assert item is not None
+    print("testing")
 
-        price = shop.price_sell(item.price)
-
-        if char.gold >= price and char.unit.inventory.empty_slots:
-            char.gold -= price
-            item = inventory_slot.pop()
-            char.unit.inventory.add(item)
-
-    def sell_item():
         
