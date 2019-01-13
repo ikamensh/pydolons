@@ -76,7 +76,7 @@ def price_sell(orig_price, trust, baseline):
 
 class Shop:
 
-    def __init__(self, assortment, trust, baseline, customer: Character = None):
+    def __init__(self, assortment, trust = 1, baseline = 500, customer: Character = None):
 
         self.inventory = Inventory(len(assortment) * 2 + 50, None)
         for item in assortment:
