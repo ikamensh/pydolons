@@ -23,7 +23,7 @@ class SlotGroupWidget(QtWidgets.QWidget):
         slot.setProperty('item_type', game_slot.item_type)
         slot.name = name
         slot.setProperty('slot', game_slot)
-        slot.setStyleSheet(self.slot_style)
+        # slot.setStyleSheet(self.slot_style)
         slot.setFixedSize(w, h)
         self.slots[game_slot.name] = slot
         return slot
@@ -58,4 +58,7 @@ class SlotGroupWidget(QtWidgets.QWidget):
 
     def updateSlot(self, slot):
         self.setPicSlot(slot.property('slot'), slot)
+
+    # def mousePressEvent(self, event):
+    #     print(event)
 

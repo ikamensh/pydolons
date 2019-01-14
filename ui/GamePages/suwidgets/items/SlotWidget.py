@@ -11,26 +11,51 @@ class SlotWidget(QtWidgets.QLabel):
     def __init__(self, *args, page, type, parent = None):
         super(SlotWidget, self).__init__(*args, parent=parent)
         self.page = page
+        self.cfg  = page.gamePages.gameRoot.cfg
         self.name = None
         self.type = type
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.start_point = QtCore.QPoint()
         self.dragStart = QtCore.QPoint()
         self.setAcceptDrops(True)
-        self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
+        self.setDefaultStyle()
         self.isHover = False
+        self.isDown = False
+        self.isChecked = False
         self.simple_drag = False
         self.setAttribute(QtCore.Qt.WA_Hover)
         self.installEventFilter(self)
         self.state = False
+
+    def setUpStyle(self):
+        pic_path = self.cfg.pic_file_paths.get('active_select_96.png')
+        # self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
+        # print(pic_path)
+        res = ''
+        res = 'border: 10px solid #40c4c8;'
+        res += 'border-image: url('+pic_path+') 10 round round;'
+        self.setStyleSheet(res)
+
+    def setDefaultStyle(self):
+        self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
 
     def mousePressEvent(self, event):
         self.dragStart = event.pos()
         if event.buttons() == QtCore.Qt.RightButton:
             self.pressRighBtn()
         elif event.buttons() == QtCore.Qt.LeftButton:
-            self.page.startDrag(self)
-        pass
+            self.isDown = True
+
+    def mouseReleaseEvent(self, ev:QtGui.QMouseEvent):
+        if self.isDown:
+            if self.isChecked:
+                self.isChecked = False
+                self.setDefaultStyle()
+            else:
+                self.isChecked = True
+                self.setUpStyle()
+            self.page.startManipulation(self)
+            self.isDown = False
 
     def mouseMoveEvent(self, ev):
         if ev.buttons() == QtCore.Qt.LeftButton:
