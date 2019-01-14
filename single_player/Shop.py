@@ -4,16 +4,17 @@ from game_objects.items.materials.MaterialTypes import MaterialTypes
 from typing import TYPE_CHECKING, List, Dict
 if TYPE_CHECKING:
     from game_objects.items import Blueprint, Material, QualityLevel
+    from game_objects.items import Slot
 
 
-def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTypes:List[Material]], quality_levels: List[QualityLevel]):
+def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTypes:List[Material]], quality_levels: List[QualityLevel], n=100):
 
     for bp in blueprints:
         assert bp.material_type in materials
 
     assortment = []
 
-    for i in range(100):
+    for i in range(n):
         bp = random.choice(blueprints)
         matching_materials = materials[bp.material_type]
         material = random.choice(matching_materials)
@@ -41,13 +42,12 @@ all_materials = {mt.STONE: Stones.all, mt.METAL: Metals.all, mt.WOOD: Woods.all,
 #     print(item, item.price)
 
 
+
+# def total_value(items, mod):
+#     return sum([mod(i.value) for i in items])
+
 from game_objects.items import Inventory
-
-def total_value(items, mod):
-    return sum([mod(i.value) for i in items])
-
-
-from my_utils.utils import tractable_value
+from my_utils.utils import tractable_value, kmb_number_display as kmb
 
 def price_buy(orig_price, trust,  baseline):
     expensive_factor = orig_price / baseline
@@ -76,27 +76,64 @@ def price_sell(orig_price, trust, baseline):
 
 class Shop:
 
-    def __init__(self, assortment, trust, baseline):
+    def __init__(self, assortment, trust = 1, baseline = 500, customer: Character = None):
 
-        self.inventory = Inventory(len(assortment) * 2 + 50, self)
+        self.inventory = Inventory(len(assortment) * 2 + 50, None)
         for item in assortment:
             self.inventory.add(item)
 
         self.trust = trust
         self.baseline = baseline
+        self.customer = customer
 
-    def _price_sell(self, price):
+    def price_high(self, price):
         return price_sell(price, self.trust, self.baseline)
 
-    def _price_buy(self, price):
+    def price_low(self, price):
         return price_buy(price, self.trust, self.baseline)
 
     def display_inventory(self):
-        for item in self.inventory.all_items():
-            print(item, item.price, self._price_buy(item.price), self._price_sell(item.price))
+        for item in self.inventory.all_items:
+            print(item, kmb(item.price), kmb(self.price_low(item.price)), kmb(self.price_high(item.price)))
 
 
+    def buy(self, inventory_slot: Slot):
+        assert inventory_slot in self.inventory
+
+        item = inventory_slot.content
+        assert item is not None
+
+        price = self.price_high(item.price)
+
+        if self.customer.gold >= price and self.customer.unit.inventory.empty_slots:
+            self.customer.gold -= price
+            item = inventory_slot.pop_item()
+            self.customer.unit.inventory.add(item)
+
+    def sell(self, inventory_slot: Slot):
+        assert inventory_slot in self.customer.unit.inventory
+
+        item = inventory_slot.content
+        assert item is not None
+
+        price = self.price_low(item.price)
+
+        self.customer.gold += price
+        item = inventory_slot.pop_item()
+        self.inventory.add(item)
 
 
-shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500)
-shop.display_inventory()
+if __name__ == "__main__":
+
+    from character.Character import Character
+    from cntent.base_types import demohero_basetype
+
+    char = Character(demohero_basetype)
+    char.gold = 1e6
+
+    shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500, customer=char)
+    shop.display_inventory()
+
+    print("testing")
+
+        

@@ -69,7 +69,7 @@ class Slot:
         if self.owner:
             if hasattr(item, "on_unequip"):
                 item.on_unequip(self)
-            self.owner.recalc()
+                self.owner.recalc()
         item.owner = None
         return item
 
