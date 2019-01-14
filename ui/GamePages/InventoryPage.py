@@ -19,17 +19,22 @@ class InventoryPage(AbstractPage):
     def dragSetUp(self):
         self.source = None
         self.target = None
-        self.item = Item(page=self)
 
-    def startDrag(self, slot):
-        if self.source is None:
-            self.source = slot
-            self.item.setSlot(self.source)
+    def startManipulation(self, slot):
+        if self.source is slot:
+            self.source = None
             return
+        if self.source is None:
+            if slot.property('slot').content is None:
+                return
+            else:
+                self.source = slot
+                return
         else:
             self.target = slot
+            self.source.setDefaultStyle()
+            self.target.setDefaultStyle()
         self.swap_item(self.source, self.target)
-        self.item.removeSlot()
         self.target = None
         self.source = None
         self.updatePage()
@@ -75,7 +80,6 @@ class InventoryPage(AbstractPage):
         self.gamePages.gameRoot.scene.addItem(self)
         self.gamePages.gameRoot.scene.addItem(self.mainWidget)
         self.mainWidget.widget().show()
-        self.gamePages.gameRoot.scene.addItem(self.item)
 
     def hidePage(self):
         self.state = False
@@ -84,7 +88,7 @@ class InventoryPage(AbstractPage):
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         self.mainWidget.widget().hide()
-        self.gamePages.gameRoot.scene.removeItem(self.item)
+        self.deSelectSlot()
 
     def updatePos(self):
         super().updatePos()
@@ -127,6 +131,9 @@ class InventoryPage(AbstractPage):
             return state
         return False
 
-    def mouseMoveEvent(self, e):
-        if self.item.isVisible():
-            self.item.setMousePos(e.pos().x(), e.pos().y())
+    def deSelectSlot(self):
+        if self.source is not None:
+            self.source.setDefaultStyle()
+            self.source.isDown = False
+            self.source.isChecked = False
+            self.source = None
