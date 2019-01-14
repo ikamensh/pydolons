@@ -10,7 +10,7 @@ class SlotGroupWidget(QtWidgets.QWidget):
         self.type = None
         self.cfg = page.gamePages.gameRoot.cfg
         self.the_hero = page.the_hero
-        self.slot_style = 'background-color:rgba(127, 127, 127, 100);'
+        # self.slot_style = 'background-color:rgba(127, 127, 127, 100);'
         self.slots = dict()
 
     def setUpWidgets(self):
