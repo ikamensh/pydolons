@@ -4,3 +4,4 @@ class GropusTypes(NameEnum):
     INVENTORY = auto()
     EQUIPMENT = auto()
     QUICKITEMS = auto()
+    SHOP = auto()
