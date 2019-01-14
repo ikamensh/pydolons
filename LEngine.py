@@ -14,6 +14,9 @@ from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigge
     perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger, \
     obstacle_destroy_trigger
 
+from single_player.Shop import Shop, generate_assortment, all_blueprints, all_materials, QualityLevels
+
+
 class LEngine:
     """
     LogicEngine
@@ -42,6 +45,7 @@ class LEngine:
         game = SimGame.start_dungeon(dungeon, self.the_hero)
         self.setUpTriggers(game)
         game.character = self.character
+        game.shop = self.getShop(single_palyer=True)
         return game
 
 
@@ -55,4 +59,11 @@ class LEngine:
         damage_anim_trigger(game),
         move_anim_trigger(game),
         obstacle_destroy_trigger(game)
+
+    def getShop(self, single_palyer = True):
+        shop = None
+        if single_palyer and self.character is not None:
+            return Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all),
+                        1, 500, customer=self.character)
+        return shop
 
