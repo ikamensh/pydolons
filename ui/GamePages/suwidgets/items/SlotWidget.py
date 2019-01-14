@@ -18,7 +18,7 @@ class SlotWidget(QtWidgets.QLabel):
         self.start_point = QtCore.QPoint()
         self.dragStart = QtCore.QPoint()
         self.setAcceptDrops(True)
-        self.setDefaultStyle()
+        # self.setDefaultStyle()
         self.isHover = False
         self.isDown = False
         self.isChecked = False
@@ -26,6 +26,7 @@ class SlotWidget(QtWidgets.QLabel):
         self.setAttribute(QtCore.Qt.WA_Hover)
         self.installEventFilter(self)
         self.state = False
+        self.setToolTip('this slot')
 
     def setUpStyle(self):
         pic_path = self.cfg.pic_file_paths.get('active_select_96.png')
@@ -108,6 +109,8 @@ class SlotWidget(QtWidgets.QLabel):
             target.property('hand').setPixmap(mimeData.imageData())
 
     def eventFilter(self, watched:QtCore.QObject, event:QtCore.QEvent):
+        # if event.type() == QtCore.QEvent.ToolTip:
+        #     print('tool tip')
         if event.type() == QtCore.QEvent.HoverEnter:
             watched.hovered.emit(watched)
             self.isHover = True
