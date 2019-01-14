@@ -2,6 +2,8 @@ from PySide2 import QtWidgets
 from ui.GamePages.suwidgets.items.on_unit.EquipmentWidget import EquipmentWidget
 from ui.GamePages.suwidgets.items.on_unit.InventoryWidget import InventoryWidget
 from ui.GamePages.suwidgets.items.on_unit.QuickItems import QuickItems
+from ui.GamePages.suwidgets.items.on_unit.ShopWidget import ShopWidget
+
 
 
 class InventoryGroupsWidget(QtWidgets.QWidget):
@@ -28,6 +30,10 @@ class InventoryGroupsWidget(QtWidgets.QWidget):
         group.addTab(self.equimpment,'Equipment')
         self.quick_items = QuickItems(page=self.page, parent=group)
         group.addTab(self.quick_items,'Quick items')
+        self.scroll = QtWidgets.QScrollArea(parent=self)
+        self.shop = ShopWidget(page=self.page, parent=group )
+        self.scroll.setWidget(self.shop)
+        group.addTab(self.scroll, 'Shop')
         return group
 
     def testAddItem(self):
