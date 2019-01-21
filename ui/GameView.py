@@ -6,6 +6,7 @@ class GameView(QtWidgets.QGraphicsView):
     resized = QtCore.Signal()
     wheel_change = QtCore.Signal()
     keyPress = QtCore.Signal(QtCore.QEvent)
+    mouseMove = QtCore.Signal(QtCore.QEvent)
 
     def __init__(self, parent = None):
         QtWidgets.QGraphicsView.__init__(self, parent)
@@ -39,6 +40,7 @@ class GameView(QtWidgets.QGraphicsView):
 
     def mouseMoveEvent(self, e):
         super(GameView, self).mouseMoveEvent(e)
+        self.mouseMove.emit(e)
         self.controller.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
