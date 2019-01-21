@@ -40,6 +40,7 @@ class GameConfiguration:
         print('cfg ===> setUpSounds', datetime.now())
         self.gameRoot = None
         # self.tr = QtGui.QTransform()
+        self.setUpColors()
 
     def setGameRoot(self, gameRoot):
         self.gameRoot =  gameRoot
@@ -201,6 +202,17 @@ class GameConfiguration:
         if not self.user_cfg.read_config['window']['fullscreen']:
             return self.user_cfg.read_config['window']['resolution']['width'],\
                     self.user_cfg.read_config['window']['resolution']['height']
+
+    def setUpColors(self):
+        self.colors = {}
+        self.brushs = {}
+        self.colors['b5adb7'] = QtGui.QColor('#b5adb7')
+        self.brushs['b5adb7'] = QtGui.QBrush(self.colors['b5adb7'])
+        self.colors['ff6600'] = QtGui.QColor('#ff6600')
+        self.brushs['ff6600'] = QtGui.QBrush(self.colors['ff6600'])
+        self.colors['d7a784'] = QtGui.QColor('#d7a784')
+        self.brushs['d7a784'] = QtGui.QBrush(self.colors['d7a784'])
+
 
 
 
