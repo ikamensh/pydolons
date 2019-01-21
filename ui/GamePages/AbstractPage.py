@@ -58,6 +58,10 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     def destroy(self):
         pass
 
+    def mousePressEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent):
+        super(AbstractPage, self).mousePressEvent(event)
+        pass
+
     def mouseMoveEvent(self, e):
         pass
 
