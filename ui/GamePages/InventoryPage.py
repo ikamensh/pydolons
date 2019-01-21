@@ -1,11 +1,10 @@
 from PySide2 import QtCore, QtWidgets
 
-from game_objects.items import ItemTransactions, Slot, Equipment, Slot, EquipmentSlotUids
+from game_objects.items import ItemTransactions
 
 
 from ui.GamePages import AbstractPage
 from ui.GamePages.suwidgets.items.InventoryGroupsWidget import InventoryGroupsWidget
-from ui.GamePages.suwidgets.items.Item import Item
 
 
 class InventoryPage(AbstractPage):
@@ -25,32 +24,40 @@ class InventoryPage(AbstractPage):
             self.source = None
             return
         if self.source is None:
-            if slot.property('slot').content is None:
-                return
-            else:
-                self.source = slot
-                return
+            self.source = slot
+            self.item.setPixmap(self.source.pixmap())
+            self.item.show()
+            self.item.setZValue(150.00)
+            return
         else:
             self.target = slot
             self.source.setDefaultStyle()
             self.target.setDefaultStyle()
-        self.swap_item(self.source, self.target)
-        self.target = None
-        self.source = None
+            self.item.setZValue(0.0)
+            self.swap_item(self.source, self.target)
+            self.target = None
+            self.source = None
+            self.item.hide()
         self.updatePage()
 
     def setUpWidgets(self):
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
-        self.addToGroup(self.background)
-        mainWidget = InventoryGroupsWidget(page=self)
-        self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
-        self.mainWidget.widget().setParent(self.gamePages.gameRoot.ui)
-        self.mainWidget.widget().hide()
-        self.mainWidget.setAcceptDrops(True)
-        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
 
-        self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.item = QtWidgets.QGraphicsPixmapItem()
+        self.gamePages.gameRoot.scene.addItem(self.item )
+        self.item.hide()
+
+        self.addToGroup(self.background)
+        self.mainWidget = InventoryGroupsWidget(page=self)
+        # self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
+        # self.mainWidget.widget().setParent(self.gamePages.gameRoot.ui)
+        # self.mainWidget.widget().hide()
+        # self.mainWidget.setAcceptDrops(True)
+        # self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        #
+        # self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.mainWidget.removeFromScene()
         self.resized()
 
     def resized(self):
@@ -62,7 +69,7 @@ class InventoryPage(AbstractPage):
 
         # self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
         # self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        # self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
         self.resizeBackground(self.background)
         pass
 
@@ -78,21 +85,19 @@ class InventoryPage(AbstractPage):
         self.gamePages.page = self
         self.gamePages.visiblePage = True
         self.gamePages.gameRoot.scene.addItem(self)
-        self.gamePages.gameRoot.scene.addItem(self.mainWidget)
-        self.mainWidget.widget().show()
+        self.mainWidget.addToScene()
 
     def hidePage(self):
         self.state = False
         self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
-        self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
-        self.mainWidget.widget().hide()
+        self.mainWidget.removeFromScene()
         self.deSelectSlot()
 
     def updatePos(self):
         super().updatePos()
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        # self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
 
     def toolTipShow(self, widget):
         x = widget.x() + self.mainWidget.pos().x()
@@ -106,13 +111,23 @@ class InventoryPage(AbstractPage):
         self.gamePages.toolTip.hide()
         pass
 
-    def equip(self, game_slot):
+    def equip(self, slot):
         with ItemTransactions(self.the_hero) as trans:
-            state, msg = self.the_hero.equipment.equip(game_slot)
+            state, msg = self.the_hero.equipment.equip(slot.property('slot'))
             if state:
                 self.updatePage()
             else:
                 self.gamePages.notify.showText(msg)
+
+    def unequip_slot(self, slot):
+        with ItemTransactions(self.the_hero) as trans:
+            self.the_hero.equipment.unequip_slot(slot.property('slot'))
+            self.updatePage()
+
+    def buy(self, slot):
+        with ItemTransactions(self.the_hero) as trans:
+            self.gamePages.gameRoot.game.shop.buy(slot.property('slot'))
+        self.updatePage()
 
     def drop(self, game_slot):
         with ItemTransactions(self.the_hero) as trans:
@@ -120,12 +135,14 @@ class InventoryPage(AbstractPage):
             self.updatePage()
 
     def updatePage(self):
-        self.mainWidget.widget().upateSlots()
+        self.mainWidget.upateSlots()
         self.update(0, 0, self.gamePages.gameRoot.cfg.dev_size[0],self.gamePages.gameRoot.cfg.dev_size[1])
 
     def swap_item(self, source, target):
         with ItemTransactions(self.the_hero) as trans:
             state = source.property('slot').swap_item(target.property('slot'))
+            source.update_slot()
+            target.update_slot()
             if not state:
                 self.gamePages.notify.showText('Not add item')
             return state
@@ -137,3 +154,12 @@ class InventoryPage(AbstractPage):
             self.source.isDown = False
             self.source.isChecked = False
             self.source = None
+
+    def mouseMoveEvent(self, event):
+        if self.source is not None:
+            pos = self.gamePages.gameRoot.view.mapToScene(event.pos())
+            # self.setPos(pos)
+            self.item.setX(pos.x() + 10)
+            self.item.setY(pos.y() + 10)
+        pass
+
