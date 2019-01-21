@@ -1,137 +1,175 @@
 from PySide2 import QtWidgets, QtCore, QtGui
-from game_objects.items.on_unit.EquipmentSlotUids import EquipmentSlotUids
 from ui.GamePages.suwidgets.items.GropsTypes import GropusTypes
+from game_objects.items.on_unit.EquipmentSlotUids import EquipmentSlotUids
 
 
-class SlotWidget(QtWidgets.QLabel):
+class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
     hovered = QtCore.Signal(QtCore.QObject)
     hover_out = QtCore.Signal(QtCore.QObject)
     slot_changed = QtCore.Signal(QtWidgets.QLabel, QtWidgets.QLabel)
 
-    def __init__(self, *args, page, type, parent = None):
-        super(SlotWidget, self).__init__(*args, parent=parent)
+    def __init__(self, name,  page, slot_type, parent = None):
+        QtWidgets.QGraphicsObject.__init__(self, parent)
+        QtWidgets.QGraphicsLayoutItem.__init__(self, parent)
         self.page = page
-        self.cfg  = page.gamePages.gameRoot.cfg
-        self.name = None
-        self.type = type
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.start_point = QtCore.QPoint()
-        self.dragStart = QtCore.QPoint()
+        self.cfg = page.gamePages.gameRoot.cfg
+        self.name = name
+        self.slot_type = slot_type
+        self.installSceneEventFilter(self)
+        self.setAcceptHoverEvents(True)
         self.setAcceptDrops(True)
-        # self.setDefaultStyle()
+        self.setAcceptedMouseButtons(QtCore.Qt.LeftButton|QtCore.Qt.RightButton)
+        self._pos = QtCore.QPoint(-10, -10)
+        self.brush = self.cfg.brushs['b5adb7']
+        self.pen = QtGui.QPen()
+        self.pen.setBrush(QtCore.Qt.NoBrush)
+        self._drag = False
         self.isHover = False
         self.isDown = False
         self.isChecked = False
         self.simple_drag = False
-        self.setAttribute(QtCore.Qt.WA_Hover)
         self.installEventFilter(self)
         self.state = False
-        self.setToolTip('this slot')
 
-    def setUpStyle(self):
-        pic_path = self.cfg.pic_file_paths.get('active_select_96.png')
-        # self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
-        # print(pic_path)
-        res = ''
-        res = 'border: 10px solid #40c4c8;'
-        res += 'border-image: url('+pic_path+') 10 round round;'
-        self.setStyleSheet(res)
+    def setPixmap(self, pixmap:QtGui.QPixmap):
+        if pixmap is not None:
+            self._geometry = QtCore.QRectF(self.pos().x(), self.pos().y(), pixmap.height(), pixmap.height())
+        self._pixmap = pixmap
 
-    def setDefaultStyle(self):
-        self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
+    def pixmap(self):
+        return self._pixmap
 
-    def mousePressEvent(self, event):
-        self.dragStart = event.pos()
-        if event.buttons() == QtCore.Qt.RightButton:
-            self.pressRighBtn()
-        elif event.buttons() == QtCore.Qt.LeftButton:
-            self.isDown = True
+    def boundingRect(self):
+        return QtCore.QRect(0, 0, self._geometry.width(), self._geometry.height())
 
-    def mouseReleaseEvent(self, ev:QtGui.QMouseEvent):
+    def paint(self, painter:QtGui.QPainter, option:QtWidgets.QStyleOptionGraphicsItem, widget:QtWidgets.QWidget=...):
+        painter.setPen( self.pen)
+        painter.setBrush(self.brush)
+        painter.setBackground(self.brush)
+        painter.drawRect(0, 0, self._geometry.width(), self._geometry.height())
+        if self._pixmap is not None:
+            painter.drawPixmap(0, 0, self._pixmap)
+
+    def sizeHint(self, which:QtCore.Qt.SizeHint = None, constraint:QtCore.QSizeF=None):
+        return QtCore.QSize(self.boundingRect().width(), self.boundingRect().height())
+
+    def geometry(self):
+        return QtCore.QRectF(0, 0, 64, 64)
+
+    def sceneEventFilter(self, watched:QtWidgets.QGraphicsItem, event:QtCore.QEvent):
+        return True
+
+    def mouseReleaseEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent):
         if self.isDown:
             if self.isChecked:
                 self.isChecked = False
-                self.setDefaultStyle()
+                self.brush = self.cfg.brushs['b5adb7']
             else:
                 self.isChecked = True
-                self.setUpStyle()
+                self.brush = self.cfg.brushs['d7a784']
             self.page.startManipulation(self)
             self.isDown = False
+        self.setZValue(0.0)
+        self.update(0, 0, self._geometry.width(), self._geometry.height())
 
-    def mouseMoveEvent(self, ev):
-        if ev.buttons() == QtCore.Qt.LeftButton:
-            if QtWidgets.QApplication.startDragDistance() <= (ev.pos() - self.dragStart).manhattanLength():
+    def mousePressEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
+        self.dragStart = event.pos()
+        if event.buttons() == QtCore.Qt.LeftButton:
+            self.isDown = True
+        elif event.buttons() == QtCore.Qt.RightButton:
+            self.pressRighBtn()
+        self._pos = event.pos()
+
+    def mouseMoveEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
+        if event.buttons() == QtCore.Qt.LeftButton:
+            if QtWidgets.QApplication.startDragDistance() <= (event.pos() - self.dragStart).manhattanLength():
                 self.startDrag()
+        pass
 
-    def startDrag(self):
-        drag = QtGui.QDrag(self)
-        mimeData = QtCore.QMimeData()
-        mimeData.setText(self.text())
-        mimeData.setImageData(self.pixmap())
-        drag.setPixmap(self.pixmap())
-        # mimeData.setData('slot', self.property('slot'))
-        drag.setMimeData(mimeData)
-        # result = drag.exec_(QtCore.Qt.CopyAction|QtCore.Qt.MoveAction)
-        result = drag.exec_()
-        if drag.target() == self:
-            return
-        if self.property('slot').content is None:
-            return
-        if result == QtCore.Qt.CopyAction or result == QtCore.Qt.MoveAction:
-            # Step 2
-            self.state = self.page.swap_item(self, drag.target())
-            if self.state:
-                self.setData(mimeData, drag.target())
-                self.clearSlot()
-        elif result == QtCore.Qt.IgnoreAction:
-            self.page.drop(self.property('slot'))
+    def moveToMouse(self, event):
+        if self._drag:
+            pos = self.scene().views()[0].mapToScene(event.pos())
+            # self.setPos(pos)
+            self.setX(pos.x() - self._pos.x())
+            self.setY(pos.y() - self._pos.y())
+        pass
+
+    def hoverEnterEvent(self, event:QtWidgets.QGraphicsSceneHoverEvent):
+        self.brush = self.cfg.brushs['d7a784']
+        self.hovered.emit(self)
+        self.update(0, 0, self._geometry.width(), self._geometry.height())
+
+    def hoverLeaveEvent(self, event:QtWidgets.QGraphicsSceneHoverEvent):
+        if not self.isChecked:
+            self.brush = self.cfg.brushs['b5adb7']
+        self.hover_out.emit(self)
+        self.update(0, 0, self._geometry.width(), self._geometry.height())
 
     def dragEnterEvent(self, ev:QtGui.QDragEnterEvent):
         formats = ev.mimeData().formats()
+        self.brush = self.cfg.brushs['d7a784']
+        self.update(0, 0, self._geometry.width(), self._geometry.height())
         if "text/plain" in formats:
             ev.setDropAction(QtCore.Qt.CopyAction)
             ev.setAccepted(True)
-        if 'application/x-qt-image' in formats:
-            ev.setDropAction(QtCore.Qt.CopyAction)
-            ev.setAccepted(True)
+            ev.acceptProposedAction()
 
     def dropEvent(self, ev:QtGui.QDropEvent):
         # Step 1
         if ev.dropAction() != QtCore.Qt.IgnoreAction:
+            self.page.startManipulation(self)
             ev.acceptProposedAction()
         pass
 
-    def setData(self, mimeData, target):
-        target.setText(mimeData.text())
-        target.setPixmap(mimeData.imageData())
-        if target.name == EquipmentSlotUids.HANDS.name:
-            target.property('hand').setText(mimeData.text())
-            target.property('hand').setPixmap(mimeData.imageData())
+    def dragLeaveEvent(self, event:QtWidgets.QGraphicsSceneDragDropEvent):
+        self.brush = self.cfg.brushs['b5adb7']
+        self.update(0, 0, self._geometry.width(), self._geometry.height())
+        pass
 
-    def eventFilter(self, watched:QtCore.QObject, event:QtCore.QEvent):
-        # if event.type() == QtCore.QEvent.ToolTip:
-        #     print('tool tip')
-        if event.type() == QtCore.QEvent.HoverEnter:
-            watched.hovered.emit(watched)
-            self.isHover = True
-        elif event.type() == QtCore.QEvent.HoverLeave:
-            watched.hover_out.emit(watched)
-            self.isHover = False
-        return super(SlotWidget, self).eventFilter(watched, event)
-
-    def showContextMenu(self, pos):
-        print('showContextMenu pos', pos)
-
-    def clearSlot(self):
-        self.setText('empty')
-        self.setPixmap(self.empty_pix)
+    def startDrag(self):
+        drag = QtGui.QDrag(self)
+        mimeData = QtCore.QMimeData()
+        mimeData.setText(self.name)
+        drag.setPixmap(self.pixmap())
+        drag.setMimeData(mimeData)
+        result = drag.exec_(QtCore.Qt.CopyAction|QtCore.Qt.MoveAction)
+        self.page.startManipulation(self)
+        if result == QtCore.Qt.IgnoreAction:
+            self.page.drop(self.property('slot'))
 
     def pressRighBtn(self):
-        if self.type == GropusTypes.INVENTORY:
-            self.page.equip(self.property('slot'))
-
-    def pressLeftBtn(self):
-        print('Press left btn')
+        if self.slot_type == GropusTypes.INVENTORY:
+            self.page.equip(self)
+        elif self.slot_type == GropusTypes.EQUIPMENT:
+            self.page.unequip_slot(self)
+        elif self.slot_type == GropusTypes.SHOP:
+            print('Buy man!')
+            self.page.buy(self)
         pass
+
+    def setDefaultStyle(self):
+        self.brush = self.cfg.brushs['b5adb7']
+        self.isChecked = False
+        self.isDown = False
+        self.update(0, 0, self._geometry.width(), self._geometry.height())
+
+    def update_slot(self):
+        self.setPicSlot(self.property('slot'))
+
+    def setPicSlot(self, game_slot):
+        pixmap = self.cfg.getPicFile('slot.png', 101005001)
+        self.empty_pix = pixmap
+        if game_slot.content is not None:
+            pixmap = self.cfg.getPicFile(game_slot.content.icon, 101005001)
+        self.setPixmap(pixmap)
+
+    def setData(self, mimeData, target):
+        target.setPixmap(mimeData.imageData())
+        if target.name == EquipmentSlotUids.HANDS.name:
+            target.property('hand').setPixmap(mimeData.imageData())
+
+    def clearSlot(self):
+        self.setPixmap(self.empty_pix)
+
 
 
