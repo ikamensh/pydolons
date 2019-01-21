@@ -3,26 +3,35 @@ from ui.GamePages.suwidgets.items.on_unit.EquipmentWidget import EquipmentWidget
 from ui.GamePages.suwidgets.items.on_unit.InventoryWidget import InventoryWidget
 from ui.GamePages.suwidgets.items.on_unit.QuickItems import QuickItems
 from ui.GamePages.suwidgets.items.on_unit.ShopWidget import ShopWidget
+from ui.GamePages.suwidgets.Layouts import GameGridLayout, GameVBoxLayout
 
 
+class InventoryGroupsWidget:
 
-class InventoryGroupsWidget(QtWidgets.QWidget):
-
-    def __init__(self, page, parent = None, ):
-        super(InventoryGroupsWidget, self).__init__(parent)
+    def __init__(self, page):
         self.page = page
         self.cfg = page.gamePages.gameRoot.cfg
         self.the_hero = page.the_hero
+        self.widgets = []
         self.testAddItem()
         self.setUpWidgets()
 
     def setUpWidgets(self):
-        layout = QtWidgets.QGridLayout(self)
-        self.inventory = InventoryWidget(page=self.page, parent=self)
-        layout.addWidget(self.inventory, 0, 0)
-        group = self.getInventoryGroup()
-        layout.addWidget(group, 0, 1)
-        self.setLayout(layout)
+        layout = GameGridLayout()
+        self.inventory = InventoryWidget(page=self.page)
+        layout.addItem(self.inventory, 0, 0)
+        self.widgets.append(self.inventory)
+        # group = self.getInventoryGroup()
+        self.equimpment = EquipmentWidget(page=self.page)
+        layout.addItem(self.equimpment, 0, 1)
+        self.widgets.append(self.equimpment)
+        self.quick_items = QuickItems(page=self.page)
+        layout.addItem(self.quick_items, 0, 2)
+        self.widgets.append(self.quick_items)
+        self.shop = ShopWidget(page=self.page)
+        layout.addItem(self.shop, 0, 3)
+        self.widgets.append(self.shop)
+        layout.setGeometry()
 
     def getInventoryGroup(self):
         group = QtWidgets.QTabWidget(self)
@@ -49,5 +58,13 @@ class InventoryGroupsWidget(QtWidgets.QWidget):
         pass
 
     def upateSlots(self):
-        self.inventory.updateWidget()
-        self.equimpment.updateWidget()
+        self.inventory.updateSlots()
+        self.equimpment.updateSlots()
+
+    def removeFromScene(self):
+        pass
+
+    def addToScene(self):
+        for widget in self.widgets:
+            widget.addToScene()
+        pass
