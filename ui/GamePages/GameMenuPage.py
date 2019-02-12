@@ -40,7 +40,6 @@ class GameMenuPage(AbstractPage):
         sup_panel.setUpWidgets()
         self.sup_panel = self.gamePages.gameRoot.scene.addWidget(sup_panel)
         self.sup_panel.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
-        self.createToolTip()
 
     def createUnitStack(self):
         self.unitStack.items = {}
@@ -54,18 +53,8 @@ class GameMenuPage(AbstractPage):
             self.unitStack.items[unit.uid] = item
             i += 1
 
-    def createToolTip(self):
-        self.tool:QtWidgets.QGraphicsItem = self.gamePages.gameRoot.suwidgetFactory.getToolTip(128, 128)
-        self.tool.setVisible(False)
-        self.gamePages.gameRoot.scene.addItem(self.tool)
-
-    def showToolTip(self, text, x, y):
-        self.tool.setText(text)
-        self.tool.setTextPos(x, y)
-        self.tool.setVisible(True)
-
-    def hideToolTip(self):
-        self.tool.setVisible(False)
+    def toolTipHide(self, widget):
+        self.gamePages.toolTip.hide()
 
     def setUpConsole(self):
         self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
