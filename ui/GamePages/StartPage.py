@@ -129,7 +129,7 @@ class StartPage(AbstractPage):
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
-            self.mainWidget.hide()
+            self.mainWidget.show()
 
     def hidePage(self):
         self.state = False
