@@ -58,8 +58,10 @@ class GamePages(object):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
         self.startPage.stop.pressed.connect(ui.stopGame)
-        self.toolTip = SuWidgetFactory.getToolTip(w = 128, h = 0, opacity=1.)
+        self.toolTip = SuWidgetFactory.getToolTip(self.gameRoot, w = 128, h = 0, opacity=1.)
+        self.toolTip.gameRoot = self.gameRoot
         self.toolTip.setZValue(500)
+        self.gameRoot.view.wheel_change.connect(self.toolTip.wheel_change)
         self.gameRoot.scene.addItem(self.toolTip)
         self.notify = SuWidgetFactory.getNotifyText(self.gameRoot)
         self.gameRoot.scene.addItem(self.notify)
