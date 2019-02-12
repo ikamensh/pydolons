@@ -1,12 +1,15 @@
 from PySide2 import QtCore, QtWidgets
 
 from game_objects.battlefield_objects import base_attributes
+from ui.GamePages.suwidgets.GameButton import GameButton
+from ui.GamePages.suwidgets.GameLabel import GameLabel
 
 
 class CharacterWidget(QtWidgets.QWidget):
     """docstring for CharacterPage."""
     def __init__(self, page, parent = None):
         super(CharacterWidget, self).__init__(parent)
+        self.page = page
         self.gamePages = page.gamePages
         self.character = page.gamePages.gameRoot.lengine.character
         self.btns = {}
@@ -60,9 +63,12 @@ class CharacterWidget(QtWidgets.QWidget):
         subLayout = QtWidgets.QHBoxLayout()
         pixmap = self.gamePages.gameRoot.cfg.getPicFile(str(attribute.name).lower() + '.png', 101002001)
         pixmap = pixmap.scaled(32, 32)
-        icon = QtWidgets.QLabel(parent)
+        icon = GameLabel(parent = parent)
+        icon.hovered.connect(self.page.toolTipShow)
+        icon.hover_out.connect(self.page.toolTipHide)
         icon.setPixmap(pixmap)
         icon.setFixedSize(pixmap.size())
+        icon.setProperty('info', attribute.name)
         subLayout.addWidget(icon)
         spnBox = QtWidgets.QSpinBox(parent=parent)
         spnBox.setMinimum(self.character.base_type.attributes[attribute])
