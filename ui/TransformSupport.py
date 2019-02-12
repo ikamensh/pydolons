@@ -8,6 +8,7 @@ class TransformSupport:
     def __init__(self, gameRoot):
         # super(World, self).__init__()
         self.gameRoot = gameRoot
+        self.gameRoot.tr_support = self
         self.cfg = gameRoot.cfg
         self.level = None
         # Transform for ground
@@ -25,6 +26,7 @@ class TransformSupport:
         # Offset for map
         self.off = 32
         self.l_mouse = False
+        self.isMovable  = False
 
     def setItemPos(self, item, x, y):
         # item.setPos(x - (item.rect().x() + self.tr.m31()),
@@ -54,7 +56,6 @@ class TransformSupport:
         self.tr.translate(self.cfg.dev_size[0] / 2, self.cfg.dev_size[1] / 2)
         self.tr.translate(-level.world.floor.rect().width()/2, -level.world.floor.rect().height()/2)
         level.world.setTransform(self.tr)
-        level.world.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, QtWidgets.QGraphicsItem.ItemIsSelectable)
         self.floor_rect.setRect(level.world.pos().x() + self.tr.m31(),
                                 level.world.pos().y() + self.tr.m32(),
                                 level.world.floor.rect().width() -2,
@@ -64,6 +65,13 @@ class TransformSupport:
         level.middleLayer.setTransform(self.tr)
         self.update_frame_rect()
 
+    def setMovableMaps(self):
+        if self.isMovable:
+            self.gameRoot.level.world.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, False)
+            self.isMovable = False
+        else:
+            self.gameRoot.level.world.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
+            self.isMovable = True
 
     def updateItemsPos(self):
         self.floor_rect.setRect(self.level.world.pos().x() + self.tr.m31(),
@@ -162,3 +170,21 @@ class TransformSupport:
         # self.updateGameField()
         # self.updateSupportField()
         # self.updateScreenField()
+
+    def rectHitGroupItem(self, item):
+        x = item.pos().x() + item.parentItem().pos().x() + item.parentItem().transform().m31()
+        y = item.pos().y() + item.parentItem().pos().y() + item.parentItem().transform().m32()
+        pos = self.gameRoot.view.mapFromScene(x, y)
+        size = self.gameRoot.view.transform().map(item.boundingRect().width(), item.boundingRect().height())
+        return QtCore.QRectF(pos.x(), pos.y(), size[0], size[1])
+
+    def rectHitItem(self, item):
+        pos = self.gameRoot.view.mapFromScene(item.pos())
+        size = self.gameRoot.view.transform().map(item.boundingRect().width(), item.boundingRect().height())
+        return QtCore.QRectF(pos.x(), pos.y(), size[0], size[1])
+
+    def groupToScene(self, item):
+        x = item.pos().x() + item.parentItem().pos().x() + item.parentItem().transform().m31()
+        y = item.pos().y() + item.parentItem().pos().y() + item.parentItem().transform().m32()
+        return x, y
+
