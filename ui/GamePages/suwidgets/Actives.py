@@ -1,4 +1,5 @@
 from PySide2 import QtCore, QtWidgets
+from ui.GamePages.suwidgets.GameButton import GameButton
 from PySide2.QtGui import QIcon
 
 
@@ -46,7 +47,9 @@ class Actives(QtCore.QObject):
             self.frame.setMinimumSize(self.frame_size[0], self.frame_size[1])
 
     def addWidget(self, name):
-        widget = QtWidgets.QPushButton()
+        widget = GameButton()
+        widget.hovered.connect(self.showToolTip)
+        widget.hover_out.connect(self.page.toolTipHide)
         widget.setIcon(self.getIcon(name))
         widget.setIconSize(QtCore.QSize(48, 48))
         widget.setProperty('active_name', name)
@@ -65,6 +68,14 @@ class Actives(QtCore.QObject):
         self.setActivesSize()
         widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
         self.widgets[name] = widget
+
+    def showToolTip(self, widget):
+        x = widget.x() + self.frame.x() + self.x
+        y = widget.y() + self.frame.y() + self.y
+        self.page.gamePages.toolTip.setPos(self.page.scene().views()[0].mapToScene(x, y))
+        self.page.gamePages.toolTip.setText(widget.property('active_name'))
+        self.page.gamePages.toolTip.show()
+        pass
 
     def addActiveButtons(self):
         self.hero = self.page.gamePages.gameRoot.game.the_hero
@@ -156,18 +167,6 @@ class Actives(QtCore.QObject):
 
     def mouseMoveEvent(self, e):
         self.mousePos = e.pos()
-        if self.mainWidget.geometry().contains(e.pos()):
-            self.collision(e.pos())
-
-    def collision(self, pos):
-        for widget in self.widgets.values():
-            qr = QtCore.QRect(self.x + self.frame.x() + widget.x(), self.y + self.frame.y() + widget.y(), self.widget_size[0], self.widget_size[1])
-            if qr.contains(pos.x(), pos.y()):
-                widget.setFocus()
-                self.page.showToolTip(widget.property('active_name'), pos.x() + 20, pos.y() - 20)
-                break
-            else:
-                self.page.hideToolTip()
 
     def destroy(self):
         del self.up
