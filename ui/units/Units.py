@@ -11,6 +11,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.groups_at = {}
         self.units_heaps = {}
         self.level = None
+        self.acceptHoverEvents()
 
     def setLevel(self, level):
         self.level = level
@@ -22,17 +23,22 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
-        if unit == self.level.gameRoot.game.the_hero:
-            self.updateVision()
         x, y = cell_to.x, cell_to.y
         self.units_at[unit.uid].setWorldPos(x, y)
+        if unit == self.level.gameRoot.game.the_hero:
+            self.updateVision()
 
     def unitDied(self, unit):
+        # cell = self.units_at[unit.uid].worldPos
+        # if self.units_heaps.get(cell) is not None:
+        #     self.units_heaps.get(cell).remove(self.units_at[unit.uid])
         unit = self.units_at[unit.uid]
+        unit.setVisible(False)
         self.removeFromGroup(unit)
-        if unit != self.level.gameRoot.game.the_hero:
-            self.updateVision()
+        # if unit != self.level.gameRoot.game.the_hero:
         del self.units_at[unit.uid]
+        self.update_heaps()
+        self.updateVision()
 
     def turnUnit(self, uid, turn):
         if uid == self.level.gameRoot.game.the_hero.uid:
@@ -56,7 +62,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move.lower()].play()
         self.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.update_heaps()
-        self.level.middleLayer.moveSupport(self.units_at[msg.get('unit').uid])
 
     def unitTurnSlot(self, msg):
         self.turnUnit(msg.get('uid'), msg.get('turn'))
@@ -64,7 +69,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def targetDamageSlot(self, msg):
         # Требуется рефакторинг метод срабатывает после смерти юнита
         if msg.get('target').uid in self.units_at.keys():
-            self.level.middleLayer.updateSupport(msg.get('target'), msg.get('amount'))
+            self.units_at[msg.get('target').uid].updateSupport(msg.get('target'), msg.get('amount'))
             self.level.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
         pass
 
@@ -76,10 +81,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
     def unitDiedSlot(self, msg):
-        self.update_heaps()
         self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
-        self.level.middleLayer.removeUnitLayer(msg.get('unit').uid)
         self.unitDied(msg.get('unit'))
 
     def addToUnitsGroup(self, unit):
@@ -120,18 +123,40 @@ class Units(QtWidgets.QGraphicsItemGroup):
                     self.units_heaps[cell] = UnitsHeap(gameRoot=self.level.gameRoot)
                     self.level.gameRoot.controller.mouseMove.connect(self.units_heaps[cell].mouseMoveEvent)
                     self.level.gameRoot.controller.mousePress.connect(self.units_heaps[cell].mousePressEvent)
-                    self.units_heaps[cell].updated_gui.connect(self.level.middleLayer.update_gui_support)
                     self.units_heaps[cell].update_units(list(self.units_from_(units)))
-            elif self.units_at[units[0].uid].scale != 1.:
-                    if self.units_heaps.get(cell) is not None:
-                        del self.units_heaps[cell]
+            else:
+                if self.units_heaps.get(cell) is not None:
+                    del self.units_heaps[cell]
+                if self.units_at[units[0].uid].scale != 1.:
                     self.units_at[units[0].uid].setScale(1.)
                     self.units_at[units[0].uid].setOffset(0., 0.)
-                    self.level.middleLayer.update_gui_support(self.units_at[units[0].uid])
 
     def units_from_(self, units):
         for unit in units:
             yield self.units_at[unit.uid]
+
+    def setUpToolTip(self, item):
+        item.hovered.connect(self.toolTipShow)
+        item.hover_out.connect(self.toolTipHide)
+
+    def toolTipShow(self, item):
+        pos = self.level.gameRoot.tr_support.groupToScene(item)
+        self.level.gameRoot.gamePages.toolTip.setPos(pos[0], pos[1])
+        units = self.level.gameRoot.game.battlefield.units_at.get(item.worldPos)
+        if units is not None:
+            if len(units) == 1:
+                self.level.gameRoot.gamePages.toolTip.setDict(units[0].tooltip_info)
+            else:
+                for u in units:
+                    if u.uid == self.units_heaps[item.worldPos].units[-1].uid:
+                        self.level.gameRoot.gamePages.toolTip.setDict(u.tooltip_info)
+        self.level.gameRoot.gamePages.toolTip.show()
+        pass
+
+    def toolTipHide(self):
+        self.level.gameRoot.gamePages.toolTip.hide()
+        pass
+
 
 
 
