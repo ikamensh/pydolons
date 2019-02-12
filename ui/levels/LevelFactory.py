@@ -51,14 +51,16 @@ class LevelFactory:
         self.level.setUnits(Units())
         for unit, unit_pos in battlefield.unit_locations.items():
             if isinstance(unit, bf_objs.Unit):
-                gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg)
+                gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg, unit_bf = unit)
                 if unit.icon == 'hero.png':
-                    gameUnit.is_hero = True
                     self.active_unit = True
                 gameUnit.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
+                gameUnit.gameRoot = self.level.gameRoot
                 gameUnit.setDirection(battlefield.unit_facings[unit])
                 gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
                 gameUnit.uid = unit.uid
+                self.level.gameRoot.view.mouseMove.connect(gameUnit.mouseMove)
+                self.level.units.setUpToolTip(gameUnit)
                 self.level.units.addToGroup(gameUnit)
                 # добавили gameunit
                 self.level.units.units_at[unit.uid] = gameUnit
@@ -75,7 +77,6 @@ class LevelFactory:
                 self.level.world.obstacles[unit.uid] = obstacle
 
         self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
-        self.level.middleLayer.createSuppot(self.level.units.units_at, battlefield.units_at)
         self.level.units.updateVision()
 
     def addLevelToScene(self, scene):
