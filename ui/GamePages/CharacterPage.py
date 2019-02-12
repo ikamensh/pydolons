@@ -227,5 +227,17 @@ class CharacterPage(AbstractPage):
         self.gamePages.gameRoot.lengine.character.reset()
         pass
 
+    def toolTipShow(self, widget):
+        x = widget.x() + self.mainWidget.pos().x()
+        y = widget.y() + self.mainWidget.pos().y()
+        self.gamePages.toolTip.setPos(x, y)
+        self.gamePages.toolTip.setText(widget.property('info')(widget))
+        self.gamePages.toolTip.show()
+        pass
+
+    def toolTipHide(self):
+        self.gamePages.toolTip.hide()
+        pass
+
 
 
