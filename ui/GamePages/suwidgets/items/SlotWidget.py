@@ -28,7 +28,7 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
         self.isDown = False
         self.isChecked = False
         self.simple_drag = False
-        self.installEventFilter(self)
+        # self.installEventFilter(self)
         self.state = False
 
     def setPixmap(self, pixmap:QtGui.QPixmap):
