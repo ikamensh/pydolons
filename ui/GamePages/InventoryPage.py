@@ -14,6 +14,7 @@ class InventoryPage(AbstractPage):
         self.the_hero = self.gamePages.gameRoot.lengine.the_hero
         self.dragSetUp()
         self.setUpWidgets()
+        self.state = False
 
     def dragSetUp(self):
         self.source = None
@@ -84,6 +85,7 @@ class InventoryPage(AbstractPage):
         self.state = True
         self.gamePages.page = self
         self.gamePages.visiblePage = True
+        self.show()
         self.gamePages.gameRoot.scene.addItem(self)
         self.mainWidget.addToScene()
 
@@ -91,6 +93,7 @@ class InventoryPage(AbstractPage):
         self.state = False
         self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
+        self.hide()
         self.gamePages.gameRoot.scene.removeItem(self)
         self.mainWidget.removeFromScene()
         self.deSelectSlot()
