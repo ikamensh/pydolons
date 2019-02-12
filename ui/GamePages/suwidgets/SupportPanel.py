@@ -7,8 +7,8 @@ class SupportPanel(QtWidgets.QWidget):
         super(SupportPanel, self).__init__(parent)
         self.page = page
         self.cfg = gameconfig
-        self.w = 80
-        self.h = self.w * 1
+        self.w = 84
+        self.h = self.w * 2
         self.setFixedSize(self.w, self.h)
         self.widget_x = self.cfg.dev_size[0] - self.w
         self.widget_y = 0
@@ -30,16 +30,25 @@ class SupportPanel(QtWidgets.QWidget):
         if pic_path:
             self.up_chest = "background-image: url('" + pic_path + "');"
 
+        pic_path = self.cfg.pic_file_paths.get('navigation.png')
+        self.navigation = "background-image: url('" + pic_path + "');"
+
     def setUpWidgets(self):
         layout = QtWidgets.QVBoxLayout(self)
-        layout.setMargin(8)
+        layout.setMargin(4)
         button = GameButton(self)
         button.hovered.connect(self.up_chest_btn)
         button.hover_out.connect(self.down_chest_btn)
-        button.clicked.connect(self.open_inventary)
+        button.clicked.connect(self.pressInventary)
         if self.down_chest:
             button.setStyleSheet(self.down_chest)
-        button.setFixedSize(64, 64)
+        button.setFixedSize(66, 66)
+        layout.addWidget(button)
+
+        button = GameButton(self)
+        button.setStyleSheet(self.navigation)
+        button.clicked.connect(self.pressNavigation)
+        button.setFixedSize(67, 67)
         layout.addWidget(button)
         self.setLayout(layout)
 
@@ -51,5 +60,8 @@ class SupportPanel(QtWidgets.QWidget):
         if self.down_chest:
             btn.setStyleSheet(self.down_chest)
 
-    def open_inventary(self):
-        pass
+    def pressInventary(self):
+        self.page.gamePages.pages['inventoryPage'].showPage()
+
+    def pressNavigation(self):
+        self.page.gamePages.gameRoot.controller.tr_support.setMovableMaps()
