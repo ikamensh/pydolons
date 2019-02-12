@@ -68,6 +68,7 @@ class SlotGroupWidget:
     def addToScene(self):
         for slot in self.slots.values():
             self.page.gamePages.gameRoot.scene.addItem(slot)
+            slot.installEventFilter(slot)
         pass
 
     def setLayout(self, layout):
