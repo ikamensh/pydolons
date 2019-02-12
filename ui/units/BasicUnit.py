@@ -9,10 +9,16 @@ from battlefield.Facing import Facing
 
 from ui.GameAnimation import SmoothAnimation
 
+from ui.units.HealthBar import HealthBar
+from ui.units.HealthText import HealthText
+
 
 class BasicUnit(QObject, GameObject):
     """docstring for BasicUnit."""
-    def __init__(self, *arg, gameconfig, parent = None):
+    hovered = QtCore.Signal(QtCore.QObject)
+    hover_out = QtCore.Signal()
+
+    def __init__(self, *arg, gameconfig, parent = None, unit_bf = None):
         QObject.__init__(self, parent)
         GameObject.__init__(self, *arg)
         self.uid = 0
@@ -23,8 +29,11 @@ class BasicUnit(QObject, GameObject):
         self.dir_angle = Facing.SOUTH
         self.count = 0
         self.count_max = 1
-        self.is_hero = False
         self.is_obstacle = False
+        self.isHover = False
+        if unit_bf.icon == 'hero.png':
+            self.is_hero = True
+        self.setUpSupports(unit_bf)
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
@@ -56,6 +65,55 @@ class BasicUnit(QObject, GameObject):
             start, end = BasicUnit.dir_dict[(self.dir_angle, turn)]
             self.dirAni.play_anim(start, end)
             self.dir_angle = turn
+
+    def mouseMove(self, event):
+        if self.isVisible() and not self.parentItem() is None:
+            if self.gameRoot.tr_support.rectHitGroupItem(self).contains(event.pos()):
+                self.isHover = True
+                self.hovered.emit(self)
+            else:
+                if self.isHover:
+                    self.hover_out.emit()
+                    self.isHover = False
+
+    def setUpSupports(self, unit_bf):
+        self.w, self.h = self.gameconfig.unit_size[0], self.gameconfig.unit_size[1]
+
+        self.hpBar = HealthBar()
+        self.hpBar.setColor(self)
+        self.hpBar.setRect(0, self.h, self.w, 32)
+        # hp.setPos(.pos())
+        self.hpBar.setHP(self.getHPprec(unit_bf))
+        self.hpBar.setParentItem(self)
+
+        self.hpText = HealthText()
+        self.hpText.setUnitPos(self.pos())
+        self.hpText.setParentItem(self)
+
+    def updateSupport(self, unit_bf, amount):
+        self.hpBar.setHP(self.getHPprec(unit_bf))
+        self.hpText.setText(amount)
+
+    def getHPprec(self, unit):
+        return (unit.health * 100)/unit.max_health
+
+    def setScale(self, scale):
+        super(BasicUnit, self).setScale(scale)
+        if scale == 0.5:
+            self.hpText.setScale(2.)
+        else:
+            self.hpText.setScale(1.)
+
+    def setOffset(self, x, y):
+        super(BasicUnit, self).setOffset(x, y)
+        # self.hpBar.
+        if x != 0.:
+            offset = self.offset()
+            self.hpBar.setOffset(offset.x(), offset.y())
+            self.hpText.setOffset(offset.x(), offset.y())
+        else:
+            self.hpBar.setOffset(0, 0)
+            self.hpText.setOffset(0, 0)
 
     def __eq__(self, other):
         if self is other: return True
