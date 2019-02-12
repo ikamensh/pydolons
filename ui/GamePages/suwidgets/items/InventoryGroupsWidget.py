@@ -62,9 +62,9 @@ class InventoryGroupsWidget:
         self.equimpment.updateSlots()
 
     def removeFromScene(self):
-        pass
+        for widget in self.widgets:
+            widget.removeFromScene()
 
     def addToScene(self):
         for widget in self.widgets:
             widget.addToScene()
-        pass
