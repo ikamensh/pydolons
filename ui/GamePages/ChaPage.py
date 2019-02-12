@@ -222,3 +222,15 @@ class ChaPage(AbstractPage):
     def updatePos(self):
         super().updatePos()
         self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+
+    def toolTipShow(self, widget):
+        x = widget.x() + self.mainWidget.pos().x()
+        y = widget.y() + self.mainWidget.pos().y()
+        self.gamePages.toolTip.setPos(self.scene().views()[0].mapToScene(x, y))
+        self.gamePages.toolTip.setText(widget.property('info'))
+        self.gamePages.toolTip.show()
+        pass
+
+    def toolTipHide(self):
+        self.gamePages.toolTip.hide()
+        pass
