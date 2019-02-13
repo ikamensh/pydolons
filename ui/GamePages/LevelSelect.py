@@ -9,6 +9,7 @@ from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from cntent.dungeons.small_graveyard import small_graveyard
 from cntent.dungeons.tel_razi_temple import tel_razi_temple
 from cntent.dungeons.tel_razi_factory import tel_razi_factory
+from cntent.dungeons.dark_wood import dark_wood
 
 
 from DreamGame import DreamGame
@@ -24,7 +25,7 @@ class LevelSelect(AbstractPage):
         self.x = 24
         self.dungeon_widgets = []
         self.fake_btns = []
-        self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon, tel_razi_temple, tel_razi_factory])
+        self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon, tel_razi_temple, tel_razi_factory, dark_wood])
         self.defaultGame = True
         self.isService = True
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)

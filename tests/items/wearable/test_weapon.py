@@ -17,16 +17,18 @@ def test_tooltip_with_name(weapon):
 
     assert is_in_tooltip(weapon.tooltip_info, str(weapon.name))
 
+
 def test_tooltip_with_damage(weapon):
 
     is_in_tooltip = lambda tooltip, search : any([search in val for val in tooltip.values()])
 
-    assert is_in_tooltip(weapon.tooltip_info, str(weapon.damage.amount))
+    assert is_in_tooltip(weapon.tooltip_info, str(int(weapon.damage.amount)))
+
 
 def test_tooltip_with_durab(weapon):
     is_in_tooltip = lambda tooltip, search: any([search in val for val in tooltip.values()])
 
-    assert is_in_tooltip(weapon.durability, str(weapon.damage.amount))
+    assert is_in_tooltip(weapon.tooltip_info, str(weapon.durability))
 
 
 
