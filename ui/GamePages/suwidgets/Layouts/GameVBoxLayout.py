@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore
 from ui.GamePages.suwidgets.Layouts.GameLayout import GameLayout
 
 
