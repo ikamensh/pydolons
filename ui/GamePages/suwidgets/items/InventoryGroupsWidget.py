@@ -61,6 +61,14 @@ class InventoryGroupsWidget:
         self.inventory.updateSlots()
         self.equimpment.updateSlots()
 
+    def hide(self):
+        for widget in self.widgets:
+            widget.hide()
+
+    def show(self):
+        for widget in self.widgets:
+            widget.show()
+
     def removeFromScene(self):
         for widget in self.widgets:
             widget.removeFromScene()
