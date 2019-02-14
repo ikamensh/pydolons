@@ -42,11 +42,12 @@ class InventoryPage(AbstractPage):
         self.updatePage()
 
     def setUpWidgets(self):
+        self.gamePages.gameRoot.scene.addItem(self)
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
 
         self.item = QtWidgets.QGraphicsPixmapItem()
-        self.gamePages.gameRoot.scene.addItem(self.item )
+        self.gamePages.gameRoot.scene.addItem(self.item)
         self.item.hide()
 
         self.addToGroup(self.background)
@@ -58,7 +59,8 @@ class InventoryPage(AbstractPage):
         # self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         #
         # self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
-        self.mainWidget.removeFromScene()
+        self.mainWidget.addToScene()
+        self.hidePage()
         self.resized()
 
     def resized(self):
@@ -86,16 +88,14 @@ class InventoryPage(AbstractPage):
         self.gamePages.page = self
         self.gamePages.visiblePage = True
         self.show()
-        self.gamePages.gameRoot.scene.addItem(self)
-        self.mainWidget.addToScene()
+        self.mainWidget.show()
 
     def hidePage(self):
         self.state = False
         self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
         self.hide()
-        self.gamePages.gameRoot.scene.removeItem(self)
-        self.mainWidget.removeFromScene()
+        self.mainWidget.hide()
         self.deSelectSlot()
 
     def updatePos(self):
