@@ -36,7 +36,7 @@ class SupportPanel(QtWidgets.QWidget):
     def setUpWidgets(self):
         layout = QtWidgets.QVBoxLayout(self)
         layout.setMargin(4)
-        button = GameButton(self)
+        button = GameButton(parent=self)
         button.hovered.connect(self.up_chest_btn)
         button.hover_out.connect(self.down_chest_btn)
         button.clicked.connect(self.pressInventary)
@@ -45,7 +45,7 @@ class SupportPanel(QtWidgets.QWidget):
         button.setFixedSize(66, 66)
         layout.addWidget(button)
 
-        button = GameButton(self)
+        button = GameButton(parent=self)
         button.setStyleSheet(self.navigation)
         button.clicked.connect(self.pressNavigation)
         button.setFixedSize(67, 67)
