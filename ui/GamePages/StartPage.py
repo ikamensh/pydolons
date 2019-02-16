@@ -154,8 +154,8 @@ class StartPage(AbstractPage):
         self.gamePages.levelSelect.showPage()
 
     def stopSlot(self):
-        pass
-        # print('stop')
+        print('Stop level:', self.gamePages.gameRoot.lengine.dungeon.name)
+        self.gamePages.gameRoot.ui.stopGame()
 
     def levelsSlot(self):
         self.hidePage()
@@ -177,7 +177,7 @@ class StartPage(AbstractPage):
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
-            self.showPage()
+            self.keyPressEsc()
         elif e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
             self.buttons[self.button_id].clicked.emit()
         elif e.key() == QtCore.Qt.Key_Up:
@@ -191,6 +191,17 @@ class StartPage(AbstractPage):
                 self.button_id = 0
             self.setAnimPos(self.button_id)
         pass
+
+    def keyPressEsc(self):
+        if self.state:
+            self.hidePage()
+        else:
+            self.showPage()
+        if self.gamePages.pages.get('chaPage') is not None:
+            if self.gamePages.pages['chaPage'].state:
+                self.gamePages.pages['chaPage'].hidePage()
+            elif self.gamePages.gameMenu is None:
+                self.gamePages.pages['chaPage'].showPage()
 
     def updatePos(self):
         super().updatePos()
