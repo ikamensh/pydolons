@@ -159,6 +159,7 @@ class ChaPage(AbstractPage):
         self.comitToChacracter()
         self.updatePage()
         self.hidePage()
+        self.gamePages.gameRoot.ui.startGame()
 
     def resetSlot(self):
         self.resetPage()
@@ -189,18 +190,15 @@ class ChaPage(AbstractPage):
 
     def hidePage(self):
         self.state = False
-        self.gamePages.page = self.gamePages.gameMenu
+        if self.gamePages.gameRoot.loop is None:
+            self.gamePages.page = self.gamePages.startPage
+        else:
+            self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.gamePages.gameRoot.scene.removeItem(self.msgBox)
         self.mainWidget.widget().hide()
-
-    def keyPressEvent(self, e):
-        if e.key() == QtCore.Qt.Key_Escape:
-            if self.state:
-                self.focusable.emit(False)
-                self.hidePage()
-                self.gamePages.startPage.hidePage()
 
     def destroy(self):
         self.mainWidget.widget().destroy()
