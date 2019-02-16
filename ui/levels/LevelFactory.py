@@ -98,9 +98,8 @@ class LevelFactory:
         self.gameRoot.controller.tr_support.level = None
         self.level.world.level = None
         self.level.world = None
-        self.level.units.units_heaps.clear()
-        self.level.units.level = None
-        self.level.units = None
+        self.level.units.destroy()
+        # self.level.units = None
         self.level.middleLayer.level = None
         self.level.middleLayer = None
         del self.level
