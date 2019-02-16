@@ -1,3 +1,5 @@
+from LEngine import LEngine
+
 
 class GameRootNode(object):
     """docstring for GameRootNode."""
@@ -11,7 +13,8 @@ class GameRootNode(object):
         self.levels = None
         self.gamePages = None
         self.game = None
-
+        self.lengine:LEngine = None
+        self.ui = None
 
     def setView(self, view):
         self.view = view
