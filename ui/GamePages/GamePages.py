@@ -24,7 +24,9 @@ class GamePages(object):
         self.focusState = False
         self.page = None
         self.focus = False
+        # init pages
         self.pages = {}
+        self.gameMenu = None
         self.visiblePage = True
 
     def setGameRoot(self, gameRoot):
@@ -57,7 +59,6 @@ class GamePages(object):
     def setUpStartPage(self, ui):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
-        self.startPage.stop.pressed.connect(ui.stopGame)
         self.toolTip = SuWidgetFactory.getToolTip(self.gameRoot, w = 128, h = 0, opacity=1.)
         self.toolTip.gameRoot = self.gameRoot
         self.toolTip.setZValue(500)
@@ -93,6 +94,7 @@ class GamePages(object):
         self.settigsPage = self.buildPage('settigsPage', SettingsPage)
 
     def buildPage(self, pageName, pageClass):
+        print('Init page:', pageName)
         page = pageClass(self)
         self.pages[pageName] = page
         self.gameRoot.view.keyPress.connect(page.keyPressEvent)
