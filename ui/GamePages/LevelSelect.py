@@ -79,11 +79,10 @@ class LevelSelect(AbstractPage):
     def getWidget(self, dungeon, parent):
         def startGame():
             name = dungeon.name
-            print('start:', name)
+            print('Select dungeon:', name)
             self.hidePage()
-            self.gamePages.gameRoot.ui.setGame(dungeon)
-            self.gamePages.gameRoot.ui.startGame()
-            self.gamePages.gameRoot.ui.changeCharacters()
+            self.gamePages.gameRoot.lengine.dungeon = dungeon
+            self.gamePages.gameRoot.ui.startCharacterPage()
 
         frame:QtWidgets.QFrame = QtWidgets.QFrame(parent=parent)
         frame.setProperty('dungeon',  dungeon)
