@@ -28,11 +28,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
         if unit == self.level.gameRoot.game.the_hero:
             self.updateVision()
 
-    def unitDied(self, unit):
-        # cell = self.units_at[unit.uid].worldPos
-        # if self.units_heaps.get(cell) is not None:
-        #     self.units_heaps.get(cell).remove(self.units_at[unit.uid])
-        unit = self.units_at[unit.uid]
+    def unitDied(self, unit_bf):
+        unit = self.units_at[unit_bf.uid]
+        self.destroyUnit(unit)
         unit.setVisible(False)
         self.removeFromGroup(unit)
         # if unit != self.level.gameRoot.game.the_hero:
@@ -126,7 +124,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
                     self.units_heaps[cell].update_units(list(self.units_from_(units)))
             else:
                 if self.units_heaps.get(cell) is not None:
-                    del self.units_heaps[cell]
+                    self.destroyUnitsHeap(cell)
                 if self.units_at[units[0].uid].scale != 1.:
                     self.units_at[units[0].uid].setScale(1.)
                     self.units_at[units[0].uid].setOffset(0., 0.)
@@ -146,16 +144,37 @@ class Units(QtWidgets.QGraphicsItemGroup):
         if units is not None:
             if len(units) == 1:
                 self.level.gameRoot.gamePages.toolTip.setDict(units[0].tooltip_info)
-            else:
-                for u in units:
-                    if u.uid == self.units_heaps[item.worldPos].units[-1].uid:
-                        self.level.gameRoot.gamePages.toolTip.setDict(u.tooltip_info)
+            # else:
+            #     for u in units:
+            #         if u.uid == self.units_heaps[item.worldPos].units[-1].uid:
+            #             self.level.gameRoot.gamePages.toolTip.setDict(u.tooltip_info)
         self.level.gameRoot.gamePages.toolTip.show()
         pass
 
     def toolTipHide(self):
         self.level.gameRoot.gamePages.toolTip.hide()
         pass
+
+    def destroyUnit(self, unit):
+        unit.hovered.disconnect(self.toolTipShow)
+        unit.hover_out.disconnect(self.toolTipHide)
+        self.level.gameRoot.view.mouseMove.disconnect(unit.mouseMove)
+
+    def destroyUnitsHeap(self, cell):
+        self.level.gameRoot.controller.mouseMove.disconnect(self.units_heaps[cell].mouseMoveEvent)
+        self.level.gameRoot.controller.mousePress.disconnect(self.units_heaps[cell].mousePressEvent)
+        del self.units_heaps[cell]
+
+    def destroy(self):
+        self.active_unit = None
+        for unit in self.units_at.values():
+            self.destroyUnit(unit)
+        self.units_at.clear()
+        self.units_pos.clear()
+        self.groups_at.clear()
+        self.units_heaps.clear()
+        self.level = None
+        self = None
 
 
 
