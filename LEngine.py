@@ -27,27 +27,25 @@ class LEngine:
         self.dungeon = None
 
     def getHero(self):
-        if self.character is None or self.the_hero is None:
+        if self.character is None:
             self.character = Character(demohero_basetype)
-            self.the_hero = self.character.unit
-            return self.the_hero
-        else:
-            return self.the_hero
-
-    def getGame(self, dungeon):
-        if self.character is None or self.the_hero is None:
+        elif self.the_hero is None:
             self.character = Character(demohero_basetype)
-            self.the_hero = self.character.unit
+        return self.character.unit
 
-        return self._getGame(dungeon)
+    def getGame(self):
+        if self.dungeon is None:
+            print('Not select dungeon')
+        self.the_hero = self.getHero()
+        return self._getGame(self.dungeon)
 
     def _getGame(self, dungeon):
+        print('Start dungeon:', dungeon.name)
         game = SimGame.start_dungeon(dungeon, self.the_hero)
         self.setUpTriggers(game)
         game.character = self.character
         game.shop = self.getShop(single_palyer=True)
         return game
-
 
     def setUpTriggers(self, game):
         levelstatus_trigger(game),
