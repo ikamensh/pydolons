@@ -1,11 +1,35 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from exceptions import PydolonsException
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
+
+
 class Cost:
-    def __init__(self, stamina=0, mana=0, health=0, readiness = 1):
+    def __init__(self, stamina=0., mana=0., health=0., readiness = 1.):
         self.stamina = stamina
         self.mana = mana
         self.health = health
         self.readiness = readiness
 
+
+    def complain(self, unit: Unit):
+        HP = "Health"
+        MANA = "MANA"
+        STAMINA = "STAMINA"
+        fmt = "Not enough {}"
+
+        if unit.health < self.health:
+            return fmt.format(HP)
+        elif unit.mana < self.mana:
+            return fmt.format(MANA)
+        elif unit.stamina < self.stamina:
+            return fmt.format(STAMINA)
+        else:
+            raise PydolonsException(f"Cost {self} is no problem for {unit}. Why are we seeing this message? :D")
+
     def __mul__(self, other):
+        other = float(other) # assert other is a number
 
         return Cost(self.stamina * other,
                     self.mana * other,

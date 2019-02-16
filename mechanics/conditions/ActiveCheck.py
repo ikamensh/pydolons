@@ -21,3 +21,7 @@ class ActiveCheck:
 
     def append(self, cond: ActiveCondition):
         self._conditions.append(cond)
+
+    def complain(self, active, target):
+        failed_conditions = self.not_satisfied_conds(active, target)
+        return failed_conditions[0].message(active, target)

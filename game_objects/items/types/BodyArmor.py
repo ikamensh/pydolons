@@ -17,6 +17,14 @@ class BodyArmor(WearableItem):
         else:
             return self._armor * self.durability_factor
 
+    @property
+    def tooltip_info(self):
+        return {
+            "name": f"{self.name}",
+            "type": f"{self.item_type}",
+            "armor": f"{self.armor}"
+        }
+
     def __repr__(self):
         return f"{self.name} providing {self.armor} armor"
 

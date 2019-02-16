@@ -10,7 +10,7 @@ class Weapon(WearableItem):
                  is_ranged,
                  game):
         super().__init__(name, ItemTypes.WEAPON, blueprint=blueprint, quality=quality,
-                         material=material, max_durability=max_durability, actives = actives,
+                         material=material, max_durability=max_durability, actives=actives,
                          game=game)
         assert isinstance(damage, Damage)
         if chances:
@@ -29,6 +29,14 @@ class Weapon(WearableItem):
 
         return Damage(self._damage.amount * self.durability_factor, self._damage.type)
 
+    @property
+    def tooltip_info(self):
+        return {
+            "name": f"{self.name}",
+            "type": f"{self.item_type}",
+            "damage": f"{self._damage.amount}",
+            "durability": f"{self.durability}"
+        }
 
     def __repr__(self):
         return f"{self.name} dealing {self.damage}"

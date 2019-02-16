@@ -1,3 +1,4 @@
+from __future__ import annotations
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 from game_objects.battlefield_objects.CharAttributes import Constants
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
@@ -13,6 +14,7 @@ from typing import Set, TYPE_CHECKING, List
 if TYPE_CHECKING:
     from DreamGame import DreamGame
     from mechanics.buffs import Ability
+    from mechanics.actives import Cost
 
 import copy
 from functools import lru_cache
@@ -287,7 +289,7 @@ class Unit(BattlefieldObject):
         if weapon and weapon.is_ranged:
             return weapon
 
-    def can_pay(self, cost):
+    def can_pay(self, cost: Cost):
         return not any( [
             cost.mana > self.mana,
             cost.stamina > self.stamina,
