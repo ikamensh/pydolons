@@ -102,11 +102,14 @@ class GameMenuPage(AbstractPage):
         return self.actives.isFocus() or self.gui_console.isFocus()
 
     def destroy(self):
+        self.gamePages.gameRoot.view.wheel_change.disconnect(self.updatePos)
         self.actives.destroy()
         del self.actives
         self.gui_console.killTimer(self.gui_console.id)
-        self.gamePages.gameRoot.scene.removeItem(self.p_gui_console )
+        self.gamePages.gameRoot.scene.removeItem(self.p_gui_console)
         del self.p_gui_console
+        self.gamePages.gameRoot.scene.removeItem(self.sup_panel)
+        del self.sup_panel
 
     def updatePos(self):
         super().updatePos()
