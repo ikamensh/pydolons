@@ -17,9 +17,8 @@ from ui.GameView import GameView
 from LEngine import LEngine
 from GameLoopThread import GameLoopThread, ProxyEmit
 
-
-
 from datetime import datetime
+
 
 class TheUI(QtWidgets.QWidget):
     view = None
@@ -92,10 +91,12 @@ class TheUI(QtWidgets.QWidget):
                           self.gameconfig.ava_size[1])
 
     def initLevel(self, level_name = None):
+        print('Iinit level')
         self.level = self.levelFactory.getLevel()
         self.levelFactory.addLevelToScene(self.scene)
 
     def destroyLevel(self):
+        print('Destroy level')
         self.levelFactory.removeLevelFromScene(self.scene)
         self.levelFactory.removeLevel()
         self.gameRoot.level = None
@@ -112,14 +113,12 @@ class TheUI(QtWidgets.QWidget):
         # self.game = self.lengine.getGame('walls_level')
         # self.game = self.lengine.getGame('pirate_level')
 
-    def changeCharacters(self):
-        hero = self.lengine.getHero()
+    def startCharacterPage(self):
+        self.lengine.the_hero = self.lengine.getHero()
         self.gamePages.setUpCharecterPage()
 
-    def setGame(self, dungeon):
-        self.gameRoot.game = self.lengine.getGame(dungeon)
-
     def startGame(self):
+        self.gameRoot.game = self.lengine.getGame()
         self.loadGame()
         # game_loop thread initialization
         self.loop = GameLoopThread()
@@ -176,8 +175,6 @@ if __name__ == '__main__':
     from game_objects.battlefield_objects import Unit
 
     from threading import Thread
-
-
 
     game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
     Thread(target=game.loop).start()
