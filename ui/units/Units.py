@@ -24,7 +24,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def moveUnit(self, unit, cell_to):
         x, y = cell_to.x, cell_to.y
-        self.units_at[unit.uid].setWorldPos(x, y)
+        self.units_at[unit.uid].moveTo(x, y)
         if unit == self.level.gameRoot.game.the_hero:
             self.updateVision()
 
