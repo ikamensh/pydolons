@@ -12,7 +12,6 @@ class SupportPanel(QtWidgets.QWidget):
         self.setFixedSize(self.w, self.h)
         self.widget_x = self.cfg.dev_size[0] - self.w
         self.widget_y = 0
-        self.move(self.widget_x, self.widget_y)
         self.setUpStyles()
 
     def setUpStyles(self):
