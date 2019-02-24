@@ -40,6 +40,7 @@ class GameMenuPage(AbstractPage):
         sup_panel.setUpWidgets()
         self.sup_panel = self.gamePages.gameRoot.scene.addWidget(sup_panel)
         self.sup_panel.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.updadteSupPanlePos()
 
     def createUnitStack(self):
         self.unitStack.items = {}
@@ -93,7 +94,6 @@ class GameMenuPage(AbstractPage):
     def resized(self):
         super().resized()
         self.gui_console.resized(self.gamePages.gameRoot.cfg.dev_size)
-
         self.updateGuiConsolePos()
         self.actives.resized()
         self.upateActivesPos()
