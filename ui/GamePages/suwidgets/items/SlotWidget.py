@@ -15,7 +15,6 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
         self.cfg = page.gamePages.gameRoot.cfg
         self.name = name
         self.slot_type = slot_type
-        self.installSceneEventFilter(self)
         self.setAcceptHoverEvents(True)
         self.setAcceptDrops(True)
         self.setAcceptedMouseButtons(QtCore.Qt.LeftButton|QtCore.Qt.RightButton)
