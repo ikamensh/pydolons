@@ -1,16 +1,15 @@
 from PySide2 import QtCore
 
-QObject = QtCore.QObject
-
 from ui.gamecore import GameObject
 from ui.GameAnimation import Direction
+from ui.GameAnimation import SmoothAnimation
+from ui.GameAnimation import GameVariantAnimation
+from ui.units.HealthBar import HealthBar
+from ui.units.HealthText import HealthText
 
 from battlefield.Facing import Facing
 
-from ui.GameAnimation import SmoothAnimation
-
-from ui.units.HealthBar import HealthBar
-from ui.units.HealthText import HealthText
+QObject = QtCore.QObject
 
 
 class BasicUnit(QObject, GameObject):
@@ -34,6 +33,9 @@ class BasicUnit(QObject, GameObject):
         if unit_bf.icon == 'hero.png':
             self.is_hero = True
         self.setUpSupports(unit_bf)
+        self.anim_move = GameVariantAnimation(self)
+        self.anim_move.valueChanged.connect(self.setPos)
+        self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
@@ -114,6 +116,13 @@ class BasicUnit(QObject, GameObject):
         else:
             self.hpBar.setOffset(0, 0)
             self.hpText.setOffset(0, 0)
+
+    def moveTo(self, x, y):
+        self.anim_move.setStartValue(self.pos())
+        self.worldPos.x = x
+        self.worldPos.y = y
+        self.anim_move.setEndValue(QtCore.QPointF(x * self.w, y * self.h))
+        self.anim_move.start()
 
     def __eq__(self, other):
         if self is other: return True
