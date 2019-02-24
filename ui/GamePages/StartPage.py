@@ -197,11 +197,11 @@ class StartPage(AbstractPage):
             self.hidePage()
         else:
             self.showPage()
-        if self.gamePages.pages.get('chaPage') is not None:
-            if self.gamePages.pages['chaPage'].state:
-                self.gamePages.pages['chaPage'].hidePage()
+        if self.gamePages.pages.get('characterPage') is not None:
+            if self.gamePages.pages['characterPage'].state:
+                self.gamePages.pages['characterPage'].hidePage()
             elif self.gamePages.gameMenu is None:
-                self.gamePages.pages['chaPage'].showPage()
+                self.gamePages.pages['characterPage'].showPage()
 
     def updatePos(self):
         super().updatePos()
