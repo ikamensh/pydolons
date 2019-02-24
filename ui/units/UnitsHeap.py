@@ -1,9 +1,8 @@
 from PySide2 import QtCore
+from ui.gamecore import GameObject
+from ui.units.BasicUnit import BasicUnit
 
 QObject = QtCore.QObject
-
-from ui.gamecore import GameObject
-from ui.units import BasicUnit
 
 
 class UnitsHeap(QObject, GameObject):
@@ -45,12 +44,8 @@ class UnitsHeap(QObject, GameObject):
             self.units.reverse()
 
     def info(self):
+        # debug information
         print(self.units, 'len:', len(self.units))
-        # for u in self.units:
-        #     print('u ----- info')
-        #     print('pos', u.pos())
-        #     print('rect', u.boundingRect())
-        #     print('offset', u.offset())
 
     def reset_gui(self, unit):
         unit.setOffset(0., 0.)
