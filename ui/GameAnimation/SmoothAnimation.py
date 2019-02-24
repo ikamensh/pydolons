@@ -1,5 +1,6 @@
 from collections import deque
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore
+from ui.GameAnimation.GameVariantAnimation import GameVariantAnimation
 
 
 class SmoothAnimation:
@@ -10,17 +11,12 @@ class SmoothAnimation:
     Для использования класса необходимо указать слот изменения контроллируемого аттрибута,
     например QObject.setRotation для угра поворота. Дальше достаточно просто вызывать play_anim(start, end)
     """
-    def __init__(self, target, slot, basic_duration = 500):
+    def __init__(self, target, slot, basic_duration = GameVariantAnimation.DURATION_BASIC):
         self.basic_duration = basic_duration
-        anim = QtCore.QPropertyAnimation(target, b'angle')
-        anim.setDuration(basic_duration)
 
-        anim.valueChanged.connect(slot)
-        anim.stateChanged.connect(self._keep_playing)
-
-        self.anim = anim
-
-
+        self.anim = GameVariantAnimation(target)
+        self.anim.valueChanged.connect(slot)
+        self.anim.stateChanged.connect(self._keep_playing)
         self.queue = deque()
 
     def _keep_playing(self, state):
@@ -32,7 +28,6 @@ class SmoothAnimation:
                 self.anim.setStartValue(start)
                 self.anim.setEndValue(end)
                 self.anim.start()
-
 
     def play_anim(self, start, end):
         if self.anim.state() == QtCore.QAbstractAnimation.Stopped:
