@@ -1,7 +1,8 @@
 from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from ui.units import GameVision
-from ui.units import Units, BasicUnit, ObstacleUnit
+from ui.units.BasicUnit import BasicUnit
+from ui.units import Units, ObstacleUnit
 from ui.levels.BaseLevel import BaseLevel
 from ui.debug.DebugLayer import DebugLayer
 
