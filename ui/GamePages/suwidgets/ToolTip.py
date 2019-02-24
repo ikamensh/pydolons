@@ -21,7 +21,6 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
         self._x = 0
         self._y = 0
         self.view_pos = QtCore.QPoint(0, 0)
-        self.setZValue(10)
         self.gameRoot = gameRoot
 
     def setDefaultTextColor(self, color):
