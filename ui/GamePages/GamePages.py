@@ -7,7 +7,7 @@
 from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
-from ui.GamePages.ChaPage import ChaPage
+from ui.GamePages.CharacterPage import CharacterPage
 from ui.GamePages.InventoryPage import InventoryPage
 from ui.GamePages.BackGorundPage import BackGorundPage
 from ui.GamePages.ReadmePage import ReadmePage
@@ -36,6 +36,8 @@ class GamePages(object):
     def setUpPages(self):
         self.setUpBackgrounPage()
         self.setUpGameMenu()
+        self.gameRoot.scene.addItem(self.toolTip)
+        self.gameRoot.scene.addItem(self.notify)
         self.setUpInventoryPage()
 
     def destroyPages(self):
@@ -51,6 +53,8 @@ class GamePages(object):
                 del self.pages[keys[i]]
             i += 1
         self.gameMenu = None
+        self.gameRoot.scene.removeItem(self.toolTip)
+        self.gameRoot.scene.removeItem(self.notify)
 
     def setUpBackgrounPage(self):
         self.background = self.buildPage('background', BackGorundPage)
@@ -61,11 +65,8 @@ class GamePages(object):
         self.page = self.startPage
         self.toolTip = SuWidgetFactory.getToolTip(self.gameRoot, w = 128, h = 0, opacity=1.)
         self.toolTip.gameRoot = self.gameRoot
-        self.toolTip.setZValue(500)
         self.gameRoot.view.wheel_change.connect(self.toolTip.wheel_change)
-        self.gameRoot.scene.addItem(self.toolTip)
         self.notify = SuWidgetFactory.getNotifyText(self.gameRoot)
-        self.gameRoot.scene.addItem(self.notify)
 
     def setUpLevelsPage(self):
         self.levelSelect = self.buildPage('levelSelect', LevelSelect)
@@ -79,8 +80,8 @@ class GamePages(object):
         self.gameMenu = gameMenu
 
     def setUpCharecterPage(self):
-        chaPage = self.buildPage('chaPage', ChaPage)
-        chaPage.showPage()
+        characterPage = self.buildPage('characterPage', CharacterPage)
+        characterPage.showPage()
 
     def setUpInventoryPage(self):
         inventoryPage = self.buildPage('inventoryPage', InventoryPage)
