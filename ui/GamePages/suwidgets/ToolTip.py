@@ -10,13 +10,18 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
     self.minimuWidth Зависит от шрифта и self.minimumLeters -- минимальное количество символов
 
     """
-    def __init__(self, parent = None):
+    def __init__(self, gameRoot, parent = None):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsRectItem.__init__(self, parent)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self.textItem = QtWidgets.QGraphicsTextItem()
         self.textItem.setParentItem(self)
         self.minimuWidth = 100
         self.minimumLeters = 16
+        self._x = 0
+        self._y = 0
+        self.view_pos = QtCore.QPoint(0, 0)
+        self.gameRoot = gameRoot
 
     def setDefaultTextColor(self, color):
         self.textItem.setDefaultTextColor(color)
@@ -28,17 +33,30 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
         self.minimuWidth = self.textItem.boundingRect().width()
         self.textItem.setPlainText(tempText)
 
+    def setPos(self, *args):
+        if len(args) == 1:
+            pos = args[0]
+            self.view_pos = self.gameRoot.view.mapFromScene(pos)
+            # self._x, self._y = pos.x(), pos.y()
+            super(ToolTip, self).setPos(pos)
+        elif len(args) == 2:
+            self.view_pos = self.gameRoot.view.mapFromScene(args[0], args[1])
+            super(ToolTip, self).setPos(args[0], args[1])
+
     def setTextPos(self, x, y):
+        self.view_pos = self.gameRoot.view.mapFromScene(x, y)
         self.textItem.setPos(x, y)
 
     def setText(self, text):
         self.textItem.setPlainText(text)
         h = self.textItem.boundingRect().height()
         self.setRect(self.textItem.x(), self.textItem.y(), self.minimuWidth, h)
-        self.setZValue(10)
 
     def setDict(self, data):
         result = ''
         for k, v in data.items():
             result = result + k + ' = ' + v + '\n'
         self.setText(result[:-1])
+
+    def wheel_change(self):
+        self.setPos(self.gameRoot.view.mapToScene(self.view_pos))

@@ -1,9 +1,9 @@
-from PySide2 import QtWidgets
+from PySide2.QtWidgets import QGraphicsRectItem
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QColor
 
 
-class HealthBar(QtWidgets.QGraphicsRectItem):
+class HealthBar(QGraphicsRectItem):
     """docstring for HealtBar."""
     orange = QColor(255, 102, 0)
     def __init__(self):
@@ -29,3 +29,9 @@ class HealthBar(QtWidgets.QGraphicsRectItem):
         y = (6 * 128) / 7
         self.rect().setWidth(w)
         self.setRect(0, y, w, h)
+
+    def setOffset(self, x, y):
+        # self.setPos(x + 32, y - 32)
+        self.setX(x)
+        self.setY(x)
+        pass

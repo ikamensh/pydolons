@@ -1,6 +1,6 @@
 from __future__ import annotations
 import sys
-from PySide2.QtCore import Slot, Signal
+from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QApplication, QPushButton, QGroupBox
 
 from PySide2 import QtWidgets
@@ -11,9 +11,6 @@ from cntent.dungeons.demo_dungeon import demo_dungeon
 from cntent.dungeons.demo_dungeon_walls import walls_dungeon
 from cntent.dungeons.small_graveyard import small_graveyard
 from cntent.dungeons.tel_razi_temple import tel_razi_temple
-from cntent.dungeons.tel_razi_factory import tel_razi_factory
-
-
 
 from ui.experimental.DungeonWidget import DungeonWidget
 
@@ -72,7 +69,7 @@ class DungeonChoice(QGroupBox):
 
 
 if __name__ == "__main__":
-    from ui.GameConfiguration import GameConfiguration
+    from ui.gameconfig.GameConfiguration import GameConfiguration
 
     qt_app = QApplication(sys.argv)
     gc = GameConfiguration()

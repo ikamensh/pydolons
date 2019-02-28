@@ -1,9 +1,8 @@
 from PySide2 import QtCore
+from ui.gamecore import GameObject
+from ui.units.BasicUnit import BasicUnit
 
 QObject = QtCore.QObject
-
-from ui.gamecore import GameObject
-from ui.units import BasicUnit
 
 
 class UnitsHeap(QObject, GameObject):
@@ -45,12 +44,8 @@ class UnitsHeap(QObject, GameObject):
             self.units.reverse()
 
     def info(self):
+        # debug information
         print(self.units, 'len:', len(self.units))
-        # for u in self.units:
-        #     print('u ----- info')
-        #     print('pos', u.pos())
-        #     print('rect', u.boundingRect())
-        #     print('offset', u.offset())
 
     def reset_gui(self, unit):
         unit.setOffset(0., 0.)
@@ -90,16 +85,17 @@ class UnitsHeap(QObject, GameObject):
         pass
 
     def mousePressEvent(self, e):
-        pos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
-        x = pos.x() - self.gameRoot.controller.tr_support.tr.m31() - self.gameRoot.level.world.pos().x()
-        y = pos.y() - self.gameRoot.controller.tr_support.tr.m32() - self.gameRoot.level.world.pos().y()
-        if self.pos().x() < x and self.pos().x() + 128 > x and self.pos().y() < y and self.pos().y() + 128 > y:
-            if self.select_unit is not None:
-                self.units.remove(self.select_unit)
-                self.units.append(self.select_unit)
-                self.units.reverse()
-                self.update_gui()
-                self.units.reverse()
+        if e.button() == QtCore.Qt.MouseButton.RightButton:
+            pos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
+            x = pos.x() - self.gameRoot.controller.tr_support.tr.m31() - self.gameRoot.level.world.pos().x()
+            y = pos.y() - self.gameRoot.controller.tr_support.tr.m32() - self.gameRoot.level.world.pos().y()
+            if self.pos().x() < x and self.pos().x() + 128 > x and self.pos().y() < y and self.pos().y() + 128 > y:
+                if self.select_unit is not None:
+                    self.units.remove(self.select_unit)
+                    self.units.append(self.select_unit)
+                    self.units.reverse()
+                    self.update_gui()
+                    self.units.reverse()
 
     def units_before(self):
         l = len(self.units)

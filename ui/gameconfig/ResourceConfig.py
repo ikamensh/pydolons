@@ -1,34 +1,26 @@
-import os
-from PySide2 import QtGui, QtWidgets, QtMultimedia
-from ui.GameSizeConfig import gameItemsSizes
-from ui.UserConfig import UserConfig, DEFAULT_CONFIG
+from PySide2.QtGui import QPixmap
+from PySide2.QtMultimedia import QSound
 
 from config import pydolons_rootdir
 from mechanics.damage import DamageTypes
+from ui.gameconfig.GameSizeConfig import gameItemsSizes
 
+import os
 from datetime import datetime
-from copy import copy
-
-class GameConfiguration:
-    """docstring for GameConfiguration.
-    Установка конфигурации игровых объектов, настроек экрана и системы
-    """
-    def __init__(self, lazy = True):
-        print('cfg ===> start init', datetime.now())
-        self.ignore_path = ('resources/assets/sprites/axe', )         # Игнорируемые папки
 
 
+class ResourceConfig:
+    def __init__(self, cfg, lazy = True):
+        self.ignore_path = ('resources/assets/sprites/axe',)  # Игнорируемые папки
+        self.rez_step = 0
         self.pic_formats = ('png', 'jpg')
         self.pic_file_paths = {}
         self.pix_maps = {}
 
-
         self.sound_formats = ('wav', 'mp3')
         self.sound_file_paths = {}
         self.sound_maps = {}
-        self.setUpUserConfig()
-        self.setUpScreen()
-        print('cfg ===> setUpScreen', datetime.now())
+
         self.setUpUnits()
         self.loadFilesPath()
         print('cfg ===> loadFilesPath', datetime.now())
@@ -37,66 +29,6 @@ class GameConfiguration:
             self.setUpPixmaps()
             print('cfg ===> setUpPixmaps', datetime.now())
         self.setUpSounds()
-        print('cfg ===> setUpSounds', datetime.now())
-        self.gameRoot = None
-        # self.tr = QtGui.QTransform()
-
-    def setGameRoot(self, gameRoot):
-        self.gameRoot =  gameRoot
-        self.gameRoot.cfg = self
-
-    def setWorld(self, world):
-        """
-        метод добавляет атрибуты игрового мира, которые доступны все классам
-        """
-        self.world_size = world.worldSize
-        self.world_a_size = world.worldHalfSize
-
-
-    def setUpScreen(self):
-        """
-        :atribute ava_size  - доступный размер
-        :atribute dev_size  - размер устройства
-        :atribute ava_ha_size  - доступный размер деленый на 2
-        :atribute dev_size  - размер устройства деленый на 2
-        """
-        self.desktop = QtWidgets.QDesktopWidget()
-        self.dev_size = self.desktop.screenGeometry().width(), self.desktop.screenGeometry().height()
-        self.device_resolution = self.dev_size[0], self.dev_size[1]
-        if self.dev_size[1] < 900:
-            self.rez_step = 0
-        else:
-            self.rez_step = 1
-            if self.dev_size[1] > 1079:
-                self.rez_step = 2
-        # self.dev_ha_size = int(self.dev_size[0] / 2), int(self.dev_size[1] / 2)
-        # self.ava_size = self.desktop.availableGeometry().width(), self.desktop.availableGeometry().height()
-        # self.ava_ha_size = int(self.ava_size[0] / 2), int(self.ava_size[1] / 2)
-        # self.correct_size = self.ava_ha_size[0] - 3, self.ava_ha_size[1] - 17
-        self.resolutions = ((800, 600),
-                            (1024, 768),
-                            (1280, 800),
-                            (1280, 1024),
-                            (1280, 720),
-                            (1360, 768),
-                            (1366, 768),
-                            (1440, 900),
-                            (1536, 864),
-                            (1600, 900),
-                            (1680, 1050),
-                            (1920, 1200),
-                            (1920, 1080),
-                            (2560, 1080),
-                            (2560, 1440),
-                            (3440, 1440),
-                            (3840, 2160))
-        if self.device_resolution not in self.resolutions:
-            self.device_resolution = self.resolutions[0]
-
-    def updateScreenSize(self, w, h):
-        self.dev_size = (w, h)
-        # self.tr.reset()
-        # self.tr.translate(w/2, h/2)
 
     def setUpUnits(self):
         """
@@ -150,8 +82,7 @@ class GameConfiguration:
         for filename, path in self.sound_file_paths.items():
             sound = None
             try:
-                # print('load ', filename)
-                sound = QtMultimedia.QSound(path)
+                sound = QSound(path)
                 self.sound_maps[filename] = sound
             except Exception as e:
                 print(filename, ' : ', e)
@@ -176,17 +107,10 @@ class GameConfiguration:
         for filename, path in self.pic_file_paths.items():
             pixmap = None
             try:
-                pixmap = QtGui.QPixmap(path)
+                pixmap = QPixmap(path)
                 self.pix_maps[filename] = pixmap
             except Exception as e:
                 print(e)
-
-    def setUpUserConfig(self):
-        self.user_cfg = UserConfig()
-        try:
-            self.user_cfg.readSetting()
-        except Exception as e:
-            self.user_cfg.read_config = copy(DEFAULT_CONFIG)
 
     def getSize(self, id):
         size = gameItemsSizes.get(id)
@@ -195,16 +119,3 @@ class GameConfiguration:
             return (64, 64)
         else:
             return size[self.rez_step]
-
-    @property
-    def dev_cfg_size(self):
-        if not self.user_cfg.read_config['window']['fullscreen']:
-            return self.user_cfg.read_config['window']['resolution']['width'],\
-                    self.user_cfg.read_config['window']['resolution']['height']
-
-
-
-
-
-
-

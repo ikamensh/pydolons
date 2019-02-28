@@ -121,6 +121,7 @@ class StartPage(AbstractPage):
                 self.gamePages.visiblePage = False
                 self.gamePages.gameRoot.scene.removeItem(self)
                 self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+                self.mainWidget.show()
         else:
             self.state = True
             self.focusable.emit(True)
@@ -128,6 +129,7 @@ class StartPage(AbstractPage):
             self.gamePages.visiblePage = True
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+            self.mainWidget.show()
 
     def hidePage(self):
         self.state = False
@@ -136,6 +138,7 @@ class StartPage(AbstractPage):
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+        self.mainWidget.hide()
 
     def resized(self):
         super().resized()
@@ -151,8 +154,8 @@ class StartPage(AbstractPage):
         self.gamePages.levelSelect.showPage()
 
     def stopSlot(self):
-        pass
-        # print('stop')
+        print('Stop level:', self.gamePages.gameRoot.lengine.dungeon.name)
+        self.gamePages.gameRoot.ui.stopGame()
 
     def levelsSlot(self):
         self.hidePage()
@@ -174,7 +177,7 @@ class StartPage(AbstractPage):
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
-            self.showPage()
+            self.keyPressEsc()
         elif e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
             self.buttons[self.button_id].clicked.emit()
         elif e.key() == QtCore.Qt.Key_Up:
@@ -188,6 +191,17 @@ class StartPage(AbstractPage):
                 self.button_id = 0
             self.setAnimPos(self.button_id)
         pass
+
+    def keyPressEsc(self):
+        if self.state:
+            self.hidePage()
+        else:
+            self.showPage()
+        if self.gamePages.pages.get('characterPage') is not None:
+            if self.gamePages.pages['characterPage'].state:
+                self.gamePages.pages['characterPage'].hidePage()
+            elif self.gamePages.gameMenu is None:
+                self.gamePages.pages['characterPage'].showPage()
 
     def updatePos(self):
         super().updatePos()

@@ -9,6 +9,16 @@ def tractable_value(true_value, digits = 2):
     base = 10 ** (log10 + 1 - digits)
     return int(true_value // base * base)
 
+
+def kmb_number_display( value ):
+    dividors = {1e9 : 'b', 1e6 : 'm', 1e3: 'k'}
+
+    for k, v in dividors.items():
+        if value >= k:
+            return f"{value / k:.1f}"  + v
+    return str(value)
+
+
 def clamp(n, minn, maxn):
     if n < minn:
         return minn

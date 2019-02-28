@@ -11,11 +11,11 @@ class SuWidgetFactory:
         pass
 
     @abstractmethod
-    def getToolTip(w = 128, h = 128, minimumLeters = 16, fontFamily = "Times", pointSize = 12):
-        tooltip = ToolTip()
+    def getToolTip(gameRoot, w = 128, h = 128, minimumLeters = 16, fontFamily = "Times", pointSize = 12, opacity = 0.8):
+        tooltip = ToolTip(gameRoot)
         tooltip.minimumLeters = minimumLeters
         tooltip.setBrush(QtGui.QBrush(QtCore.Qt.black))
-        tooltip.setOpacity(0.8)
+        tooltip.setOpacity(opacity)
         tooltip.setDefaultTextColor(QtCore.Qt.white)
         tooltip.setFont(QtGui.QFont(fontFamily, pointSize, 10, False))
         tooltip.setTextPos(w / 2, -h / 2)
@@ -27,4 +27,5 @@ class SuWidgetFactory:
         notifytext.setFont(QtGui.QFont("Times", 48, 10, False))
         notifytext.setDefaultTextColor(QtCore.Qt.blue)
         notifytext.gameRoot = gameRoot
+        gameRoot.view.wheel_change.connect(notifytext.resized)
         return notifytext

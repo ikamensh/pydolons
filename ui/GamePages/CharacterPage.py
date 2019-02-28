@@ -1,7 +1,13 @@
-from PySide2 import QtGui, QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
+from ui.GamePages.suwidgets.CharacterWidget import CharacterWidget
+from ui.GamePages.suwidgets.MasteriesWidget import MasteriesWidget
+from ui.GamePages.suwidgets.perk_tree.QPerkTree import QPerkTree
+from ui.GamePages.suwidgets.GameMsgBox import GameMsgBox
+
 from game_objects.battlefield_objects import base_attributes
+
 
 class CharacterPage(AbstractPage):
     """docstring for CharacterPage."""
@@ -14,10 +20,11 @@ class CharacterPage(AbstractPage):
         self.w_2 = int(self.w / 2)
         self.h_2 = int(self.h / 2)
         self.setUpWidgets()
+        self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
-        self.background = QtWidgets.QGraphicsRectItem(0, 0, self.w, self.h)
-        self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
+        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
@@ -28,21 +35,37 @@ class CharacterPage(AbstractPage):
         mainLayout: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
         mainLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
 
-        mainLayout.addLayout(self.getHeroLayout(mainWidget), 0, 0, 1, 1, QtCore.Qt.AlignLeft)
-        mainLayout.addLayout(self.getPointLayout(mainWidget), 0, 1, 1, 2, QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        mainLayout.addLayout(self.getPageBtnLayout(mainWidget), 1, 0, 1, 1, QtCore.Qt.AlignLeft)
+        self.charWidget = CharacterWidget(self, parent = mainWidget)
+        self.masteriWidget = MasteriesWidget(self, parent = mainWidget)
+        self.perkWidget = QPerkTree(self.gamePages.gameRoot.cfg, self.character.perk_trees[0], self.character, mainWidget)
+
+        mainLayout.addWidget(self.charWidget, 0, 0, 1, 1)
+        mainLayout.addWidget(self.perkWidget, 0, 3, 3, 1)
+        mainLayout.addWidget(self.masteriWidget, 1, 0, 1, 3)
+        mainLayout.addLayout(self.getPageBtnLayout(mainWidget), 2, 3, 1, 1, alignment = QtCore.Qt.AlignRight)
+
         mainWidget.setLayout(mainLayout)
 
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
+        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
+
+        msgBox = GameMsgBox()
+        msgBox.setGameConfig(self.gamePages.gameRoot.cfg)
+        msgBox.setText('This character page')
+        msgBox.setInformativeText('Change character elements and up hero')
+        self.msgBox = self.gamePages.gameRoot.scene.addWidget(msgBox)
+        self.gamePages.gameRoot.scene.removeItem(self.msgBox)
+        self.updatePage()
         self.resized()
 
     def setUpGui(self):
-        self.save.clicked.connect(self.saveSlot)
         self.ok.clicked.connect(self.okSlot)
+        self.save.clicked.connect(self.saveSlot)
+        self.reset.clicked.connect(self.resetSlot)
 
     def getHeroLayout(self, parent):
-        hero = self.gamePages.gameRoot.game.the_hero
+        hero = self.gamePages.gameRoot.lengine.the_hero
         layout = QtWidgets.QGridLayout()
         layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         layout.setVerticalSpacing(0)
@@ -112,50 +135,48 @@ class CharacterPage(AbstractPage):
 
     def getPageBtnLayout(self, parent):
         btnLayout = QtWidgets.QHBoxLayout()
-
-        self.ok = QtWidgets.QPushButton("ok", parent)
+        self.ok = QtWidgets.QPushButton("Ok", parent)
         self.ok.setStyleSheet(self.buttonStyle)
         btnLayout.addWidget(self.ok)
 
-        self.save = QtWidgets.QPushButton("save", parent)
+        self.save = QtWidgets.QPushButton("Save", parent)
         self.save.setStyleSheet(self.buttonStyle)
         btnLayout.addWidget(self.save)
+
+        self.reset = QtWidgets.QPushButton("Reset", parent)
+        self.reset.setStyleSheet(self.buttonStyle)
+        btnLayout.addWidget(self.reset)
 
         return btnLayout
 
     def updatePage(self):
-        hero = self.gamePages.gameRoot.game.the_hero
-        self.healthBar.setMaximum(hero.max_health)
-        self.healthBar.setValue(hero.health)
-        self.healthBar.property('label').setText(str(int(hero.health)))
-        self.manaBar.setMaximum(hero.max_mana)
-        self.manaBar.setValue(hero.mana)
-        self.manaBar.property('label').setText(str(int(hero.mana)))
-        self.staminaBar.setMaximum(hero.max_stamina)
-        self.staminaBar.setValue(hero.stamina)
-        self.staminaBar.property('label').setText(str(int(hero.stamina)))
-        self.freePointLabel.setText('Free points: ' + str(self.character.free_attribute_points))
-        for k, v in self.character.base_type.attributes.items():
-            spnBtn = self.btns.get(k)
-            if not spnBtn is None:
-                spnBtn.setValue(v)
+        self.charWidget.updatePage()
+        self.masteriWidget.updatePage()
+        self.perkWidget.updatePage()
+        pass
 
     def okSlot(self):
         self.comitToChacracter()
-        self.focusable.emit(False)
+        self.updatePage()
         self.hidePage()
+        self.gamePages.gameRoot.ui.startGame()
+
+    def resetSlot(self):
+        self.resetPage()
+        self.updatePage()
 
     def saveSlot(self):
         self.comitToChacracter()
+        self.updatePage()
 
     def resized(self):
-        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2
-        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2
-        self.mainWidget.setPos(x, y)
+        super().resized()
         self.w = self.mainWidget.widget().width()
         self.h = self.mainWidget.widget().height()
-        self.background.setRect(x, y, self.w, self.h)
-        # self.heroIcon.setPos(x + 50, y + 50)
+        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        self.resizeBackground(self.background)
         pass
 
     def showPage(self):
@@ -164,34 +185,20 @@ class CharacterPage(AbstractPage):
         self.gamePages.visiblePage = True
         self.gamePages.gameRoot.scene.addItem(self)
         self.gamePages.gameRoot.scene.addItem(self.mainWidget)
+        self.gamePages.gameRoot.scene.addItem(self.msgBox)
+        self.mainWidget.widget().show()
 
     def hidePage(self):
         self.state = False
-        self.gamePages.page = self.gamePages.gameMenu
+        if self.gamePages.gameRoot.loop is None:
+            self.gamePages.page = self.gamePages.startPage
+        else:
+            self.gamePages.page = self.gamePages.gameMenu
         self.gamePages.visiblePage = False
         self.gamePages.gameRoot.scene.removeItem(self)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
-
-    def keyPressEvent(self, e):
-        if e.key() == QtCore.Qt.Key_O:
-            if self.state:
-                self.focusable.emit(False)
-                self.hidePage()
-                self.resetPage()
-            else:
-                self.updatePage()
-                self.showPage()
-
-    def mousePress(self, e):
-        self.mousePos = e.pos()
-        if self.state:
-            focusState = self.mainWidget.widget().geometry().contains(e.pos().x(), e.pos().y())
-            if focusState:
-                self.focusable.emit(True)
-            else:
-                self.focusable.emit(False)
-                self.resetPage()
-                self.hidePage()
+        self.gamePages.gameRoot.scene.removeItem(self.msgBox)
+        self.mainWidget.widget().hide()
 
     def destroy(self):
         self.mainWidget.widget().destroy()
@@ -199,23 +206,6 @@ class CharacterPage(AbstractPage):
             self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         del self.mainWidget
         pass
-
-    def freePointsChanged(self, value):
-        spnBox = self.mainWidget.widget().focusWidget()
-        if self.character.temp_attributes is None:
-            attributes = self.character.base_type.attributes
-        else:
-            attributes = self.character.temp_attributes
-
-        if attributes[spnBox.property('attribute')] == value:
-            return
-        elif attributes[spnBox.property('attribute')] > value:
-            self.character.reduce_attrib(spnBox.property('attribute'))
-        else:
-            self.character.increase_attrib(spnBox.property('attribute'))
-            if self.character.free_attribute_points == 0:
-                spnBox.setValue(attributes[spnBox.property('attribute')])
-        self.freePointLabel.setText('Free points: ' + str(self.character.free_attribute_points))
 
     def comitToChacracter(self):
         try:
@@ -227,5 +217,18 @@ class CharacterPage(AbstractPage):
         self.gamePages.gameRoot.lengine.character.reset()
         pass
 
+    def updatePos(self):
+        super().updatePos()
+        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
 
+    def toolTipShow(self, widget):
+        x = widget.x() + self.mainWidget.pos().x()
+        y = widget.y() + self.mainWidget.pos().y()
+        self.gamePages.toolTip.setPos(self.scene().views()[0].mapToScene(x, y))
+        self.gamePages.toolTip.setText(widget.property('info'))
+        self.gamePages.toolTip.show()
+        pass
 
+    def toolTipHide(self):
+        self.gamePages.toolTip.hide()
+        pass

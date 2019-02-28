@@ -15,15 +15,13 @@ class GameMenuPage(AbstractPage):
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def showNotify(self, text):
-        self.notify.showText(text)
+        self.gamePages.notify.showText(text)
 
     def setUpGui(self):
         self.actives = Actives(self, columns=6)
         self.actives.setTargets.connect(self.gamePages.gameRoot.level.middleLayer.getTargets)
 
         self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
-        self.notify = self.gamePages.gameRoot.suwidgetFactory.getNotifyText(self.gamePages.gameRoot)
-        self.addToGroup(self.notify)
 
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
@@ -42,7 +40,7 @@ class GameMenuPage(AbstractPage):
         sup_panel.setUpWidgets()
         self.sup_panel = self.gamePages.gameRoot.scene.addWidget(sup_panel)
         self.sup_panel.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
-        self.createToolTip()
+        self.updadteSupPanlePos()
 
     def createUnitStack(self):
         self.unitStack.items = {}
@@ -56,18 +54,8 @@ class GameMenuPage(AbstractPage):
             self.unitStack.items[unit.uid] = item
             i += 1
 
-    def createToolTip(self):
-        self.tool:QtWidgets.QGraphicsItem = self.gamePages.gameRoot.suwidgetFactory.getToolTip(128, 128)
-        self.tool.setVisible(False)
-        self.gamePages.gameRoot.scene.addItem(self.tool)
-
-    def showToolTip(self, text, x, y):
-        self.tool.setText(text)
-        self.tool.setTextPos(x, y)
-        self.tool.setVisible(True)
-
-    def hideToolTip(self):
-        self.tool.setVisible(False)
+    def toolTipHide(self, widget):
+        self.gamePages.toolTip.hide()
 
     def setUpConsole(self):
         self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
@@ -106,7 +94,6 @@ class GameMenuPage(AbstractPage):
     def resized(self):
         super().resized()
         self.gui_console.resized(self.gamePages.gameRoot.cfg.dev_size)
-
         self.updateGuiConsolePos()
         self.actives.resized()
         self.upateActivesPos()
@@ -115,11 +102,14 @@ class GameMenuPage(AbstractPage):
         return self.actives.isFocus() or self.gui_console.isFocus()
 
     def destroy(self):
+        self.gamePages.gameRoot.view.wheel_change.disconnect(self.updatePos)
         self.actives.destroy()
         del self.actives
         self.gui_console.killTimer(self.gui_console.id)
-        self.gamePages.gameRoot.scene.removeItem(self.p_gui_console )
+        self.gamePages.gameRoot.scene.removeItem(self.p_gui_console)
         del self.p_gui_console
+        self.gamePages.gameRoot.scene.removeItem(self.sup_panel)
+        del self.sup_panel
 
     def updatePos(self):
         super().updatePos()

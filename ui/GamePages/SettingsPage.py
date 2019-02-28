@@ -86,8 +86,8 @@ class SettingsPage(AbstractPage):
 
     def changeResolution(self, index):
         size = self.resolution.itemData(index)
-        self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['resolution'] = {'width': size[0], 'height': size[1]}
-        self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen'] = False
+        self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution'] = {'width': size[0], 'height': size[1]}
+        self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = False
         self.gamePages.gameRoot.view.changeResolution(size[0], size[1])
         self.gamePages.gameRoot.ui.setMinimumSize(self.resolution.itemData(index)[0], self.resolution.itemData(index)[1])
 
@@ -102,7 +102,7 @@ class SettingsPage(AbstractPage):
     def changeFullScreen(self):
         if self.fullscreen.isChecked():
             self.resolution.setEnabled(False)
-            self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen'] = True
+            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = True
             self.gamePages.gameRoot.ui.showFullScreen()
             self.gamePages.gameRoot.view.resized.emit()
         else:
@@ -134,27 +134,26 @@ class SettingsPage(AbstractPage):
 
     def saveSlot(self):
         if self.fullscreen.isChecked():
-            self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['resolution'] = 'current'
-            self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen'] = True
-        else:
-            if self.gamePages.gameRoot.cfg.dev_size not in self.gamePages.gameRoot.cfg.resolutions:
-                w, h = self.gamePages.gameRoot.cfg.device_resolution
-            else:
-                w, h = self.gamePages.gameRoot.cfg.dev_size
-            self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['resolution'] = {'width':w, 'height':h}
-            self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen'] = False
+            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution'] = 'current'
+            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = True
+        elif self.resolution.currentText() == 'current':
+            # w, h = self.gamePages.gameRoot.cfg.dev_size
+            # if (w, h) not in self.gamePages.gameRoot.cfg.resolutions:
+            #     w, h = self.gamePages.gameRoot.cfg.device_resolution
+            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution'] = 'current'
+            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = False
         try:
-            self.gamePages.gameRoot.cfg.user_cfg.saveSetting()
+            self.gamePages.gameRoot.cfg.userConfig.saveSetting()
         except Exception as e:
             print('D\'ont save conifg!')
 
     def readFromConfig(self):
-        if self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen']:
+        if self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen']:
             self.fullscreen.setCheckState(QtCore.Qt.Checked)
             self.resolution.setEnabled(False)
         else:
-            w = self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['resolution']['width']
-            h = self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['resolution']['height']
+            w = self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution']['width']
+            h = self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution']['height']
             index = self.gamePages.gameRoot.cfg.resolutions.index((w, h))
             self.resolution.setCurrentIndex(index+1)
             self.select_resolution.setText(str(w)+'x'+str(h))

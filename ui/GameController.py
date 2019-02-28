@@ -62,16 +62,17 @@ class GameController(QtCore.QObject):
     def mousePressEvent(self, e):
         self.mousePress.emit(e)
         self.tr_support.mousePressEvent(e)
-        if e.button() == QtCore.Qt.RightButton:
-            self.r_mouse = True
-            try:
-                if not self.gameRoot.gamePages.isGamePage:
-                    if self.tr_support.floor_rect.contains(self.lost_m_pos.x(), self.lost_m_pos.y()):
-                        self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
-                        self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                        self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
-            except PydolonsException as exc:
-                UiErrorMessageEvent(self.gameRoot.game, repr(exc))
+        if not self.tr_support.isMovable:
+            if e.button() == QtCore.Qt.LeftButton:
+                self.r_mouse = True
+                try:
+                    if not self.gameRoot.gamePages.isGamePage:
+                        if self.tr_support.floor_rect.contains(self.lost_m_pos.x(), self.lost_m_pos.y()):
+                            self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                            self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
+                            self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+                except PydolonsException as exc:
+                    UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def mouseReleaseEvent(self, e):
         self.tr_support.mouseReleaseEvent(e)
@@ -123,11 +124,7 @@ class GameController(QtCore.QObject):
     def itemSelect(self, pos):
         x = int((pos.x() - self.tr_support.tr.m31() - self.world.pos().x()) / self.gameRoot.cfg.unit_size[0])
         y = int((pos.y() - self.tr_support.tr.m32() - self.world.pos().y()) / self.gameRoot.cfg.unit_size[1])
-
         self.last_point.x, self.last_point.y = x, y
-        self.middleLayer.showToolTip(self.last_point,
-                                     self.units.units_at,
-                                     self.gameRoot.game.battlefield.units_at)
         self.middleLayer.selectItem(x, y)
 
     orientations = {
@@ -149,6 +146,8 @@ class GameController(QtCore.QObject):
             self.gameRoot.game.order_turn_cw()
         elif e.key() in GameController.orientations:
             self.gameRoot.game.order_step(GameController.orientations[e.key()])
+        elif e.key() == QtCore.Qt.Key_H:
+            self.tr_support.setMovableMaps()
         if self.middleLayer.targeted:
             self.middleLayer.removeTargets()
 

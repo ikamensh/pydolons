@@ -17,9 +17,8 @@ from ui.GameView import GameView
 from LEngine import LEngine
 from GameLoopThread import GameLoopThread, ProxyEmit
 
-
-
 from datetime import datetime
+
 
 class TheUI(QtWidgets.QWidget):
     view = None
@@ -27,6 +26,7 @@ class TheUI(QtWidgets.QWidget):
 
     def __init__(self, lengine:LEngine, game = None):
         super().__init__()
+        self.setAcceptDrops(True)
         print('cfg ===> newGame init TheUI', datetime.now())
         # work level
         self.lengine = lengine
@@ -35,7 +35,7 @@ class TheUI(QtWidgets.QWidget):
         cursor = QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'))
         self.setCursor(cursor)
 
-        self.gameRoot: GameRootNode = GameRootNode()
+        self.gameRoot = GameRootNode()
         self.gameRoot.lengine = self.lengine
         self.gameRoot.ui = self
 
@@ -79,7 +79,7 @@ class TheUI(QtWidgets.QWidget):
         print('cfg ===> init TheUI', datetime.now())
 
     def window_config(self):
-        if self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen']:
+        if self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen']:
             self.showFullScreen()
         else:
             self.show()
@@ -91,10 +91,12 @@ class TheUI(QtWidgets.QWidget):
                           self.gameconfig.ava_size[1])
 
     def initLevel(self, level_name = None):
+        print('Iinit level')
         self.level = self.levelFactory.getLevel()
         self.levelFactory.addLevelToScene(self.scene)
 
     def destroyLevel(self):
+        print('Destroy level')
         self.levelFactory.removeLevelFromScene(self.scene)
         self.levelFactory.removeLevel()
         self.gameRoot.level = None
@@ -111,14 +113,12 @@ class TheUI(QtWidgets.QWidget):
         # self.game = self.lengine.getGame('walls_level')
         # self.game = self.lengine.getGame('pirate_level')
 
-    def changeCharacters(self):
-        hero = self.lengine.getHero()
+    def startCharacterPage(self):
+        self.lengine.the_hero = self.lengine.getHero()
         self.gamePages.setUpCharecterPage()
 
-    def setGame(self, dungeon):
-        self.gameRoot.game = self.lengine.getGame(dungeon)
-
     def startGame(self):
+        self.gameRoot.game = self.lengine.getGame()
         self.loadGame()
         # game_loop thread initialization
         self.loop = GameLoopThread()
@@ -175,8 +175,6 @@ if __name__ == '__main__':
     from game_objects.battlefield_objects import Unit
 
     from threading import Thread
-
-
 
     game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
     Thread(target=game.loop).start()

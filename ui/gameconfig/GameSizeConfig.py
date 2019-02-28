@@ -10,6 +10,9 @@ def setUpSize():
     # PerksPage
     gameItemsSizes[101004001] = ((32, 32), (64, 64), (96, 96))
     gameItemsSizes[101004002] = ((128, 128), (256, 256), (384, 384))
+    # InventoryPage
+    gameItemsSizes[101005001] = ((64, 64), (64, 64), (64, 64))
+    gameItemsSizes[101005002] = ((128, 128), (256, 256), (384, 384))
     # World size
     # Floor
     gameItemsSizes[102001001] = ((128, 128), (128, 128), (128, 128))
