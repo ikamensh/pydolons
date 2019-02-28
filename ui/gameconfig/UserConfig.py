@@ -11,8 +11,8 @@ DEFAULT_CONFIG = {
 
 DEFAULT_SIZE_CONFIG = {
     'window':{
-        'resolution':{'width':800,
-                      'height':600},
+        'resolution':{'width':1024,
+                      'height':768},
         'fullscreen':False
     }
 }
