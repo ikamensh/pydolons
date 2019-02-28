@@ -1,4 +1,5 @@
 from LEngine import LEngine
+from ui.gameconfig.GameConfiguration import GameConfiguration
 
 
 class GameRootNode(object):
@@ -7,7 +8,7 @@ class GameRootNode(object):
         super(GameRootNode, self).__init__()
         self.scene = None
         self.view = None
-        self.cfg = None
+        self.cfg:GameConfiguration = None
         self.level = None
         self.loop = None
         self.levels = None
