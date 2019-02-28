@@ -35,7 +35,7 @@ class TheUI(QtWidgets.QWidget):
         cursor = QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'))
         self.setCursor(cursor)
 
-        self.gameRoot: GameRootNode = GameRootNode()
+        self.gameRoot = GameRootNode()
         self.gameRoot.lengine = self.lengine
         self.gameRoot.ui = self
 
@@ -79,7 +79,7 @@ class TheUI(QtWidgets.QWidget):
         print('cfg ===> init TheUI', datetime.now())
 
     def window_config(self):
-        if self.gamePages.gameRoot.cfg.user_cfg.read_config['window']['fullscreen']:
+        if self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen']:
             self.showFullScreen()
         else:
             self.show()
