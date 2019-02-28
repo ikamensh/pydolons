@@ -1,5 +1,4 @@
-from PySide2 import QtWidgets, QtCore
-from ui.GameConfiguration import GameConfiguration
+from PySide2 import QtWidgets
 
 
 class GameView(QtWidgets.QGraphicsScene):
