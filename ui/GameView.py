@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtCore
-from ui.GameConfiguration import GameConfiguration
+from ui.gameconfig.GameConfiguration import GameConfiguration
 
 
 class GameView(QtWidgets.QGraphicsView):
@@ -57,15 +57,15 @@ class GameView(QtWidgets.QGraphicsView):
 
     def slotAlarmTimer(self):
         w, h = self.width(), self.height()
-        if self.gameconfig.user_cfg.read_config['window']['fullscreen']:
+        if self.gameconfig.userConfig.read_config['window']['fullscreen']:
             self.changeResolution(w, h)
         else:
-            w = self.gameconfig.user_cfg.read_config['window']['resolution']['width']
-            h = self.gameconfig.user_cfg.read_config['window']['resolution']['height']
+            w = self.gameconfig.userConfig.read_config['window']['resolution']['width']
+            h = self.gameconfig.userConfig.read_config['window']['resolution']['height']
             self.changeResolution(w, h)
 
     def changeResolution(self, w, h):
-        self.gameconfig.updateScreenSize(w, h)
+        self.gameconfig.deviceConfig.updateScreenSize(w, h)
         self.setMinimumSize(w, h)
         self.scene().setSceneRect(0, 0, w, h)
         self.resized.emit()
