@@ -4,8 +4,9 @@ from copy import copy
 
 DEFAULT_CONFIG = {
     'window':{
-        'resolution':'current',
-        'fullscreen':True
+        'resolution':{'width':1366,
+                      'height':768},
+        'fullscreen':True,
     }
 }
 
@@ -25,6 +26,7 @@ class UserConfig(object):
         else:
             self.home = environ['HOME']
         self.config_dir = path.join(self.home, 'Pydolons-dev')
+        self.dev_size = None
 
     @property
     def default_config(self):
@@ -61,6 +63,10 @@ class UserConfig(object):
         self.read_config = copy(DEFAULT_CONFIG)
         with open(config, 'w') as f:
             f.write(raw_config)
+
+    def setSize(self, size):
+        self.read_config['window']['resolution']['width'] = size[0]
+        self.read_config['window']['resolution']['height'] = size[1]
     
 # if __name__ == '__main__':
 #     cfg = Settings()
