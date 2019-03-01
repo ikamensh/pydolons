@@ -5,6 +5,7 @@ from PySide2 import QtWidgets, QtCore
 class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
     focusable = QtCore.Signal(bool)
+
     def __init__(self, gamePages, parent = None):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsItemGroup.__init__(self)
