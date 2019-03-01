@@ -1,4 +1,4 @@
-from PySide2 import QtGui, QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 from ui.GamePages import AbstractPage
 
@@ -19,7 +19,7 @@ class LevelSelect(AbstractPage):
     """docstring for LevelSelect."""
     def __init__(self, gamePages):
         super().__init__(gamePages)
-        self.w = 600
+        self.w = 600 * self.gamePages.gameRoot.cfg.scale_x
         self.h = self.w
         self.y = 24
         self.x = 24
