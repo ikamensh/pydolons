@@ -25,6 +25,7 @@ class GameConfiguration:
         self.setUpUserConfig()
         # Setup size steps
         self.rez_step = self.getStep()
+        self.calculateScales()
         # Setup configuration from resources
         self.setUpResourceConfig(lazy)
         # Setup configuration from styles
@@ -77,7 +78,7 @@ class GameConfiguration:
                        self.userConfig.read_config['window']['resolution']['height']
 
     def setUpStyleConfig(self):
-        self.styleConfig = StyleConfig()
+        self.styleConfig = StyleConfig(self)
         self.colors = self.styleConfig.colors
         self.brushs = self.styleConfig.brushs
 
@@ -88,6 +89,13 @@ class GameConfiguration:
             return 2
         else:
             return 1
+
+    def calculateScales(self):
+        WIDTH = 1366
+        HEIGHT = 768
+        self.scale_x = self.dev_size[0] / WIDTH
+        self.scale_y = self.dev_size[1] / HEIGHT
+
 
 
 
