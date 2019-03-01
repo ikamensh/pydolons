@@ -1,4 +1,5 @@
-from PySide2.QtGui import QPixmap
+from PySide2.QtGui import QPixmap, QFont, QFontDatabase
+
 from PySide2.QtMultimedia import QSound
 
 from config import pydolons_rootdir
@@ -21,6 +22,10 @@ class ResourceConfig:
         self.sound_file_paths = {}
         self.sound_maps = {}
 
+        self.fonts_formats = ('ttf')
+        self.fonts_file_paths = {}
+        self.fonts_maps = {}
+
         self.setUpUnits()
         self.loadFilesPath()
         print('cfg ===> loadFilesPath', datetime.now())
@@ -29,6 +34,7 @@ class ResourceConfig:
             self.setUpPixmaps()
             print('cfg ===> setUpPixmaps', datetime.now())
         self.setUpSounds()
+        self.setUpFonts()
 
     def setUpUnits(self):
         """
@@ -60,6 +66,8 @@ class ResourceConfig:
                         self.pic_file_paths[name.lower()] = os.path.join(item[0], name)
                     elif name[-3:].lower() in self.sound_formats:
                         self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
+                    elif name[-3:].lower() in self.fonts_formats:
+                        self.fonts_file_paths[name.lower()] = os.path.join(item[0], name)
 
     def getPicFile(self, filename, id = None, size = None):
         """
@@ -119,3 +127,14 @@ class ResourceConfig:
             return (64, 64)
         else:
             return size[self.rez_step]
+
+    def setUpFonts(self):
+        for filename, path in self.fonts_file_paths.items():
+            font = None
+            try:
+                id = QFontDatabase.addApplicationFont(path)
+                name = QFontDatabase.applicationFontFamilies(id)[0]
+                font = QFont(name)
+                self.fonts_maps[filename] = font
+            except Exception as e:
+                print(e)
