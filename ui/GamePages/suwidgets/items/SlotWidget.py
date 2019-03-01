@@ -18,6 +18,7 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
         self.setAcceptHoverEvents(True)
         self.setAcceptDrops(True)
         self.setAcceptedMouseButtons(QtCore.Qt.LeftButton|QtCore.Qt.RightButton)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self._pos = QtCore.QPoint(-10, -10)
         self.brush = self.cfg.brushs['b5adb7']
         self.pen = QtGui.QPen()
