@@ -62,7 +62,6 @@ class CharacterWidget(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
         subLayout = QtWidgets.QHBoxLayout()
         pixmap = self.gamePages.gameRoot.cfg.getPicFile(str(attribute.name).lower() + '.png', 101002001)
-        pixmap = pixmap.scaled(32, 32)
         icon = GameLabel(parent = parent)
         icon.hovered.connect(self.page.toolTipShow)
         icon.hover_out.connect(self.page.toolTipHide)
