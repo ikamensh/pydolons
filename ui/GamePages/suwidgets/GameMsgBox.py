@@ -7,15 +7,17 @@ class GameMsgBox(QtWidgets.QDialog):
     CANCEL = 1
     SAVE = 2
 
-    def __init__(self, parent = None):
+    def __init__(self, page, parent = None):
         super(GameMsgBox, self).__init__(parent)
+        self.widget_pos = QtCore.QPoint()
+        self.page = page
+        self.setWidgetGeometry(page.gamePages.gameRoot.cfg)
         self.setStyleSheet("background-image: url('resources/UI/Assets/scroll_background.png');")
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setFixedSize(640, 480)
         self.finished.connect(self.hide)
         self.setUpWigets()
 
-    def setGameConfig(self, cfg):
+    def setWidgetGeometry(self, cfg):
         if cfg.dev_size[0] < 1439:
             w = 640
         elif cfg.dev_size[0] < 1919:
@@ -28,6 +30,9 @@ class GameMsgBox(QtWidgets.QDialog):
             h = 640
         elif cfg.dev_size[1] >= 1050:
             h = 960
+        self.widget_pos.setX((cfg.dev_size[0] - w)/2)
+        self.widget_pos.setY((cfg.dev_size[1] - h)/2)
+        self.move(self.widget_pos)
         self.setFixedSize(w, h)
 
     def setUpWigets(self):
@@ -85,3 +90,6 @@ class GameMsgBox(QtWidgets.QDialog):
         self.rejected.emit()
         self.finished.emit(1)
         self.setResult(1)
+
+    def resized(self):
+        pass
