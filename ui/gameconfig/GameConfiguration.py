@@ -67,17 +67,14 @@ class GameConfiguration:
         except Exception as e:
             self.userConfig.read_config = copy(DEFAULT_CONFIG)
         finally:
-            if self.userConfig.read_config['window']['resolution'] != 'current':
-                self.dev_size = self.userConfig.read_config['window']['resolution']['width'],\
-                        self.userConfig.read_config['window']['resolution']['height']
+            self.dev_size = self.userConfig.read_config['window']['resolution']['width'], \
+                            self.userConfig.read_config['window']['resolution']['height']
 
     @property
     def dev_cfg_size(self):
         """from User Config"""
-        print(self.userConfig.read_config)
-        if not self.userConfig.read_config['window']['fullscreen']:
-            return self.userConfig.read_config['window']['resolution']['width'], \
-                   self.userConfig.read_config['window']['resolution']['height']
+        return self.userConfig.read_config['window']['resolution']['width'], \
+                       self.userConfig.read_config['window']['resolution']['height']
 
     def setUpStyleConfig(self):
         self.styleConfig = StyleConfig()
