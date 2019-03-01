@@ -27,8 +27,10 @@ class GameMenuPage(AbstractPage):
         self.unitStack.setBrush(QtCore.Qt.blue)
         self.unitStack.setPos(0, 0)
 
+        w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
+
         self.active_select = GameObject()
-        self.active_select.setPixmap(self.gamePages.gameRoot.cfg.getPicFile('active select 96.png').scaled(64, 64))
+        self.active_select.setPixmap(self.gamePages.gameRoot.cfg.getPicFile('active select 96.png').scaled(w_u, w_u))
         self.active_select.setParentItem(self.unitStack)
         self.active_select.setPos(self.unitStack.x(), self.unitStack.y())
 
@@ -44,12 +46,13 @@ class GameMenuPage(AbstractPage):
 
     def createUnitStack(self):
         self.unitStack.items = {}
+        w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
         i = 0
         for unit in self.gamePages.gameRoot.level.units.units_at.values():
-            item = GameObject(64, 64)
+            item = GameObject(w_u, w_u)
             item.setParentItem(self.unitStack)
-            item.setPixmap(unit.pixmap().scaled(64, 64))
-            item.setPos(self.unitStack.x() + i * 64, self.unitStack.y())
+            item.setPixmap(unit.pixmap().scaled(w_u, w_u))
+            item.setPos(self.unitStack.x() + i * w_u, self.unitStack.y())
             item.stackBefore(self.active_select)
             self.unitStack.items[unit.uid] = item
             i += 1
@@ -61,7 +64,7 @@ class GameMenuPage(AbstractPage):
         self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
         self.gui_console.id = self.gui_console.startTimer(50)
         self.gui_console.setTabChangesFocus(False)
-        self.gui_console.resize(320, 240)
+        self.gui_console.resize(320 * self.gamePages.gameRoot.cfg.scale_x, 240 * self.gamePages.gameRoot.cfg.scale_y)
         self.gamePages.gameRoot.controller.mouseMove.connect(self.gui_console.setMousePos)
         self.gui_console.btn.clicked.connect(self.updateGuiConsolePos)
         self.p_gui_console = self.scene().addWidget(self.gui_console)
@@ -76,12 +79,13 @@ class GameMenuPage(AbstractPage):
         self.updateUnitStack()
 
     def updateUnitStack(self):
+        w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
         units_stack = self.gamePages.gameRoot.game.turns_manager.managed_units
         w = len(units_stack)
-        self.unitStack.rect().setWidth(w * 64)
+        self.unitStack.rect().setWidth(w * w_u)
         i = 0
         for bf_unit in units_stack:
-            self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * 64, self.unitStack.y())
+            self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * w_u, self.unitStack.y())
             i += 1
 
     def setDefaultPos(self):
