@@ -50,11 +50,12 @@ class CharacterPage(AbstractPage):
         self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
-        msgBox = GameMsgBox()
-        msgBox.setGameConfig(self.gamePages.gameRoot.cfg)
+        msgBox = GameMsgBox(page=self)
+        # msgBox = GameMsgBox()
         msgBox.setText('This character page')
         msgBox.setInformativeText('Change character elements and up hero')
         self.msgBox = self.gamePages.gameRoot.scene.addWidget(msgBox)
+        self.msgBox.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self.gamePages.gameRoot.scene.removeItem(self.msgBox)
         self.updatePage()
         self.resized()
@@ -94,44 +95,6 @@ class CharacterPage(AbstractPage):
         layout.addWidget(barLabel, row, 2, 1, 1, QtCore.Qt.AlignLeft)
         bar.setProperty('label', barLabel)
         return bar
-
-    def getAttributeLayout(self, attribute, parent):
-        layout = QtWidgets.QVBoxLayout()
-        subLayout = QtWidgets.QHBoxLayout()
-        pixmap = self.gamePages.gameRoot.cfg.getPicFile(str(attribute.name).lower() + '.png', 101002001)
-        pixmap = pixmap.scaled(32, 32)
-        icon = QtWidgets.QLabel(parent)
-        icon.setPixmap(pixmap)
-        icon.setFixedSize(pixmap.size())
-        subLayout.addWidget(icon)
-        spnBox = QtWidgets.QSpinBox(parent=parent)
-        spnBox.setMinimum(self.character.base_type.attributes[attribute])
-        spnBox.valueChanged.connect(self.freePointsChanged)
-        spnBox.setProperty('attribute', attribute)
-        self.btns[attribute] = spnBox
-        subLayout.addWidget(spnBox)
-        label = QtWidgets.QLabel(str(attribute.name), parent)
-        layout.addLayout(subLayout)
-        layout.addWidget(label)
-        return layout
-
-    def getPointLayout(self, parent):
-        layout = QtWidgets.QGridLayout()
-        layout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
-        self.freePointLabel = QtWidgets.QLabel(parent = parent)
-        self.freePointLabel.setText('Free points: '+ str(self.character.free_attribute_points))
-        layout.addWidget(self.freePointLabel, 0, 0, 1, 1, QtCore.Qt.AlignRight)
-        i = 1
-        row = 1
-        for attribute in base_attributes:
-            if i % 2 == 0:
-                col = 0
-            else:
-                col = 1
-                row += 1
-            layout.addLayout(self.getAttributeLayout(attribute, parent), row, col)
-            i += 1
-        return layout
 
     def getPageBtnLayout(self, parent):
         btnLayout = QtWidgets.QHBoxLayout()
@@ -220,6 +183,8 @@ class CharacterPage(AbstractPage):
     def updatePos(self):
         super().updatePos()
         self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        self.msgBox.setPos(self.gamePages.gameRoot.view.mapToScene(self.msgBox.widget().widget_pos))
+
 
     def toolTipShow(self, widget):
         x = widget.x() + self.mainWidget.pos().x()
