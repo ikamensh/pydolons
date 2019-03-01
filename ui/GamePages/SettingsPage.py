@@ -24,17 +24,17 @@ class SettingsPage(AbstractPage):
 
         formlayout = QtWidgets.QFormLayout(mainWidget)
 
-        formlayout.addRow('Device\nresolution', QtWidgets.QLabel(self.dev_resolution))
+        formlayout.addRow('Device\nresolution', QtWidgets.QLabel(self.res_to_str(self.gamePages.gameRoot.cfg.deviceConfig.device_resolution)))
 
         self.resolution = self.getResolutions()
         formlayout.addRow('Resolutions', self.resolution)
 
-        self.select_resolution = QtWidgets.QLabel(self.dev_resolution)
+        self.select_resolution = QtWidgets.QLabel('', parent=mainWidget)
+        self.select_resolution.setText(self.res_to_str(self.resolution.itemData(self.resolution.currentIndex())))
+
         formlayout.addRow('Select\nresolution', self.select_resolution)
 
-        self.fullscreen = self.getFullScreen()
-        formlayout.addRow('Fullscreen', self.fullscreen)
-
+        self.fullscreen = self.getCheckBox(mainWidget, 'Full screen', formlayout, self.ceckFullScreenBox)
         save = QtWidgets.QPushButton('SAVE')
         save.clicked.connect(self.saveSlot)
         formlayout.addRow('save\nchanges', save)
@@ -78,36 +78,37 @@ class SettingsPage(AbstractPage):
         resolution = QtWidgets.QComboBox()
         resolution.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLengthWithIcon)
         resolution.activated.connect(self.changeResolution)
-        resolution.addItem('current', (self.gamePages.gameRoot.cfg.dev_size[0],
-                                      self.gamePages.gameRoot.cfg.dev_size[1]))
         for res in self.gamePages.gameRoot.cfg.resolutions:
             resolution.addItem(str(res[0])+'x'+str(res[1]), res)
+
         return resolution
 
     def changeResolution(self, index):
-        size = self.resolution.itemData(index)
-        self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution'] = {'width': size[0], 'height': size[1]}
-        self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = False
-        self.gamePages.gameRoot.view.changeResolution(size[0], size[1])
-        self.gamePages.gameRoot.ui.setMinimumSize(self.resolution.itemData(index)[0], self.resolution.itemData(index)[1])
+        self.gamePages.gameRoot.cfg.userConfig.setSize(self.resolution.itemData(index))
+        self.select_resolution.setText(self.res_to_str(self.resolution.itemData(index)))
 
-        self.select_resolution.setText(self.dev_resolution)
-        self.gamePages.gameRoot.ui.showNormal()
+    def getCheckBox(self, mainWidget, name = None, formLayout = None, slot = None):
+        checkBox = QtWidgets.QCheckBox(parent=mainWidget)
+        if formLayout is not None:
+            if name is None:
+                formLayout.addRow('check_box', checkBox)
+            else:
+                formLayout.addRow(name, checkBox)
+        if slot is not None:
+            checkBox.clicked.connect(slot)
+        return checkBox
 
-    def getFullScreen(self):
-        fullscreen = QtWidgets.QCheckBox()
-        fullscreen.clicked.connect(self.changeFullScreen)
-        return fullscreen
-
-    def changeFullScreen(self):
+    def ceckFullScreenBox(self):
         if self.fullscreen.isChecked():
             self.resolution.setEnabled(False)
             self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = True
-            self.gamePages.gameRoot.ui.showFullScreen()
-            self.gamePages.gameRoot.view.resized.emit()
+            index = self.gamePages.gameRoot.cfg.resolutions.index(self.gamePages.gameRoot.cfg.deviceConfig.device_resolution)
+            self.resolution.setCurrentIndex(index)
+            self.select_resolution.setText(self.res_to_str(self.gamePages.gameRoot.cfg.deviceConfig.device_resolution))
+            self.gamePages.gameRoot.cfg.userConfig.setSize(self.gamePages.gameRoot.cfg.deviceConfig.device_resolution)
         else:
+            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = False
             self.resolution.setEnabled(True)
-            self.gamePages.gameRoot.ui.showNormal()
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Escape:
@@ -124,24 +125,16 @@ class SettingsPage(AbstractPage):
         self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
         self.mainWidget.setPos(self.widget_pos)
         self.resizeBackground(self.background)
-        if self.fullscreen.isChecked():
-            self.select_resolution.setText(self.dev_resolution)
         pass
 
     @property
     def dev_resolution(self):
         return str(self.gamePages.gameRoot.cfg.dev_size[0])+'x'+str(self.gamePages.gameRoot.cfg.dev_size[1])
 
+    def res_to_str(self, size):
+        return str(size[0])+'x'+str(size[1])
+
     def saveSlot(self):
-        if self.fullscreen.isChecked():
-            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution'] = 'current'
-            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = True
-        elif self.resolution.currentText() == 'current':
-            # w, h = self.gamePages.gameRoot.cfg.dev_size
-            # if (w, h) not in self.gamePages.gameRoot.cfg.resolutions:
-            #     w, h = self.gamePages.gameRoot.cfg.device_resolution
-            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution'] = 'current'
-            self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen'] = False
         try:
             self.gamePages.gameRoot.cfg.userConfig.saveSetting()
         except Exception as e:
@@ -149,12 +142,13 @@ class SettingsPage(AbstractPage):
 
     def readFromConfig(self):
         if self.gamePages.gameRoot.cfg.userConfig.read_config['window']['fullscreen']:
-            self.fullscreen.setCheckState(QtCore.Qt.Checked)
+            self.fullscreen.setChecked(True)
             self.resolution.setEnabled(False)
         else:
             w = self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution']['width']
             h = self.gamePages.gameRoot.cfg.userConfig.read_config['window']['resolution']['height']
             index = self.gamePages.gameRoot.cfg.resolutions.index((w, h))
-            self.resolution.setCurrentIndex(index+1)
+            self.resolution.setCurrentIndex(index)
             self.select_resolution.setText(str(w)+'x'+str(h))
+
 
