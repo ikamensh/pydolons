@@ -7,7 +7,7 @@ class SupportPanel(QtWidgets.QWidget):
         super(SupportPanel, self).__init__(parent)
         self.page = page
         self.cfg = gameconfig
-        self.w = 84
+        self.w = 84 * self.cfg.scale_x
         self.h = self.w * 2
         self.setFixedSize(self.w, self.h)
         self.widget_x = self.cfg.dev_size[0] - self.w
@@ -19,18 +19,19 @@ class SupportPanel(QtWidgets.QWidget):
         self.setStyleSheet('background-color: rgba(0, 0, 0, 0);')
         # if pic_path:
         #     self.setStyleSheet("background-image: url('" + pic_path + "');")
-
+        bg_style = '''background-repeat: no-repeat;
+        '''
         self.up_chest = None
         self.down_chest = None
         pic_path = self.cfg.pic_file_paths.get('chest_0.png')
         if pic_path:
-            self.down_chest = "background-image: url('" + pic_path + "');"
+            self.down_chest = "background-image: url('" + pic_path + "');"+bg_style
         pic_path = self.cfg.pic_file_paths.get('chest_1.png')
         if pic_path:
-            self.up_chest = "background-image: url('" + pic_path + "');"
+            self.up_chest = "background-image: url('" + pic_path + "');"+bg_style
 
         pic_path = self.cfg.pic_file_paths.get('navigation.png')
-        self.navigation = "background-image: url('" + pic_path + "');"
+        self.navigation = "background-image: url('" + pic_path + "');"+bg_style
 
     def setUpWidgets(self):
         layout = QtWidgets.QVBoxLayout(self)
@@ -41,13 +42,15 @@ class SupportPanel(QtWidgets.QWidget):
         button.clicked.connect(self.pressInventary)
         if self.down_chest:
             button.setStyleSheet(self.down_chest)
-        button.setFixedSize(66, 66)
+        w = 66 * self.cfg.scale_x
+        button.setFixedSize(w, w)
         layout.addWidget(button)
 
         button = GameButton(parent=self)
         button.setStyleSheet(self.navigation)
         button.clicked.connect(self.pressNavigation)
-        button.setFixedSize(67, 67)
+        w = 67 * self.cfg.scale_x
+        button.setFixedSize(w, w)
         layout.addWidget(button)
         self.setLayout(layout)
 
