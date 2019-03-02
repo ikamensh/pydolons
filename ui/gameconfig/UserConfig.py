@@ -1,4 +1,5 @@
 from os import path, mkdir, environ, name as osname
+from datetime import datetime
 from json import dumps, loads
 from copy import copy
 
@@ -35,6 +36,7 @@ class UserConfig(object):
 
     def readSetting(self):
         config = path.join(self.config_dir, 'config.json')
+        self.updateOldConfig(config)
         if path.exists(self.config_dir):
             if path.isdir(self.config_dir):
                 if path.exists(config):
@@ -67,7 +69,12 @@ class UserConfig(object):
     def setSize(self, size):
         self.read_config['window']['resolution']['width'] = size[0]
         self.read_config['window']['resolution']['height'] = size[1]
-    
+
+    def updateOldConfig(self, config):
+        new_dt = datetime.fromtimestamp(1551483646.6045456)
+        config_dt = datetime.fromtimestamp(path.getmtime(config))
+        if new_dt >= config_dt:
+            self.create_default()
 # if __name__ == '__main__':
 #     cfg = Settings()
 #     cfg.readSetting()
