@@ -3,6 +3,27 @@ from battlefield.Vision import Vision
 from battlefield.Facing import Facing
 
 
+def test_dead_units_dont_block(empty_game, hero, pirate):
+
+    bf = empty_game.battlefield
+    hero.prc_base += 100
+    empty_game.add_unit(hero, Cell(1,1), facing=Facing.SOUTH)
+
+    vision = Vision(bf)
+
+    free_vision = vision.std_seen_cells(hero)
+
+    empty_game.add_unit(pirate, Cell(1,2))
+
+    blocked_vision = vision.std_seen_cells(hero)
+    assert blocked_vision != free_vision
+
+    pirate.health -= 99999
+
+    unblocked_vision = vision.std_seen_cells(hero)
+    assert unblocked_vision == free_vision
+
+
 def test_blocks(game_hvsp):
 
     bf = game_hvsp.battlefield
@@ -61,7 +82,6 @@ def test_visibility(game_hvsp, hero, pirate):
     vision = Vision(bf)
 
     cells_seen = vision.std_seen_cells(hero)
-    print(cells_seen)
     assert Cell(1, 4) in cells_seen
     assert Cell(1, 5) in cells_seen
     assert Cell(5, 1) in cells_seen

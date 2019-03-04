@@ -1,6 +1,5 @@
 from mechanics.events import DamageEvent
 
-
 def test_move_into_obstacle_attack(empty_game, hero, obstacle, no_chances):
 
     empty_game.add_unit(hero, 1+1j, facing=1)

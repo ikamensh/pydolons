@@ -13,7 +13,7 @@ class Vision:
         facing = bf.unit_facings[unit]
 
         cell_from = bf.unit_locations[unit]
-        visible_cells = self.std_vision_field(unit.sight_range, facing, cell_from, bf)
+        visible_cells = set( self.std_vision_field(unit.sight_range, facing, cell_from, bf) )
         obstacles = {cell for cell in self.battlefield.units_at if cell in visible_cells}
         obstacles -= {cell_from}
         walls = frozenset({cell for cell in self.battlefield.units_at if cell in visible_cells and
@@ -85,7 +85,7 @@ class Vision:
                 if metric(cell_from, cell) <= sight_range:
                     visible_cells.add(cell)
 
-        return visible_cells
+        return frozenset(visible_cells)
 
     @staticmethod
     def dist_eliptic_x(p1, p2):
