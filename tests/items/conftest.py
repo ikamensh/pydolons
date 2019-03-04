@@ -35,19 +35,30 @@ def my_cuirass_blueprint():
     return ArmorBlueprint("cuirass", target_item_type=ArmorTypes.CUIRASS, rarity=1)
 
 @pytest.fixture()
-def weapon(empty_game):
-    return Weapon("test axe1", Damage(50, DamageTypes.SLASH), max_durability=50, game=empty_game, is_ranged=False)
-
-@pytest.fixture()
 def real_weapon(my_sword_blueprint, bronze, usual, empty_game):
     return Weapon("test axe1", Damage(50, DamageTypes.SLASH), max_durability=50,
-                  blueprint=my_sword_blueprint, material=bronze, quality=usual, game=empty_game, is_ranged=False)
+                  blueprint=my_sword_blueprint, material=bronze, quality=usual,
+                  game=empty_game, is_ranged=False)
+
+def _weapon(empty_game):
+    return Weapon("test axe1", Damage(50, DamageTypes.SLASH),
+                  max_durability=50, game=empty_game, is_ranged=False)
+
+@pytest.fixture()
+def weapon(empty_game):
+    return _weapon(empty_game)
+
+
+
+def _armor(empty_game):
+    return BodyArmor("da armor", Armor(30), max_durability=50, game=empty_game)
+
 
 @pytest.fixture()
 def armor(empty_game):
-    return BodyArmor("da armor", Armor(30), max_durability=50, game=empty_game)
+    return _armor(empty_game)
 
-@pytest.fixture(params=[weapon, armor])
+@pytest.fixture(params=[_weapon, _armor])
 def diff_item(request, empty_game):
     item = request.param(empty_game)
     yield item

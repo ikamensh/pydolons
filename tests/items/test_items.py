@@ -1,12 +1,6 @@
 from game_objects.items import ItemTransactions, Slot
 import pytest
 
-
-def test_equip_random_slot(hero, diff_item):
-    slot = Slot("test slot")
-    slot.content = diff_item
-    assert not hero.equipment.equip(slot)
-
 def test_equip(hero, diff_item):
     with ItemTransactions(hero) as trans:
         slot = hero.inventory.get_empty_slot()
