@@ -1,4 +1,6 @@
 from mechanics.events import MovementEvent
+from battlefield import Cell
+
 
 def test_impassable_event(obstacle, hero, empty_game):
 
@@ -9,7 +11,6 @@ def test_impassable_event(obstacle, hero, empty_game):
 
     assert empty_game.battlefield.unit_locations[hero] == 1+1j
 
-from battlefield import Cell
 def test_impassible_action(obstacle, hero, empty_game):
 
 
@@ -25,7 +26,6 @@ def test_impassible_action(obstacle, hero, empty_game):
     assert valid_action is None
 
 
-from battlefield import Cell
 import pytest
 from exceptions import PydolonsException
 

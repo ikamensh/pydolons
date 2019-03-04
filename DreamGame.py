@@ -105,7 +105,8 @@ class DreamGame:
         obstacle.alive = False
 
 
-    def add_obstacle(self, obstacle, cell):
+    def add_obstacle(self, obstacle: Obstacle, cell):
+        obstacle.game = self
         self.battlefield.place(obstacle, cell)
 
 

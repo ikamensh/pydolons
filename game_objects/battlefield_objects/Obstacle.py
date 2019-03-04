@@ -42,4 +42,4 @@ class Obstacle(BattlefieldObject):
                 'defence':str(self.melee_evasion)}
 
     def __repr__(self):
-        return f"{self.name} alive {self.alive} with {self.health :.0f} HP"
+        return f"{self.name} with {self.health :.0f} HP"
