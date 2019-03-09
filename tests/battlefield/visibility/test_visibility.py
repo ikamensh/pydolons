@@ -10,16 +10,15 @@ def var_facing(request) -> complex:
     return request.param
 
 
-@pytest.mark.parametrize('prc', [1, 10, 15, 70, 1000])
+@pytest.mark.parametrize('prc', [6, 10, 12, 17, 23, 29, 53, 113])
 def test_symmetric(huge_game, hero, prc, var_facing):
     hero_c_coords = 30+30j
-    hero.prc_base.base = prc
-
-    assert hero.prc == prc
 
     huge_game.add_unit(hero, hero_c_coords, facing=var_facing)
+    hero.prc_base.base = prc
 
     v = huge_game.battlefield.vision
+    print(hero.prc, hero.prc_base.base, hero.sight_range)
     cells_seen = v.std_seen_cells(hero)
 
     cells_to_right = set()
@@ -32,9 +31,7 @@ def test_symmetric(huge_game, hero, prc, var_facing):
             collection.add(c)
 
     assert len(cells_to_left) == len(cells_to_right)
-    pytest.skip("TODO: TEST INCOMPLETE. DIFFERENT SIGHT RANGES ARE NOT TESTED.")
-
-
+    # pytest.skip("TODO: TEST INCOMPLETE. DIFFERENT SIGHT RANGES ARE NOT TESTED.")
 
 
 def test_visibility(game_hvsp, hero):

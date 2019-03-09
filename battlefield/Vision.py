@@ -57,7 +57,7 @@ class Vision:
         w = bf.h
         h = bf.h
 
-        v1 = (sight_range * 2 / 3) * 1j
+        v1 = (sight_range * 2 / 3 + 1) * 1j
         v2 = sight_range
 
         c1 = facing * v1 + cell_from.complex
