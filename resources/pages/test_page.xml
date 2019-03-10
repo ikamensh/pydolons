@@ -1,0 +1,2403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<page>
+    <item name = 'perks_block'
+               right = '286'
+               top = '0'
+              width="286"
+              height="1080"
+               
+               color="FF0000"
+               icon="cha_page_perk_bg.png"
+                type="other">
+        <item name="perks_name"
+                  right="276"
+                  top = '1'
+                  width="404"
+                  height="10"
+                  text="Perks"
+                  color="#FFFFFF"
+                  font_size="24"
+                  type="text">
+            </item>
+        <item name="perks_group_1"
+          top="70"
+          right='286'
+          >
+                <item name = 'perk_str'
+                      position="inherit"
+                       left="10"
+                       top = '10'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon="cha_page_elemnt_bg.png"
+                        type="other">
+
+                    <item name="perk_str_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Streingth"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_str_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="str.png"
+                          type="other">
+                    </item>
+                    <item name="perk_str_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_str_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_str_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          input="button"
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_agi'
+                      position="inherit"
+                       left='148'
+                       top = '10'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon = 'cha_page_elemnt_bg.png'>
+                    <item name="perk_agi_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Agility"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_agi_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="agi.png"
+                          type="other">
+                    </item>
+                    <item name="perk_agi_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_agi_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_agi_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_end'
+                      position="inherit"
+                       left = '10'
+                       top = '148'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon="cha_page_elemnt_bg.png"
+                        type="other">
+                    <item name="perk_end_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Endurance"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_end_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="end.png"
+                          type="other">
+                    </item>
+                    <item name="perk_end_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_end_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_end_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_prc'
+                      position="inherit"
+                        left='148'
+                        top = '148'
+                        width="128"
+                        height="128"
+                        icon = 'cha_page_elemnt_bg.png'>
+                     <item name="perk_prc_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Perception"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_prc_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="prc.png"
+                          type="other">
+                    </item>
+                    <item name="perk_prc_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_prc_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_prc_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_int'
+                      position="inherit"
+                       left="10"
+                       top = '286'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon="cha_page_elemnt_bg.png"
+                        type="other">
+                    <item name="perk_int_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Intelligence"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_int_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="int.png"
+                          type="other">
+                    </item>
+                    <item name="perk_int_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_int_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_int_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_cha'
+                      position="inherit"
+                       left="148"
+                       top = '286'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon = 'cha_page_elemnt_bg.png'>
+                    <item name="perk_cha_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Charisma"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_cha_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="cha.png"
+                          type="other">
+                    </item>
+                    <item name="perk_cha_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_cha_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_cha_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+        </item>
+        <item name="perks_group_2"
+              top="496"
+              right='286'
+              width="0"
+              height="0"
+              type="group">
+                <item name = 'perk_hel'
+                      position="inherit"
+                       left="10"
+                       top = '10'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon="cha_page_elemnt_bg.png"
+                        type="other">
+                    <item name="perk_hel_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Health"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_hel_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="strange_perk.png"
+                          type="other">
+                    </item>
+                    <item name="perk_hel_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_hel_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_hel_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_man'
+                      position="inherit"
+                      left='148'
+                      top = '10'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon = 'cha_page_elemnt_bg.png'>
+                    <item name="perk_man_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Mana"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_man_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="strange_perk.png"
+                          type="other">
+                    </item>
+                    <item name="perk_man_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_man_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_man_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_sta'
+                       position="inherit"
+                       left="10"
+                       top = '148'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon="cha_page_elemnt_bg.png"
+                        type="other">
+                    <item name="perk_sta_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Stamina"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_sta_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="strange_perk.png"
+                          type="other">
+                    </item>
+                    <item name="perk_sta_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_sta_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_sta_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'perk_ini'
+                      position="inherit"
+                      left="148"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="perk_ini_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Initiative"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_ini_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="strange_perk.png"
+                          type="other">
+                    </item>
+                    <item name="perk_ini_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_ini_level"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Level 0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_ini_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+        </item>
+
+    </item>
+    <item name = 'mastery_block'
+                right = '710'
+                top = '0'
+                width="424"
+                height="1080"
+                icon="cha_page_perk_bg.png">
+        <item name="mastery_block_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="404"
+                          height="10"
+                          text="Masteries"
+                          color="#FFFFFF"
+                          font_size="24"
+                          type="text">
+                    </item>
+        <item name="mastety_battle_group"
+              top="32"
+              right = '710'>
+            <item name="mastery_battle_name"
+                  position="inherit"
+                  left = '10'
+                  top = '10'
+                  width="404"
+                  height="10"
+                  text="Battle masteries"
+                  color="#FFFFFF"
+                  font_size="20"
+                  type="text">
+                    </item>
+            <item name="mastety_battle_group_1"
+                  position="inherit"
+                  top="-16"
+                  left='0'>
+                <item name = 'mastery_club'
+                          position="inherit"
+                          left = '10'
+                          top = '64'
+                          width="128"
+                          height="128"
+                          icon="cha_page_elemnt_bg.png"
+                          type="other">
+                        <item name="mastery_club_name"
+                              position="inherit"
+                              left = '10'
+                              top = '1'
+                              width="108"
+                              height="10"
+                              
+                              icon = 'sdd'
+                              text="Club"
+                              color="#FFFFFF"
+                              type="text">
+                        </item>
+                        <item name="mastery_club_icon"
+                              position="inherit"
+                              left = '10'
+                              top = '30'
+                              width="48"
+                              height="48"
+                              icon="club.png"
+                              type="other">
+                        </item>
+                        <item name="mastery_club_bar"
+                              position="inherit"
+                              left = '10'
+                              top = '88'
+                              width="108"
+                              height="10"
+                              background-color="#6A6AFF"
+                              icon = 'VALUE_BOX.png'>
+                        </item>
+                        <item name="mastery_club_point"
+                              position="inherit"
+                              left = '10'
+                              top = '98'
+                              width="108"
+                              height="10"
+                              text="0"
+                              color="#FFFFFF"
+                              type="text">
+                        </item>
+                        <item name="mastery_club_up"
+                              position="inherit"
+                              left = '68'
+                              top = '30'
+                              width="48"
+                              height="48"
+                              icon="up.png"
+                              type="other">
+                        </item>
+                    </item>
+                <item name = 'mastery_sword'
+                      position="inherit"
+                      left = '148'
+                      top = '64'
+                      width="128"
+                      height="128"
+                      
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_sword_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Sword"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_sword_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="sword.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_sword_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_sword_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="perk_agi_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_axe'
+                      position="inherit"
+                      left = '286'
+                    top = '64'
+                    width="128"
+                    height="128"
+                    icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_axe_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="Axe"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_axe_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="axe.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_axe_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_axe_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_axe_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_dagger'
+                      position="inherit"
+                      left = '10'
+                      top = '202'
+                      width="128"
+                      height="128"
+                      icon="cha_page_elemnt_bg.png"
+                      type="other">
+                    <item name="mastery_dagger_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Dagger"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_dagger_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="dagger.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_dagger_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_dagger_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_dagger_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_spear'
+                      position="inherit"
+                      left = '148'
+                      top = '202'
+                      width="128"
+                      height="128"
+                       
+                       color="FF0000"
+                       icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_spear_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Spear"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_spear_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="spear.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_spear_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_spear_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_spear_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_unarmed'
+                      position="inherit"
+                        left = '286'
+                        top = '202'
+                        width="128"
+                        height="128"
+                        icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_unarmed_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="Unarmed"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_unarmed_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="unarmed.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_unarmed_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_unarmed_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_unarmed_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_bow'
+                      position="inherit"
+                      left = '10'
+                      top = '340'
+                      width="128"
+                      height="128"
+                      icon="cha_page_elemnt_bg.png"
+                      type="other">
+                    <item name="mastery_bow_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Bow"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_bow_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="bow.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_dagger_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_dagger_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_dagger_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_hammer'
+                      position="inherit"
+                      left = '148'
+                      top = '340'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_hammer_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Hammer"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_hammer_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="hammer.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_hammer_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_hammer_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_hammer_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_shoot'
+                  position="inherit"
+                  left = '286'
+                  top = '340'
+                  width="128"
+                  height="128"
+                  icon = 'cha_page_elemnt_bg.png'>
+                <item name="mastery_shoot_name"
+                      position="inherit"
+                      left = '10'
+                      top = '1'
+                      width="108"
+                      height="10"
+                      icon = 'sdd'
+                      text="Shoot"
+                      color="#FFFFFF"
+                      type="text">
+                </item>
+                <item name="mastery_shoot_icon"
+                      position="inherit"
+                      left = '10'
+                      top = '30'
+                      width="48"
+                      height="48"
+                      icon="shoot.png"
+                      type="other">
+                </item>
+                <item name="mastery_shoot_bar"
+                      position="inherit"
+                      left = '10'
+                      top = '88'
+                      width="108"
+                      height="10"
+                      background-color="#6A6AFF"
+                      icon = 'VALUE_BOX.png'>
+                </item>
+                <item name="mastery_shoot_point"
+                      position="inherit"
+                      left = '10'
+                      top = '98'
+                      width="108"
+                      height="10"
+                      text="0"
+                      color="#FFFFFF"
+                      type="text">
+                </item>
+                <item name="mastery_shoot_up"
+                      position="inherit"
+                      left = '68'
+                      top = '30'
+                      width="48"
+                      height="48"
+                      
+                      color="FF0000"
+                      icon="up.png"
+                      type="other">
+                </item>
+            </item>
+            </item>
+            </item>
+        <item name="mastery_magic_group"
+              top="480"
+              right = '710'>
+
+            <item name="mastery_magic_name"
+                  position="inherit"
+                  left = '10'
+                  top = '10'
+                  width="404"
+                  height="10"
+                  text="Magic masteries"
+                  color="#FFFFFF"
+                  font_size="20"
+                  type="text">
+                    </item>
+            <item name="mastery_magic_group_1"
+                  position="inherit"
+                  top="36"
+                  left='0'>
+                <item name = 'mastery_frost'
+                      position="inherit"
+                       left = '10'
+                       top = '10'
+                      width="128"
+                      height="128"
+                       icon="cha_page_elemnt_bg.png"
+                        type="other">
+                    <item name="mastery_frost_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Frost"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_frost_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="frost.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_frost_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_frost_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_frost_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_fire'
+                      position="inherit"
+                      left = '148'
+                      top = '10'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_fire_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Hammer"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_fire_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="fire.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_fire_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_fire_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_fire_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_light'
+                      position="inherit"
+                      left="286"
+                      top = '10'
+                      width="128"
+                      height="128"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_light_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Light"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_light_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="light.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_light_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_light_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_light_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+
+                <item name = 'mastery_lightning'
+                      position="inherit"
+                      left="10"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      icon="cha_page_elemnt_bg.png"
+                      type="other">
+                    <item name="mastery_lightning_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Lightning"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_lightning_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="lightning.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_lightning_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_lightning_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_lightning_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_earth'
+                      position="inherit"
+                      left="148"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_earth_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          icon = 'sdd'
+                          text="Earth"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_earth_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="earth.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_earth_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_earth_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          icon = 'sdd'
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_earth_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_acid'
+                      position="inherit"
+                      left="286"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_acid_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Acid"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_acid_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="acid.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_acid_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_acid_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_acid_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+
+                <item name = 'mastery_sonic'
+                      position="inherit"
+                      left = '10'
+                      top = '286'
+                      width="128"
+                      height="128"
+                      icon="cha_page_elemnt_bg.png"
+                      type="other">
+                    <item name="mastery_sonic_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Sonic"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_sonic_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="sonic.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_sonic_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_sonic_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_sonic_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_astral'
+                      position="inherit"
+                      left="148"
+                      top="286"
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_astral_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          text="Astral"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_astral_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="astral.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_astral_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_astral_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_astral_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_mind'
+                      position="inherit"
+                      left="286"
+                      top="286"
+                      width="128"
+                      height="128"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_mind_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Mind"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_mind_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="mind.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_mind_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_mind_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_mind_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+
+                <item name = 'mastery_holy'
+                      position="inherit"
+                      left="10"
+                      top="424"
+                      width="128"
+                      height="128"
+                      icon="cha_page_elemnt_bg.png"
+                      type="other">
+                    <item name="mastery_holy_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Holy"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_holy_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="holy.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_holy_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_holy_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_holy_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_dark'
+                      position="inherit"
+                      left="148"
+                      top="424"
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_dark_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          
+                          text="Dark"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_dark_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="dark.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_dark_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_dark_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_dark_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+                <item name = 'mastery_nature'
+                      position="inherit"
+                      left="286"
+                      top="424"
+                      width="128"
+                      height="128"
+                      icon = 'cha_page_elemnt_bg.png'>
+                    <item name="mastery_nature_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Nature"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_nature_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="nature.png"
+                          type="other">
+                    </item>
+                    <item name="mastery_nature_bar"
+                          position="inherit"
+                          left = '10'
+                          top = '88'
+                          width="108"
+                          height="10"
+                          background-color="#6A6AFF"
+                          icon = 'VALUE_BOX.png'>
+                    </item>
+                    <item name="mastery_nature_point"
+                          position="inherit"
+                          left = '10'
+                          top = '98'
+                          width="108"
+                          height="10"
+                          text="0"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="mastery_nature_up"
+                          position="inherit"
+                          left = '68'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          
+                          color="FF0000"
+                          icon="up.png"
+                          type="other">
+                    </item>
+                </item>
+            </item>
+        </item>
+    </item>
+    <item name="character_block"
+          left="786"
+          top = '0'
+          width="424"
+          height="1080"
+          icon="cha_page_perk_bg.png">
+        <item name="character_group"
+              left="786"
+              top="0">
+            <item name="character_name"
+                  position="inherit"
+                  left = '10'
+                  top = '1'
+                  width="404"
+                  height="10"
+                  text="Characters"
+                  color="#FFFFFF"
+                  font_size="24"
+                  type="text">
+            </item>
+            <item name="character_group_1"
+                  position="inherit"
+                  left="0"
+                  top="70">
+                <item name = 'cha_str'
+                      position="inherit"
+                      left="10"
+                      top = '10'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon="cha_page_elemnt_bg.png">
+                    <item name="cha_str_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Streingth"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_str_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="streingth.png"
+                          type="other">
+                    </item>
+                    <item name="cha_str_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          text="0"
+                          font_size="20"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_str_chec_box"
+                          position="inherit"
+                          left = '68'
+                          top = '30'>
+                        <item name="cha_str_up"
+                          position="inherit"
+                          left = '0'
+                          top = '0'
+                          width="48"
+                          height="24"
+                          icon="up4.png"
+                          type="other">
+                        </item>
+                        <item name="cha_str_down"
+                          position="inherit"
+                          left = '0'
+                          top = '24'
+                          width="48"
+                          height="24"
+                          icon="down4.png"
+                          type="other">
+                        </item>
+                    </item>
+                </item>
+                <item name = 'cha_end'
+                      position="inherit"
+                      left="148"
+                      top = '10'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon="cha_page_elemnt_bg.png">
+                    <item name="cha_end_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Endurance"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_end_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="endurance.png"
+                          type="other">
+                    </item>
+                    <item name="cha_end_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          text="0"
+                          font_size="20"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_end_chec_box"
+                          position="inherit"
+                          left = '68'
+                          top = '30'>
+                        <item name="cha_end_up"
+                          position="inherit"
+                          left = '0'
+                          top = '0'
+                          width="48"
+                          height="24"
+                          icon="up4.png"
+                          type="other">
+                        </item>
+                        <item name="cha_end_down"
+                          position="inherit"
+                          left = '0'
+                          top = '24'
+                          width="48"
+                          height="24"
+                          icon="down4.png"
+                          type="other">
+                        </item>
+                    </item>
+                </item>
+                <item name = 'cha_agi'
+                      position="inherit"
+                      left="286"
+                      top = '10'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon="cha_page_elemnt_bg.png">
+                    <item name="cha_agi_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Agility"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_agi_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="agility.png"
+                          type="other">
+                    </item>
+                    <item name="cha_agi_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          text="0"
+                          font_size="20"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_agi_chec_box"
+                          position="inherit"
+                          left = '68'
+                          top = '30'>
+                        <item name="cha_agi_up"
+                          position="inherit"
+                          left = '0'
+                          top = '0'
+                          width="48"
+                          height="24"
+                          icon="up4.png"
+                          type="other">
+                        </item>
+                        <item name="cha_agi_down"
+                          position="inherit"
+                          left = '0'
+                          top = '24'
+                          width="48"
+                          height="24"
+                          icon="down4.png"
+                          type="other">
+                        </item>
+
+                    </item>
+                </item>
+
+                <item name = 'cha_per'
+                      position="inherit"
+                      left="10"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon="cha_page_elemnt_bg.png">
+                    <item name="cha_per_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Perception"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_per_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="perception.png"
+                          type="other">
+                    </item>
+                    <item name="cha_per_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          text="0"
+                          font_size="20"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_per_chec_box"
+                          position="inherit"
+                          left = '68'
+                          top = '30'>
+                        <item name="cha_per_up"
+                          position="inherit"
+                          left = '0'
+                          top = '0'
+                          width="48"
+                          height="24"
+                          icon="up4.png"
+                          type="other">
+                        </item>
+                        <item name="cha_per_down"
+                          position="inherit"
+                          left = '0'
+                          top = '24'
+                          width="48"
+                          height="24"
+                          icon="down4.png"
+                          type="other">
+                        </item>
+                    </item>
+                </item>
+                <item name = 'cha_inh'
+                      position="inherit"
+                      left="148"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon="cha_page_elemnt_bg.png">
+                    <item name="cha_inh_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Initiative"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_inh_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="initiative.png"
+                          type="other">
+                    </item>
+                    <item name="cha_inh_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          text="0"
+                          font_size="20"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_inh_chec_box"
+                          position="inherit"
+                          left = '68'
+                          top = '30'>
+                        <item name="cha_inh_up"
+                          position="inherit"
+                          left = '0'
+                          top = '0'
+                          width="48"
+                          height="24"
+                          icon="up4.png"
+                          type="other">
+                        </item>
+                        <item name="cha_inh_down"
+                          position="inherit"
+                          left = '0'
+                          top = '24'
+                          width="48"
+                          height="24"
+                          icon="down4.png"
+                          type="other">
+                        </item>
+                    </item>
+                </item>
+                <item name = 'cha_char'
+                      position="inherit"
+                      left="286"
+                      top = '148'
+                      width="128"
+                      height="128"
+                      color="FF0000"
+                      icon="cha_page_elemnt_bg.png">
+                    <item name="cha_char_name"
+                          position="inherit"
+                          left = '10'
+                          top = '1'
+                          width="108"
+                          height="10"
+                          text="Charisma"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_char_icon"
+                          position="inherit"
+                          left = '10'
+                          top = '30'
+                          width="48"
+                          height="48"
+                          icon="charisma.png"
+                          type="other">
+                    </item>
+                    <item name="cha_char_point"
+                          position="inherit"
+                          left = '10'
+                          top = '78'
+                          width="108"
+                          height="10"
+                          text="0"
+                          font_size="20"
+                          color="#FFFFFF"
+                          type="text">
+                    </item>
+                    <item name="cha_char_chec_box"
+                          position="inherit"
+                          left = '68'
+                          top = '30'>
+                        <item name="cha_char_up"
+                          position="inherit"
+                          left = '0'
+                          top = '0'
+                          width="48"
+                          height="24"
+                          icon="up4.png"
+                          type="other">
+                        </item>
+                        <item name="cha_char_down"
+                          position="inherit"
+                          left = '0'
+                          top = '24'
+                          width="48"
+                          height="24"
+                          icon="down4.png"
+                          type="other">
+                        </item>
+
+                    </item>
+                </item>
+            </item>
+        </item>
+    </item>
+    <item name="image_block"
+          right = '1558'
+          top = '0'
+          width="424"
+          height="286"
+          icon="cha_page_perk_bg.png"
+    > </item>
+</page>
+
+
+

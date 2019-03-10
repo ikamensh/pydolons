@@ -142,3 +142,9 @@ class GamePages(object):
     def isFocus(self):
         return self.focusState or self.gameMenu.isFocus()
 
+    def test_xml(self):
+        from ui.GamePages.TestXMlPage import XMLPage
+        self.xml_page = self.buildPage('xml', XMLPage)
+        self.gameRoot.scene.addItem(self.xml_page)
+        self.xml_page.show()
+
