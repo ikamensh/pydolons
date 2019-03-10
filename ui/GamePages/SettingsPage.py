@@ -7,13 +7,15 @@ class SettingsPage(AbstractPage):
     """docstring for StartPage."""
     def __init__(self, gamePages):
         super().__init__(gamePages)
-        self.w = 320
-        self.h = 240
+        self.w = 420 * self.gamePages.gameRoot.cfg.scale_x
+        self.h = 320 * self.gamePages.gameRoot.cfg.scale_y
+        self.res_id = 0
         self.isService = True
         self.setUpWidgets()
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
+        self.res_id=self.gamePages.gameRoot.cfg.resolutions.index(self.gamePages.gameRoot.cfg.deviceConfig.dev_size)
         self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
@@ -80,7 +82,7 @@ class SettingsPage(AbstractPage):
         resolution.activated.connect(self.changeResolution)
         for res in self.gamePages.gameRoot.cfg.resolutions:
             resolution.addItem(str(res[0])+'x'+str(res[1]), res)
-
+        resolution.setCurrentIndex(self.res_id)
         return resolution
 
     def changeResolution(self, index):
