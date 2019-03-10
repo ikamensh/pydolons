@@ -1,6 +1,38 @@
 from battlefield.Vision import Vision
 from battlefield.Facing import Facing
 from battlefield.Cell import Cell
+import pytest
+
+
+f = Facing
+@pytest.fixture(params=[f.NORTH, f.EAST, f.SOUTH, f.WEST])
+def var_facing(request) -> complex:
+    return request.param
+
+
+@pytest.mark.parametrize('prc', [6, 10, 12, 17, 23, 29, 53, 113])
+def test_symmetric(huge_game, hero, prc, var_facing):
+    hero_c_coords = 30+30j
+
+    huge_game.add_unit(hero, hero_c_coords, facing=var_facing)
+    hero.prc_base.base = prc
+
+    v = huge_game.battlefield.vision
+    print(hero.prc, hero.prc_base.base, hero.sight_range)
+    cells_seen = v.std_seen_cells(hero)
+
+    cells_to_right = set()
+    cells_to_left = set()
+    for c in cells_seen:
+        vec = c.complex - hero_c_coords
+        deg, ccw = Cell.angle_between(vec, var_facing)
+        if deg > 1e-3:
+            collection = cells_to_right if ccw else cells_to_left
+            collection.add(c)
+
+    assert len(cells_to_left) == len(cells_to_right)
+    # pytest.skip("TODO: TEST INCOMPLETE. DIFFERENT SIGHT RANGES ARE NOT TESTED.")
+
 
 def test_visibility(game_hvsp, hero):
 

@@ -2,7 +2,18 @@ from __future__ import annotations
 from cmath import phase, pi
 import functools
 from math import hypot
-from typing import Union, List
+from typing import Union, List, Tuple
+
+def positive_angle(angle):
+    assert -pi*2 <= angle < 2*pi
+    if angle < 0:
+        return angle + 2* pi
+    else:
+        return angle
+
+def cw_phase(c):
+    p = phase(c)
+    return positive_angle(p)
 
 class Cell:
     def __init__(self, x, y):
@@ -23,27 +34,20 @@ class Cell:
         return Cell(int(c_or_c.real), int(c_or_c.imag)) if isinstance(c_or_c, complex) else c_or_c
 
     @staticmethod
-    def angle_between(c1, c2):
+    def angle_between(c1: complex, c2: complex) -> Tuple[float, bool]:
         """
-        :param c1: complex vector 1
-        :param c2: complex vector 2
         :return: smallest angle between the two vectors, and if it is ccw from c1 to c2
         """
-        p1 = phase(c1)
-        p2 = phase(c2)
+        if c1 == 0j or c2 == 0j or c1 == -0j or c2 == -0j:
+            return 0, True
 
-        if p1 < 0 :
-            p1 += 2 * pi
+        p1 = cw_phase(c1)
+        p2 = cw_phase(c2)
 
-        if p2 < 0:
-            p2 += 2 * pi
+        angle_cw = positive_angle(p2 - p1)
+        angle_ccw = positive_angle(p1 - p2)
 
-        angle = abs(p1 - p2)
-        if angle > pi:
-            angle = abs( angle - 2* pi )
-
-
-        return  angle / pi * 180, p1 >= p2
+        return  min(angle_cw, angle_ccw) / pi * 180, angle_ccw < angle_cw
 
     @staticmethod
     @functools.lru_cache()

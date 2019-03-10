@@ -111,6 +111,12 @@ def empty_game(simple_battlefield):
     return _game
 
 @pytest.fixture()
+def huge_game():
+    bf = Battlefield(60, 60)
+    return DreamGame(bf)
+
+
+@pytest.fixture()
 def hero_only_game(battlefield8, hero):
 
     _game = DreamGame(battlefield8)
