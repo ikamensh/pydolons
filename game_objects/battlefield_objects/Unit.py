@@ -57,6 +57,7 @@ class Unit(BattlefieldObject):
         self.disabled = False
         self.alive = True
         self.last_damaged_by = None
+        self.fights_hero = None
 
         self.bonuses = frozenset()
         self.buffs = []

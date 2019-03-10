@@ -9,6 +9,7 @@ from ui.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 from mechanics.rpg.regen import regen_rule
 from mechanics.rpg.push import push_rule
+from mechanics.rpg.aggro import vision_aggro_rule, damage_provokes_rule
 
 from exceptions import PydolonsException, CantAffordActiveException
 from multiplayer.events.ServerOrderIssuedEvent import ServerOrderIssuedEvent
@@ -21,11 +22,16 @@ import random
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from typing import Dict
+    from typing import Dict, List
     from game_objects.battlefield_objects import Unit, Obstacle
 
 
 class DreamGame:
+    default_rules = [exp_rule,
+                     regen_rule,
+                     push_rule,
+                     vision_aggro_rule,
+                     damage_provokes_rule]
 
     def __init__(self, bf=None, rules=None, is_sim = False, is_server=True, seed = None):
         self.random = random.Random(seed) if seed else random.Random(100)
@@ -34,6 +40,7 @@ class DreamGame:
         self.factions : Dict[Unit, Faction] = {}
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
+        self.wondering_ai = RandomAI(self, chance_pass=0.66)
         self.gamelog = GameLog(LogTargets.PRINT)
         self.events_platform = EventsPlatform(self.gamelog)
         self.turns_manager = AtbTurnsManager(self)
@@ -42,7 +49,9 @@ class DreamGame:
         self.player_turn_lock = False
         self.is_server = is_server
 
-        for rule in (rules or [exp_rule, regen_rule, push_rule]):
+
+
+        for rule in (rules or DreamGame.default_rules):
             rule(self)
 
     @classmethod
@@ -87,8 +96,12 @@ class DreamGame:
         self.battlefield.place(unit, cell, facing)
         self.turns_manager.add_unit(unit)
         unit.alive = True
+        if faction is Faction.ENEMY:
+            unit.fights_hero = False
 
         unit.update()
+
+
 
 
 
@@ -133,18 +146,17 @@ class DreamGame:
                 while self.player_turn_lock and self.loop_state :
                     time.sleep(0.02)
                 continue
+
             else:
                 NextUnitEvent(active_unit)
 
-                active, target = self.enemy_ai.decide_step(active_unit)
+                ai = self.enemy_ai if active_unit.fights_hero else self.wondering_ai
+                active, target = ai.decide_step(active_unit)
 
-                # try:
-                #     active, target = self.enemy_ai.decide_step(active_unit)
-                # except Exception as e:
-                #     print(e)
-                #     active, target = self.random_ai.decide_step(active_unit)
-
-                self.order_action(active_unit, active, target)
+                if active:
+                    self.order_action(active_unit, active, target)
+                else:
+                    active_unit.readiness -= 0.5
 
 
 
@@ -340,7 +352,7 @@ class DreamGame:
 
 
     @property
-    def units(self):
+    def units(self) -> List[Unit]:
         return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
 
     def get_location(self, unit: Unit):

@@ -15,9 +15,9 @@ def one_game():
     sys.exit(app.exec_())
 
 
-one_game()
+# one_game()
 
-# from cProfile import Profile
-# profiler = Profile()
-# profiler.runcall(one_game)
-# profiler.print_stats('cumulative')
+from cProfile import Profile
+profiler = Profile()
+profiler.runcall(one_game)
+profiler.print_stats('cumulative')
