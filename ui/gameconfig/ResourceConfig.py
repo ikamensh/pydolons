@@ -136,5 +136,6 @@ class ResourceConfig:
                 name = QFontDatabase.applicationFontFamilies(id)[0]
                 font = QFont(name)
                 self.fonts_maps[filename] = font
+                self.main_font_name = name
             except Exception as e:
                 print(e)

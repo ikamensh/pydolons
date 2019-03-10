@@ -47,6 +47,7 @@ class GameConfiguration:
         """from Resource Config"""
         self.resourceConfig = ResourceConfig(lazy)
         self.resourceConfig.rez_step =self.rez_step
+        self.main_font_name = self.resourceConfig.main_font_name
         self.pix_maps = self.resourceConfig.pix_maps
         self.unit_size = self.resourceConfig.unit_size
         self.pic_file_paths = self.resourceConfig.pic_file_paths
@@ -91,8 +92,8 @@ class GameConfiguration:
             return 1
 
     def calculateScales(self):
-        WIDTH = 1366
-        HEIGHT = 768
+        WIDTH = 1920
+        HEIGHT = 1080
         self.scale_x = self.dev_size[0] / WIDTH
         self.scale_y = self.dev_size[1] / HEIGHT
 
