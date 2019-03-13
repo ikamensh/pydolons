@@ -10,22 +10,21 @@ class Vision:
 
     def std_seen_cells(self, unit):
         bf = self.battlefield
-        facing = bf.unit_facings[unit]
-
-        cell_from = bf.unit_locations[unit]
-        visible_cells = set( self.std_vision_field(unit.sight_range, facing, cell_from, bf) )
-        obstacles = {cell for cell in self.battlefield.units_at if cell in visible_cells}
-        obstacles -= {cell_from}
-        walls = frozenset({cell for cell in self.battlefield.units_at if cell in visible_cells and
-                 self.battlefield.units_at[cell][0].is_obstacle})
-        diag_wall_blockers = self.merge_walls(walls)
-        obstacles |= diag_wall_blockers
-        for obstacle in obstacles:
-            for cell_to in set(visible_cells):
-                if self.blocks(cell_from, cell_to, obstacle):
-                    visible_cells.remove(cell_to)
-
-        return visible_cells
+        facing = bf.unit_facings.get(unit)
+        if facing is not  None:
+            cell_from = bf.unit_locations[unit]
+            visible_cells = set( self.std_vision_field(unit.sight_range, facing, cell_from, bf) )
+            obstacles = {cell for cell in self.battlefield.units_at if cell in visible_cells}
+            obstacles -= {cell_from}
+            walls = frozenset({cell for cell in self.battlefield.units_at if cell in visible_cells and
+                     self.battlefield.units_at[cell][0].is_obstacle})
+            diag_wall_blockers = self.merge_walls(walls)
+            obstacles |= diag_wall_blockers
+            for obstacle in obstacles:
+                for cell_to in set(visible_cells):
+                    if self.blocks(cell_from, cell_to, obstacle):
+                        visible_cells.remove(cell_to)
+            return visible_cells
 
     @staticmethod
     @functools.lru_cache(maxsize=int(2**8))

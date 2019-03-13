@@ -125,9 +125,11 @@ class Units(QtWidgets.QGraphicsItemGroup):
             else:
                 if self.units_heaps.get(cell) is not None:
                     self.destroyUnitsHeap(cell)
-                if self.units_at[units[0].uid].scale != 1.:
-                    self.units_at[units[0].uid].setScale(1.)
-                    self.units_at[units[0].uid].setOffset(0., 0.)
+                unit = self.units_at.get(units[0].uid)
+                if unit is not None:
+                    if unit.scale != 1.:
+                        unit.setScale(1.)
+                        unit.setOffset(0., 0.)
 
     def units_from_(self, units):
         for unit in units:
@@ -156,9 +158,10 @@ class Units(QtWidgets.QGraphicsItemGroup):
         pass
 
     def destroyUnit(self, unit):
-        unit.hovered.disconnect(self.toolTipShow)
-        unit.hover_out.disconnect(self.toolTipHide)
-        self.level.gameRoot.view.mouseMove.disconnect(unit.mouseMove)
+        if not unit.is_obstacle:
+            unit.hovered.disconnect(self.toolTipShow)
+            unit.hover_out.disconnect(self.toolTipHide)
+            self.level.gameRoot.view.mouseMove.disconnect(unit.mouseMove)
 
     def destroyUnitsHeap(self, cell):
         self.level.gameRoot.controller.mouseMove.disconnect(self.units_heaps[cell].mouseMoveEvent)
