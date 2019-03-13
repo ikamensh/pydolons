@@ -74,13 +74,6 @@ class StartPage(AbstractPage):
         self.buttons.append(self.exit)
         laoyout.addWidget(self.exit)
 
-        self.xml = GameButton('xml', mainWidget)
-        self.xml.setStyleSheet(buttonStyle)
-        self.xml.clicked.connect(self.xml_up)
-        self.xml.hovered.connect(self.get_wig)
-        self.buttons.append(self.xml)
-        laoyout.addWidget(self.xml)
-
         mainWidget.setLayout(laoyout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
         self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
@@ -109,7 +102,6 @@ class StartPage(AbstractPage):
         self.buttons_pos.append(self.getButtonPos(self.readme))
         self.buttons_pos.append(self.getButtonPos(self.settings))
         self.buttons_pos.append(self.getButtonPos(self.exit))
-        self.buttons_pos.append(self.getButtonPos(self.xml))
 
     def getButtonPos(self, button):
         x1 = self.mainWidget.pos().x() + button.pos().x() - 68
@@ -219,9 +211,3 @@ class StartPage(AbstractPage):
     def get_wig(self, button):
         self.button_id = self.buttons.index(button)
         self.setAnimPos(self.button_id)
-
-    def xml_up(self):
-        self.hidePage()
-        self.gamePages.test_xml()
-
-

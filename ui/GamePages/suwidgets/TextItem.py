@@ -42,16 +42,43 @@ class TextItem(QGraphicsSimpleTextItem):
         # self.pixmap = self.gameRoot.cfg.getPicFile(attrib['icon'])
         self.setPos(self._left, self._top)
         self.setUpTextOptions(attrib)
+        self._color = attrib['color']
         brush = QBrush(QColor(attrib['color']))
         self.setBrush(brush)
         pass
 
+    # def checkAttrib(self, attrib):
+    #     if attrib.get('top') is None:
+    #         attrib['top'] = 1080 - int(attrib['bottom'])
+    #     if attrib.get('left') is None:
+    #         attrib['left'] = 1920 - int(attrib['right'])
+    #     self._parent_node = attrib.get('parent_node')
+
     def checkAttrib(self, attrib):
+        if attrib.get('width') is None:
+            attrib['width'] = '0'
+        if attrib.get('height') is None:
+            attrib['height'] = '0'
         if attrib.get('top') is None:
             attrib['top'] = 1080 - int(attrib['bottom'])
         if attrib.get('left') is None:
             attrib['left'] = 1920 - int(attrib['right'])
         self._parent_node = attrib.get('parent_node')
+
+        if attrib.get('background-color') is not None:
+            self._bg_brush = QBrush(QColor(attrib['background-color']))
+        if attrib.get('icon') is not None:
+            self.pixmap = self.gameRoot.cfg.getPicFile(attrib['icon'])
+        if attrib.get('background-color') is not None:
+            self.paint = self.paint_bg
+        if attrib.get('icon') is not None:
+            self.paint = self.paint_pic
+        if attrib.get('icon') is not None and attrib.get('background-color') is not None:
+            self.paint = self.paint_pic_bg
+        if attrib.get('input') is None:
+            self.input = ''
+        else:
+            self.input = attrib.get('input')
 
     def setUpTextOptions(self, attrib):
         # self.setPlainText(attrib['text'])
@@ -66,3 +93,6 @@ class TextItem(QGraphicsSimpleTextItem):
         #         self._font = QFont(self.cfg.main_font_name)
         #         self._font.setPointSize(self.font().pointSize() - 1)
         #         self.setFont(self._font)
+
+    def setColor(self, color):
+        self.setBrush(QBrush(QColor(color)))

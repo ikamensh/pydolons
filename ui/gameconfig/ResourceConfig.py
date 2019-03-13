@@ -8,6 +8,7 @@ from ui.gameconfig.GameSizeConfig import gameItemsSizes
 
 import os
 from datetime import datetime
+from xml.etree import ElementTree as ET
 
 
 class ResourceConfig:
@@ -26,6 +27,9 @@ class ResourceConfig:
         self.fonts_file_paths = {}
         self.fonts_maps = {}
 
+        self.xml_file_paths = {}
+        self.xml_maps = {}
+
         self.setUpUnits()
         self.loadFilesPath()
         print('cfg ===> loadFilesPath', datetime.now())
@@ -35,6 +39,7 @@ class ResourceConfig:
             print('cfg ===> setUpPixmaps', datetime.now())
         self.setUpSounds()
         self.setUpFonts()
+        self.setUpXML_Page()
 
     def setUpUnits(self):
         """
@@ -68,6 +73,26 @@ class ResourceConfig:
                         self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
                     elif name[-3:].lower() in self.fonts_formats:
                         self.fonts_file_paths[name.lower()] = os.path.join(item[0], name)
+                    elif name[-3:] == 'xml':
+                        self.xml_file_paths[name] = os.path.join(item[0], name)
+
+    #### P I X M A P ####
+
+    def setUpPixmaps(self):
+        """Метод перебирает словарь GameConfiguration.pic_file_paths
+        получает название файла, путь к файлу. Формирует объект QtGui.QPixmap
+        которы добавляется в словарь GameConfiguration.pix_maps
+        {filename: QtGui.QPixmap()}
+        """
+        if self.lazy:
+            print('lazy')
+        for filename, path in self.pic_file_paths.items():
+            pixmap = None
+            try:
+                pixmap = QPixmap(path)
+                self.pix_maps[filename] = pixmap
+            except Exception as e:
+                print(e)
 
     def getPicFile(self, filename, id = None, size = None):
         """
@@ -85,6 +110,16 @@ class ResourceConfig:
             size = self.getSize(id)
             pixmap = pixmap.scaled(size[0], size[1])
         return pixmap
+
+    def getSize(self, id):
+        size = gameItemsSizes.get(id)
+        if size is None:
+            print("d'ont get size for id, set default")
+            return (64, 64)
+        else:
+            return size[self.rez_step]
+
+    #### S O U N D S ####
 
     def setUpSounds(self):
         for filename, path in self.sound_file_paths.items():
@@ -104,29 +139,7 @@ class ResourceConfig:
         self.sound_maps[DamageTypes.ACID] = self.sound_maps['acid.wav']
         # self.sound_maps[DamageTypes.SONIC] = self.sound_maps['soinc.wav']
 
-    def setUpPixmaps(self):
-        """Метод перебирает словарь GameConfiguration.pic_file_paths
-        получает название файла, путь к файлу. Формирует объект QtGui.QPixmap
-        которы добавляется в словарь GameConfiguration.pix_maps
-        {filename: QtGui.QPixmap()}
-        """
-        if self.lazy:
-            print('lazy')
-        for filename, path in self.pic_file_paths.items():
-            pixmap = None
-            try:
-                pixmap = QPixmap(path)
-                self.pix_maps[filename] = pixmap
-            except Exception as e:
-                print(e)
-
-    def getSize(self, id):
-        size = gameItemsSizes.get(id)
-        if size is None:
-            print("d'ont get size for id, set default")
-            return (64, 64)
-        else:
-            return size[self.rez_step]
+    #### F O N T S ####
 
     def setUpFonts(self):
         for filename, path in self.fonts_file_paths.items():
@@ -139,3 +152,17 @@ class ResourceConfig:
                 self.main_font_name = name
             except Exception as e:
                 print(e)
+
+    #### X M L  P A G E ####
+
+    def setUpXML_Page(self):
+        for filename, xml_path in self.xml_file_paths.items():
+            self.xml_maps[filename] = ET.parse(xml_path)
+
+    def getXML_Page(self, name):
+        page = self.xml_maps.get(name)
+        if page is not None:
+            return page
+        else:
+            return self.xml_maps.get('404_page.xml')
+

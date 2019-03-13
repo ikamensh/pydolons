@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QGraphicsObject, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QWidget, QGraphicsItem
+from PySide2.QtWidgets import QGraphicsObject, QStyleOptionGraphicsItem, QWidget
 from PySide2.QtGui import QPainter, QColor, QBrush
 from PySide2 import QtCore
 
@@ -9,7 +9,7 @@ class TestItem(QGraphicsObject):
         self.gameRoot = page.gamePages.gameRoot
         self.page = page
         self.attrib = None
-        # self.setAcceptHoverEvents(True)
+        self.setAcceptHoverEvents(True)
         self.setAcceptDrops(True)
         self.setAcceptedMouseButtons(QtCore.Qt.LeftButton | QtCore.Qt.RightButton)
         self.isHover = False
@@ -26,6 +26,7 @@ class TestItem(QGraphicsObject):
         self.attrib = attrib
         self.checkAttrib(attrib)
         self.name = attrib['name']
+        self._names = attrib['name'].split('_')
         self._top = int(attrib.get('top')) * self.scale_x
         self._left = int(attrib.get('left')) * self.scale_x
         self._width = int(attrib.get('width')) * self.scale_x
@@ -47,7 +48,6 @@ class TestItem(QGraphicsObject):
         if attrib.get('left') is None:
             attrib['left'] = 1920 - int(attrib['right'])
         self._parent_node = attrib.get('parent_node')
-
         if attrib.get('background-color') is not None:
             self._bg_brush = QBrush(QColor(attrib['background-color']))
         if attrib.get('icon') is not None:
@@ -85,21 +85,16 @@ class TestItem(QGraphicsObject):
         painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
         pass
 
-    # # def sceneEventFilter(self, watched:QGraphicsObject, event:QtCore.QEvent):
-    # #     print(event)
-    # #     return True
-    #
-    # def mouseReleaseEvent(self, event:QGraphicsSceneMouseEvent):
-    #     print(event)
-    #     pass
-    #
-    # def mousePressEvent(self, event:QGraphicsSceneMouseEvent):
-    #     print(event)
-    #     pass
-    #
-    # def mouseMoveEvent(self, event:QGraphicsSceneMouseEvent):
-    #     print(event)
-    #     pass
+    @property
+    def width(self):
+        return int(self.attrib.get('width')) * self.scale_x
+
+    def update(self):
+        super(TestItem, self).update(self._left, self._top, self.width, self._height)
+
+    def setPixmapIcon(self, icon:str):
+        self.pixmap = self.gameRoot.cfg.getPicFile(icon)
+
 
 
 

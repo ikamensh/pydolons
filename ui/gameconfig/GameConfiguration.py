@@ -61,6 +61,10 @@ class GameConfiguration:
         """from Resource Config"""
         return self.resourceConfig.getPicFile(filename, id, size)
 
+    def getXML_Page(self, pagename):
+        """from Resource Config"""
+        return self.resourceConfig.getXML_Page(pagename)
+
     def setUpUserConfig(self):
         """from User Config"""
         self.userConfig = UserConfig()
