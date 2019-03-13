@@ -10,6 +10,10 @@ class NameEnum(Enum):
     def __str__(self):
         return self.name.lower()
 
+    @property
+    def tooltip_info(self):
+        return {'name':self.name}
+
 
 if __name__ == "__main__":
     class Ordinal(NameEnum):

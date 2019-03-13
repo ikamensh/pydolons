@@ -21,8 +21,7 @@
             </item>
         <item name="perks_group_1"
           top="70"
-          right='286'
-          >
+          right='286'>
                 <item name = 'perk_str'
                       position="inherit"
                        left="10"
@@ -41,7 +40,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Streingth"
                           color="#FFFFFF"
                           type="text">
@@ -64,7 +63,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -76,7 +75,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -88,7 +87,6 @@
                           width="48"
                           height="48"
                           input="button"
-                          color="FF0000"
                           icon="up.png"
                           type="other">
                     </item>
@@ -109,7 +107,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Agility"
                           color="#FFFFFF"
                           type="text">
@@ -132,7 +130,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -144,7 +142,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -155,7 +153,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -178,7 +176,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Endurance"
                           color="#FFFFFF"
                           type="text">
@@ -201,7 +199,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -213,7 +211,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -224,7 +222,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -243,8 +241,6 @@
                           top = '1'
                           width="108"
                           height="10"
-                          
-                          icon = 'sdd'
                           text="Perception"
                           color="#FFFFFF"
                           type="text">
@@ -266,8 +262,6 @@
                           top = '78'
                           width="108"
                           height="10"
-                          
-                          icon = 'sdd'
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -279,7 +273,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -290,7 +284,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -313,7 +307,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Intelligence"
                           color="#FFFFFF"
                           type="text">
@@ -336,7 +330,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -348,7 +342,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -359,7 +353,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -381,7 +375,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Charisma"
                           color="#FFFFFF"
                           type="text">
@@ -403,8 +397,6 @@
                           top = '78'
                           width="108"
                           height="10"
-                          
-                          icon = 'sdd'
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -416,7 +408,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -427,7 +419,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -457,7 +449,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Health"
                           color="#FFFFFF"
                           type="text">
@@ -480,7 +472,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -492,7 +484,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -503,7 +495,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -525,7 +517,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Mana"
                           color="#FFFFFF"
                           type="text">
@@ -548,7 +540,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -560,7 +552,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -571,7 +563,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -594,7 +586,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Stamina"
                           color="#FFFFFF"
                           type="text">
@@ -617,7 +609,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -629,7 +621,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -640,7 +632,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -652,7 +644,6 @@
                       top = '148'
                       width="128"
                       height="128"
-                      
                       color="FF0000"
                       icon = 'cha_page_elemnt_bg.png'>
                     <item name="perk_ini_name"
@@ -662,7 +653,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Initiative"
                           color="#FFFFFF"
                           type="text">
@@ -684,8 +675,6 @@
                           top = '78'
                           width="108"
                           height="10"
-                          
-                          icon = 'sdd'
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -697,7 +686,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Level 0"
                           color="#FFFFFF"
                           type="text">
@@ -708,7 +697,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -767,7 +756,7 @@
                               width="108"
                               height="10"
                               
-                              icon = 'sdd'
+                              
                               text="Club"
                               color="#FFFFFF"
                               type="text">
@@ -807,6 +796,7 @@
                               width="48"
                               height="48"
                               icon="up.png"
+                              input="button"
                               type="other">
                         </item>
                     </item>
@@ -826,7 +816,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Sword"
                           color="#FFFFFF"
                           type="text">
@@ -855,13 +845,13 @@
                           top = '98'
                           width="108"
                           height="10"
-                          icon = 'sdd'
                           text="0"
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="perk_agi_up"
+                    <item name="mastery_sword_up"
                           position="inherit"
+                          input="button"
                           left = '68'
                           top = '30'
                           width="48"
@@ -883,7 +873,7 @@
                           top = '1'
                           width="108"
                           height="10"
-                          icon = 'sdd'
+                          
                           text="Axe"
                           color="#FFFFFF"
                           type="text">
@@ -922,7 +912,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -943,7 +933,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Dagger"
                           color="#FFFFFF"
                           type="text">
@@ -982,6 +972,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1002,7 +993,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Spear"
                           color="#FFFFFF"
                           type="text">
@@ -1031,7 +1022,7 @@
                           top = '98'
                           width="108"
                           height="10"
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -1042,6 +1033,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1059,7 +1051,7 @@
                           top = '1'
                           width="108"
                           height="10"
-                          icon = 'sdd'
+                          
                           text="Unarmed"
                           color="#FFFFFF"
                           type="text">
@@ -1098,7 +1090,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -1131,7 +1123,7 @@
                           icon="bow.png"
                           type="other">
                     </item>
-                    <item name="mastery_dagger_bar"
+                    <item name="mastery_bow_bar"
                           position="inherit"
                           left = '10'
                           top = '88'
@@ -1140,7 +1132,7 @@
                           background-color="#6A6AFF"
                           icon = 'VALUE_BOX.png'>
                     </item>
-                    <item name="mastery_dagger_point"
+                    <item name="mastery_bow_point"
                           position="inherit"
                           left = '10'
                           top = '98'
@@ -1150,12 +1142,13 @@
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="mastery_dagger_up"
+                    <item name="mastery_bow_up"
                           position="inherit"
                           left = '68'
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1175,7 +1168,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Hammer"
                           color="#FFFFFF"
                           type="text">
@@ -1204,7 +1197,7 @@
                           top = '98'
                           width="108"
                           height="10"
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -1215,6 +1208,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1232,7 +1226,7 @@
                       top = '1'
                       width="108"
                       height="10"
-                      icon = 'sdd'
+                      
                       text="Shoot"
                       color="#FFFFFF"
                       type="text">
@@ -1271,7 +1265,7 @@
                       top = '30'
                       width="48"
                       height="48"
-                      
+                      input="button"
                       color="FF0000"
                       icon="up.png"
                       type="other">
@@ -1350,6 +1344,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1369,7 +1364,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Hammer"
                           color="#FFFFFF"
                           type="text">
@@ -1398,7 +1393,7 @@
                           top = '98'
                           width="108"
                           height="10"
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -1409,6 +1404,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1464,7 +1460,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -1523,6 +1519,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1542,7 +1539,7 @@
                           width="108"
                           height="10"
                           
-                          icon = 'sdd'
+                          
                           text="Earth"
                           color="#FFFFFF"
                           type="text">
@@ -1571,7 +1568,7 @@
                           top = '98'
                           width="108"
                           height="10"
-                          icon = 'sdd'
+                          
                           text="0"
                           color="#FFFFFF"
                           type="text">
@@ -1582,6 +1579,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1637,7 +1635,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -1696,6 +1694,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1753,6 +1752,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1808,7 +1808,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -1867,6 +1867,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1924,6 +1925,7 @@
                           top = '30'
                           width="48"
                           height="48"
+                          input="button"
                           icon="up.png"
                           type="other">
                     </item>
@@ -1979,7 +1981,7 @@
                           top = '30'
                           width="48"
                           height="48"
-                          
+                          input="button"
                           color="FF0000"
                           icon="up.png"
                           type="other">
@@ -2060,6 +2062,7 @@
                           top = '0'
                           width="48"
                           height="24"
+                          input="button"
                           icon="up4.png"
                           type="other">
                         </item>
@@ -2069,6 +2072,7 @@
                           top = '24'
                           width="48"
                           height="24"
+                          input="button"
                           icon="down4.png"
                           type="other">
                         </item>
@@ -2122,6 +2126,7 @@
                           top = '0'
                           width="48"
                           height="24"
+                          input="button"
                           icon="up4.png"
                           type="other">
                         </item>
@@ -2131,6 +2136,7 @@
                           top = '24'
                           width="48"
                           height="24"
+                          input="button"
                           icon="down4.png"
                           type="other">
                         </item>
@@ -2184,6 +2190,7 @@
                           top = '0'
                           width="48"
                           height="24"
+                          input="button"
                           icon="up4.png"
                           type="other">
                         </item>
@@ -2193,6 +2200,7 @@
                           top = '24'
                           width="48"
                           height="24"
+                          input="button"
                           icon="down4.png"
                           type="other">
                         </item>
@@ -2200,7 +2208,7 @@
                     </item>
                 </item>
 
-                <item name = 'cha_per'
+                <item name = 'cha_prc'
                       position="inherit"
                       left="10"
                       top = '148'
@@ -2208,7 +2216,7 @@
                       height="128"
                       color="FF0000"
                       icon="cha_page_elemnt_bg.png">
-                    <item name="cha_per_name"
+                    <item name="cha_prc_name"
                           position="inherit"
                           left = '10'
                           top = '1'
@@ -2218,7 +2226,7 @@
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="cha_per_icon"
+                    <item name="cha_prc_icon"
                           position="inherit"
                           left = '10'
                           top = '30'
@@ -2227,7 +2235,7 @@
                           icon="perception.png"
                           type="other">
                     </item>
-                    <item name="cha_per_point"
+                    <item name="cha_prc_point"
                           position="inherit"
                           left = '10'
                           top = '78'
@@ -2238,37 +2246,38 @@
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="cha_per_chec_box"
+                    <item name="cha_prc_chec_box"
                           position="inherit"
                           left = '68'
                           top = '30'>
-                        <item name="cha_per_up"
+                        <item name="cha_prc_up"
                           position="inherit"
                           left = '0'
                           top = '0'
                           width="48"
                           height="24"
+                          input="button"
                           icon="up4.png"
                           type="other">
                         </item>
-                        <item name="cha_per_down"
+                        <item name="cha_prc_down"
                           position="inherit"
                           left = '0'
                           top = '24'
                           width="48"
                           height="24"
+                          input="button"
                           icon="down4.png"
                           type="other">
                         </item>
                     </item>
                 </item>
-                <item name = 'cha_inh'
+                <item name = 'cha_initiative'
                       position="inherit"
                       left="148"
                       top = '148'
                       width="128"
                       height="128"
-                      color="FF0000"
                       icon="cha_page_elemnt_bg.png">
                     <item name="cha_inh_name"
                           position="inherit"
@@ -2289,7 +2298,7 @@
                           icon="initiative.png"
                           type="other">
                     </item>
-                    <item name="cha_inh_point"
+                    <item name="cha_initiative_point"
                           position="inherit"
                           left = '10'
                           top = '78'
@@ -2300,31 +2309,33 @@
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="cha_inh_chec_box"
+                    <item name="cha_initiative_chec_box"
                           position="inherit"
                           left = '68'
                           top = '30'>
-                        <item name="cha_inh_up"
+                        <item name="cha_initiative_up"
                           position="inherit"
                           left = '0'
                           top = '0'
                           width="48"
                           height="24"
+                          input="button"
                           icon="up4.png"
                           type="other">
                         </item>
-                        <item name="cha_inh_down"
+                        <item name="cha_initiative_down"
                           position="inherit"
                           left = '0'
                           top = '24'
                           width="48"
                           height="24"
+                          input="button"
                           icon="down4.png"
                           type="other">
                         </item>
                     </item>
                 </item>
-                <item name = 'cha_char'
+                <item name = 'cha_cha'
                       position="inherit"
                       left="286"
                       top = '148'
@@ -2332,7 +2343,7 @@
                       height="128"
                       color="FF0000"
                       icon="cha_page_elemnt_bg.png">
-                    <item name="cha_char_name"
+                    <item name="cha_cha_name"
                           position="inherit"
                           left = '10'
                           top = '1'
@@ -2342,7 +2353,7 @@
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="cha_char_icon"
+                    <item name="cha_cha_icon"
                           position="inherit"
                           left = '10'
                           top = '30'
@@ -2351,7 +2362,7 @@
                           icon="charisma.png"
                           type="other">
                     </item>
-                    <item name="cha_char_point"
+                    <item name="cha_cha_point"
                           position="inherit"
                           left = '10'
                           top = '78'
@@ -2362,25 +2373,27 @@
                           color="#FFFFFF"
                           type="text">
                     </item>
-                    <item name="cha_char_chec_box"
+                    <item name="cha_cha_chec_box"
                           position="inherit"
                           left = '68'
                           top = '30'>
-                        <item name="cha_char_up"
+                        <item name="cha_cha_up"
                           position="inherit"
                           left = '0'
                           top = '0'
                           width="48"
                           height="24"
+                          input="button"
                           icon="up4.png"
                           type="other">
                         </item>
-                        <item name="cha_char_down"
+                        <item name="cha_cha_down"
                           position="inherit"
                           left = '0'
                           top = '24'
                           width="48"
                           height="24"
+                          input="button"
                           icon="down4.png"
                           type="other">
                         </item>
@@ -2390,13 +2403,278 @@
             </item>
         </item>
     </item>
+    <item name="info_block"
+          top="0"
+          left="424"
+          width="364"
+          height="1080"
+          icon="cha_page_perk_bg.png">
+        <item name="info_name"
+              top="0"
+              left="10"
+              text="Attribute Info"
+              position="inherit"
+              type="text"
+              font_size="24"
+              color="#FFFFFF">
+
+        </item>
+        <item name="info_value"
+              top="56"
+              left="10"
+              text=""
+              position="inherit"
+              type="text"
+              font_size="20"
+                  color="#FFFFFF"></item>
+    </item>
     <item name="image_block"
-          right = '1558'
+          left="0"
           top = '0'
           width="424"
-          height="286"
-          icon="cha_page_perk_bg.png"
-    > </item>
+          height="1080"
+          icon="cha_page_perk_bg.png">
+        <item name="block_name"
+              top="0"
+              left="20"
+              text="Hero information"
+              position="inherit"
+              type="text"
+              font_size="24"
+              color="#FFFFFF"></item>
+        <item name="hero_icon"
+          top="56"
+          left="20"
+          text="Hero"
+          width="128"
+          height="128"
+          position="inherit"
+          icon="heroes"></item>
+        <item name="attr_group"
+                left="10"
+                top="194">
+            <item name="attr_health"
+              position="inherit"
+                left="10"
+                top="0">
+            <item name="attr_health_name"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Health:"
+                  color="#FFFFFF">
+            </item>
+            <item name="attr_health_value"
+                  position="inherit"
+                  left="192"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+            <item name="attr_mana"
+              position="inherit"
+                left="10"
+                top="42">
+            <item name="attr_mana_name"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Mana:"
+                  color="#FFFFFF">
+            </item>
+            <item name="attr_mana_value"
+                  position="inherit"
+                  left="192"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+            <item name="attr_stamina"
+              position="inherit"
+                left="10"
+                top="84">
+            <item name="attr_stamina_name"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Stamina:"
+                  color="#FFFFFF">
+            </item>
+            <item name="attr_stamina_value"
+                  position="inherit"
+                  left="192"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+        </item>
+        <item name="perk_spent"
+              position="inherit"
+                left="10"
+                top="330">
+            <item name="perk_spent_name"
+                  position="inherit"
+                  left="10"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Perks spent:"
+                  color="#FFFFFF">
+            </item>
+            <item name="perk_spent_value"
+                  position="inherit"
+                  left="256"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+        <item name="mastery_spent"
+              position="inherit"
+                left="10"
+                top="372">
+            <item name="mastery_spent_name"
+                  position="inherit"
+                  left="10"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Masteries spent:"
+                  color="#FFFFFF">
+            </item>
+            <item name="mastery_spent_value"
+                  position="inherit"
+                  left="256"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+        <item name="cha_spent"
+              position="inherit"
+                left="10"
+                top="414">
+            <item name="cha_spent_name"
+                  position="inherit"
+                  left="10"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Free xp:"
+                  color="#FFFFFF">
+            </item>
+            <item name="cha_spent_value"
+                  position="inherit"
+                  left="256"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+        <item name="button_group"
+              position="inherit"
+            left="10"
+            top="640">
+                <item name="button_accept"
+                      position="inherit"
+                        left="10"
+                        top="0"
+                        width="64"
+                        height="64"
+                        icon="cha_page_elemnt_bg.png">
+                    <item name="button_accept_icon"
+                        position="inherit"
+                        left="0"
+                        top="0"
+                        width="64"
+                        height="64"
+                        input="button"
+                        icon="button_accept.png">
+                    </item>
+                </item>
+
+                <item name="button_deny"
+                      position="inherit"
+                        left="256"
+                        top="0"
+                        width="64"
+                        height="64"
+                        icon="cha_page_elemnt_bg.png">
+                    <item name="button_deny_icon"
+                        position="inherit"
+                        left="0"
+                        top="0"
+                        width="64"
+                        height="64"
+                        input="button"
+                        icon="button_deny.png">
+                    </item>
+                </item>
+
+                <item name="button_close"
+                      position="inherit"
+                        left="256"
+                        top="74"
+                        width="64"
+                        height="64"
+                        icon="cha_page_elemnt_bg.png">
+                    <item name="button_close_icon"
+                        position="inherit"
+                        left="0"
+                        top="0"
+                        width="64"
+                        height="64"
+                        input="button"
+                        icon="button_close.png">
+                    </item>
+                </item>
+        </item>
+    </item>
 </page>
 
 
