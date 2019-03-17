@@ -161,13 +161,11 @@ class DreamGame:
 
 
     def game_over(self):
-        own_units = [unit for unit in self.factions if self.factions[unit] is Faction.PLAYER and unit.alive]
-        enemy_units = [unit for unit in self.factions if self.factions[unit] is Faction.ENEMY and unit.alive]
 
-        if len(own_units) == 0:
+        if len(self.player_units) == 0:
             LevelStatusEvent(self, "DEFEAT")
             return "DEFEAT"
-        elif len(enemy_units) == 0:
+        elif len(self.enemy_units) == 0:
             LevelStatusEvent(self, "VICTORY")
             return "VICTORY"
         else:
@@ -354,6 +352,14 @@ class DreamGame:
     @property
     def units(self) -> List[Unit]:
         return [unit for unit in self.battlefield.unit_locations if not unit.is_obstacle]
+
+    @property
+    def enemy_units(self) -> List[Unit]:
+        return [u for u in self.units if self.factions[u] is Faction.ENEMY]
+
+    @property
+    def player_units(self) -> List[Unit]:
+        return [u for u in self.units if self.factions[u] is Faction.PLAYER]
 
     def get_location(self, unit: Unit):
         return self.battlefield.unit_locations[unit]

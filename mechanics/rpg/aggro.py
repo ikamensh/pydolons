@@ -45,10 +45,10 @@ def vision_aggro_rule(game):
 
 # no bleeding?
 def damage_provokes_cb(t, e: DamageEvent):
-
-    damage_from_player = e.game.factions[e.source] is Faction.PLAYER
-    if damage_from_player:
-        e.target.fights_hero = True
+    if e.source:
+        damage_from_player = e.game.factions[e.source] is Faction.PLAYER
+        if damage_from_player:
+            e.target.fights_hero = True
 
 
 def damage_provokes_rule(game):
