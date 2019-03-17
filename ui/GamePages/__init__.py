@@ -6,5 +6,5 @@
 from ui.GamePages.AbstractPage import AbstractPage
 from ui.GamePages.StartPage import StartPage
 from ui.GamePages.GameMenuPage import GameMenuPage
-from ui.GamePages.CharacterPage import CharacterPage
+from ui.GamePages.character_page import CharacterPage
 from ui.GamePages.GamePages import GamePages

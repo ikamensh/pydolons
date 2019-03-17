@@ -7,7 +7,7 @@
 from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
-from ui.GamePages.CharacterPage import CharacterPage
+from ui.GamePages.character_page.CharacterPage import CharacterPage
 from ui.GamePages.InventoryPage import InventoryPage
 from ui.GamePages.BackGorundPage import BackGorundPage
 from ui.GamePages.ReadmePage import ReadmePage
@@ -81,12 +81,12 @@ class GamePages(object):
 
     def setUpCharecterPage(self):
         characterPage = self.buildPage('characterPage', CharacterPage)
+        self.gameRoot.scene.addItem(characterPage)
         characterPage.showPage()
 
     def setUpInventoryPage(self):
         inventoryPage = self.buildPage('inventoryPage', InventoryPage)
         self.gameRoot.controller.mouseMove.connect(inventoryPage.mouseMoveEvent)
-
 
     def setUpReadmePage(self):
         self.readme = self.buildPage('readmePage', ReadmePage)
@@ -111,7 +111,6 @@ class GamePages(object):
     def mousePressEvent(self, e):
         # self.page.mousePressEvent(e)
         pass
-
 
     def resized(self):
         for page in self.pages.values():
@@ -141,4 +140,12 @@ class GamePages(object):
     @property
     def isFocus(self):
         return self.focusState or self.gameMenu.isFocus()
+
+    def test_xml(self):
+        # from ui.GamePages.TestXMlPage import XMLPage
+        # self.xml_page = self.buildPage('xml', XMLPage)
+        # self.xml_page.setUpHeroAttr(self.gameRoot.lengine.character)
+        # self.gameRoot.scene.addItem(self.xml_page)
+        # self.xml_page.show()
+        pass
 

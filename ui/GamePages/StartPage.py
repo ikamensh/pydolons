@@ -73,6 +73,7 @@ class StartPage(AbstractPage):
         self.exit.hovered.connect(self.get_wig)
         self.buttons.append(self.exit)
         laoyout.addWidget(self.exit)
+
         mainWidget.setLayout(laoyout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
         self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
@@ -210,5 +211,3 @@ class StartPage(AbstractPage):
     def get_wig(self, button):
         self.button_id = self.buttons.index(button)
         self.setAnimPos(self.button_id)
-
-

@@ -22,7 +22,7 @@ class StyleConfig:
 
     def setUpFonts(self):
         self.main_font = self.cfg.resourceConfig.fonts_maps['imfeenrm28p.ttf']
-        pointSize = int(self.system_font.pointSize()*self.cfg.scale_x)
+        pointSize = int(16 *self.cfg.scale_x)
         self.main_font.setPointSize(pointSize)
         # self.main_font.set
         QGuiApplication.setFont(self.main_font)

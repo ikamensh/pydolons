@@ -1,0 +1,16 @@
+<item name="message_box"
+    left="0"
+    top="0"
+    width="512"
+    height="512"
+    icon="default.png">
+       <item name="message"
+            left="128"
+            top="256"
+            text="404 PAGE SUNK INTO HELL"
+            position="inherit"
+            type="text"
+            font_size="28"
+            color="#FFFFFF">
+       </item>
+</item>

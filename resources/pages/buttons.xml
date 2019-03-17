@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<item>
+<item name="button_accept"
+      position="inherit"
+        left="0"
+        top="0"
+        width="64"
+        heidth="64"
+        input="button"
+        icon="cha_page_elemnt_bg.png">
+    <item name="button_accept_icon"
+        position="inherit"
+        left="0"
+        top="0"
+        width="64"
+        heidth="64"
+        input="button"
+        icon="button_accept.png">
+    </item>
+</item>
+
+<item name="button_deny"
+      position="inherit"
+        left="0"
+        top="0"
+        width="64"
+        heidth="64"
+        input="button"
+        icon="cha_page_elemnt_bg.png">
+    <item name="button_deny_icon"
+        position="inherit"
+        left="0"
+        top="0"
+        width="64"
+        heidth="64"
+        input="button"
+        icon="button_deny.png">
+    </item>
+</item>
+
+<item name="button_close"
+      position="inherit"
+        left="0"
+        top="0"
+        width="64"
+        heidth="64"
+        input="button"
+        icon="cha_page_elemnt_bg.png">
+    <item name="button_close_icon"
+        position="inherit"
+        left="0"
+        top="0"
+        width="64"
+        heidth="64"
+        input="button"
+        icon="button_close.png">
+    </item>
+</item>
+</item>
