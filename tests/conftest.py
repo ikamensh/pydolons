@@ -108,17 +108,18 @@ def huge_game():
 
 
 @pytest.fixture()
-def hero_only_game(battlefield8, hero):
-
-    _game = DreamGame(battlefield8)
+def hero_only_game(hero):
+    bf = Battlefield(8, 8)
+    _game = DreamGame(bf)
     _game.add_unit(hero)
     _game.the_hero = hero
 
     return _game
 
 @pytest.fixture()
-def game_hvsp(battlefield8, hero, pirate_band):
-    _game = DreamGame(battlefield8)
+def game_hvsp(hero, pirate_band):
+    bf = Battlefield(8, 8)
+    _game = DreamGame(bf)
 
     locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
     for pirate, cell in zip(pirate_band, locations):

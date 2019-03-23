@@ -41,8 +41,16 @@ def test_distance_unit_to_point(game_hvsp):
 
     assert battlefield8.distance(pirate, Cell(4, 4)) == 0
 
+import pytest
+from battlefield import Battlefield
+
+@pytest.fixture()
+def battlefield8():
+    yield Battlefield(8,8)
 
 def test_neighbouring_cells(battlefield8):
+    battlefield8 = Battlefield(8, 8)
+
     #corners have 2 adjecent cells
     assert len(battlefield8.neighbours_exclude_center(Cell(0, 0))) == 2
     assert len(battlefield8.neighbours_exclude_center(Cell(0, 7))) == 2
