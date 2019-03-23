@@ -12,8 +12,8 @@ class Obstacle(BattlefieldObject):
 
     is_obstacle = True
 
-    def __init__(self, name, max_health, *, game=None, armor=0, resists=None, icon="wall.png"):
-        super().__init__()
+    def __init__(self, name, max_health, *, cell=None, game=None, armor=0, resists=None, icon="wall.png"):
+        super().__init__(cell)
         self.game = game
 
         self.name = name

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-from exceptions import PydolonsException
+from exceptions import PydolonsError
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
 
@@ -26,7 +26,7 @@ class Cost:
         elif unit.stamina < self.stamina:
             return fmt.format(STAMINA)
         else:
-            raise PydolonsException(f"Cost {self} is no problem for {unit}. Why are we seeing this message? :D")
+            raise PydolonsError(f"Cost {self} is no problem for {unit}. Why are we seeing this message? :D")
 
     def __mul__(self, other):
         other = float(other) # assert other is a number

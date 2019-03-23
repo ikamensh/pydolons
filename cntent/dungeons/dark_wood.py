@@ -1,13 +1,15 @@
-from battlefield.Battlefield import Cell
+from battlefield import Cell
 from cntent.monsters.werewolves import werewolf
 from game_objects.dungeon.Dungeon import Dungeon
 
 
-def build_unit_locations(g):
-    werewolf_band = [werewolf.create(g), werewolf.create(g), werewolf.create(g)]
-    locations = [Cell(3, 3), Cell(6, 6), Cell(3, 6)]
-    unit_locations = {werewolf_band[i]: locations[i] for i in range(3)}
-    return unit_locations
+def build_units(g):
+    werewolf_band = [werewolf.create(g, 3+3j),
+                     werewolf.create(g, 6+6j),
+                     werewolf.create(g, 3+6j)]
+    return werewolf_band
 
 
-dark_wood = Dungeon("Dark Wood", 8, 8, unit_locations=build_unit_locations, hero_entrance=Cell(3, 4), icon="dark_wood.jpg")
+dark_wood = Dungeon("Dark Wood", 8, 8,
+                    objs=build_units, hero_entrance=Cell(3, 4),
+                    icon="dark_wood.jpg")

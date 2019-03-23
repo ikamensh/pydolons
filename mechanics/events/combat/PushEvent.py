@@ -13,10 +13,10 @@ class PushEvent(Event):
 
     def __init__(self, unit: Unit, push_against: Unit):
         game = unit.game
-        self.battlefield = game.battlefield
+        self.bf = game.bf
         self.unit = unit
         self.push_against = push_against
-        self.cell_to = self.battlefield.unit_locations[push_against]
+        self.cell_to = push_against.cell
 
 
         super().__init__(game)
@@ -32,7 +32,7 @@ class PushEvent(Event):
         events.DamageEvent(damage, self.unit, source=self.push_against)
 
         if self.unit.alive and self.push_against.alive:
-            pushed_to = self.game.random.choice(self.battlefield.get_cells_within_dist(self.cell_to, 1))
+            pushed_to = self.game.random.choice(self.bf.get_cells_within_dist(self.cell_to, 1))
             success = roll(0.6, self.unit.str * 2, self.push_against.str * 2, self.game.random)
 
             if success:

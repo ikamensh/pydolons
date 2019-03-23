@@ -17,7 +17,7 @@ def test_symmetric(huge_game, hero, prc, var_facing):
     huge_game.add_unit(hero, hero_c_coords, facing=var_facing)
     hero.prc_base.base = prc
 
-    v = huge_game.battlefield.vision
+    v = huge_game.vision
     print(hero.prc, hero.prc_base.base, hero.sight_range)
     cells_seen = v.std_seen_cells(hero)
 
@@ -36,12 +36,9 @@ def test_symmetric(huge_game, hero, prc, var_facing):
 
 def test_visibility(game_hvsp, hero):
 
-    bf = game_hvsp.battlefield
-    bf.unit_locations = {}
-    bf.place(hero, Cell(1,1), Facing.SOUTH)
+    game_hvsp.add_unit(hero, cell=Cell(1,1), facing=Facing.SOUTH)
 
-    vision = Vision(bf)
-    cells_seen = vision.std_seen_cells(hero)
+    cells_seen = game_hvsp.vision.std_seen_cells(hero)
 
     assert Cell(0,0) not in cells_seen
     assert Cell(7,7) not in cells_seen
@@ -58,33 +55,30 @@ def test_visibility(game_hvsp, hero):
 
 def test_borders(game_hvsp, hero):
 
-    bf = game_hvsp.battlefield
-    bf.unit_facings[hero] = Facing.SOUTH
 
-    bf.move(hero, Cell(1, 1))
-    vision = Vision(bf)
+    hero.facing = Facing.SOUTH
+    hero.cell = Cell(1,1)
+
+    vision = game_hvsp.vision
     cells_seen_before = vision.std_seen_cells(hero)
 
 
-    bf.move(hero, Cell(7, 7))
+    hero.cell = Cell(7,7)
     cells_seen_after = vision.std_seen_cells(hero)
 
     assert len(cells_seen_after) < len(cells_seen_before)
     assert Cell(8,8) not in cells_seen_after
 
-def test_direction(game_hvsp, hero):
+def test_direction_same_number(hero_only_game, hero):
 
-    bf = game_hvsp.battlefield
-    bf.unit_facings[hero] = Facing.SOUTH
+    vision = hero_only_game.vision
 
-
-    vision = Vision(bf)
-    bf.unit_locations = {}
-    bf.place(hero, Cell(4, 4))
+    hero.facing = Facing.SOUTH
+    hero.cell = Cell(4, 4)
     cells_seen_before = vision.std_seen_cells(hero)
 
 
-    bf.unit_facings[hero] = Facing.SOUTH
+    hero.facing = Facing.NORTH
     cells_seen_after = vision.std_seen_cells(hero)
 
     assert len(cells_seen_after) == len(cells_seen_before)

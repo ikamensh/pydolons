@@ -5,11 +5,10 @@ from battlefield.Facing import Facing
 
 def test_dead_units_dont_block(empty_game, hero, pirate):
 
-    bf = empty_game.battlefield
     hero.prc_base += 100
     empty_game.add_unit(hero, Cell(1,1), facing=Facing.SOUTH)
 
-    vision = Vision(bf)
+    vision = empty_game.vision
 
     free_vision = vision.std_seen_cells(hero)
 
@@ -26,10 +25,8 @@ def test_dead_units_dont_block(empty_game, hero, pirate):
 
 def test_blocks(game_hvsp):
 
-    bf = game_hvsp.battlefield
+    vision = game_hvsp.vision
 
-
-    vision = Vision(bf)
     blocks = vision.blocks(looking_from=Cell(1,1),
                            looking_to=Cell(1,4),
                            obstacle=Cell(1,2))
@@ -53,8 +50,8 @@ def test_blocks(game_hvsp):
 
 def test_symmetry(game_hvsp):
 
-    bf = game_hvsp.battlefield
-    vision = Vision(bf)
+    vision = game_hvsp.vision
+
     cells = []
     for x in range(4):
         for y in range(4):
@@ -73,13 +70,12 @@ def test_symmetry(game_hvsp):
 
 def test_visibility(game_hvsp, hero, pirate):
 
-    bf = game_hvsp.battlefield
+    vision = game_hvsp.vision
+
     hero.prc_base += 100
-    bf.move(hero, Cell(1,1))
-    bf.unit_facings[hero] = Facing.SOUTH
+    hero.cell = Cell(1,1)
+    hero.facing = Facing.SOUTH
 
-
-    vision = Vision(bf)
 
     cells_seen = vision.std_seen_cells(hero)
     assert Cell(1, 4) in cells_seen
@@ -87,7 +83,7 @@ def test_visibility(game_hvsp, hero, pirate):
     assert Cell(5, 1) in cells_seen
 
 
-    bf.place(pirate, Cell(1,2))
+    game_hvsp.add_unit(pirate, cell=1+2j)
 
     cells_seen = vision.std_seen_cells(hero)
 

@@ -3,14 +3,15 @@ from cntent.base_types import mud_golem_basetype
 from cntent.monsters.pirates import pirate_scum
 from game_objects.battlefield_objects import Unit
 from game_objects.dungeon.Dungeon import Dungeon
-
-def create_location(g):
-    pirate_band = [pirate_scum.create(g) for i in range(3)]
-    locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
-    unit_locations = {pirate_band[i]: locations[i] for i in range(3)}
-
-    unit_locations[Unit(mud_golem_basetype)] = Cell(3, 3)
-    return unit_locations
+from mechanics.factions import Faction
 
 
-demo_dungeon = Dungeon("Pirate Bar", 16, 16, unit_locations=create_location, hero_entrance=Cell(3, 4), icon="pirates_1.jpg")
+def create_monsters(g):
+    monsters = [pirate_scum.create(g, Cell(4, 4)),
+                   pirate_scum.create(g, Cell(4, 5)),
+                   pirate_scum.create(g, Cell(5, 4)),
+                    Unit(mud_golem_basetype, cell=Cell(3, 3))]
+    return monsters
+
+
+demo_dungeon = Dungeon("Pirate Bar", 16, 16, objs=create_monsters, hero_entrance=Cell(3, 4), icon="pirates_1.jpg")

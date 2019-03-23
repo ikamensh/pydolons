@@ -1,19 +1,21 @@
 from __future__ import annotations
-from game_objects.battlefield_objects import BattlefieldObject
 from mechanics.AI import SearchNode
-from battlefield.Battlefield import Cell
-from DreamGame import DreamGame
 import copy
+from battlefield import Cell
+from game_objects.battlefield_objects import BattlefieldObject
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import Unit, Obstacle, BattlefieldObject
-    from typing import Tuple, Union
+    from battlefield import Battlefield
+    from game_objects.battlefield_objects import Unit
+    from typing import Tuple, Union, Set
     from mechanics.actives import Active
-    from battlefield import Cell
     from mechanics.factions import Faction
 
-class SimGame(DreamGame):
+class SimGame:
+    gamelog = None
+    units: Set[Unit] = None
+    bf: Battlefield = None
 
 
     def simulation(self):
@@ -53,30 +55,32 @@ class SimGame(DreamGame):
         return sim
 
 
-    def fake_measure(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction: Faction, use_position=True):
+    def fake_measure(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]],
+                     fraction: Faction, use_position=True):
         active, target = choice
         with active.simulate(target):
             return self.utility(fraction, use_position=use_position)
 
     def delta(self, choice: Tuple[Active, Union[Cell, BattlefieldObject, None]], fraction = None):
-        _fraction = fraction or self.factions[choice[0].owner]
+        _fraction = fraction or choice[0].owner.faction
         _delta = self.get_neighbour(choice).utility(_fraction) - self.utility(_fraction)
         return _delta
 
 
     # The marvel of convoluted math,
     # we evaluate how good the game is for a given fraction with a single number!
-    def utility(self, fraction, use_position=True):
+    def utility(self, faction, use_position=True):
         total = 0
 
-        own_units = [unit for unit in self.units if self.factions[unit] is fraction]
-        opponent_units = [unit for unit in self.units if self.factions[unit] is not fraction]
+        own_units = [unit for unit in self.units if unit.faction is faction]
+        opponent_units = [unit for unit in self.units if unit.faction is not faction]
 
         total += sum([self.unit_utility(unit) for unit in own_units])
         total -= sum([self.unit_utility(unit) for unit in opponent_units])
 
         if use_position:
-            position_util = self.position_utility(own_units, opponent_units) / (1 + 1e13 * len(self.units))
+            position_util = self.position_utility(own_units, opponent_units) / \
+                            (1 + 1e13 * len(self.units))
             total += position_util
 
         return total
@@ -88,7 +92,7 @@ class SimGame(DreamGame):
             for other in opponent:
                 importance = (self.unit_utility(own_unit) * self.unit_utility(other)) ** (1/2)
 
-                dist = self.battlefield.distance(own_unit, other)
+                dist = self.bf.distance(own_unit, other)
 
                 # the closer the better
                 distance_util = 1e5 * (6 - dist **(1/2)) * importance
@@ -97,12 +101,14 @@ class SimGame(DreamGame):
 
                 # we want to face towards opponents
                 if dist > 0:
-                    own_facing_util = 1e9 * (1/dist) * ( 6 - self.battlefield.angle_to(own_unit, other)[0] / 45) * importance
+                    own_facing_util = 1e9 * (1/dist) * \
+                                      (6 - self.bf.angle_to(own_unit, other)[0] / 45) * importance
                     assert own_facing_util >= 0
                     total += own_facing_util
 
                     #its best for opponents to face away from us
-                    opponent_facing_away_util = (1/dist) * self.battlefield.angle_to(other, own_unit)[0] / 45 * importance
+                    opponent_facing_away_util = (1/dist) * self.bf.angle_to(other, own_unit)[0] \
+                                                / 45 * importance
                     assert opponent_facing_away_util >= 0
                     total += opponent_facing_away_util
 
@@ -110,7 +116,7 @@ class SimGame(DreamGame):
         # for unit in own:
         #     for other in own:
         #         importance = (unit.utility * other.utility) ** (1 / 2)
-        #         total -= importance * self.battlefield.distance(unit, other) ** (1/2)
+        #         total -= importance * self.bf.distance(unit, other) ** (1/2)
 
         return total
 
@@ -118,7 +124,8 @@ class SimGame(DreamGame):
     def unit_utility(unit: Unit):
 
         hp_factor = 1 + unit.health
-        other_factors = 1 # + (unit.mana + unit.stamina + unit.readiness*3) * len(unit.actives) / 1000
+        other_factors = 1
+        # + (unit.mana + unit.stamina + unit.readiness*3) * len(unit.actives) / 1000
         magnitude = sum([unit.str, unit.end, unit.agi, unit.prc, unit.int, unit.cha])
 
         utility = magnitude * hp_factor * 1 * other_factors
@@ -156,39 +163,31 @@ class SimGame(DreamGame):
         result = list()
 
         if targeting_cls is Cell:
-            for c in self.battlefield.all_cells:
+            for c in self.bf.all_cells:
                 if active.check_target(c):
                     result.append(c)
             return result
 
         if targeting_cls is BattlefieldObject:
-            for unit in self.battlefield.unit_locations:
+            for unit in self.bf.all_objs:
                 if active.check_target(unit):
                     result.append(unit)
             return result
 
-
-
     # Identifying objects between different sim instances
+    def find_unit(self, unit: Unit):
+        return self.find_unit_by_uid(unit.uid)
 
-    def find_unit(self, unit):
-        for other in self.battlefield.unit_locations:
-            if unit.uid == other.uid:
-                return other
+    def find_active(self, active: Active):
+        return self.find_active_by_uid(active.uid)
 
-    def find_active(self, active):
-        for unit in self.battlefield.all_units:
-            for other in unit.actives:
-                if active.uid == other.uid:
-                    return other
-
-    def find_unit_by_uid(self, unit_uid):
-        for other in self.battlefield.unit_locations:
+    def find_unit_by_uid(self, unit_uid: int) -> BattlefieldObject:
+        for other in self.bf.all_objs:
             if unit_uid == other.uid:
                 return other
 
-    def find_active_by_uid(self, active_uid):
-        for unit in self.battlefield.all_units:
+    def find_active_by_uid(self, active_uid: int) -> Active:
+        for unit in self.units:
             for other in unit.actives:
                 if active_uid == other.uid:
                     return other

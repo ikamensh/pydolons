@@ -18,8 +18,7 @@ class TurnEvent(Event):
 
     def resolve(self):
         turn = -1j if self.ccw else 1j
-        new_turning = self.game.battlefield.unit_facings[self.unit] * turn
-        self.game.battlefield.unit_facings[self.unit] = new_turning
+        self.unit.facing *= turn
 
 
     def __repr__(self):

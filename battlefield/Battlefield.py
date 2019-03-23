@@ -1,14 +1,11 @@
 from __future__ import annotations
 from typing import Dict, Collection, List, TYPE_CHECKING
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import Unit, BattlefieldObject, Obstacle
-
-from battlefield.Facing import Facing
+    from game_objects.battlefield_objects import Unit, BattlefieldObject
+    from typing import Set
 from battlefield.Cell import Cell
-from battlefield.Vision import Vision
-from my_utils.utils import flatten
-
-
+from functools import lru_cache
+from collections import defaultdict
 
 class Battlefield:
 
@@ -16,44 +13,52 @@ class Battlefield:
     space_per_unit = 3
     space_per_obstacle = 10
 
-    def __init__(self, w, h):
+    def __init__(self, w, h, game = None):
         self.w = w
         self.h = h
-        self.unit_locations: Dict[BattlefieldObject,Cell] = {}
-        self.unit_facings :Dict[Unit, complex] = {}
-        self.vision = Vision(self)
+        self.game = game
 
-    def x_sees_y(self, x, y):
-        if x.is_obstacle:
-            return False
+        all_cells = []
+        for i in range(self.w):
+            for j in range(self.h):
+                all_cells.append(Cell(i, j))
+        self.all_cells = frozenset(all_cells)
 
-        cells_x_sees = self.vision.std_seen_cells(x)
-        return self.unit_locations[y] in cells_x_sees
+    # @property
+    # def game(self):
+    #     return self._game
+    #
+    # @game.setter
+    # def game(self, val):
+    #     self._game = val
 
 
-    def distance(self, one, another):
+    @property
+    def all_objs(self):
+        return self.game.units | self.game.obstacles
+
+    @staticmethod
+    def distance(one, another):
         if hasattr(one, "alive"):
-            one = self.unit_locations[one]
+            one = one.cell
         if hasattr(another, "alive"):
-            another = self.unit_locations[another]
+            another = another.cell
         return Cell._distance(Cell.maybe_complex(one), Cell.maybe_complex(another))
 
-    def get_units_dists_to(self, p, units_subset = None):
-        unit_dist_tuples = [ (u, self.distance(p, u))
-                             for u in units_subset or self.unit_locations]
+    @staticmethod
+    def get_units_dists_to(p, units_subset):
+        unit_dist_tuples = [ (u, Battlefield.distance(p, u)) for u in units_subset]
         return sorted(unit_dist_tuples, key=lambda x:x[1])
 
     def get_units_within_radius(self, center, radius):
-        return [ u for u in self.unit_locations if self.distance(center, u) <= radius]
+        return [u for u in self.all_objs if Battlefield.distance(center, u) <= radius]
 
     def get_units_at(self, _cell):
         cell = Cell.maybe_complex(_cell)
-        if cell in self.units_at:
-            return self.units_at[cell]
+        if cell in self.cells_to_units:
+            return self.cells_to_units[cell]
         else:
             return None
-
-
 
     def neighbours_exclude_center(self, cell, distance=1) -> List[Cell]:
         neighbours = set(self.get_cells_within_dist(cell, distance))
@@ -68,27 +73,6 @@ class Battlefield:
         return min(pairs, key=lambda x:x[1])
 
 
-
-    def place(self, unit, _p, facing=None):
-        p = Cell.maybe_complex(_p)
-
-        assert 0 <= p.x < self.w
-        assert 0 <= p.y < self.h
-
-        self.unit_locations[unit] = p
-        if not unit.is_obstacle:
-            self.unit_facings[unit] = facing or Facing.NORTH
-
-    def remove(self, unit):
-        assert unit in self.unit_locations
-        del self.unit_locations[unit]
-        if not unit.is_obstacle:
-            del self.unit_facings[unit]
-
-    def move(self, unit, new_position):
-        self.unit_locations[unit] = Cell.maybe_complex(new_position)
-
-
     def space_free(self, cell):
         units = self.get_units_at(cell)
         if not units:
@@ -97,65 +81,35 @@ class Battlefield:
                           [self.space_per_unit for u in units if not u.is_obstacle])
         return self.space_per_cell - space_taken
 
-
-    def angle_to(self, unit, target):
+    @staticmethod
+    def angle_to(unit, target):
         if isinstance(target, complex):
             target_cell = Cell.from_complex(target)
         elif isinstance(target, Cell):
             target_cell = target
         else:
-            target_cell = self.unit_locations[target]
+            target_cell = target.cell
 
-        facing = self.unit_facings[unit]
-        location = self.unit_locations[unit]
-        vector_to_target = target_cell.complex - location.complex
+        vector_to_target = target_cell.complex - unit.cell.complex
         if vector_to_target == 0j:
             return 9000, None
-        return Cell.angle_between(facing, vector_to_target)
+        return Cell.angle_between(unit.facing, vector_to_target)
+
+    def units_in_area(self, area : Collection[Cell]) -> List[BattlefieldObject]:
+        return [u for u in self.all_objs if u.cell in area]
 
     @staticmethod
-    def _distance(p1, p2):
-        return Cell._distance(p1, p2)
-
-    @property
-    def all_cells(self) -> List[Cell]:
-        if hasattr(self, "_all_cells"):
-            return list(self._all_cells)
-
-        result = []
-        for i in range(self.w):
-            for j in range(self.h):
-                result.append(Cell(i, j))
-
-        self._all_cells = result
-        return list(result)
-
-    @property
-    def all_units(self) -> List[Unit]:
-        return [u for u in self.unit_locations.keys() if not u.is_obstacle] # avoiding direct import
-
-    @property
-    def all_obstacles(self) -> List[Obstacle]:
-        return [u for u in self.unit_locations.keys() if u.is_obstacle] # avoiding direct import
-
-
-    def units_in_area(self, cells : Collection[Cell]) -> List[Unit]:
-        cells_with_units = set(self.units_at.keys()).intersection(set(cells))
-        return list(flatten(self.units_at[c] for c in cells_with_units))
-
-    #optimize: use dirty bit
-    @property
-    def units_at(self) -> Dict[Cell, List[BattlefieldObject]]:
-        result = {}
-        for unit, cell in self.unit_locations.items():
-            if cell not in result:
-                result[cell] = [unit]
-            else:
-                result[cell].append(unit)
-
+    def _cells_to_units(units: Set[BattlefieldObject]) -> Dict[Cell, List[BattlefieldObject]]:
+        result = defaultdict(list)
+        for unit in units:
+            result[unit.cell].append(unit)
         return result
 
-    def cone(self, cell_from, direction, angle_max, dist_min, dist_max):
+    @property
+    def cells_to_units(self) -> Dict[Cell, List[BattlefieldObject]]:
+        return Battlefield._cells_to_units(self.all_objs)
+
+    def cone(self, cell_from, direction:complex, angle_max, dist_min, dist_max):
         result = []
         for cell in self.all_cells:
             if dist_min <= self.distance(cell, cell_from) <= dist_max:
@@ -166,7 +120,7 @@ class Battlefield:
         return result
 
 
-    def __iter__(self):
-        for unit in self.unit_locations:
-            if not unit.is_obstacle:
-                yield unit
+    @staticmethod
+    def _distance(p1, p2):
+        return Cell._distance(p1, p2)
+

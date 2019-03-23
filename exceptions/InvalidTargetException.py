@@ -1,6 +1,6 @@
-from exceptions import PydolonsException
+from exceptions import PydolonsError
 
-class InvalidTargetException(PydolonsException):
+class InvalidTargetError(PydolonsError):
 
     def __init__(self, target, order):
         self.target = target

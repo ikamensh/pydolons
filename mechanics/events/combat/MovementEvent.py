@@ -12,21 +12,21 @@ class MovementEvent(Event):
     def __init__(self, unit: Unit, cell_to: Union[Cell, complex], fire=True):
         self.unit = unit
         game = unit.game
-        self.battlefield = game.battlefield
-        self.cell_from = self.battlefield.unit_locations[unit]
+        self.bf = game.bf
+        self.cell_from = unit.cell
         self.cell_to = Cell.maybe_complex(cell_to)
         super().__init__(game, fire=fire, logging=True)
 
     def check_conditions(self):
-        units_on_target_cell = self.battlefield.get_units_at(self.cell_to)
+        units_on_target_cell = self.bf.get_units_at(self.cell_to)
         if units_on_target_cell:
-            wall = bool([u for u in self.battlefield.get_units_at(self.cell_to) if u.is_obstacle])
+            wall = bool([u for u in self.bf.get_units_at(self.cell_to) if u.is_obstacle])
         else:
             wall = False
         return self.unit.alive and not wall
 
     def resolve(self):
-        self.battlefield.move(self.unit, self.cell_to)
+        self.unit.cell = self.cell_to
 
     def __repr__(self):
         return "{} moves from {} to {}".format(self.unit, self.cell_from, self.cell_to)

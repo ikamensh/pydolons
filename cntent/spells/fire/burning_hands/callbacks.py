@@ -12,9 +12,9 @@ def burning_hands_callback(active: Active, _):
     spell = active.spell
     n_damage = spell.amount
 
-    bf = active.game.battlefield
-    starting_location = bf.unit_locations[source]
-    facing = bf.unit_facings[source]
+    bf = active.game.bf
+    starting_location = source.cell
+    facing = source.facing
 
     units_hit = bf.units_in_area(bf.cone(starting_location, facing, angle_max=spell.radius*20, dist_min=1, dist_max=spell.range))
 

@@ -1,14 +1,20 @@
+from __future__ import annotations
 from mechanics.AI import RandomAI, SearchNode
 from astar import AStar
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
+    from DreamGame import DreamGame
 
 class StarSearch(AStar):
     really_big_number = 1e50
 
-    def __init__(self, game, unit, depth_limit):
+    def __init__(self, game: DreamGame, unit: Unit, depth_limit: int):
         super().__init__()
         self.game = game
         self.unit = unit
-        self.faction = self.game.factions[self.unit]
+        self.faction = unit.faction
         self.visited = []
         self.depth_limit = depth_limit
 

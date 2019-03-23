@@ -59,15 +59,15 @@ def test_enough_charge(just_a_golem):
 def test_enough_charge_move(just_a_golem, empty_game):
 
     assert just_a_golem.disabled is False
-    initial_location = empty_game.battlefield.unit_locations[just_a_golem]
-    facing = empty_game.battlefield.unit_facings[just_a_golem]
+    initial_location = just_a_golem.cell
+    facing = just_a_golem.facing
 
     cell_in_front = initial_location.complex + facing
 
     empty_game.order_move(just_a_golem, cell_in_front)
 
     assert just_a_golem.disabled is False
-    assert empty_game.battlefield.unit_locations[just_a_golem].complex == cell_in_front
+    assert just_a_golem.cell.complex == cell_in_front
 
 
 

@@ -1,8 +1,9 @@
 import pytest
 
+from battlefield import Battlefield
 from DreamGame import Faction
-from mechanics.AI.SimGame import SimGame
-from battlefield import Cell, Battlefield
+from DreamGame import DreamGame
+from battlefield import Cell
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
@@ -10,14 +11,16 @@ from game_objects.battlefield_objects import BattlefieldObject
 
 
 @pytest.fixture()
-def empty_simgame(simple_battlefield):
-    return SimGame(simple_battlefield)
+def empty_simgame():
+    bf = Battlefield(6, 6)
+    yield DreamGame(bf)
 
 
 @pytest.fixture()
-def minigame(simple_battlefield, pirate,  hero):
+def minigame(pirate,  hero):
 
-    _game = SimGame(simple_battlefield)
+    bf = Battlefield(6, 6)
+    _game = DreamGame(bf)
     _game.add_unit(hero, (2+2j), Faction.PLAYER)
     _game.add_unit(pirate, (4 + 4j), Faction.ENEMY)
 
@@ -27,23 +30,25 @@ def minigame(simple_battlefield, pirate,  hero):
 
 
 @pytest.fixture()
-def sim_game(battlefield8, hero, pirate_band):
-    _game = SimGame(battlefield8)
+def sim_game(hero, pirate_band):
+    bf = Battlefield(8, 8)
+    _game = DreamGame(bf)
 
     locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
-    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
+    for p, cell in zip(pirate_band, locations):
+        p.cell = cell
 
-    units_locations[hero] = Cell(1, 1)
+    hero.cell = Cell(1, 1)
+    hero.faction = Faction.PLAYER
 
-    fractions = {unit: Faction.ENEMY for unit in units_locations if not unit.is_obstacle}
-    fractions[hero] = Faction.PLAYER
+    for u in pirate_band + [hero]:
+        _game.add_unit(u)
 
-    _game.add_many(units_locations.keys(), units_locations, fractions)
     return _game
 
 @pytest.fixture()
 def walls_game(walls_dungeon, hero):
-    _game = SimGame.start_dungeon(walls_dungeon, hero)
+    _game = DreamGame.start_dungeon(walls_dungeon, hero)
     return _game
 
 @pytest.fixture()

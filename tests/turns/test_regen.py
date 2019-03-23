@@ -2,7 +2,7 @@
 
 def test_regen(game_hvsp, hero):
     assert hero in game_hvsp.turns_manager.managed
-    assert hero in game_hvsp.battlefield.unit_locations.keys()
+    assert hero in game_hvsp.units
 
 
     hero.health -= 100
@@ -23,7 +23,7 @@ def test_regen(game_hvsp, hero):
 
 def test_bleeding(game_hvsp, hero):
     assert hero in game_hvsp.turns_manager.managed
-    assert hero in game_hvsp.battlefield.unit_locations.keys()
+    assert hero in game_hvsp.units
 
 
     hero.health -= 0.75 * hero.health

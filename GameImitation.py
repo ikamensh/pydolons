@@ -43,7 +43,7 @@ class DreamGame:
         print(dungeon.unit_locations)
         unit_locations = dungeon.unit_locations(self)
         print('debug')
-        unit_locations[hero] = dungeon.hero_entrance
+        hero.cell = dungeon.hero_entrance
 
         self.the_hero = hero
 
@@ -59,35 +59,26 @@ class DreamGame:
 
         self.add_many(unit_locations.keys(), unit_locations, self.faction)
 
-
-    def add_many(self, units, locations, fractions, facings = None):
-        facings = facings or {unit: 1j for unit in units}
-        for unit in units:
-            if unit.is_obstacle:
-                self.add_obstacle(unit, locations[unit])
-            else:
-                self.add_unit(unit, locations[unit], fractions[unit], facings.get(unit, 1j))
-
     def add_unit(self, unit, cell, fraction=Faction.NEUTRALS, facing=None):
         unit.game = self
         for a in unit.actives:
             a.game = self
         self.faction[unit] = fraction
-        self.battlefield.place(unit, cell, facing)
+        self.bf.place(unit, cell, facing)
         # self.turns_manager.add_unit(unit)
         unit.alive = True
 
     def unit_died(self, unit):
-        self.battlefield.remove(unit)
+        self.bf.remove(unit)
         # self.turns_manager.remove_unit(unit)
         unit.alive = False
 
     def obstacle_destroyed(self, obstacle):
-        self.battlefield.remove(obstacle)
+        self.bf.remove(obstacle)
         obstacle.alive = False
 
     def add_obstacle(self, obstacle, cell):
-        self.battlefield.place(obstacle, cell)
+        self.bf.place(obstacle, cell)
 
     def ui_order(self, *args, **kwargs):
         self.gamelog.msg = 'ui_order'

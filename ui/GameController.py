@@ -3,7 +3,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from battlefield.Facing import Facing
 
 from ui.events import UiErrorMessageEvent
-from exceptions import PydolonsException
+from exceptions import PydolonsError
 from ui.TransformSupport import TransformSupport
 
 
@@ -71,7 +71,7 @@ class GameController(QtCore.QObject):
                             self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
                             self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
                             self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
-                except PydolonsException as exc:
+                except PydolonsError as exc:
                     UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def mouseReleaseEvent(self, e):
@@ -83,7 +83,7 @@ class GameController(QtCore.QObject):
         self.keyPress.emit(e)
         try:
             self.order_from_hotkey(e)
-        except PydolonsException as exc:
+        except PydolonsError as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
     def wheelEvent(self, e):

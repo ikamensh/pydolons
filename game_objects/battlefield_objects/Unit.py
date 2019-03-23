@@ -1,4 +1,15 @@
 from __future__ import annotations
+
+
+import copy
+from functools import lru_cache
+from typing import Set, TYPE_CHECKING, List
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
+    from mechanics.buffs import Ability
+    from mechanics.actives import Cost
+    from battlefield import Cell
+
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 from game_objects.battlefield_objects.CharAttributes import Constants
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
@@ -7,17 +18,11 @@ from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics import events
 from mechanics.actives import ActiveTags, Active
+from mechanics.factions import Faction
 from cntent.actives.std.std_movements import std_movements, turn_ccw, turn_cw
 from cntent.actives.std.std_melee_attack import std_attacks
 from character.masteries.Masteries import Masteries, MasteriesEnum
-from typing import Set, TYPE_CHECKING, List
-if TYPE_CHECKING:
-    from DreamGame import DreamGame
-    from mechanics.buffs import Ability
-    from mechanics.actives import Cost
-
-import copy
-from functools import lru_cache
+from battlefield import Facing
 
 import random
 
@@ -50,8 +55,14 @@ class Unit(BattlefieldObject):
     is_obstacle = False
 
 
-    def __init__(self, base_type: BaseType, *, game=None,  masteries: Masteries = None):
-        super().__init__()
+    def __init__(self,
+                 base_type: BaseType, *,
+                 cell = None,
+                 facing = Facing.NORTH,
+                 faction = Faction.ENEMY,
+                 game=None,
+                 masteries: Masteries = None):
+        super().__init__(cell)
         self.game: DreamGame = game
         self.readiness = 0
         self.disabled = False
@@ -72,6 +83,8 @@ class Unit(BattlefieldObject):
 
         self.base_type = base_type
         self.masteries = masteries
+        self.facing: complex = facing
+        self.faction = faction
 
         self.update(base_type, masteries)
 
@@ -224,9 +237,7 @@ class Unit(BattlefieldObject):
 
 
     def reset(self):
-        """
-        Give unit maximum values for all dynamic attributes
-        """
+        """Give unit maximum values for all dynamic attributes"""
         DynamicParameter.reset(self)
 
     @property

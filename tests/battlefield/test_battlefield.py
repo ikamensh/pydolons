@@ -4,37 +4,32 @@ from battlefield.Facing import Facing
 def test_movement_preserves_facing(game_hvsp, hero):
 
     for facing in [Facing.EAST, Facing.NORTH, Facing.WEST, Facing.SOUTH]:
-        game_hvsp.battlefield.unit_facings[hero] = facing
-        game_hvsp.battlefield.move(hero, (1 + 1j))
-        assert game_hvsp.battlefield.unit_facings[hero] == facing
+        hero.facing = facing
+        hero.cell = 1 + 1j
+        assert hero.facing == facing
 
 
 def test_units_dont_block_movement(game_hvsp, hero):
     location_before = Cell(3, 4)
-    game_hvsp.battlefield.move(hero, location_before)
+    hero.cell = location_before
 
-    assert game_hvsp.battlefield.units_at[Cell(4, 4)] is not None  # expecting a pirate from conftest
+    assert game_hvsp.bf.cells_to_units[Cell(4, 4)] # expecting a pirate from conftest
 
     game_hvsp.order_move(hero, Cell(4, 4))
-    assert location_before != game_hvsp.get_location(hero)
+    assert location_before != hero.cell
 
 def test_obstacles_block_movement(game_hvsp, hero):
     location_before = Cell(3, 4)
-    game_hvsp.battlefield.move(hero, location_before)
+    hero.cell = location_before
 
-    assert game_hvsp.battlefield.units_at[Cell(4, 4)] is not None  # expecting a pirate from conftest
-    game_hvsp.battlefield.units_at[Cell(4, 4)][0].is_obstacle = True
+    assert game_hvsp.bf.cells_to_units[Cell(4, 4)]  # expecting a pirate from conftest
+    game_hvsp.bf.cells_to_units[Cell(4, 4)][0].is_obstacle = True
 
     game_hvsp.order_move(hero, Cell(4, 4))
-    assert location_before == game_hvsp.get_location(hero)
-
-def test_valid_placement(game_hvsp):
-    battlefield8 = game_hvsp.battlefield
-    assert len(battlefield8.unit_locations) == 4
-
+    assert location_before == hero.cell
 
 def test_distance_unit_to_point(game_hvsp):
-    battlefield8 = game_hvsp.battlefield
+    battlefield8 = game_hvsp.bf
 
     hero = battlefield8.get_units_at(Cell(1, 1))[0]
     assert battlefield8.distance(hero, Cell(1, 4)) == 3

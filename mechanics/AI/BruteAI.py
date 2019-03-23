@@ -13,7 +13,7 @@ class BruteAI:
 
         neighbour_nodes = self.game.get_all_neighbouring_states(active_unit)
 
-        faction = self.game.factions[active_unit]
+        faction = active_unit.faction
         # nodes_utils = [(node, node.utility(faction)) for node in neighbour_nodes] #easy debug
         best_node = max(neighbour_nodes, key= lambda x: x.utility(faction))
 

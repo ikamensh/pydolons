@@ -17,7 +17,7 @@ class Level_demo_dungeon(BaseLevel):
 
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
-        self.world.setWorldSize(game.battlefield.w, game.battlefield.h)
+        self.world.setWorldSize(game.bf.w, game.bf.h)
         self.world.setFloor(self.gameconfig.getPicFile('floor.png'))
 
         self.setMiddleLayer(UnitMiddleLayer(self.gameconfig))
@@ -40,12 +40,12 @@ class Level_demo_dungeon(BaseLevel):
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
             if isinstance(unit, bf_objs.Unit):
-                gameUnit.setDirection(battlefield.unit_facings[unit])
+                gameUnit.setDirection(unit.facing)
             gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
             gameUnit.uid = unit.uid
             self.units.addToGroup(gameUnit)
             # добавили gameunit
-            self.units.units_at[unit.uid] = gameUnit
+            self.units.cells_to_units[unit.uid] = gameUnit
 
-        self.units.active_unit = self.units.units_at[self.game.turns_manager.get_next().uid]
-        self.middleLayer.createSuppot(self.units.units_at)
+        self.units.active_unit = self.units.cells_to_units[self.game.turns_manager.get_next().uid]
+        self.middleLayer.createSuppot(self.units.cells_to_units)

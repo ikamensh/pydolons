@@ -9,7 +9,7 @@ def test_impassable_event(obstacle, hero, empty_game):
 
     MovementEvent(hero, 1+2j)
 
-    assert empty_game.battlefield.unit_locations[hero] == 1+1j
+    assert hero.cell == 1+1j
 
 def test_impassible_action(obstacle, hero, empty_game):
 
@@ -27,7 +27,7 @@ def test_impassible_action(obstacle, hero, empty_game):
 
 
 import pytest
-from exceptions import PydolonsException
+from exceptions import PydolonsError
 
 def test_impassible_order(obstacle, hero, empty_game):
 
@@ -37,7 +37,7 @@ def test_impassible_order(obstacle, hero, empty_game):
 
     tgt_cell = Cell(1,2)
 
-    with pytest.raises(PydolonsException):
+    with pytest.raises(PydolonsError):
         empty_game.order_move(hero, tgt_cell)
 
-    assert empty_game.battlefield.unit_locations[hero] == 1+1j
+    assert hero.cell == 1+1j

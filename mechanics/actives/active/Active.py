@@ -16,8 +16,6 @@ from mechanics.conditions.ActiveCheck import ActiveCheck
 from mechanics.conditions.ActiveCondition import ActiveCondition
 
 
-
-
 class Active:
     last_uid = 0
 

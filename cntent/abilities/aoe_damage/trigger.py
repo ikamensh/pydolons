@@ -5,8 +5,8 @@ from mechanics.damage import ImpactFactor
 
 def aoe_damage_callback(t,e:DamageEvent):
 
-    bf = e.game.battlefield
-    target_cell = bf.unit_locations[e.target]
+    bf = e.game.bf
+    target_cell = e.target.cell
     recipients = bf.get_units_within_radius(center=target_cell, radius=t.radius)
     for unit in recipients:
         new_e = DamageEvent(e.damage*t.percentage, unit,

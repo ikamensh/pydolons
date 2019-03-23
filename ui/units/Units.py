@@ -97,9 +97,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def updateVision(self):
         hero = self.level.gameRoot.game.the_hero
-        bf = self.level.gameRoot.game.battlefield
+        bf = self.level.gameRoot.game.bf
         self.level.gameVision.setSeenCells(bf.vision.std_seen_cells(hero))
-        for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
+        for cell, units in self.level.gameRoot.game.units:
             if cell not in bf.vision.std_seen_cells(hero):
                 for u in units:
                     unit = self.units_at.get(u.uid)
@@ -112,7 +112,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
                         unit.setVisible(True)
 
     def update_heaps(self):
-        for cell, units in self.level.gameRoot.game.battlefield.units_at.items():
+        for cell, units in self.level.gameRoot.game.bf.cells_to_units.items():
             if len(units) > 1:
                 if cell in self.units_heaps.keys():
                     self.units_heaps[cell].info()
@@ -142,7 +142,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def toolTipShow(self, item):
         pos = self.level.gameRoot.tr_support.groupToScene(item)
         self.level.gameRoot.gamePages.toolTip.setPos(pos[0], pos[1])
-        units = self.level.gameRoot.game.battlefield.units_at.get(item.worldPos)
+        units = self.level.gameRoot.game.bf.cells_to_units.get(item.worldPos)
         if units is not None:
             if len(units) == 1:
                 self.level.gameRoot.gamePages.toolTip.setDict(units[0].tooltip_info)

@@ -54,12 +54,12 @@ def punish_move_damage_conditioned_cb(t: Trigger, e: MovementEvent):
 
 
 def cond_enemy_moves(t, e: MovementEvent):
-    return e.game.factions[t.zone_control_unit] != e.game.factions[e.unit]
+    return t.zone_control_unit.faction != e.unit.faction
 
 
 def cond_from_within_radius(t, e: MovementEvent):
     initial_location = e.cell_from
-    return e.game.battlefield.distance(t.zone_control_unit, initial_location) <= t.zone_control_radius
+    return e.game.bf.distance(t.zone_control_unit, initial_location) <= t.zone_control_radius
 
 
 def cond_not_disabled(t, e):
