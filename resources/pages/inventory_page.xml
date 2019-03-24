@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<page name="page_bg"
+        top="0"
+        left="0"
+        width="1920"
+        height="1080"
+        icon="Arena.jpg">
+    <item name="inventory_block"
+          top="0"
+          left="0"
+            width="1920"
+            height="192"
+            icon="cha_page_perk_bg.png">
+        <item name="scroll_block"
+              position="inherit"
+                top="16"
+                left="128"
+                width="1664">
+                <item name="scroll_but"
+                      position="inherit"
+                      left="0"
+                      top="0"
+                      width="64"
+                      height="16"
+                      input="button"
+                      icon="buckle.png">
+                </item>
+        </item>
+
+    </item>
+    <item name="shop_block"
+          top="888"
+          left="0"
+            width="1920"
+            height="192"
+            icon="cha_page_perk_bg.png">
+        <item name="shop_scroll_block"
+              position="inherit"
+                top="16"
+                left="128"
+                width="1664">
+                <item name="shop_scroll_but"
+                      position="inherit"
+                      left="0"
+                      top="0"
+                      width="64"
+                      height="16"
+                      input="button"
+                      icon="buckle.png">
+                </item>
+        </item>
+
+    </item>
+    <item name="info_block"
+          top="0"
+          left="0"
+          width="512"
+          height="1080"
+          icon="cha_page_perk_bg.png">
+        <item name="info_name"
+              top="208"
+              left="20"
+              text="Thing Info"
+              position="inherit"
+              type="text"
+              font_size="22"
+              color="#FFFFFF">
+        </item>
+        <item name="info_value"
+              top="240"
+              left="20"
+              text=""
+              position="inherit"
+              type="text"
+              font_size="20"
+              color="#FFFFFF"></item>
+        <item name="hero_info_name"
+              top="512"
+              left="20"
+              text="Hero Info"
+              position="inherit"
+              type="text"
+              font_size="22"
+              color="#FFFFFF">
+        </item>
+        <item name="hero_gold_name"
+              top="544"
+              left="20"
+              text="Gold:"
+              position="inherit"
+              type="text"
+              font_size="22"
+              color="#FFFFFF">
+        </item>
+        <item name="hero_gold_value"
+              top="544"
+              left="148"
+              text="0"
+              position="inherit"
+              type="text"
+              font_size="22"
+              color="#FFFFFF">
+        </item>
+    </item>
+    <item name="equipments_block"
+          left="684"
+          top="0"
+          width="552"
+          height="1080"
+          icon="cha_page_masteri_bg.png">
+        <item name="equipments_left"
+              left="10"
+              top="328"
+              position="inherit">
+            <item name="equip_head"
+                  position="inherit"
+                  left="0"
+                  top="10"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+                <item name="equip_slot_head"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  width="128"
+                  height="128"
+                  input="button"
+                  icon="head_pic.png">
+            </item>
+            </item>
+            <item name="equip_body"
+                  position="inherit"
+                  left="0"
+                  top="148"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+                <item name="equip_slot_body"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  width="128"
+                  height="128"
+                      input="button"
+                  icon="body_pic.png">
+            </item>
+            </item>
+            <item name="equip_feet"
+                  position="inherit"
+                  left="0"
+                  top="286"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+                <item name="equip_slot_feet"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  width="128"
+                  height="128"
+                  input="button"
+                      icon="feet_pic.png"></item>
+            </item>
+        </item>
+        <item name="equipments_center"
+              left="148"
+              top="328"
+              position="inherit">
+
+        </item>
+        <item name="equipments_right"
+              left="414"
+              top="328"
+              position="inherit">
+            <item name="equip_ring1"
+                  position="inherit"
+                  left="0"
+                  top="10"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+                <item name="equip_slot_ring1"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  width="128"
+                  height="128"
+                  input="button"
+                      icon="ring_pic.png">
+
+                </item>
+            </item>
+            <item name="equip_hands"
+                  position="inherit"
+                  left="0"
+                  top="148"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+                <item name="equip_slot_hands"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  width="128"
+                  height="128"
+                  input="button"
+                      icon="hand_pic.png">
+
+                </item>
+            </item>
+            <item name="equip_ring2"
+                  position="inherit"
+                  left="0"
+                  top="286"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+                <item name="equip_slot_ring2"
+                  position="inherit"
+                  left="0"
+                  top="0"
+                  width="128"
+                  height="128"
+                  input="button"
+                      icon="ring_pic.png"></item>
+            </item>
+        </item>
+    </item>
+    <item name="quickitems_block"
+            top="0"
+            left="1236"
+            width="424"
+            height="1080"
+            icon="cha_page_masteri_bg.png">
+            <item name="quickitems_name"
+                  position="inherit"
+                  top="256"
+                  left="10"
+                  text="Quick items"
+                  font_size="24"
+                  type="text"></item>
+            <item name="quickitems_item"
+                  position="inherit"
+                  left="10"
+                  top="338"
+                  width="128"
+                  height="128"
+                  icon="cha_page_elemnt_bg.png">
+            </item>
+
+    </item>
+</page>

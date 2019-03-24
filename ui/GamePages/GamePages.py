@@ -8,7 +8,8 @@ from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
 from ui.GamePages.GameMenuPage import GameMenuPage
 from ui.GamePages.character_page.CharacterPage import CharacterPage
-from ui.GamePages.InventoryPage import InventoryPage
+# from ui.GamePages.InventoryPage import InventoryPage
+from ui.GamePages.inventory_page.InventoryPage import InventoryPage
 from ui.GamePages.BackGorundPage import BackGorundPage
 from ui.GamePages.ReadmePage import ReadmePage
 from ui.GamePages.SettingsPage import SettingsPage
@@ -86,7 +87,9 @@ class GamePages(object):
 
     def setUpInventoryPage(self):
         inventoryPage = self.buildPage('inventoryPage', InventoryPage)
-        self.gameRoot.controller.mouseMove.connect(inventoryPage.mouseMoveEvent)
+        self.gameRoot.scene.addItem(inventoryPage)
+        inventoryPage.hidePage()
+        # self.gameRoot.controller.mouseMove.connect(inventoryPage.mouseMoveEvent)
 
     def setUpReadmePage(self):
         self.readme = self.buildPage('readmePage', ReadmePage)

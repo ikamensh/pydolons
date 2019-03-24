@@ -19,7 +19,7 @@ class Character:
 
         self.perk_trees = [everymans_perks()]
 
-        self.gold = 0
+        self.gold = 10000
 
     @property
     def masteries_can_go_up(self) -> Set[MasteriesEnum]:

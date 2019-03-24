@@ -1,5 +1,5 @@
 from ui.GamePages.AbstractPage import AbstractPage
-from ui.GamePages.suwidgets.TestItem import TestItem
+from ui.GamePages.suwidgets.BaseItem import BaseItem
 from ui.GamePages.suwidgets.TextItem import TextItem
 from ui.GamePages.character_page.GamePerkTree import GamePerkTree
 from ui.GamePages.character_page.GameMasteries import GameMasteries
@@ -10,9 +10,6 @@ from PySide2 import QtCore
 class CharacterPage(AbstractPage):
     def __init__(self, gamePages):
         super(CharacterPage, self).__init__(gamePages)
-        self.xml_page = None
-        self.items = {}
-        self.elements = {}
         self.readXML('character_page.xml')
         self.read_tree()
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
@@ -27,9 +24,6 @@ class CharacterPage(AbstractPage):
 
     def keyPressEvent(self, e):
         pass
-
-    def setUpGui(self):
-        self.read_tree(self.xml_page)
 
     def showPage(self):
         self.state = True
@@ -63,7 +57,7 @@ class CharacterPage(AbstractPage):
             # print(item.name, 'press')
             pass
 
-    def releaseItem(self, item:TestItem):
+    def releaseItem(self, item:BaseItem):
         if item is not None:
             # print(item.name, 'release')
             if item.input == 'button':
@@ -182,7 +176,7 @@ class CharacterPage(AbstractPage):
                 spent_value.setText(self.gha.free_xp)
         self.hero_attr_update()
 
-    def heroAttr_change(self, item:TestItem):
+    def heroAttr_change(self, item:BaseItem):
         if item._names[2] == 'up':
             self.heroAttr_up(item._names[1])
         elif item._names[2] == 'down':
@@ -235,12 +229,6 @@ class CharacterPage(AbstractPage):
         if info is not None:
             self.items.get('info_value').setText(self.setDict(info))
         pass
-
-    def setDict(self, data):
-        result = ''
-        for k, v in data.items():
-            result = result + k + ' : ' + v + '\n'
-        return result
 
     def clear_colors(self):
         for item in self.items.values():
