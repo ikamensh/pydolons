@@ -48,7 +48,7 @@ class GameMenuPage(AbstractPage):
         self.unitStack.items = {}
         w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
         i = 0
-        for unit in self.gamePages.gameRoot.level.units.cells_to_units.values():
+        for unit in self.gamePages.gameRoot.level.units.units_at.values():
             item = GameObject(w_u, w_u)
             item.setParentItem(self.unitStack)
             item.setPixmap(unit.pixmap().scaled(w_u, w_u))

@@ -63,8 +63,9 @@ class BasicUnit(QObject, GameObject):
                 }
 
     def setDirection(self, turn):
+        print(self.dir_angle, turn)
         if turn != self.dir_angle:
-            start, end = BasicUnit.dir_dict[(self.dir_angle, turn)]
+            start, end = self.dir_dict.get((self.dir_angle, turn), (0, 90))
             self.dirAni.play_anim(start, end)
             self.dir_angle = turn
 

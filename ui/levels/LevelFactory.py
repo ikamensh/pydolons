@@ -41,8 +41,8 @@ class LevelFactory:
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
 
         self.level.gameVision = GameVision(self.level)
-
-        self.setUpUnits(self.gameRoot.game.battlefield)
+        print(dir(self.gameRoot.game))
+        self.setUpUnits(self.gameRoot.game.bf)
         self.level.gameRoot.cfg.setWorld(self.level.world)
         self.level.gameRoot.controller.setUp(self.level.world, self.level.units, self.level.middleLayer)
         self.level.gameRoot.controller.tr_support.initLevel(self.level)
@@ -50,7 +50,9 @@ class LevelFactory:
 
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
-        for unit, unit_pos in battlefield.unit_locations.items():
+        for unit_pos, units in battlefield.cells_to_units.items():
+            print(units)
+            unit = units[0]
             if isinstance(unit, bf_objs.Unit):
                 gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg, unit_bf = unit)
                 if unit.icon == 'hero.png':
@@ -64,7 +66,8 @@ class LevelFactory:
                 self.level.units.setUpToolTip(gameUnit)
                 self.level.units.addToGroup(gameUnit)
                 # добавили gameunit
-                self.level.units.cells_to_units[unit.uid] = gameUnit
+                print(unit.uid)
+                self.level.units.units_at[unit.uid] = gameUnit
             elif isinstance(unit, Obstacle):
                 obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
                                         self.gameRoot.cfg.unit_size[1],
@@ -74,10 +77,11 @@ class LevelFactory:
                 obstacle.uid = unit.uid
                 self.level.world.addToGroup(obstacle)
                 if obstacle.name == 'Wooden door':
-                    self.level.units.cells_to_units[unit.uid] = obstacle
+                    self.level.units.units_at[unit.uid] = obstacle
                 self.level.world.obstacles[unit.uid] = obstacle
-
-        self.level.units.active_unit = self.level.units.cells_to_units[self.gameRoot.game.turns_manager.get_next().uid]
+        print('next', self.gameRoot.game.turns_manager.get_next())
+        print('uid', self.gameRoot.game.turns_manager.get_next().uid)
+        self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
         self.level.units.updateVision()
 
     def addLevelToScene(self, scene):

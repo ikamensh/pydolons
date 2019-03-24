@@ -97,10 +97,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def updateVision(self):
         hero = self.level.gameRoot.game.the_hero
-        bf = self.level.gameRoot.game.bf
-        self.level.gameVision.setSeenCells(bf.vision.std_seen_cells(hero))
-        for cell, units in self.level.gameRoot.game.units:
-            if cell not in bf.vision.std_seen_cells(hero):
+        self.level.gameVision.setSeenCells(self.level.gameRoot.game.vision.std_seen_cells(hero))
+        for cell, units in self.level.gameRoot.game.bf.cells_to_units.items():
+            if cell not in self.level.gameRoot.game.vision.std_seen_cells(hero):
                 for u in units:
                     unit = self.units_at.get(u.uid)
                     if unit is not None:
