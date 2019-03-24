@@ -26,3 +26,12 @@ class StyleConfig:
         self.main_font.setPointSize(pointSize)
         # self.main_font.set
         QGuiApplication.setFont(self.main_font)
+
+    def calculateScales(self):
+        WIDTH = 1920
+        HEIGHT = 1080
+        self.scale_x = self.dev_size[0] / WIDTH
+        self.scale_y = self.dev_size[1] / HEIGHT
+        print('scales x:y = ', self.scale_x, self.scale_y)
+        print('font system_hint', self.system_hint)
+        print('font system_pixelSize', self.system_pixelSize)
