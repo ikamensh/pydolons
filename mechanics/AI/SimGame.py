@@ -191,3 +191,22 @@ class SimGame:
             for other in unit.actives:
                 if active_uid == other.uid:
                     return other
+
+
+    @staticmethod
+    def cost_heuristic(unit: Unit, factors = None):
+        _factors = factors or {}
+
+        def _(active):
+            cost = active.cost
+            hp_relative_cost = cost.health / unit.health * _factors.get("hp", 1)
+            mana_relative_cost = cost.mana / unit.mana * _factors.get("mana", 0.5)
+            stamina_relative_cost = cost.stamina / unit.stamina * _factors.get("stamina", 0.5)
+            readiness_cost = cost.readiness * _factors.get("rdy", 0.1)
+
+            return sum( (hp_relative_cost,
+                         mana_relative_cost,
+                         stamina_relative_cost,
+                         readiness_cost) )
+
+        return _
