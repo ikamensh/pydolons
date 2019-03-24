@@ -16,8 +16,8 @@ class Monster:
         self.masteries = masteries
 
 
-    def create(self, game) -> Unit:
-        unit = Unit(self.base_type, game=game)
+    def create(self, game, cell=None) -> Unit:
+        unit = Unit(self.base_type, game=game, cell=cell)
         if self.items:
             self.items.random = game.random
             for item in self.items:

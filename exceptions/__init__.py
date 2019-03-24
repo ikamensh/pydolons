@@ -1,3 +1,3 @@
-from exceptions.PydolonsException import PydolonsException
-from exceptions.CantAffordActiveException import CantAffordActiveException
-from exceptions.InvalidTargetException import InvalidTargetException
+from exceptions.PydolonsError import PydolonsError
+from exceptions.CantAffordActiveException import CantAffordActiveError
+from exceptions.InvalidTargetException import InvalidTargetError

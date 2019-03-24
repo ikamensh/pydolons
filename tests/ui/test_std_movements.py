@@ -25,8 +25,8 @@ def check_contains_right_action_and_cell(collect_events, action, cell):
 
 @pytest.mark.parametrize("facing", facings)
 def test_can_move_forward(hero_only_game, hero, collect_events, facing):
-    pos = hero_only_game.battlefield.unit_locations[hero_only_game.the_hero]
-    hero_only_game.battlefield.unit_facings[hero_only_game.the_hero] = facing
+    pos = hero.cell
+    hero.facing = facing
 
     target_cell = Cell.from_complex(pos.complex + facing)
 
@@ -37,8 +37,8 @@ def test_can_move_forward(hero_only_game, hero, collect_events, facing):
 
 @pytest.mark.parametrize("facing", facings)
 def test_can_move_back(hero_only_game, hero, collect_events, facing):
-    pos = hero_only_game.battlefield.unit_locations[hero_only_game.the_hero]
-    hero_only_game.battlefield.unit_facings[hero_only_game.the_hero] = facing
+    pos = hero.cell
+    hero.facing = facing
 
     target_cell = Cell.from_complex(pos.complex - facing)
 
@@ -50,8 +50,8 @@ def test_can_move_back(hero_only_game, hero, collect_events, facing):
 
 @pytest.mark.parametrize("facing", facings)
 def test_can_move_left(hero_only_game, hero, collect_events, facing):
-    pos = hero_only_game.battlefield.unit_locations[hero_only_game.the_hero]
-    hero_only_game.battlefield.unit_facings[hero_only_game.the_hero] = facing
+    pos = hero.cell
+    hero.facing = facing
 
     target_cell = Cell.from_complex(pos.complex + facing * 1j)
 
@@ -63,8 +63,8 @@ def test_can_move_left(hero_only_game, hero, collect_events, facing):
 
 @pytest.mark.parametrize("facing", facings)
 def test_can_move_right(hero_only_game, hero, collect_events, facing):
-    pos = hero_only_game.battlefield.unit_locations[hero_only_game.the_hero]
-    hero_only_game.battlefield.unit_facings[hero_only_game.the_hero] = facing
+    pos = hero.cell
+    hero.facing = facing
 
     target_cell = Cell.from_complex(pos.complex + facing * -1j)
 
@@ -76,8 +76,8 @@ def test_can_move_right(hero_only_game, hero, collect_events, facing):
 @pytest.mark.parametrize("facing", facings)
 def test_can_move_diag_left(hero_only_game, hero, collect_events, facing):
 
-    pos = hero_only_game.battlefield.unit_locations[hero_only_game.the_hero]
-    hero_only_game.battlefield.unit_facings[hero_only_game.the_hero] = facing
+    pos = hero.cell
+    hero.facing = facing
 
     target_cell = Cell.from_complex(pos.complex + facing * (1+1j) )
     hero_only_game.ui_order(target_cell.x, target_cell.y)
@@ -86,8 +86,8 @@ def test_can_move_diag_left(hero_only_game, hero, collect_events, facing):
 
 @pytest.mark.parametrize("facing", facings)
 def test_can_move_diag_right(hero_only_game, hero, collect_events, facing):
-    pos = hero_only_game.battlefield.unit_locations[hero_only_game.the_hero]
-    hero_only_game.battlefield.unit_facings[hero_only_game.the_hero] = facing
+    pos = hero.cell
+    hero.facing = facing
 
     target_cell = Cell.from_complex(pos.complex + facing * (1 - 1j))
     hero_only_game.ui_order(target_cell.x, target_cell.y)

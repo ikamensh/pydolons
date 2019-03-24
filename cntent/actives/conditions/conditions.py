@@ -1,4 +1,4 @@
-from battlefield import Cell
+from battlefield import Cell, Battlefield
 from mechanics.events import MovementEvent
 from mechanics.conditions import ActiveCondition
 
@@ -6,7 +6,7 @@ from mechanics.conditions import ActiveCondition
 def proximity_condition(max_distance):
 
     def _(active, target):
-        return active.game.battlefield.distance(active.owner, target) <= max_distance
+        return active.game.bf.distance(active.owner, target) <= max_distance
 
     c = ActiveCondition("Proximity", _, "{target} is too far away.")
 
@@ -15,7 +15,7 @@ def proximity_condition(max_distance):
 def range_condition(min_dist, max_dist):
 
     def _(active, target):
-        return min_dist <= active.game.battlefield.distance(active.owner, target) <= max_dist
+        return min_dist <= active.game.bf.distance(active.owner, target) <= max_dist
 
     c = ActiveCondition("Range", _,
                         f"Distance to target must be in range [{min_dist},{max_dist}].")
@@ -23,9 +23,8 @@ def range_condition(min_dist, max_dist):
     return c
 
 def __get_angle(active, target):
-    bf = active.game.battlefield
-    target_cell = target if isinstance(target, Cell) else bf.unit_locations[target]
-    return bf.angle_to(active.owner, target_cell)
+    target_cell = target if isinstance(target, Cell) else target.cell
+    return Battlefield.angle_to(active.owner, target_cell)
 
 
 def within_angle(max_angle_inkl):

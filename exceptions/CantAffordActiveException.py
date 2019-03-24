@@ -1,6 +1,6 @@
-from exceptions import PydolonsException
+from exceptions import PydolonsError
 
-class CantAffordActiveException(PydolonsException):
+class CantAffordActiveError(PydolonsError):
 
     def __init__(self, active, missing):
         assert missing in ["mana", "stamina", "health"]

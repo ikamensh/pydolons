@@ -18,7 +18,7 @@ def test_zone_control(pirate_band, empty_game, no_chances):
     p2.readiness = 1.5
     empty_game.order_move(p2, 2+4j)
 
-    assert empty_game.battlefield.unit_locations[p2].complex == 2+3j
+    assert p2.cell.complex == 2+3j
     actives_found = 0
     attacks_found = 0
     for event, happened in spy:
@@ -48,7 +48,7 @@ def test_zone_control_no_friendly_fire(pirate_band, empty_game, no_chances):
     p2.readiness = 1.5
     empty_game.order_move(p2, 2+4j)
 
-    assert empty_game.battlefield.unit_locations[p2].complex == 2+4j
+    assert p2.cell.complex == 2+4j
 
     actives_found = 0
     attacks_found = 0
@@ -79,7 +79,7 @@ def test_zone_control_need_active(pirate_band, empty_game, no_chances):
     p2.readiness = 1.5
     empty_game.order_move(p2, 2+4j)
 
-    assert empty_game.battlefield.unit_locations[p2].complex == 2+4j
+    assert p2.cell.complex == 2+4j
 
     actives_found = 0
     attacks_found = 0
@@ -110,7 +110,7 @@ def test_zone_control_need_readiness(pirate_band, empty_game, no_chances):
     p2.readiness = 1.5
     empty_game.order_move(p2, 2+4j)
 
-    assert empty_game.battlefield.unit_locations[p2].complex == 2+4j
+    assert p2.cell.complex == 2+4j
 
     actives_found = 0
     attacks_found = 0

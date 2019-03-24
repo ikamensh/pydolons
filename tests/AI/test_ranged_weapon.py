@@ -15,6 +15,7 @@ def test_shoots(empty_simgame, hero):
     assert target is hero
 
 def test_can_shoot(empty_simgame, hero):
+    assert empty_simgame.bf.game is empty_simgame
     shooter = tel_razi_scrub.create(empty_simgame)
 
     empty_simgame.add_unit(shooter, 2+2j, facing=1j)

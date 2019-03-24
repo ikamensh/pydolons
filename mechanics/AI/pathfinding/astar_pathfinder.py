@@ -1,7 +1,12 @@
+from __future__ import annotations
 from collections import namedtuple
 from battlefield import Battlefield
 from mechanics.actives import ActiveTags
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
+    from typing import List, Tuple
+    from mechanics.actives import Cost
 
 Node = namedtuple("PathNode", "pos facing")
 
@@ -13,8 +18,8 @@ class StarSearch(AStar):
         super().__init__()
         self.game = game
         self.unit = unit
-        self.w = game.battlefield.w
-        self.h = game.battlefield.h
+        self.w = game.bf.w
+        self.h = game.bf.h
         self.costs_cache = {}
 
         self.transitions = self.build_transitions(unit)
@@ -25,7 +30,7 @@ class StarSearch(AStar):
             vector, rotation, cost = t
             pos, facing = node.pos + vector * node.facing, node.facing * rotation
             if 0 <= pos.real < self.w and 0 <= pos.imag < self.h:
-                if self.game.battlefield.get_units_at(pos) is not None:
+                if self.game.bf.get_units_at(pos) is not None:
                     continue
                 new_node = Node(pos, facing)
                 _neighbors.append(new_node)
@@ -46,25 +51,22 @@ class StarSearch(AStar):
         return distance <= 1.5
 
     def path_to(self, _cell, desired_facing=1j):
-        start = Node(self.game.battlefield.unit_locations[self.unit].complex,
-                     self.game.battlefield.unit_facings[self.unit])
+        start = Node(self.unit.cell.complex, self.unit.facing)
 
         cell = _cell.complex if not isinstance(_cell, complex) else _cell
-        end = Node(cell,
-                    desired_facing)
+        end = Node(cell, desired_facing)
 
         path = self.astar(start, end)
         return list(path)
 
     @staticmethod
-    def build_transitions(unit):
+    def build_transitions(unit: Unit) -> List[Tuple[complex, complex, Cost]]:
         game = unit.game
-        real_bf = game.battlefield
+        real_bf = game.bf
 
         bf = Battlefield(12, 12)
         game.battlefield = bf
-        location = 5 + 5j
-        bf.place(unit, location)
+        unit.cell = 5 + 5j
 
         choices = game.get_all_choices(unit)
         move_choices = [c for c in choices if ActiveTags.MOVEMENT in c[0].tags]
@@ -74,7 +76,7 @@ class StarSearch(AStar):
         transitions = []
         for c in move_choices:
             action, cell = c
-            vector = cell.complex - location
+            vector = cell.complex - unit.cell.complex
             rotation = 1 + 0j
             transitions.append((vector, rotation, action.cost))
 

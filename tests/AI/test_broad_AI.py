@@ -10,7 +10,7 @@ import pytest
 def test_returns_actions(minigame):
 
     ai = BroadAI(minigame)
-    unit = list(minigame.battlefield.unit_locations.keys())[0]
+    unit = list(minigame.units)[0]
 
     action, target = ai.decide_step(unit)
     assert isinstance(action, Active)
@@ -18,15 +18,15 @@ def test_returns_actions(minigame):
 
 def test_locations_are_intact(minigame):
 
+    ai = BroadAI(minigame)
+    locations_initial = (minigame.bf.cells_to_units,
+                         [{u:u.facing} for u in minigame.units])
 
-    locations_initial = (minigame.battlefield.unit_locations, minigame.battlefield.unit_facings)
+    for u in minigame.units:
+        ai.decide_step(u)
 
-    for i in range(3):
-        ai = BroadAI(minigame)
-        unit = list(minigame.battlefield.unit_locations.keys())[0]
-
-        ai.decide_step(unit)
-        assert locations_initial == (minigame.battlefield.unit_locations, minigame.battlefield.unit_facings)
+        assert locations_initial == (minigame.bf.cells_to_units,
+                                     [{u: u.facing} for u in minigame.units])
 
 
 def test_chooses_imba_targets_enemy(minigame, imba_ability, hero, pirate):
@@ -44,7 +44,7 @@ def test_chooses_imba_targets_enemy(minigame, imba_ability, hero, pirate):
 
 
     assert action is ingame_imba
-    assert minigame.factions[target] is not minigame.factions[hero]
+    assert target.faction is not hero.faction
 
 def test_chooses_imba_targets_enemy_inverse(minigame, imba_ability, hero, pirate):
     ai = BroadAI(minigame)
@@ -57,14 +57,14 @@ def test_chooses_imba_targets_enemy_inverse(minigame, imba_ability, hero, pirate
     assert minigame.delta((ingame_imba, pirate)) < 0
 
     assert action is ingame_imba
-    assert minigame.factions[target] is not minigame.factions[pirate]
+    assert target.faction is not pirate.faction
 
 def test_uses_enabler_abilities(minigame, enabler):
 
 
     ai = BroadAI(minigame)
-    unit = list(minigame.battlefield.unit_locations.keys())[0]
-    minigame.battlefield.move(unit, 0j)
+    unit = list(minigame.units)[0]
+    unit.cell = 0j
     ingame_imba = unit.give_active(enabler)
 
     action, target = ai.decide_step(unit)
@@ -73,7 +73,7 @@ def test_uses_enabler_abilities(minigame, enabler):
 
 @pytest.mark.skip(reason="actions are rolled out and can seem harmless.")
 def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype):
-    _game = SimGame(simple_battlefield)
+    _game = DreamGame(simple_battlefield)
     _game.add_unit(mud_golem, 3 + 3j, Faction.ENEMY, 1j)
     _game.add_unit(hero, 3 + 4j, Faction.PLAYER, 1 + 0j)
 
@@ -91,6 +91,6 @@ def test_no_friendly_fire(simple_battlefield, hero,  mud_golem, pirate_basetype)
         active_unit = _game.turns_manager.get_next()
         active, target = _game.enemy_ai.decide_step(active_unit)
         if isinstance(target, Unit):
-            if _game.factions[target] is _game.factions[active_unit]:
+            if target.faction is active_unit.faction:
                 assert False
         active_unit.activate(active, target)

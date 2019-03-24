@@ -1,34 +1,49 @@
-from battlefield.Cell import Cell
+from __future__ import annotations
+from battlefield import Cell, Battlefield
 import numpy as np
 import functools
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit, BattlefieldObject
+    from typing import Set
+    from DreamGame import DreamGame
 
 
 class Vision:
+    def __init__(self, game: DreamGame):
+        self.game = game
 
-    def __init__(self, battlefield):
-        self.battlefield = battlefield
+    def x_sees_y(self, x, y):
+        if x.is_obstacle:
+            return False
 
-    def std_seen_cells(self, unit):
-        bf = self.battlefield
-        facing = bf.unit_facings.get(unit)
-        if facing is not  None:
-            cell_from = bf.unit_locations[unit]
-            visible_cells = set( self.std_vision_field(unit.sight_range, facing, cell_from, bf) )
-            obstacles = {cell for cell in self.battlefield.units_at if cell in visible_cells}
-            obstacles -= {cell_from}
-            walls = frozenset({cell for cell in self.battlefield.units_at if cell in visible_cells and
-                     self.battlefield.units_at[cell][0].is_obstacle})
-            diag_wall_blockers = self.merge_walls(walls)
-            obstacles |= diag_wall_blockers
-            for obstacle in obstacles:
-                for cell_to in set(visible_cells):
-                    if self.blocks(cell_from, cell_to, obstacle):
-                        visible_cells.remove(cell_to)
-            return visible_cells
+        cells_x_sees = self.std_seen_cells(x)
+        return y.cell in cells_x_sees
+
+    def std_seen_cells(self, unit: Unit):
+        all_bf_objs: Set[BattlefieldObject] = self.game.units | self.game.obstacles
+
+        cell_from = unit.cell
+        visible_cells = set(self._std_vision_field(unit.sight_range,
+                                                   unit.facing,
+                                                   cell_from,
+                                                   self.game.bf))
+        obstacles = {obj.cell for obj in all_bf_objs if obj.cell in visible_cells}
+        obstacles -= {cell_from}
+        visible_walls = frozenset({o.cell for o in all_bf_objs
+                                   if o.cell in visible_cells and o.is_obstacle})
+        diag_wall_blockers = Vision._merge_walls(visible_walls)
+        obstacles |= diag_wall_blockers
+        for obstacle in obstacles:
+            for cell_to in set(visible_cells):
+                if Vision.blocks(cell_from, cell_to, obstacle):
+                    visible_cells.remove(cell_to)
+
+        return visible_cells
 
     @staticmethod
     @functools.lru_cache(maxsize=int(2**8))
-    def merge_walls(obstacles):
+    def _merge_walls(obstacles):
         """
         Creates new artificial obstacles to enable diagonal walls.
         :param obstacles: all obstacles within sight
@@ -43,12 +58,9 @@ class Vision:
 
         return new_obstacles
 
-
-
-
     @staticmethod
     @functools.lru_cache(maxsize=int(2**10))
-    def std_vision_field(sight_range, facing, cell_from, bf):
+    def _std_vision_field(sight_range, facing, cell_from, bf):
         """
         :return: a set of cells from battlefield :bf which are normally visible
         from :cell_from when facing in the direction :facing and having :sight_range
@@ -74,9 +86,9 @@ class Vision:
 
         visible_cells = set()
         if facing.real:
-            metric = Vision.dist_eliptic_y
+            metric = Vision._dist_eliptic_y
         else:
-            metric = Vision.dist_eliptic_x
+            metric = Vision._dist_eliptic_x
 
         for x in range(xmin, xmax + 1):
             for y in range(ymin, ymax + 1):
@@ -87,11 +99,11 @@ class Vision:
         return frozenset(visible_cells)
 
     @staticmethod
-    def dist_eliptic_x(p1, p2):
+    def _dist_eliptic_x(p1, p2):
         return Cell._hypot( 1.45*(p1.x - p2.x) , (p1.y - p2.y) )
 
     @staticmethod
-    def dist_eliptic_y(p1, p2):
+    def _dist_eliptic_y(p1, p2):
         return Cell._hypot((p1.x - p2.x), 1.45*(p1.y - p2.y))
 
 

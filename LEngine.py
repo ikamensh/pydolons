@@ -4,7 +4,7 @@ from cntent.dungeons.pirate_lair import pirate_lair
 from cntent.dungeons.small_graveyard import small_graveyard
 from cntent.dungeons.small_orc_cave import small_orc_cave
 
-from mechanics.AI.SimGame import SimGame
+from DreamGame import DreamGame
 # from GameImitation import DreamGame
 from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
@@ -41,7 +41,7 @@ class LEngine:
 
     def _getGame(self, dungeon):
         print('Start dungeon:', dungeon.name)
-        game = SimGame.start_dungeon(dungeon, self.the_hero)
+        game = DreamGame.start_dungeon(dungeon, self.the_hero)
         self.setUpTriggers(game)
         game.character = self.character
         game.shop = self.getShop(single_palyer=True)

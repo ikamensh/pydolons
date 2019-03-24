@@ -17,7 +17,7 @@ def virtual(unit):
 @contextmanager
 def simulate_death(game, unit):
     position = game.get_location(unit)
-    facing = game.battlefield.unit_facings[unit]
+    facing = unit.facing
     fraction = game.fractions[unit]
     game.unit_died(unit)
     yield

@@ -2,7 +2,7 @@ from mechanics.events import AttackEvent
 
 
 def test_loses_durability(game_hvsp, hero, weapon, pirate, armor, no_chances, monkeypatch):
-    game_hvsp.add_unit(pirate, 7+7j)
+    game_hvsp.add_unit(pirate)
 
     hero.equipment.equip_item( weapon )
     pirate.equipment.equip_item( armor )
@@ -10,7 +10,7 @@ def test_loses_durability(game_hvsp, hero, weapon, pirate, armor, no_chances, mo
     weapon_dur_before = weapon.durability
     armor_dur_before = armor.durability
 
-    monkeypatch.setattr(game_hvsp.battlefield, 'x_sees_y', lambda x, y:True, raising=False)
+    monkeypatch.setattr(game_hvsp.vision, 'x_sees_y', lambda x, y:True, raising=False)
 
     AttackEvent(hero, pirate)
 

@@ -10,47 +10,47 @@ def test_unit_util_positive(hero, pirate):
 
 def test_more_hp_is_better(minigame, hero):
 
-    utility_initial = minigame.utility(minigame.factions[hero])
+    utility_initial = minigame.utility(hero.faction)
     hero.max_health += 100
-    assert utility_initial < minigame.utility(minigame.factions[hero])
+    assert utility_initial < minigame.utility(hero.faction)
 
 def test_invertion(minigame, hero):
-    pirate = [unit for unit in minigame.battlefield.unit_locations if unit is not hero][0]
+    pirate = [unit for unit in minigame.units if unit is not hero][0]
 
-    utility_initial = minigame.utility(minigame.factions[pirate])
+    utility_initial = minigame.utility(pirate.faction)
     hero.max_health += 100
-    assert utility_initial > minigame.utility(minigame.factions[pirate])
+    assert utility_initial > minigame.utility(pirate.faction)
 
 def test_less_hp_is_worse(minigame, hero):
 
-    utility_initial = minigame.utility(minigame.factions[hero])
+    utility_initial = minigame.utility(hero.faction)
     hero.max_health -= 100
-    assert utility_initial > minigame.utility(minigame.factions[hero])
+    assert utility_initial > minigame.utility(hero.faction)
 
 def test_double_inversion(minigame, hero):
 
-    pirate = [unit for unit in minigame.battlefield.unit_locations if unit is not hero][0]
-    utility_initial = minigame.utility(minigame.factions[pirate])
+    pirate = [unit for unit in minigame.units if unit is not hero][0]
+    utility_initial = minigame.utility(pirate.faction)
     hero.max_health -= 100
-    assert utility_initial < minigame.utility(minigame.factions[pirate])
+    assert utility_initial < minigame.utility(pirate.faction)
 
 @pytest.mark.skip(reason="not supported")
 def test_more_mana_is_better(minigame, hero):
-    utility_initial = minigame.utility(minigame.factions[hero])
+    utility_initial = minigame.utility(hero.faction)
     hero.max_mana += 100
-    assert utility_initial < minigame.utility(minigame.factions[hero])
+    assert utility_initial < minigame.utility(hero.faction)
 
 @pytest.mark.skip(reason="not supported")
 def test_more_stamina_is_better(minigame, hero):
-    utility_initial = minigame.utility(minigame.factions[hero])
+    utility_initial = minigame.utility(hero.faction)
     hero.max_stamina += 100
-    assert utility_initial < minigame.utility(minigame.factions[hero])
+    assert utility_initial < minigame.utility(hero.faction)
 
 @pytest.mark.skip(reason="not supported")
 def test_more_readiness_is_better(minigame, hero):
-    utility_initial = minigame.utility(minigame.factions[hero])
+    utility_initial = minigame.utility(hero.faction)
     hero.readiness += 100
-    assert utility_initial < minigame.utility(minigame.factions[hero])
+    assert utility_initial < minigame.utility(hero.faction)
 
 
 
@@ -113,7 +113,7 @@ def test_pirates_cry_too_a_little(minigame, pirate, no_chances, tiny_imba_abilit
 def test_positions_can_go_out_of_utility(minigame):
     n_checked = 0
 
-    for unit in minigame.battlefield.unit_locations:
+    for unit in minigame.units:
         choices = minigame.get_all_choices(unit)
 
         for c in choices:

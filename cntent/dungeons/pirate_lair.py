@@ -2,6 +2,7 @@ from battlefield.Battlefield import Cell
 from cntent.base_types import mud_wall
 from cntent.base_types.doors import wooden_door
 from game_objects.dungeon.Dungeon import Dungeon
+from mechanics.factions import Faction
 
 from cntent.monsters.pirates import pirate_scum, pirate_boatswain, pirate_captain
 
@@ -52,10 +53,14 @@ def create_units(g):
     unit_locations[pirate_boatswain.create(g)] = Cell(13,12)
 
     unit_locations[pirate_captain.create(g)] = Cell(14,4)
-    return unit_locations
+
+    for u, c in unit_locations.items():
+        u.cell = c
+
+    return list(unit_locations.keys())
 
 
-pirate_lair = Dungeon("Pirate headquaters", 16, 16, unit_locations=create_units, hero_entrance=Cell(2, 0), icon="pirates_3.jpg")
+pirate_lair = Dungeon("Pirate headquaters", 16, 16, objs=create_units, hero_entrance=Cell(2, 0), icon="pirates_3.jpg")
 
 
 

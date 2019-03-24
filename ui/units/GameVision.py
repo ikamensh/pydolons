@@ -6,8 +6,8 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
     def __init__(self, level):
         super(GameVision, self).__init__()
         self.level = level
-        self.bf_w = self.level.gameRoot.game.battlefield.w
-        self.bf_h = self.level.gameRoot.game.battlefield.h
+        self.bf_w = self.level.gameRoot.game.bf.w
+        self.bf_h = self.level.gameRoot.game.bf.h
         self.cell_w = self.level.gameRoot.cfg.getSize(103001001)[0]
         self.cell_h = self.level.gameRoot.cfg.getSize(103001001)[1]
         self.cfg = level.gameRoot.cfg

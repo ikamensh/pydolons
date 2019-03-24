@@ -98,11 +98,11 @@ class LevelSelect(AbstractPage):
 
         form_layout.addRow(QtWidgets.QLabel(dungeon.name, parent))
 
-        locs = dungeon.unit_locations(DreamGame())
-        n_units_label = QtWidgets.QLabel(f'{len([u for u in locs.keys() if not u.is_obstacle])}', parent)
+        objs = dungeon.objs(DreamGame())
+        n_units_label = QtWidgets.QLabel(f'{len([u for u in objs if not u.is_obstacle])}', parent)
         form_layout.addRow('Units in the dungeon:', n_units_label)
 
-        max_xp_label = QtWidgets.QLabel(f'{max([u.xp for u in locs.keys() if not u.is_obstacle])}', parent)
+        max_xp_label = QtWidgets.QLabel(f'{max([u.xp for u in objs if not u.is_obstacle])}', parent)
         form_layout.addRow('Strongest enemy XP: ', max_xp_label)
 
         start = QtWidgets.QPushButton('start', parent)

@@ -62,7 +62,7 @@ def perish_anim_trigger(game):
 
 
 def play_trun_anim(t, e):
-    ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.game.battlefield.unit_facings[e.unit]})
+    ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.unit.facing})
 
 def turn_anim_trigger(game):
     return Trigger(TurnEvent,

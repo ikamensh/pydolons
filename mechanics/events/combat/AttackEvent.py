@@ -16,8 +16,8 @@ class AttackEvent(Event):
         self.source = source
         self.target = target
         self.weapon = weapon or source.get_melee_weapon()
-        self.is_backstab = not target.is_obstacle and not game.battlefield.x_sees_y(target, source)
-        self.is_blind = not game.battlefield.x_sees_y(source, target)
+        self.is_backstab = not target.is_obstacle and not game.vision.x_sees_y(target, source)
+        self.is_blind = not game.vision.x_sees_y(source, target)
 
         precision, evasion = self.effective_precision_evasion()
         self.impact = self.weapon.chances.actual(precision, evasion).roll_impact(random=game.random)
@@ -25,7 +25,9 @@ class AttackEvent(Event):
         super().__init__(game,fire, logging=True)
 
     def check_conditions(self) -> bool:
-        return all( (self.source, self.source.alive, self.target, self.target.alive, self.weapon, self.weapon.durability is None or self.weapon.durability > 0) )
+        return all( (self.source, self.source.alive, self.target,
+                     self.target.alive, self.weapon,
+                     self.weapon.durability is None or self.weapon.durability > 0) )
 
     def resolve(self) -> None:
 

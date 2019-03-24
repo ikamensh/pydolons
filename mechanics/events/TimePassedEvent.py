@@ -18,7 +18,7 @@ class TimePassedEvent(Event):
 
     def resolve(self):
         # cooldowns expire
-        for unit in list(self.game.battlefield.unit_locations.keys()):
+        for unit in list(self.game.units):
             if not unit.is_obstacle and unit.alive:
                 for active in unit.actives:
                     active.remaining_cd = max(0, active.remaining_cd - self.dt)

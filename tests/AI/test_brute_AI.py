@@ -3,12 +3,13 @@ from mechanics.actives import Active, ActiveTags
 from game_objects.battlefield_objects import Unit
 import pytest
 from cntent.actives.std.std_misc import wait_active
+from DreamGame import DreamGame
 
 
 def test_returns_actions(minigame):
 
     ai = BruteAI(minigame)
-    unit = list(minigame.battlefield.unit_locations.keys())[0]
+    unit = list(minigame.units)[0]
 
     action, target = ai.decide_step(unit)
     assert isinstance(action, Active)
@@ -18,10 +19,10 @@ def test_basetype_gives_valid_actives(sim_game, pirate_basetype):
 
     pirate_basetype.actives += [wait_active]
 
-    pirate = Unit(pirate_basetype, game=sim_game)
+    pirate = Unit(pirate_basetype, game=sim_game, cell=0j)
     ai = BruteAI(sim_game)
 
-    sim_game.add_unit(pirate, 6+6j)
+    sim_game.add_unit(pirate)
     action, target = ai.decide_step(pirate)
     assert isinstance(action, Active)
 
@@ -39,29 +40,27 @@ def test_is_deterministic(minigame, hero):
 
 def test_locations_are_intact(minigame, hero, pirate):
 
-    minigame.battlefield.unit_facings[hero] = 1 + 0j
-    minigame.battlefield.unit_facings[pirate] = -1 + 0j
+    locations_initial = (minigame.bf.cells_to_units,
+                         [{u:u.facing} for u in minigame.units])
 
-    locations_initial = (minigame.battlefield.unit_locations, minigame.battlefield.unit_facings)
-
-    for i in range(10):
+    for u in minigame.units:
         ai = BruteAI(minigame)
-        unit = list(minigame.battlefield.unit_locations.keys())[0]
 
-        ai.decide_step(unit)
-        assert locations_initial == (minigame.battlefield.unit_locations, minigame.battlefield.unit_facings)
+        ai.decide_step(u)
+        assert locations_initial == (minigame.bf.cells_to_units,
+                                     [{u: u.facing} for u in minigame.units])
 
 def test_chooses_imba_targets_enemy(minigame, imba_ability):
 
 
     ai = BruteAI(minigame)
-    unit = list(minigame.battlefield.unit_locations.keys())[0]
+    unit = list(minigame.units)[0]
     unit.give_active(imba_ability)
 
     action, target = ai.decide_step(unit, epsilon=0)
 
     assert int(action.uid / 1e7) == imba_ability.uid
-    assert minigame.factions[target] is not minigame.factions[unit]
+    assert target.faction is not unit.faction
 
 # @pytest.mark.skip(reason="non-deterministic ai does not guarantee this.")
 def test_no_suicide(sim_game):
@@ -71,13 +70,13 @@ def test_no_suicide(sim_game):
         active_unit = sim_game.turns_manager.get_next()
         active, target = sim_game.enemy_ai.decide_step(active_unit)
         if isinstance(target, Unit):
-            if sim_game.factions[target] is sim_game.factions[active_unit]:
+            if target.faction is active_unit.faction:
                 assert False
         active_unit.activate(active, target)
 
 
 def test_no_friendly_fire(sim_game, hero, pirate):
-    for unit in sim_game.battlefield.unit_locations:
+    for unit in sim_game.units:
         ai = BruteAI(sim_game)
         action, target = ai.decide_step(unit, epsilon=0)
         choices = sim_game.get_all_choices(unit)
@@ -89,7 +88,7 @@ def test_no_friendly_fire(sim_game, hero, pirate):
 def test_with_obstacle(sim_game, hero, pirate, obstacle):
 
     sim_game.add_obstacle(obstacle, 5+5j)
-    for unit in sim_game.battlefield.all_units:
+    for unit in sim_game.units:
         ai = BruteAI(sim_game)
         choices = sim_game.get_all_choices(unit)
         actives = [c[0] for c in choices]
@@ -97,11 +96,15 @@ def test_with_obstacle(sim_game, hero, pirate, obstacle):
     # no exceptions thrown
 
 def test_hits_take_prio(sim_game, hero, pirate, no_chances):
-    for unit in sim_game.battlefield.unit_locations:
-        bf = sim_game.battlefield
-        bf.move(hero, 5+5j)
-        bf.unit_facings[hero] = -1j
-        ai = BruteAI(sim_game)
+    ai = BruteAI(sim_game)
+
+    hero.cell = 5 + 5j
+    hero.facing = -1j
+
+    pirate.cell = 5 + 4j
+    pirate.facing = 1j
+
+    for unit in sim_game.units:
         action, target = ai.decide_step(unit, epsilon=0)
         choices = sim_game.get_all_choices(unit)
         actives = [c[0] for c in choices]
@@ -115,9 +118,8 @@ def test_hits_take_prio(sim_game, hero, pirate, no_chances):
 
 def test_own_turn_first(minigame, hero, pirate):
 
-    bf = minigame.battlefield
-    bf.unit_facings[hero] = 1j
-    bf.unit_facings[pirate] = 1 + 0j
+    hero.facing = 1j
+    pirate.facing = 1 + 0j
 
     ai = BruteAI(minigame)
     active, target = ai.decide_step(pirate, epsilon=0)
@@ -126,9 +128,9 @@ def test_own_turn_first(minigame, hero, pirate):
 
 
 def test_moves_closer(minigame, hero, pirate):
-    bf = minigame.battlefield
-    bf.unit_facings[hero] = 1j
-    bf.unit_facings[pirate] = -1j
+    bf = minigame.bf
+    hero.facing = 1j
+    pirate.facing = -1j
 
     distance_before = bf.distance(hero,pirate)
 
@@ -141,9 +143,9 @@ def test_moves_closer(minigame, hero, pirate):
     assert distance_after < distance_before
 
 def test_moves_closer_too(minigame, hero, pirate):
-    bf = minigame.battlefield
-    bf.unit_facings[hero] = 1j
-    bf.unit_facings[pirate] = -1j
+    bf = minigame.bf
+    hero.facing = 1j
+    pirate.facing = -1j
 
     distance_before = bf.distance(hero,pirate)
 
@@ -175,9 +177,8 @@ def avoids_punishing_action(take_punishment, minigame, hero):
 
 
 import pytest
-
+from battlefield import Battlefield
 from DreamGame import Faction
-from mechanics.AI.SimGame import SimGame
 from mechanics.actives import Active, ActiveTags
 from battlefield.Facing import Facing
 import copy
@@ -185,9 +186,9 @@ import copy
 
 
 @pytest.fixture()
-def just_hero_game(simple_battlefield, hero):
-
-    _game = SimGame(simple_battlefield)
+def just_hero_game(hero):
+    bf = Battlefield(6, 6)
+    _game = DreamGame(bf)
     _game.add_unit(hero, (3+3j), Faction.PLAYER)
     _game.the_hero = hero
 
@@ -207,7 +208,7 @@ def test_attacks(just_hero_game, hero, pirate):
 
     ai = BruteAI(g)
 
-    g.battlefield.unit_facings[hero] = Facing.WEST
+    hero.facing = Facing.WEST
 
     a, t = ai.decide_step(pirate)
     assert ActiveTags.ATTACK in a.tags

@@ -7,8 +7,8 @@ from mechanics.events import DamageEvent
 
 
 
-def test_rage(game_hvsp, hero, pirate):
-
+def test_rage(game_hvsp, hero):
+    pirate = game_hvsp.enemy_units[0]
     hero.add_ability( battle_rage(1)() )
 
     str_before = hero.str
@@ -20,7 +20,8 @@ def test_rage(game_hvsp, hero, pirate):
     assert hpmax_before < hero.max_health
     # assert ini_before < hero.initiative # initiative is rounded as an integer and is not guaranteed to grow
 
-def test_rage_expires(game_hvsp, hero, pirate):
+def test_rage_expires(game_hvsp, hero):
+    pirate = game_hvsp.enemy_units[0]
 
     hero.add_ability( battle_rage(1)() )
 
@@ -36,7 +37,8 @@ def test_rage_expires(game_hvsp, hero, pirate):
     assert ini_before == hero.initiative
 
 
-def test_stacks(game_hvsp, hero, pirate):
+def test_stacks(game_hvsp, hero):
+    pirate = game_hvsp.enemy_units[0]
 
     hero.add_ability( battle_rage(1)() )
 

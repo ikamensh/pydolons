@@ -2,14 +2,18 @@ import random
 
 
 class RandomAI:
-    def __init__(self, game):
+    def __init__(self, game, chance_pass = 0.):
         self.game = game
-        self.battlefield = self.game.battlefield
+        self.battlefield = self.game.bf
+        self.chance_pass = chance_pass
 
 
     def decide_step(self, active_unit):
 
-        assert active_unit in self.battlefield.unit_locations
+        if self.chance_pass > random.random():
+            return None, None
+
+        assert active_unit in self.game.units
 
         actives = active_unit.actives
 

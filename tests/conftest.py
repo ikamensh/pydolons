@@ -38,15 +38,15 @@ def demohero_basetype():
 
 @pytest.fixture()
 def hero(demohero_basetype, empty_game):
-    return Unit(demohero_basetype, game=empty_game)
+    return Unit(demohero_basetype, game=empty_game, cell=1+1j, faction=Faction.PLAYER)
 
 @pytest.fixture()
 def pirate(pirate_basetype, empty_game):
-    return Unit(pirate_basetype, game=empty_game)
+    return Unit(pirate_basetype, game=empty_game, cell=0j)
 
 @pytest.fixture()
 def mud_golem():
-    yield(Unit(mud_golem_basetype))
+    yield(Unit(mud_golem_basetype, cell=0j))
 
 
 @pytest.fixture()
@@ -54,7 +54,8 @@ def steel_wall():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall = lambda g: Obstacle("Wall of steel!", 5000, game=g, resists=resists, armor=500, icon="wall.png")
+    _steel_wall = lambda g, c: Obstacle("Wall of steel!", 5000, game=g, cell=c, resists=resists,
+                                     armor=500, icon="wall.png")
     return _steel_wall
 
 
@@ -70,15 +71,16 @@ def demo_dungeon(pirate_band):
 def walls_dungeon(pirate_basetype, steel_wall):
 
     def create_locations(g):
-        unit_locations = {}
+        units = []
 
         wall_x = 4
         for wall_y in range(0, 6):
-            unit_locations[steel_wall(g)] =  Cell(wall_x, wall_y)
+            units.append( steel_wall(g, Cell(wall_x, wall_y)) )
+        units.append( Unit(pirate_basetype, cell=Cell(7, 0)) )
 
-        unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
-        return unit_locations
-    _walls_dungeon = Dungeon("test_walls_dung", 12, 12, unit_locations=create_locations, hero_entrance=Cell(0, 0))
+        return units
+
+    _walls_dungeon = Dungeon("test_walls_dung", 12, 12, objs=create_locations, hero_entrance=Cell(0, 0))
 
     yield  _walls_dungeon
 
@@ -94,20 +96,9 @@ def pirate_band(pirate_basetype):
     return _pirate_band
 
 @pytest.fixture()
-def battlefield8():
-    bf = Battlefield(8, 8)
-    return bf
-
-@pytest.fixture()
-def simple_battlefield():
+def empty_game():
     bf = Battlefield(6, 6)
-    return bf
-
-@pytest.fixture()
-def empty_game(simple_battlefield):
-
-    _game = DreamGame(simple_battlefield)
-
+    _game = DreamGame(bf)
     return _game
 
 @pytest.fixture()
@@ -117,27 +108,29 @@ def huge_game():
 
 
 @pytest.fixture()
-def hero_only_game(battlefield8, hero):
-
-    _game = DreamGame(battlefield8)
-    _game.add_unit(hero, 1 + 1j, Faction.PLAYER)
+def hero_only_game(hero):
+    bf = Battlefield(8, 8)
+    _game = DreamGame(bf)
+    _game.add_unit(hero)
     _game.the_hero = hero
 
     return _game
 
 @pytest.fixture()
-def game_hvsp(battlefield8, hero, pirate_band):
-    _game = DreamGame(battlefield8)
+def game_hvsp(hero, pirate_band):
+    bf = Battlefield(8, 8)
+    _game = DreamGame(bf)
 
     locations = [Cell(4, 4), Cell(4, 5), Cell(5, 4)]
-    units_locations = {pirate_band[i]: locations[i] for i in range(3)}
+    for pirate, cell in zip(pirate_band, locations):
+        pirate.cell = cell
+        pirate.faction = Faction.ENEMY
 
-    units_locations[hero] = Cell(1, 1)
+    hero.cell = Cell(1, 1)
+    hero.faction = Faction.PLAYER
 
-    factions = {unit: Faction.ENEMY for unit in units_locations if not unit.is_obstacle}
-    factions[hero] = Faction.PLAYER
-
-    _game.add_many(units_locations.keys(), units_locations, factions)
+    for unit in pirate_band + [hero]:
+        _game.add_unit(unit)
 
 
 

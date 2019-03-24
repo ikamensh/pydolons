@@ -4,8 +4,8 @@ from cntent.items.std import std_items
 
 def test_takes_different_time(game_hvsp, hero, mud_golem):
 
-    hero_pos = game_hvsp.battlefield.unit_locations[hero]
-    hero_facing = game_hvsp.battlefield.unit_facings[hero]
+    hero_pos = hero.cell
+    hero_facing = hero.facing
 
     game_hvsp.add_unit(mud_golem, hero_pos.complex + hero_facing)
 

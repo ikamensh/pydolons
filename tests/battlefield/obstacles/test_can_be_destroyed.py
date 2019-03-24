@@ -22,13 +22,14 @@ def test_can_take_damage(obstacle):
     assert health_after < health_before
 
 
-def test_can_be_destroyed(obstacle, game_hvsp):
+def test_can_be_destroyed(obstacle, empty_game):
 
-    assert obstacle in game_hvsp.battlefield.unit_locations
+    empty_game.add_obstacle(obstacle)
+    assert obstacle in empty_game.obstacles
 
     obstacle.health -= 999999
+    assert obstacle not in empty_game.obstacles
 
-    assert obstacle not in game_hvsp.battlefield.unit_locations
 
 
 def test_can_be_attacked(obstacle, hero, no_chances):

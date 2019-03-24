@@ -19,7 +19,7 @@ def test_random_teleport(pirate_band, empty_game, no_chances):
     p2.readiness = 0.5
     empty_game.order_attack(p1, p2)
 
-    assert empty_game.battlefield.unit_locations[p2].complex != 2+3j
+    assert p2.cell.complex != 2+3j
     actives_found = 0
     attacks_found = 0
     moves_found = 0
@@ -52,7 +52,7 @@ def test_random_teleport_cost_blocks(pirate_band, empty_game, no_chances):
     p2.readiness = 0.5
     empty_game.order_attack(p1, p2)
 
-    assert empty_game.battlefield.unit_locations[p2].complex == 2 + 3j
+    assert p2.cell.complex == 2 + 3j
     actives_found = 0
     attacks_found = 0
     moves_found = 0
@@ -85,7 +85,7 @@ def test_random_teleport_chance_blocks(pirate_band, empty_game, no_chances):
     p2.readiness = 0.5
     empty_game.order_attack(p1, p2)
 
-    assert empty_game.battlefield.unit_locations[p2].complex == 2 + 3j
+    assert p2.cell.complex == 2 + 3j
     actives_found = 0
     attacks_found = 0
     moves_found = 0

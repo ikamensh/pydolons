@@ -18,8 +18,8 @@ def random_teleport_callback(t:Trigger,e:AttackEvent):
     if unit.can_pay(cost):
 
         if e.game.random.random() < chance:
-            initial_location = e.game.battlefield.unit_locations[unit]
-            possible_cells = e.game.battlefield.neighbours_exclude_center(initial_location, radius)
+            initial_location = unit.cell
+            possible_cells = e.game.bf.neighbours_exclude_center(initial_location, radius)
             target_cell = e.game.random.choice(possible_cells)
             MovementEvent(unit, target_cell)
             unit.pay(cost)

@@ -16,7 +16,7 @@ from multiplayer.network.ServerSocket import ServerSocket
 def order_recieved_cb(t, e: ServerOrderRecievedEvent):
     g: DreamGame = e.game
     next_unit = g.turns_manager.get_next()
-    fraction = g.factions[next_unit]
+    fraction = next_unit.faction
     if e.fraction == fraction:
         unit = g.find_unit_by_uid(e.unit_uid)
         active = g.find_active_by_uid(e.active_uid)

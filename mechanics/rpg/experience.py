@@ -15,8 +15,8 @@ def condition(t,e):
         return False
 
     return \
-        e.game.factions[e.unit] is Faction.ENEMY and \
-        e.game.factions[e.killer] is Faction.PLAYER
+        e.unit.faction is Faction.ENEMY and \
+        e.killer.faction is Faction.PLAYER
 
 def grant_xp_callback(t, e):
     e.killer.xp += compute_exp_gain(e.killer, e.unit)

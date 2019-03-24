@@ -15,9 +15,9 @@ class ItemDroppedEvent(Event):
             location = cell
         else:
             if item.owner:
-                location = g.battlefield.unit_locations[item.owner]
+                location = g.bf.unit_locations[item.owner]
             else:
-                location = g.random.choice( g.battlefield.all_cells )
+                location = g.random.sample( g.bf.all_cells, 1 )[0]
         self.location = location
 
         super().__init__(g, logging=True)

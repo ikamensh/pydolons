@@ -8,12 +8,12 @@ import mechanics.AI.SimUtils as SimUtils
 @contextmanager
 def sim_move_on_target_cell(active: Active, target: Cell):
     unit = active.owner
-    location_before = active.game.battlefield.unit_locations[unit]
-    active.game.battlefield.move(unit, target)
+    location_before = unit.cell
+    unit.cell = target
     with SimUtils.virtual(unit):
         unit.pay(active.cost)
         yield
-    active.game.battlefield.move(unit, location_before)
+    unit.cell = location_before
 
 
 @contextmanager
@@ -32,9 +32,6 @@ def sim_attack(active: Active, target: BattlefieldObject):
                 yield
 
 
-
-
-
 def sim_turn(ccw):
     turn = -1j if ccw else 1j
 
@@ -42,12 +39,12 @@ def sim_turn(ccw):
     def _(active: Active, _):
 
         unit = active.owner
-        facing_before = active.game.battlefield.unit_facings[unit]
-        active.game.battlefield.unit_facings[unit] *= turn
+        facing_before = unit.facing
+        unit.facing *= turn
         with SimUtils.virtual(unit):
             unit.pay(active.cost)
             yield
-        active.game.battlefield.unit_facings[unit] = facing_before
+        unit.facing = facing_before
 
     return _
 
