@@ -29,6 +29,7 @@ class TextItem(QGraphicsSimpleTextItem):
         self.attrib = attrib
         self.checkAttrib(attrib)
         self.name = attrib['name']
+        self._names = attrib['name'].split('_')
         self._top = int(attrib.get('top')) * self.scale_y
         self._left = int(attrib.get('left')) * self.scale_x
         self._width = int(attrib.get('width')) * self.scale_x
@@ -67,6 +68,8 @@ class TextItem(QGraphicsSimpleTextItem):
 
         if attrib.get('background-color') is not None:
             self._bg_brush = QBrush(QColor(attrib['background-color']))
+        if attrib.get('color') is None:
+            attrib['color'] = '#FFFFFF'
         if attrib.get('icon') is not None:
             self.pixmap = self.gameRoot.cfg.getPicFile(attrib['icon'])
         if attrib.get('background-color') is not None:
@@ -86,7 +89,7 @@ class TextItem(QGraphicsSimpleTextItem):
         self._font = QFont(self.cfg.main_font_name)
         self._font.setPointSize(int(16 *self.scale_x))
         if attrib.get('font_size') is not None:
-            self._font.setPointSize(int(attrib.get('font_size'))*self.scale_x)
+            self._font.setPointSize(int(attrib.get('font_size')) * self.scale_x)
         self.setFont(self._font)
         # if self.document().size().width() > self._width:
         #     while self.document().size().width() > self._width:

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from PySide2 import QtWidgets, QtCore
-from ui.GamePages.suwidgets.TestItem import TestItem
+from ui.GamePages.suwidgets.BaseItem import BaseItem
 from ui.GamePages.suwidgets.TextItem import TextItem
 from ui.GamePages.suwidgets.GroupItem import GroupItem
 from xml.etree import ElementTree as ET
@@ -9,14 +9,16 @@ from xml.etree import ElementTree as ET
 class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
     focusable = QtCore.Signal(bool)
-    ITEM_TYPES = {'other':TestItem, 'text':TextItem, 'group':GroupItem}
+    ITEM_TYPES = {'other':BaseItem, 'text':TextItem, 'group':GroupItem}
 
     def __init__(self, gamePages, parent = None):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsItemGroup.__init__(self)
         # super(AbstractPage, self).__init__()
+        self.xml_page = None
+        self.items = {}
         self.widget_pos = QtCore.QPoint()
-        self.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self.gamePages = gamePages
         self.state = False
         self.isService = False
@@ -64,6 +66,34 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     def readXML(self, name):
         tree = self.gamePages.gameRoot.cfg.getXML_Page(name)
         self.xml_page:ET.Element = tree.getroot()
+
+    def find_element(self, start_node, name = None, func = None):
+        def plug(node):
+            pass
+        if func is None:
+            func = plug
+        visited = {}  # изначально список посещённых узлов пуст
+        for node in start_node.iter():
+            visited[node] = False
+        queue = list()
+        queue.append(start_node)  # начиная с узла-источника
+        visited[start_node] = True
+        while len(queue) != 0:  # пока очередь не пуста
+            node = queue.pop()  # извлечь первый элемент в очереди
+            func(node)
+            if self.check_attr(node.attrib):
+                if node.attrib['name'] == name:
+                    return node
+            for child in node:  # все преемники текущего узла, ...
+                if not visited[child]:  # ... которые ещё не были посещены ...
+                    queue.append(child)  # ... добавить в конец очереди...
+                    visited[child] = True  # ... и пометить как посещённые
+
+    def setDict(self, data):
+        result = ''
+        for k, v in data.items():
+            result = result + k + ' : ' + v + '\n'
+        return result
         
     @abstractmethod
     def setUp(self):
@@ -107,9 +137,9 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     def destroy(self):
         pass
 
-    def mousePressEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent):
-        super(AbstractPage, self).mousePressEvent(event)
-        pass
+    # def mousePressEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent):
+    #     super(AbstractPage, self).mousePressEvent(event)
+    #     pass
 
     def mouseMoveEvent(self, e):
         pass

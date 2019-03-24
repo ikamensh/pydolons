@@ -3,9 +3,9 @@ from PySide2.QtGui import QPainter, QColor, QBrush
 from PySide2 import QtCore
 
 
-class TestItem(QGraphicsObject):
+class BaseItem(QGraphicsObject):
     def __init__(self, page, parent=None):
-        super(TestItem, self).__init__(parent)
+        super(BaseItem, self).__init__(parent)
         self.gameRoot = page.gamePages.gameRoot
         self.page = page
         self.attrib = None
@@ -90,10 +90,14 @@ class TestItem(QGraphicsObject):
         return int(self.attrib.get('width')) * self.scale_x
 
     def update(self):
-        super(TestItem, self).update(self._left, self._top, self.width, self._height)
+        super(BaseItem, self).update(self._left, self._top, self.width, self._height)
 
     def setPixmapIcon(self, icon:str):
         self.pixmap = self.gameRoot.cfg.getPicFile(icon)
+
+
+
+
 
 
 
