@@ -21,6 +21,5 @@ imba_active = Active(BattlefieldObject,
                      tags=[ActiveTags.ATTACK],
                      name="imba", cooldown=5)
 
-demohero_basetype = BaseType({'str':25, 'agi': 20,'end': 25, 'prc': 25}, "Demo Hero", icon="hero.png", sound_map=hero_sound_map,
-                             actives=[imba_active])
+demohero_basetype = BaseType({'str':25, 'agi': 20,'end': 25, 'prc': 25}, "Demo Hero", icon="hero.png", sound_map=hero_sound_map)
 

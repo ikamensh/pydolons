@@ -13,8 +13,8 @@ def one_game():
     lengine = LEngine()
     window = TheUI(lengine)
     app.aboutToQuit.connect(window.close_app)
-    sys.exit(app.exec_())
-
+    # sys.exit(app.exec_())
+    app.exec_()
 
 # one_game()
 

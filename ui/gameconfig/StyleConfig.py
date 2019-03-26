@@ -1,8 +1,11 @@
+from __future__ import annotations
 from PySide2.QtGui import QColor, QBrush, QFont, QFontDatabase, QGuiApplication
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.gameconfig.GameConfiguration import GameConfiguration
 
 class StyleConfig:
-    def __init__(self, cfg):
+    def __init__(self, cfg: GameConfiguration):
         self.colors = {}
         self.brushs = {}
         self.setUpColors()
@@ -10,6 +13,8 @@ class StyleConfig:
         self.system_font :QFont = QGuiApplication.font()
         self.system_hint = self.system_font.hintingPreference()
         self.system_pixelSize = self.system_font.pixelSize()
+        self.base_point_size = 8
+        self.default_point_size = 8
         self.setUpFonts()
 
     def setUpColors(self):
@@ -22,7 +27,7 @@ class StyleConfig:
 
     def setUpFonts(self):
         self.main_font = self.cfg.resourceConfig.fonts_maps['imfeenrm28p.ttf']
-        pointSize = int(16 *self.cfg.scale_x)
+        pointSize = int(self.default_point_size *self.cfg.scale_x)
         self.main_font.setPointSize(pointSize)
         # self.main_font.set
         QGuiApplication.setFont(self.main_font)
@@ -30,8 +35,8 @@ class StyleConfig:
     def calculateScales(self):
         WIDTH = 1920
         HEIGHT = 1080
-        self.scale_x = self.dev_size[0] / WIDTH
-        self.scale_y = self.dev_size[1] / HEIGHT
+        self.scale_x = self.cfg.dev_size[0] / WIDTH
+        self.scale_y = self.cfg.dev_size[1] / HEIGHT
         print('scales x:y = ', self.scale_x, self.scale_y)
         print('font system_hint', self.system_hint)
         print('font system_pixelSize', self.system_pixelSize)

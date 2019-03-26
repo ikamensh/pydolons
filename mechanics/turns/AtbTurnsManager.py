@@ -1,3 +1,4 @@
+from __future__ import annotations
 from my_utils.utils import flatten
 
 from game_objects.battlefield_objects import Unit
@@ -5,18 +6,20 @@ from game_objects.battlefield_objects import Unit
 from mechanics.turns import TurnsManager
 from mechanics.buffs import Buff
 from mechanics.events import TimePassedEvent
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
 
 epsilon = 1e-6
 class AtbTurnsManager(TurnsManager):
-    def __init__(self, game, units=None):
+    def __init__(self, game: DreamGame):
         self.game = game
         self.managed = []
-        if units:
-            for unit in units:
+        if game.units:
+            for unit in game.units:
                 self.add_unit(unit)
 
-            buffs = list(flatten([unit.buffs for unit in units]))
+            buffs = list(flatten([unit.buffs for unit in game.units]))
             self.managed += buffs
         self.time = 0
         game.gamelog(f"Action turn based battle started. its {self.time} now")

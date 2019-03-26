@@ -66,6 +66,7 @@ class BasicUnit(QObject, GameObject):
         print(self.dir_angle, turn)
         if turn != self.dir_angle:
             start, end = self.dir_dict.get((self.dir_angle, turn), (0, 90))
+
             self.dirAni.play_anim(start, end)
             self.dir_angle = turn
 
