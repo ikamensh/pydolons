@@ -62,17 +62,18 @@ class DreamGame(SimGame):
         for rule in (rules or DreamGame.default_rules):
             rule(self)
 
-    @classmethod
-    def start_dungeon(cls, dungeon: Dungeon, hero: Unit, is_server=True):
+    @staticmethod
+    def start_dungeon(dungeon: Dungeon, hero: Unit, is_server=True):
 
         bf = Battlefield(dungeon.h, dungeon.w)
-        game = cls(bf, is_server=is_server)
+        game = DreamGame(bf, is_server=is_server)
         bf.game = game
 
 
         game.the_hero = hero
         hero.cell = dungeon.hero_entrance
         hero.faction = Faction.PLAYER
+        game.add_unit(hero)
 
         objs = dungeon.objs(game)
         for o in objs:
@@ -80,9 +81,6 @@ class DreamGame(SimGame):
                 game.add_obstacle(o)
             else:
                 game.add_unit(o)
-
-        units_who_make_turns = [unit for unit in objs if not unit.is_obstacle]
-        game.turns_manager = AtbTurnsManager(game, units_who_make_turns)
 
         return game
 

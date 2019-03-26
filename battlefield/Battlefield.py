@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import Dict, Collection, List, TYPE_CHECKING
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import Unit, BattlefieldObject
+    from game_objects.battlefield_objects import BattlefieldObject
     from typing import Set
+    import DreamGame
 from battlefield.Cell import Cell
-from functools import lru_cache
 from collections import defaultdict
 
 class Battlefield:
@@ -13,25 +13,18 @@ class Battlefield:
     space_per_unit = 3
     space_per_obstacle = 10
 
-    def __init__(self, w, h, game = None):
+    def __init__(self, w, h, game: DreamGame = None):
         self.w = w
         self.h = h
         self.game = game
+        # wall = []
+        # special_cells: Dict[Cell, SpecialCell] = {}
 
         all_cells = []
         for i in range(self.w):
             for j in range(self.h):
                 all_cells.append(Cell(i, j))
         self.all_cells = frozenset(all_cells)
-
-    # @property
-    # def game(self):
-    #     return self._game
-    #
-    # @game.setter
-    # def game(self, val):
-    #     self._game = val
-
 
     @property
     def all_objs(self):

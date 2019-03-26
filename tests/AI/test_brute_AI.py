@@ -95,18 +95,21 @@ def test_with_obstacle(sim_game, hero, pirate, obstacle):
         real_actives = [sim_game.find_active(a) for a in actives]
     # no exceptions thrown
 
-def test_hits_take_prio(sim_game, hero, pirate, no_chances):
-    ai = BruteAI(sim_game)
+def test_hits_take_prio(empty_simgame, hero, pirate, no_chances):
+    ai = BruteAI(empty_simgame)
 
     hero.cell = 5 + 5j
     hero.facing = -1j
+    empty_simgame.add_unit(hero)
 
     pirate.cell = 5 + 4j
     pirate.facing = 1j
+    empty_simgame.add_unit(pirate)
 
-    for unit in sim_game.units:
+    for unit in empty_simgame.units:
+        unit.fights_hero = True
         action, target = ai.decide_step(unit, epsilon=0)
-        choices = sim_game.get_all_choices(unit)
+        choices = empty_simgame.get_all_choices(unit)
         actives = [c[0] for c in choices]
         attack_actives = [a for a in actives if ActiveTags.ATTACK in a.tags]
         if len(attack_actives)>0:

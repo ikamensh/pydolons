@@ -87,7 +87,7 @@ class TextItem(QGraphicsSimpleTextItem):
         # self.setPlainText(attrib['text'])
         self.setText(attrib['text'])
         self._font = QFont(self.cfg.main_font_name)
-        self._font.setPointSize(int(16 *self.scale_x))
+        self._font.setPointSize(int(self.cfg.styleConfig.base_point_size *self.scale_x))
         if attrib.get('font_size') is not None:
             self._font.setPointSize(int(attrib.get('font_size')) * self.scale_x)
         self.setFont(self._font)

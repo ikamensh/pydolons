@@ -86,6 +86,7 @@ class GameConfiguration:
         self.styleConfig = StyleConfig(self)
         self.colors = self.styleConfig.colors
         self.brushs = self.styleConfig.brushs
+        self.styleConfig.calculateScales()
 
     def getStep(self):
         if self.dev_size[1] < 900:
