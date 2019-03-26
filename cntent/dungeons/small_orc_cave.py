@@ -11,4 +11,4 @@ def build_unit_locations(g):
     return orcs_band
 
 
-small_orc_cave = Dungeon("Greenskin's Cave", 8, 8, objs=build_unit_locations, hero_entrance=Cell(3, 4), icon="greenskins.png")
+small_orc_cave = Dungeon("Greenskin's Cave", 8, 8, construct_objs=build_unit_locations, hero_entrance=Cell(3, 4), icon="greenskins.png")

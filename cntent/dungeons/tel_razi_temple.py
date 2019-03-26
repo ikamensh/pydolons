@@ -1,7 +1,6 @@
 from battlefield.Battlefield import Cell
 from cntent.monsters.tel_razi.monsters import golem, tel_razi_scrub, tel_razi_zealot
 from game_objects.dungeon.Dungeon import Dungeon
-from mechanics.factions import Faction
 
 
 def build_unit_locations(g):
@@ -13,5 +12,5 @@ def build_unit_locations(g):
 
 
 tel_razi_temple = Dungeon("Tel'Razi Temple", 9, 9,
-                          objs=build_unit_locations,
+                          construct_objs=build_unit_locations,
                           hero_entrance=Cell(8, 4), icon="wormface2.jpg")

@@ -13,4 +13,4 @@ def build_unit_locations(g):
 
 
 
-small_graveyard = Dungeon("Haunted Graveyard", 8, 8, objs=build_unit_locations, hero_entrance=Cell(3, 4), icon="undead.jpg")
+small_graveyard = Dungeon("Haunted Graveyard", 8, 8, construct_objs=build_unit_locations, hero_entrance=Cell(3, 4), icon="undead.jpg")

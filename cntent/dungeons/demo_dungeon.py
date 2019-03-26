@@ -14,4 +14,4 @@ def create_monsters(g):
     return monsters
 
 
-demo_dungeon = Dungeon("Pirate Bar", 16, 16, objs=create_monsters, hero_entrance=Cell(3, 4), icon="pirates_1.jpg")
+demo_dungeon = Dungeon("Pirate Bar", 16, 16, construct_objs=create_monsters, hero_entrance=Cell(3, 4), icon="pirates_1.jpg")

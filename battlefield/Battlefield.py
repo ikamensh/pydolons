@@ -1,30 +1,35 @@
 from __future__ import annotations
 from typing import Dict, Collection, List, TYPE_CHECKING
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import BattlefieldObject
-    from typing import Set
+    from game_objects.battlefield_objects import BattlefieldObject, Wall
+    from typing import Set, FrozenSet, Collection
     import DreamGame
 from battlefield.Cell import Cell
 from collections import defaultdict
+from my_utils.utils import ReadOnlyDict
 
 class Battlefield:
 
     space_per_cell = 10
     space_per_unit = 3
-    space_per_obstacle = 10
+    space_per_obstacle = 3
 
-    def __init__(self, w, h, game: DreamGame = None):
+    def __init__(self, w, h, game: DreamGame = None, walls: Collection[Wall] = frozenset()):
         self.w = w
         self.h = h
         self.game = game
-        # wall = []
-        # special_cells: Dict[Cell, SpecialCell] = {}
+        self._walls = frozenset(walls)
+        self.walls = ReadOnlyDict({w.cell:w for w in self._walls})
 
         all_cells = []
         for i in range(self.w):
             for j in range(self.h):
                 all_cells.append(Cell(i, j))
         self.all_cells = frozenset(all_cells)
+
+    def set_new_walls(self, new_walls: Collection[Wall]):
+        self._walls = frozenset(new_walls)
+        self.walls = ReadOnlyDict({w.cell: w for w in self._walls})
 
     @property
     def all_objs(self):

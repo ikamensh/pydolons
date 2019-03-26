@@ -18,18 +18,15 @@ class MovementEvent(Event):
         super().__init__(game, fire=fire, logging=True)
 
     def check_conditions(self):
-        units_on_target_cell = self.bf.get_units_at(self.cell_to)
-        if units_on_target_cell:
-            wall = bool([u for u in self.bf.get_units_at(self.cell_to) if u.is_obstacle])
-        else:
-            wall = False
-        return self.unit.alive and not wall
+        return all((self.unit.alive,
+                   not self.cell_to in self.game.bf.walls,
+                   self.cell_to in self.game.bf.all_cells))
 
     def resolve(self):
         self.unit.cell = self.cell_to
 
     def __repr__(self):
-        return "{} moves from {} to {}".format(self.unit, self.cell_from, self.cell_to)
+        return f"{self.unit} moves from {self.cell_from} to {self.cell_to}"
 
 
 

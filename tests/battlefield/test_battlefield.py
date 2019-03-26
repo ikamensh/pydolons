@@ -1,5 +1,6 @@
 from battlefield.Battlefield import Cell
 from battlefield.Facing import Facing
+from game_objects.battlefield_objects import Wall
 
 def test_movement_preserves_facing(game_hvsp, hero):
 
@@ -18,14 +19,13 @@ def test_units_dont_block_movement(game_hvsp, hero):
     game_hvsp.order_move(hero, Cell(4, 4))
     assert location_before != hero.cell
 
-def test_obstacles_block_movement(game_hvsp, hero):
+def test_walls_block_movement(empty_game, hero):
     location_before = Cell(3, 4)
     hero.cell = location_before
+    empty_game.add_unit(hero)
+    empty_game.bf.set_new_walls( [Wall(4+4j)] )
 
-    assert game_hvsp.bf.cells_to_units[Cell(4, 4)]  # expecting a pirate from conftest
-    game_hvsp.bf.cells_to_units[Cell(4, 4)][0].is_obstacle = True
-
-    game_hvsp.order_move(hero, Cell(4, 4))
+    empty_game.order_move(hero, Cell(4, 4))
     assert location_before == hero.cell
 
 def test_distance_unit_to_point(game_hvsp):

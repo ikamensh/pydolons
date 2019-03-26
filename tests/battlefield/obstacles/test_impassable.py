@@ -1,11 +1,12 @@
 from mechanics.events import MovementEvent
 from battlefield import Cell
+from game_objects.battlefield_objects import Wall
 
 
 def test_impassable_event(obstacle, hero, empty_game):
 
     empty_game.add_unit(hero, 1+1j)
-    empty_game.add_obstacle(obstacle, 1+2j)
+    empty_game.bf.set_new_walls( [Wall(1+2j)] )
 
     MovementEvent(hero, 1+2j)
 
@@ -15,7 +16,7 @@ def test_impassible_action(obstacle, hero, empty_game):
 
 
     empty_game.add_unit(hero, 1+1j, facing=1j)
-    empty_game.add_obstacle(obstacle, 1+2j)
+    empty_game.bf.set_new_walls( [Wall(1+2j)] )
 
     tgt_cell = Cell(1,2)
     valid_action = None
@@ -33,7 +34,7 @@ def test_impassible_order(obstacle, hero, empty_game):
 
 
     empty_game.add_unit(hero, 1+1j, facing=1j)
-    empty_game.add_obstacle(obstacle, 1+2j)
+    empty_game.bf.set_new_walls( [Wall(1+2j)] )
 
     tgt_cell = Cell(1,2)
 

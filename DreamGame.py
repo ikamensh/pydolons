@@ -75,7 +75,7 @@ class DreamGame(SimGame):
         hero.faction = Faction.PLAYER
         game.add_unit(hero)
 
-        objs = dungeon.objs(game)
+        objs = dungeon.construct_objs(game)
         for o in objs:
             if o.is_obstacle:
                 game.add_obstacle(o)

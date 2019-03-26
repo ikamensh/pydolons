@@ -1,5 +1,4 @@
 from mechanics.AI import BruteAI
-from mechanics.actives import Active, ActiveTags
 from game_objects.battlefield_objects import Unit
 import pytest
 from cntent.actives.std.std_misc import wait_active
@@ -179,30 +178,19 @@ def avoids_punishing_action(take_punishment, minigame, hero):
     assert int(action.uid / 1e7) != take_punishment.uid
 
 
-import pytest
-from battlefield import Battlefield
 from DreamGame import Faction
 from mechanics.actives import Active, ActiveTags
 from battlefield.Facing import Facing
 import copy
 
 
+def test_attacks(empty_game, hero, pirate, no_chances):
 
-@pytest.fixture()
-def just_hero_game(hero):
-    bf = Battlefield(6, 6)
-    _game = DreamGame(bf)
-    _game.add_unit(hero, (3+3j), Faction.PLAYER)
-    _game.the_hero = hero
-
-
-    return _game
-
-def test_attacks(just_hero_game, hero, pirate):
-
-    g = just_hero_game
+    g = empty_game
     pirates = [copy.deepcopy(pirate) for _ in range(3)]
     pirate2, pirate3, pirate4 = pirates
+
+    g.add_unit(hero, (3+3j), Faction.PLAYER)
 
     g.add_unit(pirate, (3 + 4j), Faction.ENEMY, facing=Facing.NORTH)
     g.add_unit(pirate2, (4 + 3j), Faction.ENEMY, facing=Facing.WEST)

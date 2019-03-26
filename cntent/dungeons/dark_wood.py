@@ -11,5 +11,6 @@ def build_units(g):
 
 
 dark_wood = Dungeon("Dark Wood", 8, 8,
-                    objs=build_units, hero_entrance=Cell(3, 4),
+                    construct_objs=build_units,
+                    hero_entrance=Cell(3, 4),
                     icon="dark_wood.jpg")
