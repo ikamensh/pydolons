@@ -43,7 +43,7 @@ def test_mass_push(empty_game, hero, pirate):
         empty_game.add_unit(copy.copy(pirate), 2+2j)
 
     MovementEvent(hero, 2+2j)
-    assert len(empty_game.bf.get_units_at(2+2j)) == 3
+    assert len(empty_game.bf.get_objects_at(2 + 2j)) == 3
 
 
 

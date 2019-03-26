@@ -14,7 +14,7 @@ def test_units_dont_block_movement(game_hvsp, hero):
     location_before = Cell(3, 4)
     hero.cell = location_before
 
-    assert game_hvsp.bf.cells_to_units[Cell(4, 4)] # expecting a pirate from conftest
+    assert game_hvsp.bf.cells_to_objs[Cell(4, 4)] # expecting a pirate from conftest
 
     game_hvsp.order_move(hero, Cell(4, 4))
     assert location_before != hero.cell
@@ -31,10 +31,10 @@ def test_walls_block_movement(empty_game, hero):
 def test_distance_unit_to_point(game_hvsp):
     battlefield8 = game_hvsp.bf
 
-    hero = battlefield8.get_units_at(Cell(1, 1))[0]
+    hero = battlefield8.get_objects_at(Cell(1, 1))[0]
     assert battlefield8.distance(hero, Cell(1, 4)) == 3
 
-    pirate = battlefield8.get_units_at(Cell(4, 4))[0]
+    pirate = battlefield8.get_objects_at(Cell(4, 4))[0]
     d1 = battlefield8.distance(pirate, Cell(1, 4))
     d2 =  battlefield8.distance(pirate, Cell(4, 1))
     assert d1 == d2

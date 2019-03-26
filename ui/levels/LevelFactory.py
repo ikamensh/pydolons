@@ -50,7 +50,7 @@ class LevelFactory:
 
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
-        for unit_pos, units in battlefield.cells_to_units.items():
+        for unit_pos, units in battlefield.cells_to_objs.items():
             print(units)
             unit = units[0]
             if isinstance(unit, bf_objs.Unit):

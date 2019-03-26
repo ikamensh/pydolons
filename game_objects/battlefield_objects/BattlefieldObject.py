@@ -5,6 +5,7 @@ from typing import Union
 
 class BattlefieldObject(ABC):
 
+    size = 3
     last_uid = 0
 
     def __init__(self, cell = None):

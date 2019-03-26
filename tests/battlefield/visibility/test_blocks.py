@@ -12,6 +12,7 @@ def test_dead_units_dont_block(empty_game, hero, pirate):
 
     free_vision = vision.std_seen_cells(hero)
 
+    pirate.size = 9
     empty_game.add_unit(pirate, Cell(1,2))
 
     blocked_vision = vision.std_seen_cells(hero)
@@ -84,6 +85,7 @@ def test_visibility(game_hvsp, hero, pirate):
 
 
     game_hvsp.add_unit(pirate, cell=1+2j)
+    pirate.size = 9
 
     cells_seen = vision.std_seen_cells(hero)
 

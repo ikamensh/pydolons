@@ -39,14 +39,14 @@ def test_is_deterministic(minigame, hero):
 
 def test_locations_are_intact(minigame, hero, pirate):
 
-    locations_initial = (minigame.bf.cells_to_units,
+    locations_initial = (minigame.bf.cells_to_objs,
                          [{u:u.facing} for u in minigame.units])
 
     for u in minigame.units:
         ai = BruteAI(minigame)
 
         ai.decide_step(u)
-        assert locations_initial == (minigame.bf.cells_to_units,
+        assert locations_initial == (minigame.bf.cells_to_objs,
                                      [{u: u.facing} for u in minigame.units])
 
 def test_chooses_imba_targets_enemy(minigame, imba_ability):

@@ -19,13 +19,13 @@ def test_returns_actions(minigame):
 def test_locations_are_intact(minigame):
 
     ai = BroadAI(minigame)
-    locations_initial = (minigame.bf.cells_to_units,
+    locations_initial = (minigame.bf.cells_to_objs,
                          [{u:u.facing} for u in minigame.units])
 
     for u in minigame.units:
         ai.decide_step(u)
 
-        assert locations_initial == (minigame.bf.cells_to_units,
+        assert locations_initial == (minigame.bf.cells_to_objs,
                                      [{u: u.facing} for u in minigame.units])
 
 

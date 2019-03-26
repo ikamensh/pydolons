@@ -4,8 +4,7 @@ import numpy as np
 import functools
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from game_objects.battlefield_objects import Unit, BattlefieldObject
-    from typing import Set
+    from game_objects.battlefield_objects import Unit
     from DreamGame import DreamGame
 
 
@@ -21,20 +20,20 @@ class Vision:
         return y.cell in cells_x_sees
 
     def std_seen_cells(self, unit: Unit):
-        all_bf_objs: Set[BattlefieldObject] = self.game.units | self.game.obstacles
+        bf = self.game.bf
 
         cell_from = unit.cell
         visible_cells = set(self._std_vision_field(unit.sight_range,
                                                    unit.facing,
                                                    cell_from,
                                                    self.game.bf))
-        obstacles = {obj.cell for obj in all_bf_objs if obj.cell in visible_cells}
-        obstacles -= {cell_from}
-        visible_walls = frozenset({o.cell for o in all_bf_objs
-                                   if o.cell in visible_cells and o.is_obstacle})
+        blocking_cells = {cell for cell in bf.cells_to_objs if bf.space_free(cell) <
+                          bf.space_per_cell / 2}
+        blocking_cells -= {cell_from}
+        visible_walls = frozenset({cell for cell in bf.walls if cell in visible_cells})
         diag_wall_blockers = Vision._merge_walls(visible_walls)
-        obstacles |= diag_wall_blockers
-        for obstacle in obstacles:
+        blocking_cells |= diag_wall_blockers
+        for obstacle in blocking_cells:
             for cell_to in set(visible_cells):
                 if Vision.blocks(cell_from, cell_to, obstacle):
                     visible_cells.remove(cell_to)

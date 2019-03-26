@@ -15,7 +15,7 @@ def test_returns_actions(minigame):
 def test_locations_are_intact(minigame):
 
 
-    locations_initial = (minigame.bf.cells_to_units,
+    locations_initial = (minigame.bf.cells_to_objs,
                          [{u:u.facing} for u in minigame.units])
 
     for i in range(3):
@@ -23,7 +23,7 @@ def test_locations_are_intact(minigame):
         unit = list(minigame.units)[0]
 
         ai.decide_step(unit)
-        assert locations_initial == (minigame.bf.cells_to_units,
+        assert locations_initial == (minigame.bf.cells_to_objs,
                                      [{u:u.facing} for u in minigame.units])
 
 

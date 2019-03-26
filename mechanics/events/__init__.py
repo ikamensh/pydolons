@@ -5,8 +5,8 @@ from mechanics.events.src.Trigger import Trigger
 from mechanics.events.src.Interrupt import CounteredInterrupt, PermanentInterrupt, Trigger
 
 
-from mechanics.events.combat.UnitDiedEvent import UnitDiedEvent
 from mechanics.events.combat.ObstacleDestroyedEvent import ObstacleDestroyedEvent
+from mechanics.events.combat.UnitDiedEvent import UnitDiedEvent
 from mechanics.events.items.ItemDestroyedEvent import ItemDestroyedEvent
 from mechanics.events.items.ItemUsedUpEvent import ItemUsedUpEvent
 from mechanics.events.items.ItemDroppedEvent import ItemDroppedEvent

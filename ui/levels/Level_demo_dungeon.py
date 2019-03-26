@@ -45,7 +45,7 @@ class Level_demo_dungeon(BaseLevel):
             gameUnit.uid = unit.uid
             self.units.addToGroup(gameUnit)
             # добавили gameunit
-            self.units.cells_to_units[unit.uid] = gameUnit
+            self.units.cells_to_objs[unit.uid] = gameUnit
 
-        self.units.active_unit = self.units.cells_to_units[self.game.turns_manager.get_next().uid]
-        self.middleLayer.createSuppot(self.units.cells_to_units)
+        self.units.active_unit = self.units.cells_to_objs[self.game.turns_manager.get_next().uid]
+        self.middleLayer.createSuppot(self.units.cells_to_objs)

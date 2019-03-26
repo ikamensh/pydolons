@@ -11,8 +11,6 @@ from my_utils.utils import ReadOnlyDict
 class Battlefield:
 
     space_per_cell = 10
-    space_per_unit = 3
-    space_per_obstacle = 3
 
     def __init__(self, w, h, game: DreamGame = None, walls: Collection[Wall] = frozenset()):
         self.w = w
@@ -51,12 +49,11 @@ class Battlefield:
     def get_units_within_radius(self, center, radius):
         return [u for u in self.all_objs if Battlefield.distance(center, u) <= radius]
 
-    def get_units_at(self, _cell):
+    def get_objects_at(self, _cell) -> List[BattlefieldObject]:
         cell = Cell.maybe_complex(_cell)
-        if cell in self.cells_to_units:
-            return self.cells_to_units[cell]
-        else:
-            return None
+        if cell in self.cells_to_objs:
+            return self.cells_to_objs[cell]
+
 
     def neighbours_exclude_center(self, cell, distance=1) -> List[Cell]:
         neighbours = set(self.get_cells_within_dist(cell, distance))
@@ -70,13 +67,8 @@ class Battlefield:
         pairs = [(c, self.distance(c, target)) for c in candidates]
         return min(pairs, key=lambda x:x[1])
 
-
-    def space_free(self, cell):
-        units = self.get_units_at(cell)
-        if not units:
-            return self.space_per_cell
-        space_taken = sum([self.space_per_obstacle for u in units if u.is_obstacle] +
-                          [self.space_per_unit for u in units if not u.is_obstacle])
+    def space_free(self, cell: Cell):
+        space_taken = sum([o.size for o in self.get_objects_at(cell)])
         return self.space_per_cell - space_taken
 
     @staticmethod
@@ -93,19 +85,17 @@ class Battlefield:
             return 9000, None
         return Cell.angle_between(unit.facing, vector_to_target)
 
-    def units_in_area(self, area : Collection[Cell]) -> List[BattlefieldObject]:
-        return [u for u in self.all_objs if u.cell in area]
 
-    @staticmethod
-    def _cells_to_units(units: Set[BattlefieldObject]) -> Dict[Cell, List[BattlefieldObject]]:
+    @property
+    def cells_to_objs(self) -> Dict[Cell, List[BattlefieldObject]]:
         result = defaultdict(list)
-        for unit in units:
+        for unit in self.all_objs:
             result[unit.cell].append(unit)
         return result
 
-    @property
-    def cells_to_units(self) -> Dict[Cell, List[BattlefieldObject]]:
-        return Battlefield._cells_to_units(self.all_objs)
+
+    def units_in_area(self, area : Collection[Cell]) -> List[BattlefieldObject]:
+        return [u for u in self.all_objs if u.cell in area]
 
     def cone(self, cell_from, direction:complex, angle_max, dist_min, dist_max):
         result = []

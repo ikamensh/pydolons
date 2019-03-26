@@ -64,7 +64,7 @@ def test_go_and_hit(game_hvsp, hero):
     Pirate dies, hero can and does step on the tile where pirate stood.
     """
     pirate_location = Cell(4, 4)
-    the_enemy_pirate = game_hvsp.get_units_at(pirate_location)[0]
+    the_enemy_pirate = game_hvsp.bf.get_objects_at(pirate_location)[0]
     hero.readiness = 1
 
     path = [Cell(c[0], c[1]) for c in [(1, 2), (2, 2), (2, 3), (3, 3), (3, 4)]]

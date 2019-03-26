@@ -110,8 +110,6 @@ class DreamGame(SimGame):
         self.units.remove(unit)
         unit.deactivate_abilities()
 
-
-
     def obstacle_destroyed(self, obstacle: Obstacle):
         obstacle.alive = False
         self.obstacles.remove(obstacle)
@@ -188,8 +186,8 @@ class DreamGame(SimGame):
 
         if self.turns_manager.get_next() is self.the_hero:
             cell = Cell.from_complex(x + y* 1j)
-            if cell in self.bf.cells_to_units:
-                self.order_attack(self.the_hero, random.choice(self.bf.cells_to_units[cell]))
+            if cell in self.bf.cells_to_objs:
+                self.order_attack(self.the_hero, random.choice(self.bf.cells_to_objs[cell]))
             else:
                 self.order_move(self.the_hero, cell)
 

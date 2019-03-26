@@ -6,8 +6,6 @@ if TYPE_CHECKING:
     from game_objects.battlefield_objects import BattlefieldObject, Unit
 
 
-
-
 class Attack:
 
     @staticmethod

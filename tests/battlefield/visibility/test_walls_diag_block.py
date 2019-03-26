@@ -18,6 +18,8 @@ def test_units_no_diag_block(hero, empty_game, pirate_band):
 
     assert Cell(2, 2) in cells_seen
 
+from game_objects.battlefield_objects import Wall
+
 def test_walls_diag_block(hero, empty_game, steel_wall):
 
     empty_game.add_unit(hero, Cell(1, 1))
@@ -27,9 +29,7 @@ def test_walls_diag_block(hero, empty_game, steel_wall):
 
     assert Cell(2, 2) in cells_seen
 
-    empty_game.add_obstacle(steel_wall(empty_game, Cell(1, 2)))
-    empty_game.add_obstacle(steel_wall(empty_game, Cell(2, 1)))
-
+    empty_game.bf.set_new_walls([Wall(Cell(1, 2)), Wall(Cell(2, 1))])
     cells_seen = empty_game.vision.std_seen_cells(hero)
 
     assert Cell(2, 2) not in cells_seen

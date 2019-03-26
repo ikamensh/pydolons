@@ -14,7 +14,7 @@ def attack_callback(active  :Active, target :Unit):
 
 def attack_on_cell_callback(active  :Active, target  :Cell):
 
-    units_on_target_cell = active.game.get_units_at(target)
+    units_on_target_cell = active.game.bf.get_objects_at(target)
     if units_on_target_cell:
         chosen_target = active.game.random.choice(units_on_target_cell)
         Attack.melee_attack(source=active.owner, target=chosen_target)
