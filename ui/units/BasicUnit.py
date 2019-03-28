@@ -30,17 +30,16 @@ class BasicUnit(QObject, GameObject):
         self.count_max = 1
         self.is_obstacle = False
         self.isHover = False
-        if unit_bf.icon == 'hero.png':
-            self.is_hero = True
+        if unit_bf is not None:
+            if unit_bf.icon == 'hero.png':
+                self.is_hero = True
         self.setUpSupports(unit_bf)
-        self.anim_move = GameVariantAnimation(self)
-        self.anim_move.valueChanged.connect(self.setPos)
-        self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
+        self.anim_move = None
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
         """
-        if not self.gameconfig is None:
+        if self.gameconfig is not None:
             self.direction = Direction()
             self.direction.setParentItem(self)
             self.direction.setPixmap(self.gameconfig.getPicFile('DIRECTION POINTER.png'))
@@ -81,18 +80,19 @@ class BasicUnit(QObject, GameObject):
                     self.isHover = False
 
     def setUpSupports(self, unit_bf):
-        self.w, self.h = self.gameconfig.unit_size[0], self.gameconfig.unit_size[1]
-
         self.hpBar = HealthBar()
-        self.hpBar.setColor(self)
-        self.hpBar.setRect(0, self.h, self.w, 32)
-        # hp.setPos(.pos())
-        self.hpBar.setHP(self.getHPprec(unit_bf))
         self.hpBar.setParentItem(self)
-
         self.hpText = HealthText()
-        self.hpText.setUnitPos(self.pos())
         self.hpText.setParentItem(self)
+        if unit_bf is not None:
+            self.w, self.h = self.gameconfig.unit_size[0], self.gameconfig.unit_size[1]
+            self.hpBar.setColor(self)
+            self.hpBar.setRect(0, self.h, self.w, 32)
+            # hp.setPos(.pos())
+            self.hpBar.setHP(self.getHPprec(unit_bf))
+            self.hpText.setUnitPos(self.pos())
+            self.hpText.setUpFont()
+            self.hpText.setUpAnimation()
 
     def updateSupport(self, unit_bf, amount):
         self.hpBar.setHP(self.getHPprec(unit_bf))
@@ -126,6 +126,11 @@ class BasicUnit(QObject, GameObject):
         self.anim_move.setEndValue(QtCore.QPointF(x * self.w, y * self.h))
         self.anim_move.start()
 
+    def setUpAnimation(self):
+        self.anim_move = GameVariantAnimation(self)
+        self.anim_move.valueChanged.connect(self.setPos)
+        self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
+
     def __eq__(self, other):
         if self is other: return True
         if other is None: return False
@@ -136,4 +141,4 @@ class BasicUnit(QObject, GameObject):
         return hash(self.worldPos.x * 2 + self.worldPos.y * 3 + self.uid*4)*3
 
     def __repr__(self):
-        return f"{self.worldPos} -> BasicUnit {self.uid} "
+        return f"{self.worldPos} -> BasicUnit {self.uid}"

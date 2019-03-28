@@ -4,7 +4,7 @@ from config import pydolons_rootdir
 from PySide2 import QtGui
 from ui.units.BasicUnit import BasicUnit
 from ui.units.UnitsHeap import UnitsHeap
-from TestHelper import UsesQApp
+from tests.ui.TestHelper import UsesQApp
 
 
 class TestBasicUnit(UsesQApp):
@@ -32,15 +32,12 @@ class TestBasicUnit(UsesQApp):
 
         self.set_a = [self.unit_a, self.unit_b, self.unit_c]
         self.set_b = [self.unit_a, self.unit_d]
-
         self.heap_1 = UnitsHeap()
         for u in self.set_a:
             self.heap_1.add(u)
 
         self.heap_2 = UnitsHeap()
         self.heap_2.update_units(self.set_a)
-
-        pass
 
     def test_add_to_heap(self):
         self.assertEqual(self.heap_1.units, self.set_a)
@@ -65,7 +62,6 @@ class TestBasicUnit(UsesQApp):
         self.assertEqual(list(self.heap_2.getContains(10, 10))[0], self.unit_c)
 
     def test_get_contains_unit_b_c(self):
-        print(list(self.heap_2.getContains(60, 60)))
         self.assertEqual(list(self.heap_2.getContains(60, 60))[0], self.unit_a)
 
     def test_getTopLayer_c(self):

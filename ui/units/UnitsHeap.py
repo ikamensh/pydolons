@@ -8,9 +8,9 @@ QObject = QtCore.QObject
 class UnitsHeap(QObject, GameObject):
     updated_gui = QtCore.Signal(BasicUnit)
 
-    def __init__(self, *arg, parent=None, gameRoot=None):
+    def __init__(self, *arg, parent=None, gameRoot=None, item_parent=None):
         QObject.__init__(self, parent)
-        GameObject.__init__(self, *arg)
+        GameObject.__init__(self, item_parent)
         self.gameRoot = gameRoot
         self.u_offset = 20.
         self.u_scale = 0.5
@@ -124,8 +124,8 @@ class UnitsHeap(QObject, GameObject):
     def getInter(self):
         a = QtCore.QRect(0, 0, 100, 100)
         b = QtCore.QRect(20, 20, 100, 100)
-        if a.x() < b.x() or a.y() < b.y():
-            print('a of b')
+        # if a.x() < b.x() or a.y() < b.y():
+        #     print('a of b')
         return True
 
 

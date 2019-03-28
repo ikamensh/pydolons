@@ -1,6 +1,6 @@
 import unittest
 from ui.units.BasicUnit import BasicUnit
-from TestHelper import UsesQApp
+from tests.ui.TestHelper import UsesQApp
 
 
 class TestBasicUnit(UsesQApp):
