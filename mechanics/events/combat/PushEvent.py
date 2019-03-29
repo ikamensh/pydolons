@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
 
+
 class PushEvent(Event):
     channel = EventsChannels.PushChannel
 
@@ -18,7 +19,6 @@ class PushEvent(Event):
         self.push_against = push_against
         self.cell_to = push_against.cell
 
-
         super().__init__(game)
 
     def check_conditions(self):
@@ -27,13 +27,22 @@ class PushEvent(Event):
     def resolve(self):
 
         dmg_factor = 0.05
-        damage = Damage( (self.unit.max_health + self.push_against.max_health)* dmg_factor, type=DamageTypes.CRUSH)
+        damage = Damage(
+            (self.unit.max_health +
+             self.push_against.max_health) *
+            dmg_factor,
+            type=DamageTypes.CRUSH)
         events.DamageEvent(damage, self.push_against, source=self.unit)
         events.DamageEvent(damage, self.unit, source=self.push_against)
 
         if self.unit.alive and self.push_against.alive:
-            pushed_to = self.game.random.choice(self.bf.get_cells_within_dist(self.cell_to, 1))
-            success = roll(0.6, self.unit.str * 2, self.push_against.str * 2, self.game.random)
+            pushed_to = self.game.random.choice(
+                self.bf.get_cells_within_dist(self.cell_to, 1))
+            success = roll(
+                0.6,
+                self.unit.str * 2,
+                self.push_against.str * 2,
+                self.game.random)
 
             if success:
                 victor, loser = self.unit, self.push_against
@@ -47,11 +56,5 @@ class PushEvent(Event):
             loser.readiness -= pushed_atb_cost
             victor.readiness -= pusher_atb_cost
 
-
-
     def __repr__(self):
         return f"{self.unit} pushes against {self.push_against} to {self.cell_to}"
-
-
-
-

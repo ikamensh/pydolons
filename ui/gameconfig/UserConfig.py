@@ -4,18 +4,18 @@ from json import dumps, loads
 from copy import copy
 
 DEFAULT_CONFIG = {
-    'window':{
-        'resolution':{'width':1366,
-                      'height':768},
-        'fullscreen':True,
+    'window': {
+        'resolution': {'width': 1366,
+                       'height': 768},
+        'fullscreen': True,
     }
 }
 
 DEFAULT_SIZE_CONFIG = {
-    'window':{
-        'resolution':{'width':1024,
-                      'height':768},
-        'fullscreen':False
+    'window': {
+        'resolution': {'width': 1024,
+                       'height': 768},
+        'fullscreen': False
     }
 }
 
@@ -81,4 +81,3 @@ class UserConfig(object):
 #     print(cfg.read_config)
 #     cfg.saveSetting(DEFAULT_SIZE_CONFIG)
 #     print(cfg.read_config)
-

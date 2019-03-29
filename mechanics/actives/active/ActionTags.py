@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+
 class ActiveTags(Enum):
     MOVEMENT = auto()
     TURNING = auto()
@@ -13,4 +14,3 @@ class ActiveTags(Enum):
     DEFEND = auto()
 
     CHARGED_ITEM = auto()
-

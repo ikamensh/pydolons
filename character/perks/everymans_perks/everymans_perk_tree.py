@@ -5,22 +5,22 @@ from character.perks.everymans_perks.group_param import pg_params
 
 import copy
 
+
 def everymans_perks():
-    return copy.deepcopy(PerkTree("Generic perks", [pg_attributes,  pg_params]))
+    return copy.deepcopy(PerkTree("Generic perks", [pg_attributes, pg_params]))
 
 
 if __name__ == "__main__":
     from pprint import pprint
 
     ep = everymans_perks()
-    
-    pprint( ep.accessible_perks() )
-    pprint( ep.cost_to_levelup( ep.accessible_perks()[0] ) )
-    pprint( ep.cost_to_levelup( ep.accessible_perks()[1] ) )
-    pprint( ep.cost_to_levelup( ep.accessible_perks()[2] ) )
 
-    print('-*-'*50)
+    pprint(ep.accessible_perks())
+    pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
+    pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
+    pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
 
+    print('-*-' * 50)
 
     str_perk = ep.accessible_perks()[0]
     agi_perk = ep.accessible_perks()[1]
@@ -28,20 +28,19 @@ if __name__ == "__main__":
     p1 = ep.accessible_perks()[3]
     p2 = ep.accessible_perks()[4]
 
-
     str_perk.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
+    print('-*-' * 50)
 
     agi_perk.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
+    print('-*-' * 50)
 
     str_perk.current_level += 1
 
@@ -49,45 +48,44 @@ if __name__ == "__main__":
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
 
-    print('-*-'*50)
+    print('-*-' * 50)
     p1.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
-
-    p1.current_level += 1
-
-    pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
-    pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
-    pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
+    print('-*-' * 50)
 
     p1.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
+    print('-*-' * 50)
+
+    p1.current_level += 1
+
+    pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
+    pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
+    pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
+    print('-*-' * 50)
 
     p2.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
+    print('-*-' * 50)
 
     p2.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-    print('-*-'*50)
+    print('-*-' * 50)
 
     p2.current_level += 1
 
     pprint(ep.cost_to_levelup(ep.accessible_perks()[0]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[1]))
     pprint(ep.cost_to_levelup(ep.accessible_perks()[2]))
-

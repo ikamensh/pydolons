@@ -1,9 +1,11 @@
 
 
+from cntent.monsters.undead import zombie
+
+
 def test_regen(game_hvsp, hero):
     assert hero in game_hvsp.turns_manager.managed
     assert hero in game_hvsp.units
-
 
     hero.health -= 100
     hero.mana -= 100
@@ -12,7 +14,6 @@ def test_regen(game_hvsp, hero):
     health_before = hero.health
     mana_before = hero.mana
     stamina_before = hero.stamina
-
 
     game_hvsp.turns_manager.pass_time(3)
 
@@ -25,22 +26,18 @@ def test_bleeding(game_hvsp, hero):
     assert hero in game_hvsp.turns_manager.managed
     assert hero in game_hvsp.units
 
-
     hero.health -= 0.75 * hero.health
 
     health_before = hero.health
-
 
     game_hvsp.turns_manager.pass_time(3)
 
     assert hero.health < health_before
 
 
-from cntent.monsters.undead import zombie
-
 def test_undead_no_regen(empty_game):
     zomb = zombie.create(empty_game)
-    empty_game.add_unit(zomb, 1+1j, None)
+    empty_game.add_unit(zomb, 1 + 1j, None)
 
     zomb.health -= 100
     health_before = zomb.health

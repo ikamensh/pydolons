@@ -11,6 +11,7 @@ function for GamePages
 
 """
 
+
 class DefaultPage(AbstractPage):
     """docstring for DefaultPage.
     self.mainWidget.widget() -- native Qt Widget
@@ -27,8 +28,11 @@ class DefaultPage(AbstractPage):
 
     def setUpWidgets(self):
         #  SetUp background
-        self.background = QtWidgets.QGraphicsRectItem(0, 0, self.gamePages.gameRoot.cfg.dev_size[0],
-                                                      self.gamePages.gameRoot.cfg.dev_size[1])
+        self.background = QtWidgets.QGraphicsRectItem(
+            0,
+            0,
+            self.gamePages.gameRoot.cfg.dev_size[0],
+            self.gamePages.gameRoot.cfg.dev_size[1])
         self.background.setBrush(QtGui.QBrush(QtCore.Qt.black))
         self.addToGroup(self.background)
 
@@ -38,11 +42,12 @@ class DefaultPage(AbstractPage):
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
         mainWidget.resize(self.w, self.h)
         # SetUp opacity for main Widget
-        mainWidget.setStyleSheet('background-color: rgba(0, 0, 0, 0);color:white')
+        mainWidget.setStyleSheet(
+            'background-color: rgba(0, 0, 0, 0);color:white')
         # Add main Laout
-        mainLayout:QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout()
+        mainLayout: QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout()
 
-        layout:QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
+        layout: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
 
         self.ok = QtWidgets.QPushButton("ok", mainWidget)
         self.ok.setStyleSheet(self.buttonStyle)
@@ -103,9 +108,6 @@ class DefaultPage(AbstractPage):
             self.gamePages.gameRoot.scene.addItem(self)
             self.gamePages.gameRoot.scene.addItem(self.mainWidget)
 
-
-
     def destroy(self):
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         del self.mainWidget
-

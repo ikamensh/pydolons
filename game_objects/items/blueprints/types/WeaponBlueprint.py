@@ -6,12 +6,28 @@ from mechanics.damage import Damage
 class WeaponBlueprint(Blueprint):
     damage_per_rarity = 50
 
-    def __init__(self, name, *, weapon_type: WeaponType, material_type, rarity,
-                 damage=None, durability=None, material_count = 3, actives=None, is_ranged=False):
+    def __init__(
+            self,
+            name,
+            *,
+            weapon_type: WeaponType,
+            material_type,
+            rarity,
+            damage=None,
+            durability=None,
+            material_count=3,
+            actives=None,
+            is_ranged=False):
         assert material_type in MaterialTypes
         assert damage is None or 0.05 <= damage <= 20
-        super().__init__(name, weapon_type, rarity, durability, material_type=material_type, material_count=material_count)
-        self.damage =  (damage or 1)
+        super().__init__(
+            name,
+            weapon_type,
+            rarity,
+            durability,
+            material_type=material_type,
+            material_count=material_count)
+        self.damage = (damage or 1)
         self.weapon_type = weapon_type
         self.actives = actives
         self.is_ranged = is_ranged
@@ -20,15 +36,14 @@ class WeaponBlueprint(Blueprint):
         if self.is_ranged:
             self.value *= 1.4
 
-
     def to_item(self, material, quality, *, game=None):
         assert material.material_type is self.material_type
         total_rarity = material.rarity * quality.rarity
 
-        damage = Damage( self.damage *
-                         WeaponBlueprint.damage_per_rarity * total_rarity * \
-                         self.weapon_type.damage_factor,
-                         self.weapon_type.damage_type)
+        damage = Damage(self.damage *
+                        WeaponBlueprint.damage_per_rarity * total_rarity *
+                        self.weapon_type.damage_factor,
+                        self.weapon_type.damage_type)
 
         durability = self.durability * total_rarity
         full_name = f"{quality.name} {self.name} of {material}"
@@ -42,5 +57,3 @@ class WeaponBlueprint(Blueprint):
 
     def __repr__(self):
         return f"{self.name} blueprint"
-
-

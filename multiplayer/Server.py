@@ -45,7 +45,7 @@ def order_issued_trigger(game, server):
     t = Trigger(ServerOrderIssuedEvent,
                 platform=game.events_platform,
                 conditions={},
-                   callbacks=[order_issued_cb])
+                callbacks=[order_issued_cb])
     t.server = server
     return t
 
@@ -53,11 +53,11 @@ def order_issued_trigger(game, server):
 class PydolonsServer:
 
     def __init__(self):
-        character  = Character(demohero_basetype)
+        character = Character(demohero_basetype)
         self.game = DreamGame.start_dungeon(demo_dungeon, character.unit)
         self.game.character = character
-        self.server_socket = ServerSocket(self.game, set(self.game.fractions.values()) - {Faction.ENEMY,
-                                                                                          Faction.NEUTRALS})
+        self.server_socket = ServerSocket(self.game, set(
+            self.game.fractions.values()) - {Faction.ENEMY, Faction.NEUTRALS})
 
         order_issued_trigger(self.game, self.server_socket)
         order_recieved_trigger(self.game)
@@ -85,6 +85,7 @@ class PydolonsServer:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.server_socket.serversocket.close()
+
 
 if __name__ == "__main__":
     s = PydolonsServer()

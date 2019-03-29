@@ -10,24 +10,26 @@ from mechanics.buffs import Ability
 @pytest.fixture()
 def total_resist():
     def _():
-        resists = Resistances({dt:0.5 for dt in DamageTypes})
+        resists = Resistances({dt: 0.5 for dt in DamageTypes})
         bonus = Bonus({CharAttributes.RESISTANCES: resists})
         _total_resist = Ability(bonus)
 
         return _total_resist
     return _
 
+
 @pytest.fixture()
 def special_resist():
-    resist = Resistances({DamageTypes.ACID:100})
+    resist = Resistances({DamageTypes.ACID: 100})
     bonus = Bonus({CharAttributes.RESISTANCES: resist})
     _special_resist = Ability(bonus)
 
     return _special_resist
 
+
 @pytest.fixture()
 def vulnerability():
-    resists = Resistances({dt:-0.5 for dt in DamageTypes})
+    resists = Resistances({dt: -0.5 for dt in DamageTypes})
     bonus = Bonus({CharAttributes.RESISTANCES: resists})
     _vulnerability = Ability(bonus)
 
@@ -64,6 +66,7 @@ def test_wrong_type_useless(game_hvsp, hero, special_resist):
     dealt_armor = hp_before_dmg - hero.health
 
     assert dealt_no_armor == dealt_armor
+
 
 def test_armor_reduces_damage(game_hvsp, hero, total_resist):
 

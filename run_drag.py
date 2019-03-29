@@ -1,13 +1,14 @@
 import sys
 from PySide2 import QtGui, QtCore, QtWidgets
 
+
 class SlotWidget(QtWidgets.QLabel):
 
-    def __init__(self,*args, parent = None):
+    def __init__(self, *args, parent=None):
         super(SlotWidget, self).__init__(*args, parent=parent)
         self.start_point = QtCore.QPoint()
         self.dragStart = QtCore.QPoint()
-        self.setAcceptDrops( True )
+        self.setAcceptDrops(True)
         self.setStyleSheet('background-color:rgba(127, 127, 127, 100);')
 
     def mousePressEvent(self, ev):
@@ -16,7 +17,8 @@ class SlotWidget(QtWidgets.QLabel):
 
     def mouseMoveEvent(self, ev):
         if ev.buttons() == QtCore.Qt.LeftButton:
-            if QtWidgets.QApplication.startDragDistance() <= (ev.pos() - self.dragStart ).manhattanLength():
+            if QtWidgets.QApplication.startDragDistance() <= (
+                    ev.pos() - self.dragStart).manhattanLength():
                 # self.move(ev.pos())
                 self.startDrag()
 
@@ -24,8 +26,8 @@ class SlotWidget(QtWidgets.QLabel):
         drag = QtGui.QDrag(self)
         mimeData = QtCore.QMimeData()
         # mimeData.setImageData(getPixmap().toImage());
-        mimeData.setText(self.text());
-        drag.setMimeData(mimeData);
+        mimeData.setText(self.text())
+        drag.setMimeData(mimeData)
         # drag->setPixmap(getPixmap());
 
         result = drag.start(QtCore.Qt.MoveAction)
@@ -39,16 +41,17 @@ class SlotWidget(QtWidgets.QLabel):
         print('run onLoadImage')
         pass
 
-    def dragEnterEvent(self, ev:QtGui.QDragEnterEvent):
+    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):
         formats = ev.mimeData().formats()
 
         print('formats', formats)
         if "text/plain" in formats:
             ev.acceptProposedAction()
 
-    def dropEvent(self, ev:QtGui.QDropEvent):
+    def dropEvent(self, ev: QtGui.QDropEvent):
         self.setText(ev.mimeData().text())
         ev.acceptProposedAction()
+
 
 class Button(QtWidgets.QPushButton):
 
@@ -86,7 +89,7 @@ class Example(QtWidgets.QWidget):
 
         layout = QtWidgets.QVBoxLayout()
         for i in range(10):
-            w = SlotWidget('slot_'+str(i+1))
+            w = SlotWidget('slot_' + str(i + 1))
             layout.addWidget(w)
         # self.btn = Button('Button', self)
         # self.btn.move(100, 65)

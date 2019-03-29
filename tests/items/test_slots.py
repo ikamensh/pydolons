@@ -1,6 +1,7 @@
-from game_objects.items import  ItemTypes, Slot
+from game_objects.items import ItemTypes, Slot
 import pytest
 import copy
+
 
 def test_slot(weapon):
     slot = Slot("test slot", ItemTypes.WEAPON)
@@ -12,6 +13,7 @@ def test_slot(weapon):
     slot.pop_item()
     slot.content = weapon2
     assert slot.content == weapon2
+
 
 def test_swap(weapon):
     slot1 = Slot("test slot")
@@ -26,4 +28,3 @@ def test_swap(weapon):
 
     assert slot1.content == item2
     assert slot2.content == item1
-

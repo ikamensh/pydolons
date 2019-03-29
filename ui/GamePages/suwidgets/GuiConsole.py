@@ -28,7 +28,11 @@ class GuiConsole(QtWidgets.QPlainTextEdit):
             x = self.widget_pos.x() + self.btn.width() - self.width()
             self.state = True
         self.widget_pos.setX(x)
-        self.rect.setRect(self.widget_pos.x(), self.widget_pos.y(), self.width(), self.height())
+        self.rect.setRect(
+            self.widget_pos.x(),
+            self.widget_pos.y(),
+            self.width(),
+            self.height())
 
     def timerEvent(self, e):
         if self.last_msg != self.log.msg:
@@ -41,11 +45,14 @@ class GuiConsole(QtWidgets.QPlainTextEdit):
         else:
             self.widget_pos.setX(dev_size[0] - self.btn.width())
         self.widget_pos.setY(dev_size[1] - self.height())
-        self.rect.setRect(self.widget_pos.x(), self.widget_pos.y(), self.width(), self.height())
+        self.rect.setRect(
+            self.widget_pos.x(),
+            self.widget_pos.y(),
+            self.width(),
+            self.height())
 
     def setMousePos(self, e):
         self.mousePos = e.pos()
 
     def isFocus(self):
         return self.rect.contains(self.mousePos)
-

@@ -16,7 +16,9 @@ class ActiveCheck:
             self._conditions = []
 
     def not_satisfied_conds(self, active, target) -> List[ActiveCondition]:
-        result = [c for c in self._conditions if not c.evaluate(active, target)]
+        result = [
+            c for c in self._conditions if not c.evaluate(
+                active, target)]
         return result
 
     def append(self, cond: ActiveCondition):

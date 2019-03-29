@@ -9,7 +9,6 @@ from ui.GamePages.inventory_page.SlotsGroup import SlotsGroup
 from ui.GamePages.inventory_page.SlotMoveMaster import SlotMoveMaster
 
 
-
 from PySide2 import QtCore
 
 
@@ -56,12 +55,19 @@ class InventoryPage(AbstractPage):
             self.item.hide()
         self.updatePage()
 
-    def sceneEvent(self, event:QtCore.QEvent):
-        self.update(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+    def sceneEvent(self, event: QtCore.QEvent):
+        self.update(
+            0,
+            0,
+            self.gamePages.gameRoot.cfg.dev_size[0],
+            self.gamePages.gameRoot.cfg.dev_size[1])
         # if self.scrollSetEvent(event):
         #     return True
         if event.type() is QtCore.QEvent.GraphicsSceneHoverMove:
-            self.hoverMove(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
+            self.hoverMove(
+                self.scene().itemAt(
+                    event.scenePos(),
+                    self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneContextMenu:
             self.contextMenuEvent(event)
@@ -80,7 +86,9 @@ class InventoryPage(AbstractPage):
             return super(InventoryPage, self).sceneEvent(event)
 
     def contextMenuEvent(self, event):
-        item = self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform())
+        item = self.scene().itemAt(
+            event.scenePos(),
+            self.scene().views()[0].transform())
         print('contex', item.name)
         if item._names[0] == 'shop':
             self.move_master.buy(item)
@@ -90,7 +98,9 @@ class InventoryPage(AbstractPage):
             self.move_master.unequip(item)
 
     def mousePressEvent(self, event):
-        item = self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform())
+        item = self.scene().itemAt(
+            event.scenePos(),
+            self.scene().views()[0].transform())
         if item._names[0] == 'inventory':
             self.moveInventoryItem(item)
 
@@ -101,7 +111,9 @@ class InventoryPage(AbstractPage):
         self.s_engine.mouseReleaseEvent()
 
     def mousePressLeft(self, event):
-        item = self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform())
+        item = self.scene().itemAt(
+            event.scenePos(),
+            self.scene().views()[0].transform())
         if item._names[0] == 'inventory':
             self.move_master.moved_slot = self.inventories.getMovedSlot(item)
         elif item._names[0] == 'equip':
@@ -132,9 +144,9 @@ class InventoryPage(AbstractPage):
     def show_info(self, item):
         if item._names[0] == 'equip':
             self.show_equipment_info(item)
-        elif item._names[0] +'_'+ item._names[1] == 'inventory_slot':
+        elif item._names[0] + '_' + item._names[1] == 'inventory_slot':
             self.show_inventory_info(item)
-        elif item._names[0] +'_'+ item._names[1] == 'shop_slot':
+        elif item._names[0] + '_' + item._names[1] == 'shop_slot':
             self.show_shop_info(item)
 
     def keyPressEvent(self, e):
@@ -200,12 +212,14 @@ class InventoryPage(AbstractPage):
     ############ S C R O L L ##############
 
     def setUpScroll(self):
-        self.s_engine = ScrollBlock(self, width=self.items['scroll_block'].width)
+        self.s_engine = ScrollBlock(
+            self, width=self.items['scroll_block'].width)
         self.s_engine.setScrollBut(self.items['scroll_but'])
         for i in range(self.inventories.len):
-            self.s_engine.addScrollItem(self.items['inventory_slot_'+str(i)])
+            self.s_engine.addScrollItem(self.items['inventory_slot_' + str(i)])
 
-        self.s_engine_2 = ScrollBlock(self, width=self.items['shop_scroll_block'].width)
+        self.s_engine_2 = ScrollBlock(
+            self, width=self.items['shop_scroll_block'].width)
         self.s_engine_2.setScrollBut(self.items['shop_scroll_but'])
         for i in range(self.shop.len):
             self.s_engine_2.addScrollItem(self.items['shop_slot_' + str(i)])
@@ -250,7 +264,8 @@ class InventoryPage(AbstractPage):
     def show_equipment_info(self, item):
         slot = self.equipments.slots.get(item.name)
         if slot is not None:
-            self.items.get('info_value').setText(self.setDict(slot.tooltip_info))
+            self.items.get('info_value').setText(
+                self.setDict(slot.tooltip_info))
 
     ############## S H O P ##############
 
@@ -265,5 +280,5 @@ class InventoryPage(AbstractPage):
     def show_shop_info(self, item):
         slot = self.shop.slots.get(item.name)
         if slot is not None:
-            self.items.get('info_value').setText(self.setDict(self.shop.show_info(slot)))
-
+            self.items.get('info_value').setText(
+                self.setDict(self.shop.show_info(slot)))

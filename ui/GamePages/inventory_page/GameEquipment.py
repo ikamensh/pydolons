@@ -16,8 +16,10 @@ class GameEquipment(SlotsGroup):
                 name_slot = 'ring1'
             elif name_slot == 'ring_2':
                 name_slot = 'ring2'
-            item:Element = self.page.find_element(element, name=f'equip_slot_{name_slot}')
-            self.default_icons[f'equip_slot_{name_slot}'] = item.get('icon', 'default.png')
+            item: Element = self.page.find_element(
+                element, name=f'equip_slot_{name_slot}')
+            self.default_icons[f'equip_slot_{name_slot}'] = item.get(
+                'icon', 'default.png')
             self.slots[f'equip_slot_{name_slot}'] = slot
             if slot.content is not None:
                 item.set('icon', slot.content.icon)

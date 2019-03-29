@@ -6,10 +6,12 @@ if TYPE_CHECKING:
     from battlefield import Cell
     from DreamGame import DreamGame
 
+
 class Dungeon:
     @property
     def tooltip_info(self):
         return self.name
+
     def __init__(self, name: str, h: int, w: int, *,
                  construct_objs: Callable[[DreamGame], Collection[BattlefieldObject]],
                  hero_entrance: Union[Cell, complex],
@@ -24,4 +26,3 @@ class Dungeon:
         self.hero_entrance = hero_entrance
 
         self.icon = icon
-

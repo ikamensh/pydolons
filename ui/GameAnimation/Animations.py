@@ -28,13 +28,9 @@ class Animations:
             self.setRotation(angel)
     """
 
-
     @staticmethod
     def getDirectionAnim(target):
         animation = QtCore.QPropertyAnimation(target, b'angle')
         animation.setDuration(500)
         animation.valueChanged.connect(target.setQAngle)
         return animation
-
-
-

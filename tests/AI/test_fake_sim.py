@@ -20,5 +20,3 @@ def test_results_match(minigame, hero):
 
     assert len(mismatches) == 0
     assert count_simulated > 0
-
-

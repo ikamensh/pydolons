@@ -15,7 +15,6 @@ from cntent.dungeons.tel_razi_temple import tel_razi_temple
 from ui.experimental.DungeonWidget import DungeonWidget
 
 
-
 class DungeonChoice(QGroupBox):
     def __init__(self, dung_list, parent=None, gc=None):
         QGroupBox.__init__(self, parent)
@@ -25,7 +24,7 @@ class DungeonChoice(QGroupBox):
         layout = QtWidgets.QGridLayout()
         for i, d in enumerate(dung_list):
             dung_widg = DungeonWidget(d, gc=gc)
-            layout.addWidget(dung_widg, i // 2, i%2)
+            layout.addWidget(dung_widg, i // 2, i % 2)
             self.dungeon_widgets.append(dung_widg)
 
             dung_widg.selected.connect(self.select_dungeon)
@@ -40,7 +39,6 @@ class DungeonChoice(QGroupBox):
 
         layout.addWidget(start_button)
         self.setLayout(layout)
-
 
     @property
     def selected_dungeon(self):
@@ -66,14 +64,18 @@ class DungeonChoice(QGroupBox):
         self.start_button.setEnabled(True)
 
 
-
-
 if __name__ == "__main__":
     from ui.gameconfig.GameConfiguration import GameConfiguration
 
     qt_app = QApplication(sys.argv)
     gc = GameConfiguration()
 
-    app = DungeonChoice([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon, tel_razi_temple], gc=gc)
+    app = DungeonChoice([small_orc_cave,
+                         pirate_lair,
+                         small_graveyard,
+                         demo_dungeon,
+                         walls_dungeon,
+                         tel_razi_temple],
+                        gc=gc)
     app.show()
     qt_app.exec_()

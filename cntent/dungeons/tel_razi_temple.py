@@ -4,10 +4,10 @@ from game_objects.dungeon.Dungeon import Dungeon
 
 
 def build_unit_locations(g):
-    tel_band = [golem.create(g, 3+3j),
-                golem.create(g, 6+6j),
-                tel_razi_scrub.create(g, 3+6j),
-                tel_razi_zealot.create(g, 4+4j)]
+    tel_band = [golem.create(g, 3 + 3j),
+                golem.create(g, 6 + 6j),
+                tel_razi_scrub.create(g, 3 + 6j),
+                tel_razi_zealot.create(g, 4 + 4j)]
     return tel_band
 
 

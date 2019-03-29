@@ -11,7 +11,8 @@ class BaseItem(QGraphicsObject):
         self.attrib = None
         self.setAcceptHoverEvents(True)
         self.setAcceptDrops(True)
-        self.setAcceptedMouseButtons(QtCore.Qt.LeftButton | QtCore.Qt.RightButton)
+        self.setAcceptedMouseButtons(
+            QtCore.Qt.LeftButton | QtCore.Qt.RightButton)
         self.isHover = False
         self.isDown = False
         self.isChecked = False
@@ -56,7 +57,8 @@ class BaseItem(QGraphicsObject):
             self.paint = self.paint_bg
         if attrib.get('icon') is not None:
             self.paint = self.paint_pic
-        if attrib.get('icon') is not None and attrib.get('background-color') is not None:
+        if attrib.get('icon') is not None and attrib.get(
+                'background-color') is not None:
             self.paint = self.paint_pic_bg
         if attrib.get('input') is None:
             self.input = ''
@@ -66,23 +68,49 @@ class BaseItem(QGraphicsObject):
     def boundingRect(self):
         return QtCore.QRect(self._left, self._top, self._width, self._height)
 
-    def paint(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
+    def paint(
+            self,
+            painter: QPainter,
+            option: QStyleOptionGraphicsItem,
+            widget: QWidget = ...):
         painter.drawRect(self._left, self._top, self._width, self._height)
 
-    def paint_bg(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
+    def paint_bg(
+            self,
+            painter: QPainter,
+            option: QStyleOptionGraphicsItem,
+            widget: QWidget = ...):
         painter.setBrush(self._bg_brush)
         painter.drawRect(self._left, self._top, self._width, self._height)
         pass
 
-    def paint_pic(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
+    def paint_pic(
+            self,
+            painter: QPainter,
+            option: QStyleOptionGraphicsItem,
+            widget: QWidget = ...):
         painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
-        painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
+        painter.drawPixmap(
+            self._left,
+            self._top,
+            self._width,
+            self._height,
+            self.pixmap)
         pass
 
-    def paint_pic_bg(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
+    def paint_pic_bg(
+            self,
+            painter: QPainter,
+            option: QStyleOptionGraphicsItem,
+            widget: QWidget = ...):
         painter.setBrush(self._bg_brush)
         painter.drawRect(self._left, self._top, self._width, self._height)
-        painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
+        painter.drawPixmap(
+            self._left,
+            self._top,
+            self._width,
+            self._height,
+            self.pixmap)
         pass
 
     @property
@@ -90,17 +118,13 @@ class BaseItem(QGraphicsObject):
         return int(self.attrib.get('width')) * self.scale_x
 
     def update(self):
-        super(BaseItem, self).update(self._left, self._top, self.width, self._height)
+        super(
+            BaseItem,
+            self).update(
+            self._left,
+            self._top,
+            self.width,
+            self._height)
 
-    def setPixmapIcon(self, icon:str):
+    def setPixmapIcon(self, icon: str):
         self.pixmap = self.gameRoot.cfg.getPicFile(icon)
-
-
-
-
-
-
-
-
-
-

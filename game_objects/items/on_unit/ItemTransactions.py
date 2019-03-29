@@ -1,5 +1,6 @@
 from game_objects.items import Item, Slot
 
+
 class ItemTransactions:
 
     def __init__(self, unit):
@@ -18,10 +19,8 @@ class ItemTransactions:
                     return False
             return True
 
-
     def take_from(self, slot):
         self.manipulation_slot.swap_item(slot)
-
 
     def stop_manipulation(self):
         if self.manipulation_slot:
@@ -35,7 +34,3 @@ class ItemTransactions:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop_manipulation()
-
-
-
-

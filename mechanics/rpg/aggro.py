@@ -4,7 +4,6 @@ from mechanics.events import MovementEvent, DamageEvent
 from mechanics.factions import Faction
 
 
-
 # no bleeding?
 def gain_aggro_cb(t, e: MovementEvent):
 
@@ -22,7 +21,7 @@ def gain_aggro_cb(t, e: MovementEvent):
 
 def lose_agro_cb(t, e: MovementEvent):
     active_enemies = [u for u in e.game.units
-                       if u.faction is Faction.ENEMY and u.fights_hero]
+                      if u.faction is Faction.ENEMY and u.fights_hero]
 
     player_units = [u for u in e.game.units if u.faction is Faction.PLAYER]
 
@@ -32,8 +31,6 @@ def lose_agro_cb(t, e: MovementEvent):
     for enemy in active_enemies:
         if min_distance(enemy) > enemy.sight_range * 2:
             enemy.fights_hero = False
-
-
 
 
 def vision_aggro_rule(game):

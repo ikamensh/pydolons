@@ -7,8 +7,8 @@ def test_random_teleport(pirate_band, empty_game, no_chances):
     p1 = pirate_band[0]
     p2 = pirate_band[1]
 
-    empty_game.add_unit(p1, 2+2j,"FACTION_1", facing=1j)
-    empty_game.add_unit(p2, 2+3j,"FACTION_2", facing=1j)
+    empty_game.add_unit(p1, 2 + 2j, "FACTION_1", facing=1j)
+    empty_game.add_unit(p2, 2 + 3j, "FACTION_2", facing=1j)
 
     random_teleport_trigger(p2, 4, 1, Cost(readiness=0.1))
 
@@ -19,15 +19,15 @@ def test_random_teleport(pirate_band, empty_game, no_chances):
     p2.readiness = 0.5
     empty_game.order_attack(p1, p2)
 
-    assert p2.cell.complex != 2+3j
+    assert p2.cell.complex != 2 + 3j
     actives_found = 0
     attacks_found = 0
     moves_found = 0
     for event, happened in spy:
         if isinstance(event, AttackEvent):
-            attacks_found +=1
+            attacks_found += 1
         elif isinstance(event, ActiveEvent):
-            actives_found +=1
+            actives_found += 1
         elif isinstance(event, MovementEvent):
             moves_found += 1
 
@@ -101,6 +101,7 @@ def test_random_teleport_chance_blocks(pirate_band, empty_game, no_chances):
     assert attacks_found == 1
     assert moves_found == 0
 
+
 def test_dying_unit_dies(pirate_band, empty_game, no_chances):
     p1 = pirate_band[0]
     p2 = pirate_band[1]
@@ -114,7 +115,4 @@ def test_dying_unit_dies(pirate_band, empty_game, no_chances):
     p1.readiness = 2
     p2.readiness = 0.5
     empty_game.order_attack(p1, p2)
-    pass # no exceptions thrown
-
-
-
+    pass  # no exceptions thrown

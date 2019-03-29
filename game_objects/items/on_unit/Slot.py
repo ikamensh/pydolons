@@ -8,7 +8,11 @@ if TYPE_CHECKING:
 
 
 class Slot:
-    def __init__(self, name:str, item_type : ItemTypes = None, owner: Unit = None):
+    def __init__(
+            self,
+            name: str,
+            item_type: ItemTypes = None,
+            owner: Unit = None):
         self.name = name
         self.item_type = item_type
         self.owner = owner
@@ -52,9 +56,10 @@ class Slot:
         else:
             return self.item_type is item.item_type
 
-
     def swap_item(self, other_slot: Slot):
-        if self.check_type_match(other_slot.content) and other_slot.check_type_match(self.content):
+        if self.check_type_match(
+                other_slot.content) and other_slot.check_type_match(
+                self.content):
             self._content, other_slot._content = other_slot.pop_item(), self.pop_item()
             return True
         else:
@@ -83,5 +88,3 @@ class Slot:
 
     def __repr__(self):
         return f"{self.owner}'s {self.name} slot with {self.content}"
-
-

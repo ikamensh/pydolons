@@ -3,6 +3,7 @@ from PySide2 import QtWidgets, QtCore, QtGui
 
 class GameVision(QtWidgets.QGraphicsItemGroup):
     """docs GameVision"""
+
     def __init__(self, level):
         super(GameVision, self).__init__()
         self.level = level
@@ -18,10 +19,15 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
         self.createPoly()
 
     def getMainPoly(self):
-        poly= QtGui.QPolygonF()
+        poly = QtGui.QPolygonF()
         poly.append(QtCore.QPoint(0, 0))
         poly.append(QtCore.QPoint(self.bf_w * self.cell_w, 0))
-        poly.append(QtCore.QPoint(self.bf_w * self.cell_w, self.bf_h * self.cell_h ))
+        poly.append(
+            QtCore.QPoint(
+                self.bf_w *
+                self.cell_w,
+                self.bf_h *
+                self.cell_h))
         poly.append(QtCore.QPoint(0, self.bf_h * self.cell_h))
         return poly
 
@@ -58,12 +64,18 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
 
     def updatePoly(self):
         painPath = self.getPainterPath(self.cur_cells)
-        self.shadowGray.setPolygon(self.polyGray.subtracted(painPath.toFillPolygon()))
+        self.shadowGray.setPolygon(
+            self.polyGray.subtracted(
+                painPath.toFillPolygon()))
         self.polyDark = self.polyDark.subtracted(painPath.toFillPolygon())
         self.shadowDark.setPolygon(self.polyDark)
 
     def getPainterPath(self, cells):
         painPath = QtGui.QPainterPath()
         for cell in cells:
-            painPath.addRect(cell.x * self.cell_w, cell.y * self.cell_h , self.cell_w, self.cell_h )
+            painPath.addRect(
+                cell.x * self.cell_w,
+                cell.y * self.cell_h,
+                self.cell_w,
+                self.cell_h)
         return painPath

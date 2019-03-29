@@ -18,7 +18,7 @@ move_forward = Active(Cell,
                       simulate=sim_move_on_target_cell)
 
 move_diag = Active(Cell,
-                   [proximity_condition(1.5), between_angles(1,89), can_move_to_target_cell],
+                   [proximity_condition(1.5), between_angles(1, 89), can_move_to_target_cell],
                    Cost(stamina=2, readiness=0.6),
                    game=None,
                    callbacks=[move_on_target_cell],
@@ -27,7 +27,7 @@ move_diag = Active(Cell,
                    simulate=sim_move_on_target_cell)
 
 move_side = Active(Cell,
-                   [proximity_condition(1), between_angles(89,91), can_move_to_target_cell],
+                   [proximity_condition(1), between_angles(89, 91), can_move_to_target_cell],
                    Cost(stamina=1, readiness=0.5),
                    game=None,
                    callbacks=[move_on_target_cell],
@@ -35,14 +35,12 @@ move_side = Active(Cell,
                    name="move to the side",
                    simulate=sim_move_on_target_cell)
 
-move_back = Active(Cell,
-                   [proximity_condition(1), between_angles(180,180), can_move_to_target_cell],
-                   Cost(stamina=1, readiness=0.6),
-                   game=None,
-                   callbacks=[move_on_target_cell],
-                   tags=[ActiveTags.MOVEMENT],
-                   name="move back",
-                   simulate=sim_move_on_target_cell)
+move_back = Active(
+    Cell, [
+        proximity_condition(1), between_angles(
+            180, 180), can_move_to_target_cell], Cost(
+                stamina=1, readiness=0.6), game=None, callbacks=[move_on_target_cell], tags=[
+                    ActiveTags.MOVEMENT], name="move back", simulate=sim_move_on_target_cell)
 
 turn_cw = Active(None,
                  None,
@@ -51,16 +49,16 @@ turn_cw = Active(None,
                  callbacks=[turn_cw_callback],
                  tags=[ActiveTags.TURNING],
                  name="turn CW",
-                    simulate=sim_turn(ccw=False))
+                 simulate=sim_turn(ccw=False))
 
 turn_ccw = Active(None,
-                None,
-                Cost(readiness=0.2),
-                game=None,
-                callbacks=[turn_ccw_callback],
-                tags=[ActiveTags.TURNING],
-                name="turn CCW",
-                simulate=sim_turn(ccw=True))
+                  None,
+                  Cost(readiness=0.2),
+                  game=None,
+                  callbacks=[turn_ccw_callback],
+                  tags=[ActiveTags.TURNING],
+                  name="turn CCW",
+                  simulate=sim_turn(ccw=True))
 
 
 std_movements = [move_back, move_diag, move_forward, move_side]

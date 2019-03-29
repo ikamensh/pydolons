@@ -7,6 +7,7 @@ prefix = os.path.abspath(prefix)
 
 print(prefix)
 
+
 class sound_paths:
     slash = os.path.join(prefix, 'slash.wav')
     bash = os.path.join(prefix, 'bash.wav')
@@ -26,7 +27,6 @@ damage_sounds = {}
 t = DamageTypes
 
 
-
 damage_sounds[t.SLASH] = sound_paths.slash
 damage_sounds[t.CRUSH] = sound_paths.bash
 # damage_sounds[t.PIERCE] = sound_paths.pierce
@@ -37,5 +37,3 @@ damage_sounds[t.CRUSH] = sound_paths.bash
 # damage_sounds[t.ACID] = sound_paths.acid
 
 # damage_sounds[t.SONIC] = sound_paths.sonic
-
-

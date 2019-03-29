@@ -43,7 +43,8 @@ class InventoryPage(AbstractPage):
 
     def setUpWidgets(self):
         self.gamePages.gameRoot.scene.addItem(self)
-        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.background = QtWidgets.QGraphicsPixmapItem(
+            self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
 
         self.item = QtWidgets.QGraphicsPixmapItem()
@@ -139,7 +140,11 @@ class InventoryPage(AbstractPage):
 
     def updatePage(self):
         self.mainWidget.upateSlots()
-        self.update(0, 0, self.gamePages.gameRoot.cfg.dev_size[0],self.gamePages.gameRoot.cfg.dev_size[1])
+        self.update(
+            0,
+            0,
+            self.gamePages.gameRoot.cfg.dev_size[0],
+            self.gamePages.gameRoot.cfg.dev_size[1])
 
     def swap_item(self, source, target):
         with ItemTransactions(self.the_hero) as trans:
@@ -165,4 +170,3 @@ class InventoryPage(AbstractPage):
             self.item.setX(pos.x() + 10)
             self.item.setY(pos.y() + 10)
         pass
-

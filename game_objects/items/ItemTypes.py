@@ -1,5 +1,6 @@
 from my_utils.named_enums import NameEnum, auto
 
+
 class ItemTypes(NameEnum):
     BODY_ARMOR = auto()
     WEAPON = auto()
@@ -15,5 +16,3 @@ class ItemTypes(NameEnum):
     SPELL = auto()
 
     CHARGED = auto()
-
-

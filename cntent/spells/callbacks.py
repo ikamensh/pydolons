@@ -12,6 +12,7 @@ def lightning_bolt_callback(active, unit):
 
     DamageEvent(dmg, target=target, source=source)
 
+
 def healing_callback(active, unit):
     source = active.owner
     target = unit

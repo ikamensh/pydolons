@@ -1,3 +1,4 @@
+import math
 from __future__ import annotations
 
 from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLayout
@@ -8,10 +9,9 @@ if TYPE_CHECKING:
     from character.perks import PerkGroup
     from ui.experimental.perk_tree.QPerkTree import QPerkTree
 
-import math
 
 class QPerkGroup(QWidget):
-    def __init__(self, perk_group: PerkGroup, parent:QPerkTree):
+    def __init__(self, perk_group: PerkGroup, parent: QPerkTree):
         self.perk_group = perk_group
         self.tree = parent
         super().__init__(parent)
@@ -20,20 +20,20 @@ class QPerkGroup(QWidget):
 
         layout.setSizeConstraint(QLayout.SetFixedSize)
 
-        n_perks = len( perk_group.perk_list )
-        n_per_row = math.ceil( n_perks ** (1/2) )
+        n_perks = len(perk_group.perk_list)
+        n_per_row = math.ceil(n_perks ** (1 / 2))
         n_rows = math.ceil(n_perks / n_per_row)
 
         self.identities = {}
         for i in range(n_rows):
-            start = i*n_per_row
+            start = i * n_per_row
             finish = start + n_per_row
-            row, new_identities = self.build_row( perk_group.perk_list[start:finish] )
+            row, new_identities = self.build_row(
+                perk_group.perk_list[start:finish])
             self.identities.update(new_identities)
             layout.addWidget(row)
 
         self.setLayout(layout)
-
 
     def xp_changed(self, new_xp):
         can_spend = new_xp
@@ -45,7 +45,6 @@ class QPerkGroup(QWidget):
 
     def levelup(self):
         self.tree.levelup()
-
 
     def build_row(self, perks):
         row = QWidget()
@@ -64,9 +63,6 @@ class QPerkGroup(QWidget):
 
     def __repr__(self):
         return f"UI for {self.perk_group}"
-
-
-
 
 
 if __name__ == "__main__":

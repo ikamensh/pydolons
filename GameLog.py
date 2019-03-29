@@ -7,6 +7,7 @@ class LogTargets(Enum):
     PRINT = auto()
     SILENT = auto()
 
+
 class GameLog:
     the_log = None
 

@@ -1,30 +1,28 @@
 from mechanics.damage.DamageTypes import DamageTypes, DamageTypeGroups
 
+
 class Armor:
     MIN_ARMOR = 0
 
-    def __init__(self, base_value = 0, armor_dict=None):
+    def __init__(self, base_value=0, armor_dict=None):
         self.armor_values = {}
         for dtype in DamageTypes:
             self[dtype] = base_value
         if armor_dict:
             self.armor_values.update(armor_dict)
 
-
     def value(self):
         self.finalize()
         return self
 
-
     def finalize(self):
-        for k,v in self.armor_values.items():
+        for k, v in self.armor_values.items():
             if v < Armor.MIN_ARMOR:
                 self[k] = Armor.MIN_ARMOR
 
-
     def __setitem__(self, key, value):
         assert isinstance(key, DamageTypes)
-        self.armor_values.__setitem__(key, int(value) )
+        self.armor_values.__setitem__(key, int(value))
 
     def __getitem__(self, item):
         return self.armor_values[item]
@@ -36,7 +34,7 @@ class Armor:
         return Armor(armor_dict=result)
 
     def __mul__(self, other):
-        assert other < 1e20 # is a number
+        assert other < 1e20  # is a number
 
         result = {}
         for damage_type in self.armor_values.keys():
@@ -57,12 +55,11 @@ class Armor:
 
     def physical(self):
         types = DamageTypeGroups.physical
-        return sum([self[dt] for dt in types])/len(types)
+        return sum([self[dt] for dt in types]) / len(types)
 
     def elemental(self):
         types = DamageTypeGroups.elemental
-        return sum([self[dt] for dt in types])/len(types)
+        return sum([self[dt] for dt in types]) / len(types)
 
     def __repr__(self):
         return f"{self.display_value() :.0f}"
-

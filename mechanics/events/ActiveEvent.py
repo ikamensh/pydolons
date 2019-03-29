@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mechanics.actives import Active
 
+
 class ActiveEvent(Event):
     channel = EventsChannels.ActiveChannel
 

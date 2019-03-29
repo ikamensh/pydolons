@@ -28,4 +28,3 @@ class GameLayout:
 
     def maxSizeWidget(self):
         pass
-

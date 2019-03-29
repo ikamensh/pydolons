@@ -43,7 +43,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
             self.updateVision()
         self.units_at[uid].setDirection(turn)
 
-    def collisionHeorOfUnits(self, x = None, y = None):
+    def collisionHeorOfUnits(self, x=None, y=None):
         if x is None:
             if not (self.active_unit.worldPos.x, y) in self.getUitsLocations():
                 self.active_unit.setWorldY(y)
@@ -57,7 +57,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.active_unit = self.units_at[unit.uid]
 
     def unitMoveSlot(self, msg):
-        self.level.gameRoot.cfg.sound_maps[msg.get('unit').sound_map.move.lower()].play()
+        self.level.gameRoot.cfg.sound_maps[msg.get(
+            'unit').sound_map.move.lower()].play()
         self.moveUnit(msg.get('unit'), msg.get('cell_to'))
         self.update_heaps()
 
@@ -67,7 +68,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def targetDamageSlot(self, msg):
         # Требуется рефакторинг метод срабатывает после смерти юнита
         if msg.get('target').uid in self.units_at.keys():
-            self.units_at[msg.get('target').uid].updateSupport(msg.get('target'), msg.get('amount'))
+            self.units_at[msg.get('target').uid].updateSupport(
+                msg.get('target'), msg.get('amount'))
             self.level.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
         pass
 
@@ -79,7 +81,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
     def unitDiedSlot(self, msg):
-        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
+        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(
+            msg.get('unit').uid)
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.unitDied(msg.get('unit'))
 
@@ -88,7 +91,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
             # if group is None:
             #     self.groups_at[unit.worldPos] =
             # print('add', unit)
-            pass
+        pass
 
     def getUnitsFromCell(self, cell_to):
         for unit in self.units_at.values():
@@ -97,9 +100,11 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def updateVision(self):
         hero = self.level.gameRoot.game.the_hero
-        self.level.gameVision.setSeenCells(self.level.gameRoot.game.vision.std_seen_cells(hero))
+        self.level.gameVision.setSeenCells(
+            self.level.gameRoot.game.vision.std_seen_cells(hero))
         for cell, units in self.level.gameRoot.game.bf.cells_to_objs.items():
-            if cell not in self.level.gameRoot.game.vision.std_seen_cells(hero):
+            if cell not in self.level.gameRoot.game.vision.std_seen_cells(
+                    hero):
                 for u in units:
                     unit = self.units_at.get(u.uid)
                     if unit is not None:
@@ -115,12 +120,17 @@ class Units(QtWidgets.QGraphicsItemGroup):
             if len(units) > 1:
                 if cell in self.units_heaps.keys():
                     self.units_heaps[cell].info()
-                    self.units_heaps[cell].update_units(list(self.units_from_(units)))
+                    self.units_heaps[cell].update_units(
+                        list(self.units_from_(units)))
                 else:
-                    self.units_heaps[cell] = UnitsHeap(gameRoot=self.level.gameRoot)
-                    self.level.gameRoot.controller.mouseMove.connect(self.units_heaps[cell].mouseMoveEvent)
-                    self.level.gameRoot.controller.mousePress.connect(self.units_heaps[cell].mousePressEvent)
-                    self.units_heaps[cell].update_units(list(self.units_from_(units)))
+                    self.units_heaps[cell] = UnitsHeap(
+                        gameRoot=self.level.gameRoot)
+                    self.level.gameRoot.controller.mouseMove.connect(
+                        self.units_heaps[cell].mouseMoveEvent)
+                    self.level.gameRoot.controller.mousePress.connect(
+                        self.units_heaps[cell].mousePressEvent)
+                    self.units_heaps[cell].update_units(
+                        list(self.units_from_(units)))
             else:
                 if self.units_heaps.get(cell) is not None:
                     self.destroyUnitsHeap(cell)
@@ -144,7 +154,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
         units = self.level.gameRoot.game.bf.cells_to_objs.get(item.worldPos)
         if units is not None:
             if len(units) == 1:
-                self.level.gameRoot.gamePages.toolTip.setDict(units[0].tooltip_info)
+                self.level.gameRoot.gamePages.toolTip.setDict(
+                    units[0].tooltip_info)
             # else:
             #     for u in units:
             #         if u.uid == self.units_heaps[item.worldPos].units[-1].uid:
@@ -163,8 +174,10 @@ class Units(QtWidgets.QGraphicsItemGroup):
             self.level.gameRoot.view.mouseMove.disconnect(unit.mouseMove)
 
     def destroyUnitsHeap(self, cell):
-        self.level.gameRoot.controller.mouseMove.disconnect(self.units_heaps[cell].mouseMoveEvent)
-        self.level.gameRoot.controller.mousePress.disconnect(self.units_heaps[cell].mousePressEvent)
+        self.level.gameRoot.controller.mouseMove.disconnect(
+            self.units_heaps[cell].mouseMoveEvent)
+        self.level.gameRoot.controller.mousePress.disconnect(
+            self.units_heaps[cell].mousePressEvent)
         del self.units_heaps[cell]
 
     def destroy(self):
@@ -177,7 +190,3 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.units_heaps.clear()
         self.level = None
         self = None
-
-
-
-

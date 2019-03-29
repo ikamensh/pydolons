@@ -21,5 +21,5 @@ def setUpSize():
     gameItemsSizes[103001001] = ((128, 128), (128, 128), (128, 128))
     return gameItemsSizes
 
-gameItemsSizes = setUpSize()
 
+gameItemsSizes = setUpSize()

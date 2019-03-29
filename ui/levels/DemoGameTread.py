@@ -1,5 +1,6 @@
 from PySide2 import QtCore
 
+
 class DemoGameTread(QtCore.QThread):
 
     finished = QtCore.Signal(str)

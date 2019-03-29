@@ -1,8 +1,11 @@
+from collections import namedtuple
+import random
 """
 This script tests the savings from using lru cache.
 """
 
 import functools
+
 
 class MyVision:
     counter = 0
@@ -11,10 +14,9 @@ class MyVision:
     def my_dummy_calc(self, x, y, z):
         if x.x > y.x:
             return self.my_dummy_calc(y, x, z)
-        self.counter+=1
+        self.counter += 1
         return x
 
-from collections import namedtuple
 
 quack = namedtuple("quack", "x y")
 
@@ -23,9 +25,8 @@ m = MyVision()
 quacks = list()
 for i in range(8):
     for j in range(8):
-        quacks.append( quack(i,j) )
+        quacks.append(quack(i, j))
 
-import random
 
 results = []
 
@@ -42,9 +43,6 @@ while len(results) < 500_000:
         q2 = random.choice(quacks)
         q3 = random.choice(quacks)
 
-    results.append(m.my_dummy_calc(q1,q2,q3))
+    results.append(m.my_dummy_calc(q1, q2, q3))
 
 print(m.counter)
-
-
-

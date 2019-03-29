@@ -41,5 +41,6 @@ class GroupItem:
             self.paint = self.paint_bg
         if attrib.get('icon') is not None:
             self.paint = self.paint_pic
-        if attrib.get('icon') is not None and attrib.get('background-color') is not None:
+        if attrib.get('icon') is not None and attrib.get(
+                'background-color') is not None:
             self.paint = self.paint_pic_bg

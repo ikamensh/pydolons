@@ -1,20 +1,21 @@
 from mechanics.turns.AtbTurnsManager import AtbTurnsManager
 
+
 def test_different_units(empty_game, hero, pirate):
-    empty_game.add_unit(hero, 1+1j)
-    empty_game.add_unit(pirate, 2+1j)
+    empty_game.add_unit(hero, 1 + 1j)
+    empty_game.add_unit(pirate, 2 + 1j)
     atm = empty_game.turns_manager
 
     units_returned = set()
 
-
     for i in range(10):
         unit = atm.get_next()
         unit.readiness = 0
-        units_returned.add( unit)
+        units_returned.add(unit)
 
     assert hero in units_returned
     assert pirate in units_returned
+
 
 def test_readiness_defines_turn(empty_game, hero, pirate):
     empty_game.add_unit(hero, 1 + 1j)
@@ -31,6 +32,7 @@ def test_readiness_defines_turn(empty_game, hero, pirate):
 
     assert atm.get_next() is hero
 
+
 def test_cycles_well(empty_game, hero, pirate):
     empty_game.add_unit(hero, 1 + 1j)
     empty_game.add_unit(pirate, 2 + 1j)
@@ -45,6 +47,7 @@ def test_cycles_well(empty_game, hero, pirate):
 
     assert units_returned.count(hero) > 1
     assert units_returned.count(pirate) > 1
+
 
 def test_disabled(empty_game, hero, pirate):
     empty_game.add_unit(hero, 1 + 1j)

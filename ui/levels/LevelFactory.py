@@ -7,14 +7,14 @@ from ui.levels.BaseLevel import BaseLevel
 from ui.debug.DebugLayer import DebugLayer
 
 from game_objects import battlefield_objects as bf_objs
-from game_objects.battlefield_objects import  Obstacle
+from game_objects.battlefield_objects import Obstacle
 
 
 class LevelFactory:
     def __init__(self, logicEngine):
         self.LEngine = logicEngine
         self.gameRoot = None
-        self.level:BaseLevel = None
+        self.level: BaseLevel = None
         pass
 
     def setGameRoot(self, gameRoot):
@@ -35,8 +35,12 @@ class LevelFactory:
 
     def setUpLevel(self):
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
-        self.level.world.setWorldSize(self.gameRoot.game.bf.w, self.gameRoot.game.bf.h)
-        self.level.world.setFloor(self.gameRoot.cfg.getPicFile('floor.png', 102001001))
+        self.level.world.setWorldSize(
+            self.gameRoot.game.bf.w,
+            self.gameRoot.game.bf.h)
+        self.level.world.setFloor(
+            self.gameRoot.cfg.getPicFile(
+                'floor.png', 102001001))
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
 
@@ -44,7 +48,8 @@ class LevelFactory:
         print(dir(self.gameRoot.game))
         self.setUpUnits(self.gameRoot.game.bf)
         self.level.gameRoot.cfg.setWorld(self.level.world)
-        self.level.gameRoot.controller.setUp(self.level.world, self.level.units, self.level.middleLayer)
+        self.level.gameRoot.controller.setUp(
+            self.level.world, self.level.units, self.level.middleLayer)
         self.level.gameRoot.controller.tr_support.initLevel(self.level)
         self.level.debugLayer = DebugLayer(self.level)
 
@@ -54,7 +59,11 @@ class LevelFactory:
             print(units)
             unit = units[0]
             if isinstance(unit, bf_objs.Unit):
-                gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg, unit_bf = unit)
+                gameUnit = BasicUnit(
+                    self.gameRoot.cfg.unit_size[0],
+                    self.gameRoot.cfg.unit_size[1],
+                    gameconfig=self.gameRoot.cfg,
+                    unit_bf=unit)
                 if unit.icon == 'hero.png':
                     self.active_unit = True
                 gameUnit.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
@@ -71,7 +80,7 @@ class LevelFactory:
             elif isinstance(unit, Obstacle):
                 obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
                                         self.gameRoot.cfg.unit_size[1],
-                                        name = unit.name)
+                                        name=unit.name)
                 obstacle.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
                 obstacle.setWorldPos(unit_pos.x, unit_pos.y)
                 obstacle.uid = unit.uid
@@ -81,7 +90,8 @@ class LevelFactory:
                 self.level.world.obstacles[unit.uid] = obstacle
         print('next', self.gameRoot.game.turns_manager.get_next())
         print('uid', self.gameRoot.game.turns_manager.get_next().uid)
-        self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
+        self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next(
+        ).uid]
         self.level.units.updateVision()
 
     def addLevelToScene(self, scene):
@@ -108,7 +118,3 @@ class LevelFactory:
         self.level.middleLayer.level = None
         self.level.middleLayer = None
         del self.level
-
-
-
-

@@ -1,4 +1,6 @@
+import copy
 from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
+
 
 def test_cost_grows():
     ep = everymans_perks()
@@ -29,7 +31,6 @@ def test_gives_abilities():
 
     assert len(ep.all_abils) == 1
 
-
     str_perk.current_level += 1
 
     assert len(ep.all_abils) == 1
@@ -38,7 +39,6 @@ def test_gives_abilities():
 
     assert len(ep.all_abils) == 2
 
-import copy
 
 def test_gives_bonuses(hero):
     ep = everymans_perks()
@@ -62,26 +62,24 @@ def test_gives_bonuses(hero):
 
     assert hero2.str > hero.str
 
+
 def test_works_on_character(char):
     ep = char.perk_trees[0]
     str_perk = ep.accessible_perks()[0]
 
     str_before = char.unit.str
 
-    str_perk.current_level +=3
+    str_perk.current_level += 3
 
     assert char.unit.str > str_before
+
 
 def test_stable_on_character(char):
     ep = char.perk_trees[0]
     str_perk = ep.accessible_perks()[0]
 
-    str_perk.current_level +=3
+    str_perk.current_level += 3
 
     str_before = char.unit.str
 
     assert char.unit.str == str_before
-
-
-
-

@@ -4,8 +4,13 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from DreamGame import DreamGame
 
+
 class Event:
-    def __init__(self, game: DreamGame, fire: bool=True, logging:bool = False):
+    def __init__(
+            self,
+            game: DreamGame,
+            fire: bool = True,
+            logging: bool = False):
         self.interrupted = False
         self.game = game
         self.logging = logging
@@ -13,7 +18,7 @@ class Event:
             self.fire()
 
     def fire(self) -> None:
-        if not self.game is None:
+        if self.game is not None:
             self.game.events_platform.process_event(self)
 
     @abstractmethod

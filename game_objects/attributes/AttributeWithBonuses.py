@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+
 class AttributeWithBonuses:
 
     def __init__(self, name_base, bonus_enum):
@@ -19,10 +20,3 @@ class AttributeWithBonuses:
             if matching_bonus:
                 attr += matching_bonus
         return attr.value()
-
-
-
-
-
-
-

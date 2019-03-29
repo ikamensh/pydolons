@@ -8,7 +8,7 @@ from GameLoopThread import ProxyEmit
 
 def play_movement_anim(t, e):
     # comment bug threading
-    ProxyEmit.play_movement_anim.emit({'unit':e.unit,"cell_to":e.cell_to})
+    ProxyEmit.play_movement_anim.emit({'unit': e.unit, "cell_to": e.cell_to})
     # TheUI.singleton.gameRoot.level.unitMoveSlot({'unit':e.unit,"cell_to":e.cell_to})
 
 
@@ -20,11 +20,16 @@ def move_anim_trigger(game):
 
 ########### DAMAGE #################
 
+
 def maybe_play_damage_anim(t, e):
-    ProxyEmit.maybe_play_damage_anim.emit({'amount':e.amount,'target':e.target, 'damage_type':e.damage.type})
+    ProxyEmit.maybe_play_damage_anim.emit(
+        {'amount': e.amount, 'target': e.target, 'damage_type': e.damage.type})
+
 
 def maybe_play_hit_anim(t, e):
-    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.target.sound_map.hit.lower()})
+    ProxyEmit.maybe_play_hit_anim.emit(
+        {'sound': e.target.sound_map.hit.lower()})
+
 
 def damage_anim_trigger(game):
     return Trigger(DamageEvent,
@@ -33,10 +38,13 @@ def damage_anim_trigger(game):
                    callbacks=[maybe_play_damage_anim, maybe_play_hit_anim])
 ########### ATTACK #################
 
+
 def play_attack_anim(t, e):
     # print('e dir :\n',dir(e))
-    ProxyEmit.maybe_play_hit_anim.emit({'sound':e.source.sound_map.attack.lower()})
+    ProxyEmit.maybe_play_hit_anim.emit(
+        {'sound': e.source.sound_map.attack.lower()})
     pass
+
 
 def attack_anin_trigger(game):
     return Trigger(AttackEvent,
@@ -48,8 +56,10 @@ def attack_anin_trigger(game):
 
 
 def play_perish_anim(t, e):
-    ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'sound':e.unit.sound_map.perish.lower()})
+    ProxyEmit.play_perish_anim.emit(
+        {'unit': e.unit, 'sound': e.unit.sound_map.perish.lower()})
     pass
+
 
 def perish_anim_trigger(game):
     return Trigger(UnitDiedEvent,
@@ -62,7 +72,8 @@ def perish_anim_trigger(game):
 
 
 def play_trun_anim(t, e):
-    ProxyEmit.play_trun_anim.emit({'uid':e.unit.uid,'turn':e.unit.facing})
+    ProxyEmit.play_trun_anim.emit({'uid': e.unit.uid, 'turn': e.unit.facing})
+
 
 def turn_anim_trigger(game):
     return Trigger(TurnEvent,
@@ -76,6 +87,7 @@ def turn_anim_trigger(game):
 def play_nextunit_anim(t, e):
     ProxyEmit.play_nextunit_anim.emit()
 
+
 def nexunit_anim_trigger(game):
     return Trigger(NextUnitEvent,
                    platform=game.events_platform,
@@ -87,6 +99,7 @@ def nexunit_anim_trigger(game):
 
 def play_levelstatus(t, e):
     ProxyEmit.play_levelstatus.emit(e.status)
+
 
 def levelstatus_trigger(game):
     return Trigger(LevelStatusEvent,
@@ -100,6 +113,7 @@ def levelstatus_trigger(game):
 def display_ui_error(t, e):
     ProxyEmit.play_levelstatus.emit(e.message)
 
+
 def ui_error_message_trigger(game):
     return Trigger(UiErrorMessageEvent,
                    platform=game.events_platform,
@@ -110,7 +124,7 @@ def ui_error_message_trigger(game):
 
 
 def obstacle_destroyed(t, e):
-    ProxyEmit.obstacle_estroyed.emit({'unit':e.unit})
+    ProxyEmit.obstacle_estroyed.emit({'unit': e.unit})
 
 
 def obstacle_destroy_trigger(game):
@@ -118,4 +132,3 @@ def obstacle_destroy_trigger(game):
                    platform=game.events_platform,
                    conditions={no_sim_condition},
                    callbacks=[obstacle_destroyed])
-

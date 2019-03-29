@@ -3,7 +3,6 @@ from mechanics.events.combat.DamageEvent import DamageEvent
 from mechanics.damage import DamageTypes, Damage
 
 
-
 def test_gain_xp_by_kill(game_hvsp, hero, pirate_band):
 
     exp_rule(game_hvsp)

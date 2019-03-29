@@ -20,7 +20,7 @@ class QPerk(QWidget):
 
         layout = QVBoxLayout()
 
-        pixmap = QPixmap( os.path.join(config.res_dir,perk.icon) )
+        pixmap = QPixmap(os.path.join(config.res_dir, perk.icon))
         icon = QLabel()
         icon.setPixmap(pixmap)
         icon.setFixedSize(pixmap.size())
@@ -33,14 +33,14 @@ class QPerk(QWidget):
         # up_button.setIcon(up_icon)
         # up_button.setIconSize(QSize(32,50))
         up_button.clicked.connect(self.on_click)
-        up_button.setText( "Not initialized" )
+        up_button.setText("Not initialized")
         layout.addWidget(up_button)
         self.up_button = up_button
 
         layout.setSizeConstraint(QVBoxLayout.SetFixedSize)
         self.setLayout(layout)
 
-        self.border_color = {0:"white", 1:"yellow", 2:"orange", 3:"red"}
+        self.border_color = {0: "white", 1: "yellow", 2: "orange", 3: "red"}
         self.match_level()
 
     @property
@@ -61,14 +61,14 @@ class QPerk(QWidget):
 
         if cost >= 1e6:
             value = int(cost // 1000_000)
-            rest = int((cost - value*1000_000) // 100_000)
+            rest = int((cost - value * 1000_000) // 100_000)
             if rest != 0:
                 result = f"{value}.{rest}m"
             else:
                 result = f"{value}m"
         elif cost > 1000:
             value = int(cost // 1000)
-            rest = int((cost - value*1000) // 100)
+            rest = int((cost - value * 1000) // 100)
             if rest != 0:
                 result = f"{value}.{rest}k"
             else:
@@ -92,7 +92,6 @@ class QPerk(QWidget):
         self.group.levelup()
 
 
-
 if __name__ == "__main__":
     from character.perks.everymans_perks.group_attrib import str_perk
     from PySide2.QtWidgets import QApplication
@@ -101,6 +100,5 @@ if __name__ == "__main__":
 
     app = QPerk(str_perk)
     app.show()
-
 
     qt_app.exec_()

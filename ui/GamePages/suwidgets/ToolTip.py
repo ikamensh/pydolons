@@ -10,7 +10,8 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
     self.minimuWidth Зависит от шрифта и self.minimumLeters -- минимальное количество символов
 
     """
-    def __init__(self, gameRoot, parent = None):
+
+    def __init__(self, gameRoot, parent=None):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsRectItem.__init__(self, parent)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)

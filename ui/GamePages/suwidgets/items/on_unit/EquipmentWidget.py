@@ -21,7 +21,7 @@ class EquipmentWidget(SlotGroupWidget):
                 self.setPicSlot(game_slot, slot)
                 layout.addItem(slot, 0, 2)
             elif game_slot.name == EquipmentSlotUids.BODY.name:
-                slot = self.getSlotWidget(game_slot, game_slot.name, h = 128)
+                slot = self.getSlotWidget(game_slot, game_slot.name, h=128)
                 self.setPicSlot(game_slot, slot)
                 layout.addItem(slot, 1, 2)
             elif game_slot.name == EquipmentSlotUids.RING_1.name:
@@ -33,16 +33,18 @@ class EquipmentWidget(SlotGroupWidget):
                 self.setPicSlot(game_slot, slot)
                 layout.addItem(slot, 1, 4)
             elif game_slot.name == EquipmentSlotUids.HANDS.name:
-                slot_l = self.getSlotWidget(game_slot, game_slot.name + '_l', h = 128)
+                slot_l = self.getSlotWidget(
+                    game_slot, game_slot.name + '_l', h=128)
                 self.setPicSlot(game_slot, slot_l)
                 layout.addItem(slot_l, 1, 1)
-                slot_r = self.getSlotWidget(game_slot, game_slot.name + '_r', h = 128)
+                slot_r = self.getSlotWidget(
+                    game_slot, game_slot.name + '_r', h=128)
                 self.setPicSlot(game_slot, slot_r)
                 layout.addItem(slot_r, 1, 3)
                 slot_l.setProperty('hand', slot_r)
                 slot_r.setProperty('hand', slot_l)
             elif game_slot.name == EquipmentSlotUids.FEET.name:
-                slot = self.getSlotWidget(game_slot, game_slot.name, h = 128)
+                slot = self.getSlotWidget(game_slot, game_slot.name, h=128)
                 self.setPicSlot(game_slot, slot)
                 layout.addItem(slot, 3, 2)
 

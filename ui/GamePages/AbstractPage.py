@@ -9,9 +9,9 @@ from xml.etree import ElementTree as ET
 class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     """docstring for AbstractPage."""
     focusable = QtCore.Signal(bool)
-    ITEM_TYPES = {'other':BaseItem, 'text':TextItem, 'group':GroupItem}
+    ITEM_TYPES = {'other': BaseItem, 'text': TextItem, 'group': GroupItem}
 
-    def __init__(self, gamePages, parent = None):
+    def __init__(self, gamePages, parent=None):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsItemGroup.__init__(self)
         # super(AbstractPage, self).__init__()
@@ -23,7 +23,7 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         self.state = False
         self.isService = False
 
-    def read_tree(self, start_node = None):
+    def read_tree(self, start_node=None):
         if start_node is None:
             start_node = self.xml_page
         visited = {}  # изначально список посещённых узлов пуст
@@ -36,11 +36,12 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
             node = queue.pop()  # извлечь первый элемент в очереди
             self.create_item(node)
             # if node == goal_node:
-            #     return True                       # проверить, не является ли текущий узел целевым
+            # return True                       # проверить, не является ли
+            # текущий узел целевым
             for child in node:  # все преемники текущего узла, ...
                 if not visited[child]:  # ... которые ещё не были посещены ...
                     if self.check_attr(node.attrib):
-                        child.attrib['parent_node']=node.attrib['name']
+                        child.attrib['parent_node'] = node.attrib['name']
                     queue.append(child)  # ... добавить в конец очереди...
                     visited[child] = True  # ... и пометить как посещённые
 
@@ -65,9 +66,9 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
 
     def readXML(self, name):
         tree = self.gamePages.gameRoot.cfg.getXML_Page(name)
-        self.xml_page:ET.Element = tree.getroot()
+        self.xml_page: ET.Element = tree.getroot()
 
-    def find_element(self, start_node, name = None, func = None):
+    def find_element(self, start_node, name=None, func=None):
         def plug(node):
             pass
         if func is None:
@@ -94,19 +95,21 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         for k, v in data.items():
             result = result + k + ' : ' + v + '\n'
         return result
-        
+
     @abstractmethod
     def setUp(self):
         """
         Устанавливаем настройки страницы
         """
         pass
+
     @abstractmethod
     def showPage(self):
         """
         Показать  страницу
         """
         pass
+
     @abstractmethod
     def updatePage(self):
         """
@@ -154,15 +157,14 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         if w_screen > w_pic:
             prec = w_pic / w_screen
         else:
-            prec = w_screen /w_pic
+            prec = w_screen / w_pic
         background.setScale(prec)
-        x = (self.gamePages.gameRoot.cfg.dev_size[0] - self.background.boundingRect().width() * prec) / 2
-        y = (self.gamePages.gameRoot.cfg.dev_size[1] - self.background.boundingRect().height() * prec) / 2
+        x = (self.gamePages.gameRoot.cfg.dev_size[0] -
+             self.background.boundingRect().width() * prec) / 2
+        y = (self.gamePages.gameRoot.cfg.dev_size[1] -
+             self.background.boundingRect().height() * prec) / 2
         background.setPos(x, y)
 
     def updatePos(self):
         """ update position for scale view"""
         self.setPos(self.gamePages.gameRoot.view.mapToScene(0, 0))
-
-
-

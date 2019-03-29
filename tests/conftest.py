@@ -1,18 +1,20 @@
+from game_objects.battlefield_objects import Wall
+from game_objects.battlefield_objects import Obstacle
+from cntent.base_types.mud_golem import mud_golem_basetype
+from mechanics.factions import Faction
+from mechanics.chances import ChanceCalculator
+from mechanics.damage import DamageTypeGroups
+from game_objects.dungeon.Dungeon import Dungeon
+from game_objects.battlefield_objects import Unit, BaseType, Obstacle
+from battlefield.Battlefield import Cell, Battlefield
+from DreamGame import DreamGame
 import pytest
 
-import sys, os
+import sys
+import os
 my_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, my_path +'/../')
+sys.path.insert(0, my_path + '/../')
 
-from DreamGame import DreamGame
-from battlefield.Battlefield import Cell, Battlefield
-from game_objects.battlefield_objects import Unit, BaseType, Obstacle
-from game_objects.dungeon.Dungeon import Dungeon
-from mechanics.damage import DamageTypeGroups
-from mechanics.chances import ChanceCalculator
-from mechanics.factions import Faction
-from cntent.base_types.mud_golem import mud_golem_basetype
-from game_objects.battlefield_objects import Obstacle
 
 @pytest.fixture()
 def obstacle():
@@ -22,27 +24,35 @@ def obstacle():
 
 @pytest.fixture()
 def no_chances(monkeypatch):
-    monkeypatch.setattr(ChanceCalculator, "chance", lambda x,y,z: 1)
+    monkeypatch.setattr(ChanceCalculator, "chance", lambda x, y, z: 1)
 
 
 @pytest.fixture()
 def pirate_basetype():
     _pirate_basetype = BaseType({}, "Pirate")
-    yield  _pirate_basetype
+    yield _pirate_basetype
 
 
 @pytest.fixture()
 def demohero_basetype():
-    _demohero_basetype = BaseType({'str':25, 'agi': 35,'prc': 15}, "Demo Hero")
-    yield  _demohero_basetype
+    _demohero_basetype = BaseType(
+        {'str': 25, 'agi': 35, 'prc': 15}, "Demo Hero")
+    yield _demohero_basetype
+
 
 @pytest.fixture()
 def hero(demohero_basetype, empty_game):
-    return Unit(demohero_basetype, game=empty_game, cell=1+1j, faction=Faction.PLAYER)
+    return Unit(
+        demohero_basetype,
+        game=empty_game,
+        cell=1 + 1j,
+        faction=Faction.PLAYER)
+
 
 @pytest.fixture()
 def pirate(pirate_basetype, empty_game):
     return Unit(pirate_basetype, game=empty_game, cell=0j)
+
 
 @pytest.fixture()
 def mud_golem():
@@ -54,8 +64,16 @@ def steel_wall():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall = lambda g, c: Obstacle("Wall of steel!", 5000, game=g, cell=c, resists=resists,
-                                     armor=500, icon="wall.png")
+    def _steel_wall(
+        g,
+        c): return Obstacle(
+        "Wall of steel!",
+        5000,
+        game=g,
+        cell=c,
+        resists=resists,
+        armor=500,
+        icon="wall.png")
     return _steel_wall
 
 
@@ -65,9 +83,8 @@ def demo_dungeon(pirate_band):
     units_locations = {pirate_band[i]: locations[i] for i in range(3)}
     demo_dungeon = Dungeon(units_locations, 8, 8, hero_entrance=Cell(1, 1))
 
-    yield  demo_dungeon
+    yield demo_dungeon
 
-from game_objects.battlefield_objects import Wall
 
 @pytest.fixture()
 def walls_dungeon(pirate_basetype, steel_wall):
@@ -83,7 +100,8 @@ def walls_dungeon(pirate_basetype, steel_wall):
                              construct_walls=create_walls,
                              hero_entrance=Cell(0, 0))
 
-    yield  _walls_dungeon
+    yield _walls_dungeon
+
 
 @pytest.fixture()
 def walls_game(walls_dungeon, hero):
@@ -96,11 +114,13 @@ def pirate_band(pirate_basetype):
     _pirate_band = [Unit(pirate_basetype) for i in range(3)]
     return _pirate_band
 
+
 @pytest.fixture()
 def empty_game():
     bf = Battlefield(6, 6)
     _game = DreamGame(bf)
     return _game
+
 
 @pytest.fixture()
 def huge_game():
@@ -116,6 +136,7 @@ def hero_only_game(hero):
     _game.the_hero = hero
 
     return _game
+
 
 @pytest.fixture()
 def game_hvsp(hero, pirate_band):
@@ -133,12 +154,4 @@ def game_hvsp(hero, pirate_band):
     for unit in pirate_band + [hero]:
         _game.add_unit(unit)
 
-
-
     return _game
-
-
-
-
-
-

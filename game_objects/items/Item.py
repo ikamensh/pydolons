@@ -6,8 +6,15 @@ if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
     from game_objects.items import Slot, ItemTypes
 
+
 class Item:
-    def __init__(self, name: str, item_type: ItemTypes, *, game: DreamGame=None, icon=None):
+    def __init__(
+            self,
+            name: str,
+            item_type: ItemTypes,
+            *,
+            game: DreamGame = None,
+            icon=None):
         assert isinstance(name, str)
         assert isinstance(item_type, ItemTypes)
         self.item_type = item_type

@@ -20,7 +20,7 @@ class GameController(QtCore.QObject):
         """
         self.gameRoot = None
         self.tr = QtGui.QTransform()
-        self.tr_support:TransformSupport = None
+        self.tr_support: TransformSupport = None
 
         self.cursor = QtWidgets.QGraphicsEllipseItem(-10, -10, 20, 20)
 
@@ -28,7 +28,6 @@ class GameController(QtCore.QObject):
         self.selected_point = Cell(0, 0)
         self.lost_m_pos = QtCore.QPoint()
         self.r_mouse = False
-
 
     def setGameRoot(self, gameRoot):
         self.tr_support = TransformSupport(gameRoot)
@@ -67,10 +66,13 @@ class GameController(QtCore.QObject):
                 self.r_mouse = True
                 try:
                     if not self.gameRoot.gamePages.isGamePage:
-                        if self.tr_support.floor_rect.contains(self.lost_m_pos.x(), self.lost_m_pos.y()):
-                            self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                        if self.tr_support.floor_rect.contains(
+                                self.lost_m_pos.x(), self.lost_m_pos.y()):
+                            self.gameRoot.game.ui_order(
+                                self.last_point.x, self.last_point.y)
                             self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
-                            self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
+                            self.middleLayer.showSelectedItem(
+                                self.selected_point.x, self.selected_point.y)
                 except PydolonsError as exc:
                     UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
@@ -122,8 +124,16 @@ class GameController(QtCore.QObject):
             self.gameRoot.gameMenu.setDefaultPos()
 
     def itemSelect(self, pos):
-        x = int((pos.x() - self.tr_support.tr.m31() - self.world.pos().x()) / self.gameRoot.cfg.unit_size[0])
-        y = int((pos.y() - self.tr_support.tr.m32() - self.world.pos().y()) / self.gameRoot.cfg.unit_size[1])
+        x = int(
+            (pos.x() -
+             self.tr_support.tr.m31() -
+             self.world.pos().x()) /
+            self.gameRoot.cfg.unit_size[0])
+        y = int(
+            (pos.y() -
+             self.tr_support.tr.m32() -
+             self.world.pos().y()) /
+            self.gameRoot.cfg.unit_size[1])
         self.last_point.x, self.last_point.y = x, y
         self.middleLayer.selectItem(x, y)
 
@@ -150,4 +160,3 @@ class GameController(QtCore.QObject):
             self.tr_support.setMovableMaps()
         if self.middleLayer.targeted:
             self.middleLayer.removeTargets()
-

@@ -2,7 +2,6 @@ from cntent.items.std.std_items import sword_cheap
 from cntent.items.std.potions import minor_healing_potion
 
 
-
 def test_inventory(char):
     unit = char.unit
 
@@ -10,6 +9,7 @@ def test_inventory(char):
 
     new_unit = char.unit
     assert minor_healing_potion in new_unit.inventory.all_items
+
 
 def test_equipment(char):
     unit = char.unit

@@ -1,5 +1,6 @@
 from exceptions import PydolonsError
 
+
 class InvalidTargetError(PydolonsError):
 
     def __init__(self, target, order):

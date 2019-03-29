@@ -1,4 +1,4 @@
-from game_objects.spells import  SpellConcept
+from game_objects.spells import SpellConcept
 from game_objects.battlefield_objects import Unit
 from character.masteries.MasteriesEnumSimple import MasteriesEnum
 from mechanics.actives import Cost

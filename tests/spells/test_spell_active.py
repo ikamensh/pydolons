@@ -1,7 +1,11 @@
 from mechanics.events import ActiveEvent
 
 
-def test_lightning_depends_on_mastery(game_hvsp, pirate_band, hero, lightning_active):
+def test_lightning_depends_on_mastery(
+        game_hvsp,
+        pirate_band,
+        hero,
+        lightning_active):
 
     hero.int_base += -50
     pirate = pirate_band[0]
@@ -30,7 +34,6 @@ def test_lightning_depends_on_mastery(game_hvsp, pirate_band, hero, lightning_ac
     hero.masteries.exp_spent[lightning_active.spell.school] += 1e15
     hero.activate(lightning_active, pirate)
 
-
     assert mana_before > hero.mana
     assert stamina_before > hero.stamina
     assert readiness_before > hero.readiness
@@ -38,7 +41,11 @@ def test_lightning_depends_on_mastery(game_hvsp, pirate_band, hero, lightning_ac
     assert pirate.health < hp_before
 
 
-def test_lightning_depends_on_int(hero, game_hvsp, pirate_band, lightning_active):
+def test_lightning_depends_on_int(
+        hero,
+        game_hvsp,
+        pirate_band,
+        lightning_active):
 
     hero.int_base += -50
     pirate = pirate_band[0]

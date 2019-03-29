@@ -1,6 +1,7 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 
+
 class ClientOrderRecievedEvent(Event):
     channel = EventsChannels.ClientOrderRecievedChannel
 

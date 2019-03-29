@@ -4,13 +4,14 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.gameconfig.GameConfiguration import GameConfiguration
 
+
 class StyleConfig:
     def __init__(self, cfg: GameConfiguration):
         self.colors = {}
         self.brushs = {}
         self.setUpColors()
         self.cfg = cfg
-        self.system_font :QFont = QGuiApplication.font()
+        self.system_font: QFont = QGuiApplication.font()
         self.system_hint = self.system_font.hintingPreference()
         self.system_pixelSize = self.system_font.pixelSize()
         self.base_point_size = 8
@@ -27,7 +28,7 @@ class StyleConfig:
 
     def setUpFonts(self):
         self.main_font = self.cfg.resourceConfig.fonts_maps['imfeenrm28p.ttf']
-        pointSize = int(self.default_point_size *self.cfg.scale_x)
+        pointSize = int(self.default_point_size * self.cfg.scale_x)
         self.main_font.setPointSize(pointSize)
         # self.main_font.set
         QGuiApplication.setFont(self.main_font)

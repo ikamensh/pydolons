@@ -2,4 +2,3 @@ from game_objects.attributes.Attribute import Attribute
 from game_objects.attributes.AttributeWithBonuses import AttributeWithBonuses
 from game_objects.attributes.Bonus import Bonus
 from game_objects.attributes.DynamicParameter import DynamicParameter
-

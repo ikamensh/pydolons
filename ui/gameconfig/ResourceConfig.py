@@ -12,8 +12,10 @@ from xml.etree import ElementTree as ET
 
 
 class ResourceConfig:
-    def __init__(self, cfg, lazy = True):
-        self.ignore_path = ('resources/assets/sprites/axe',)  # Игнорируемые папки
+    def __init__(self, cfg, lazy=True):
+        self.ignore_path = (
+            'resources/assets/sprites/axe',
+        )  # Игнорируемые папки
         self.rez_step = 0
         self.pic_formats = ('png', 'jpg')
         self.pic_file_paths = {}
@@ -47,9 +49,12 @@ class ResourceConfig:
         :atribute unit_x_size -  размер юнита c умноженный на x, где  x = [a = 1/2, b = 1/3, c = 1/4]
         """
         self.unit_size = 128, 128
-        self.unit_a_size = int(self.unit_size[0] * (1/2)), int(self.unit_size[0] * (1/2))
-        self.unit_b_size = int(self.unit_size[0] * (1/3)), int(self.unit_size[0] * (1/3))
-        self.unit_c_size = int(self.unit_size[0] * (1/4)), int(self.unit_size[0] * (1/4))
+        self.unit_a_size = int(
+            self.unit_size[0] * (1 / 2)), int(self.unit_size[0] * (1 / 2))
+        self.unit_b_size = int(
+            self.unit_size[0] * (1 / 3)), int(self.unit_size[0] * (1 / 3))
+        self.unit_c_size = int(
+            self.unit_size[0] * (1 / 4)), int(self.unit_size[0] * (1 / 4))
 
     def loadFilesPath(self):
         """
@@ -58,7 +63,7 @@ class ResourceConfig:
         Словарь вида {filename: filepath}
         """
         # генератор путей, файлов и папок
-        self.walks = os.walk(top = os.path.join(pydolons_rootdir, 'resources') )
+        self.walks = os.walk(top=os.path.join(pydolons_rootdir, 'resources'))
         # Словарь путей к изображениям, ключ название файла
         # self.pic_file_paths = {}
         # получаем данные генератора
@@ -68,11 +73,14 @@ class ResourceConfig:
                 # Получаем спискок фйалов
                 for name in item[2]:
                     if name[-3:].lower() in self.pic_formats:
-                        self.pic_file_paths[name.lower()] = os.path.join(item[0], name)
+                        self.pic_file_paths[name.lower()] = os.path.join(
+                            item[0], name)
                     elif name[-3:].lower() in self.sound_formats:
-                        self.sound_file_paths[name.lower()] = os.path.join(item[0], name)
+                        self.sound_file_paths[name.lower()] = os.path.join(
+                            item[0], name)
                     elif name[-3:].lower() in self.fonts_formats:
-                        self.fonts_file_paths[name.lower()] = os.path.join(item[0], name)
+                        self.fonts_file_paths[name.lower()] = os.path.join(
+                            item[0], name)
                     elif name[-3:] == 'xml':
                         self.xml_file_paths[name] = os.path.join(item[0], name)
 
@@ -94,7 +102,7 @@ class ResourceConfig:
             except Exception as e:
                 print(e)
 
-    def getPicFile(self, filename, id = None, size = None):
+    def getPicFile(self, filename, id=None, size=None):
         """
         если файл не найден генерируется ошибка
         argument: filename -- название файла в файловой системе
@@ -106,7 +114,7 @@ class ResourceConfig:
         if pixmap is None:
             # print(filename + ' image was not found. using default.')
             pixmap = self.pix_maps.get("default_128.png")
-        if not id is None:
+        if id is not None:
             size = self.getSize(id)
             pixmap = pixmap.scaled(size[0], size[1])
         return pixmap
@@ -165,4 +173,3 @@ class ResourceConfig:
             return page
         else:
             return self.xml_maps.get('404_page.xml')
-

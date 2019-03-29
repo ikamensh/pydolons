@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
 
+
 class MovementEvent(Event):
     channel = EventsChannels.MovementChannel
 
@@ -19,15 +20,11 @@ class MovementEvent(Event):
 
     def check_conditions(self):
         return all((self.unit.alive,
-                   not self.cell_to in self.game.bf.walls,
-                   self.cell_to in self.game.bf.all_cells))
+                    self.cell_to not in self.game.bf.walls,
+                    self.cell_to in self.game.bf.all_cells))
 
     def resolve(self):
         self.unit.cell = self.cell_to
 
     def __repr__(self):
         return f"{self.unit} moves from {self.cell_from} to {self.cell_to}"
-
-
-
-

@@ -14,11 +14,12 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.targeted = False
 
     def setLevel(self, level):
-        self.level =  level
+        self.level = level
         self.level.middleLayer = self
 
     def setUp(self):
-        self.level.gameRoot.pages.gameMenu.actives.setTargets.connect(self.getTargets)
+        self.level.gameRoot.pages.gameMenu.actives.setTargets.connect(
+            self.getTargets)
 
     def setUpSelectItem(self):
         self.select_item = QtWidgets.QGraphicsRectItem()

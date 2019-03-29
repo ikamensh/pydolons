@@ -9,7 +9,6 @@ from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
 
 
-
 @pytest.fixture()
 def empty_simgame():
     bf = Battlefield(6, 6)
@@ -17,16 +16,14 @@ def empty_simgame():
 
 
 @pytest.fixture()
-def minigame(pirate,  hero):
+def minigame(pirate, hero):
 
     bf = Battlefield(6, 6)
     _game = DreamGame(bf)
-    _game.add_unit(hero, (2+2j), Faction.PLAYER)
+    _game.add_unit(hero, (2 + 2j), Faction.PLAYER)
     _game.add_unit(pirate, (4 + 4j), Faction.ENEMY)
 
-
     return _game
-
 
 
 @pytest.fixture()
@@ -46,50 +43,54 @@ def sim_game(hero, pirate_band):
 
     return _game
 
+
 @pytest.fixture()
 def walls_game(walls_dungeon, hero):
     _game = DreamGame.start_dungeon(walls_dungeon, hero)
     return _game
 
+
 @pytest.fixture()
 def imba_ability():
 
-    imba_dmg_callback = lambda a, unit: unit.lose_health(99999, a.owner)
+    def imba_dmg_callback(a, unit): return unit.lose_health(99999, a.owner)
 
     _imba_ability = Active(BattlefieldObject,
-                                [],
-                                Cost(readiness=0.1),
-                            callbacks=[imba_dmg_callback],
-                            tags=[ActiveTags.ATTACK],
+                           [],
+                           Cost(readiness=0.1),
+                           callbacks=[imba_dmg_callback],
+                           tags=[ActiveTags.ATTACK],
                            name="imba")
 
     return _imba_ability
+
 
 @pytest.fixture()
 def tiny_imba_ability():
 
-    imba_dmg_callback = lambda a, unit: unit.lose_health(9, a.owner)
+    def imba_dmg_callback(a, unit): return unit.lose_health(9, a.owner)
 
     _imba_ability = Active(BattlefieldObject,
-                                [],
-                                Cost(readiness=0.1),
-                            callbacks=[imba_dmg_callback],
-                            tags=[ActiveTags.ATTACK],
+                           [],
+                           Cost(readiness=0.1),
+                           callbacks=[imba_dmg_callback],
+                           tags=[ActiveTags.ATTACK],
                            name="imba")
 
     return _imba_ability
 
+
 @pytest.fixture()
 def enabler(imba_ability):
 
-    enabler_callback = lambda a, unit: unit.give_active(imba_ability)
+    def enabler_callback(a, unit): return unit.give_active(imba_ability)
 
     _enabler = Active(BattlefieldObject,
-                                [],
-                                Cost(readiness=0.1),
-                            callbacks=[enabler_callback],
-                            tags=[ActiveTags.ATTACK],
-                           name="gives imba")
+                      [],
+                      Cost(readiness=0.1),
+                      callbacks=[enabler_callback],
+                      tags=[ActiveTags.ATTACK],
+                      name="gives imba")
 
     return _enabler
 
@@ -97,17 +98,16 @@ def enabler(imba_ability):
 @pytest.fixture()
 def increase_utility(minigame):
 
-    minigame.utility = lambda : 0
+    minigame.utility = lambda: 0
 
     def increase_utility(_, __):
-        minigame.utility = lambda : 1e3
-
+        minigame.utility = lambda: 1e3
 
     _imba_ability = Active(BattlefieldObject,
-                                [],
-                                Cost(readiness=0.1),
+                           [],
+                           Cost(readiness=0.1),
                            game=minigame,
-                            callbacks=[increase_utility],
+                           callbacks=[increase_utility],
                            tags=[ActiveTags.ATTACK],
                            name="imba")
 
@@ -130,6 +130,3 @@ def take_punishment(minigame):
                            name="imba")
 
     return _imba_ability
-
-
-

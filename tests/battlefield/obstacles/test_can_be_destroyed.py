@@ -5,12 +5,12 @@ from mechanics.events import DamageEvent
 from mechanics.combat.Attack import Attack
 import pytest
 
+
 @pytest.fixture()
 def obstacle(game_hvsp):
     obstacle = Obstacle("dummy", 500, game=game_hvsp)
     game_hvsp.add_obstacle(obstacle, Cell(1, 2))
     return obstacle
-
 
 
 def test_can_take_damage(obstacle):
@@ -29,7 +29,6 @@ def test_can_be_destroyed(obstacle, empty_game):
 
     obstacle.health -= 999999
     assert obstacle not in empty_game.obstacles
-
 
 
 def test_can_be_attacked(obstacle, hero, no_chances):

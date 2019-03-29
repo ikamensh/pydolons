@@ -8,8 +8,9 @@ from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
 from typing import List, Set
 
+
 class Character:
-    def __init__(self, base_type : BaseType):
+    def __init__(self, base_type: BaseType):
         self.base_type = base_type
         self.masteries = Masteries()
         self._unit = Unit(base_type, masteries=self.masteries)
@@ -43,43 +44,42 @@ class Character:
         if self.temp_attributes:
             return self.attributes_count - sum(self.temp_attributes.values())
         else:
-            return self.attributes_count - sum(self.base_type.attributes.values())
+            return self.attributes_count - \
+                sum(self.base_type.attributes.values())
 
     @property
     def free_xp(self) -> int:
         if self.temp_masteries:
-            masteries_xp =  self.temp_masteries.total_exp_spent
+            masteries_xp = self.temp_masteries.total_exp_spent
         else:
             masteries_xp = self.masteries.total_exp_spent
 
-        return self.xp - masteries_xp - sum( pt.spent_xp for pt in self.perk_trees)
-
+        return self.xp - masteries_xp - \
+            sum(pt.spent_xp for pt in self.perk_trees)
 
     def increase_attrib(self, attrib_enum: CharAttributes) -> None:
         if self.free_attribute_points <= 0:
             return
 
         assert attrib_enum in CharAttributes
-        if self.temp_attributes is None :
+        if self.temp_attributes is None:
             self.temp_attributes = copy.copy(self.base_type.attributes)
         self.temp_attributes[attrib_enum] += 1
 
     def reduce_attrib(self, attrib_enum: CharAttributes) -> None:
         assert attrib_enum in CharAttributes
-        if self.temp_attributes is None :
+        if self.temp_attributes is None:
             return
         self.temp_attributes[attrib_enum] -= 1
 
-
     def increase_mastery(self, mastery: MasteriesEnum) -> None:
-        if not mastery in self.masteries_can_go_up:
+        if mastery not in self.masteries_can_go_up:
             return
 
         if self.temp_masteries is None:
             self.temp_masteries = copy.copy(self.masteries)
 
         self.temp_masteries.level_up(mastery)
-
 
     def commit(self):
         if self.temp_attributes:
@@ -89,7 +89,6 @@ class Character:
         if self.temp_masteries:
             self.masteries = self.temp_masteries
             self.temp_masteries = None
-
 
     def reset(self):
         self.temp_attributes = None
@@ -104,10 +103,10 @@ class Character:
             cpy.attributes = self.temp_attributes
             return cpy
 
-
     @property
     def unit(self) -> Unit:
-        self._unit.update(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
+        self._unit.update(self.base_type_prelim,
+                          masteries=self.temp_masteries or self.masteries)
         for pt in self.perk_trees:
             for a in pt.all_abils:
                 self._unit.add_ability(a)

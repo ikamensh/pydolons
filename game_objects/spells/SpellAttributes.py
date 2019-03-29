@@ -1,5 +1,6 @@
 from my_utils.named_enums import NameEnum, auto
 
+
 class SpellAttributes:
     COMPLEXITY = auto()
     MANA_COST = auto()

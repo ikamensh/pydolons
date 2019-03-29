@@ -12,7 +12,7 @@ def var_facing(request) -> complex:
 
 @pytest.mark.parametrize('prc', [6, 10, 12, 17, 23, 29, 53, 113])
 def test_symmetric(huge_game, hero, prc, var_facing):
-    hero_c_coords = 30+30j
+    hero_c_coords = 30 + 30j
 
     huge_game.add_unit(hero, hero_c_coords, facing=var_facing)
     hero.prc_base.base = prc
@@ -36,38 +36,37 @@ def test_symmetric(huge_game, hero, prc, var_facing):
 
 def test_visibility(game_hvsp, hero):
 
-    game_hvsp.add_unit(hero, cell=Cell(1,1), facing=Facing.SOUTH)
+    game_hvsp.add_unit(hero, cell=Cell(1, 1), facing=Facing.SOUTH)
 
     cells_seen = game_hvsp.vision.std_seen_cells(hero)
 
-    assert Cell(0,0) not in cells_seen
-    assert Cell(7,7) not in cells_seen
-    assert Cell(7,0) not in cells_seen
-    assert Cell(0,7) not in cells_seen
+    assert Cell(0, 0) not in cells_seen
+    assert Cell(7, 7) not in cells_seen
+    assert Cell(7, 0) not in cells_seen
+    assert Cell(0, 7) not in cells_seen
 
-    assert Cell(1,1) in cells_seen
-    cell = Cell(1,int(1+hero.sight_range))
+    assert Cell(1, 1) in cells_seen
+    cell = Cell(1, int(1 + hero.sight_range))
     print(cells_seen)
     assert cell in cells_seen
-    cell = Cell(1+int(hero.sight_range),1)
+    cell = Cell(1 + int(hero.sight_range), 1)
     assert cell not in cells_seen
 
 
 def test_borders(game_hvsp, hero):
 
-
     hero.facing = Facing.SOUTH
-    hero.cell = Cell(1,1)
+    hero.cell = Cell(1, 1)
 
     vision = game_hvsp.vision
     cells_seen_before = vision.std_seen_cells(hero)
 
-
-    hero.cell = Cell(7,7)
+    hero.cell = Cell(7, 7)
     cells_seen_after = vision.std_seen_cells(hero)
 
     assert len(cells_seen_after) < len(cells_seen_before)
-    assert Cell(8,8) not in cells_seen_after
+    assert Cell(8, 8) not in cells_seen_after
+
 
 def test_direction_same_number(hero_only_game, hero):
 
@@ -77,15 +76,8 @@ def test_direction_same_number(hero_only_game, hero):
     hero.cell = Cell(4, 4)
     cells_seen_before = vision.std_seen_cells(hero)
 
-
     hero.facing = Facing.NORTH
     cells_seen_after = vision.std_seen_cells(hero)
 
     assert len(cells_seen_after) == len(cells_seen_before)
     assert cells_seen_before != cells_seen_after
-
-
-
-
-
-

@@ -6,7 +6,7 @@ from random import randint
 class AnimatedItem(QtCore.QObject, GameObject):
     animationFinished = QtCore.Signal()
 
-    def __init__(self, *arg, gameconfig, parent = None):
+    def __init__(self, *arg, gameconfig, parent=None):
         QtCore.QObject.__init__(self, parent)
         GameObject.__init__(self, *arg)
         self.cfg = gameconfig
@@ -45,8 +45,8 @@ class AnimatedItem(QtCore.QObject, GameObject):
         else:
             self.current_index = 0
         self.setPixmap(self.picmaps[self.current_index])
-        if framerate > 0 :
-            self.m_timer.setInterval(1000/framerate)
+        if framerate > 0:
+            self.m_timer.setInterval(1000 / framerate)
             self.m_timer.start()
 
     def on_timerTick(self):
@@ -62,7 +62,3 @@ class AnimatedItem(QtCore.QObject, GameObject):
                 self.animationFinished.emit()
             else:
                 self.setPixmap(self.picmaps[self.current_index])
-
-
-
-

@@ -8,7 +8,7 @@ class GameView(QtWidgets.QGraphicsView):
     keyPress = QtCore.Signal(QtCore.QEvent)
     mouseMove = QtCore.Signal(QtCore.QEvent)
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         QtWidgets.QGraphicsView.__init__(self, parent)
         # Задаем минимальный размер виджета
         # Отключаем полосы прокрутки

@@ -17,7 +17,7 @@ class BasicUnit(QObject, GameObject):
     hovered = QtCore.Signal(QtCore.QObject)
     hover_out = QtCore.Signal()
 
-    def __init__(self, *arg, gameconfig, parent = None, unit_bf = None):
+    def __init__(self, *arg, gameconfig, parent=None, unit_bf=None):
         QObject.__init__(self, parent)
         GameObject.__init__(self, *arg)
         self.uid = 0
@@ -40,18 +40,20 @@ class BasicUnit(QObject, GameObject):
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
         """
-        if not self.gameconfig is None:
+        if self.gameconfig is not None:
             self.direction = Direction()
             self.direction.setParentItem(self)
-            self.direction.setPixmap(self.gameconfig.getPicFile('DIRECTION POINTER.png'))
-            self.direction.setTransformOriginPoint(self.direction.boundingRect().width()/2, - self.h/2 + self.direction.boundingRect().height())
+            self.direction.setPixmap(
+                self.gameconfig.getPicFile('DIRECTION POINTER.png'))
+            self.direction.setTransformOriginPoint(self.direction.boundingRect(
+            ).width() / 2, - self.h / 2 + self.direction.boundingRect().height())
             dirY = self.h - self.direction.boundingRect().height()
             dirX = (self.w / 2) - (self.direction.boundingRect().width() / 2)
             self.direction.setPos(dirX, dirY)
-            self.dirAni = SmoothAnimation(self.direction, self.direction.setRotation)
+            self.dirAni = SmoothAnimation(
+                self.direction, self.direction.setRotation)
 
-
-    dir_dict = {(Facing.SOUTH, Facing.EAST) : (360., 270.),
+    dir_dict = {(Facing.SOUTH, Facing.EAST): (360., 270.),
                 (Facing.SOUTH, Facing.WEST): (0., 90.),
                 (Facing.EAST, Facing.SOUTH): (270., 360.),
                 (Facing.WEST, Facing.SOUTH): (90., 0.),
@@ -72,7 +74,8 @@ class BasicUnit(QObject, GameObject):
 
     def mouseMove(self, event):
         if self.isVisible() and not self.parentItem() is None:
-            if self.gameRoot.tr_support.rectHitGroupItem(self).contains(event.pos()):
+            if self.gameRoot.tr_support.rectHitGroupItem(
+                    self).contains(event.pos()):
                 self.isHover = True
                 self.hovered.emit(self)
             else:
@@ -99,7 +102,7 @@ class BasicUnit(QObject, GameObject):
         self.hpText.setText(amount)
 
     def getHPprec(self, unit):
-        return (unit.health * 100)/unit.max_health
+        return (unit.health * 100) / unit.max_health
 
     def setScale(self, scale):
         super(BasicUnit, self).setScale(scale)
@@ -127,13 +130,17 @@ class BasicUnit(QObject, GameObject):
         self.anim_move.start()
 
     def __eq__(self, other):
-        if self is other: return True
-        if other is None: return False
-        if self.__class__ != other.__class__: return False
+        if self is other:
+            return True
+        if other is None:
+            return False
+        if self.__class__ != other.__class__:
+            return False
         return self.__hash__() == other.__hash__()
 
     def __hash__(self):
-        return hash(self.worldPos.x * 2 + self.worldPos.y * 3 + self.uid*4)*3
+        return hash(self.worldPos.x * 2 +
+                    self.worldPos.y * 3 + self.uid * 4) * 3
 
     def __repr__(self):
         return f"{self.worldPos} -> BasicUnit {self.uid} "

@@ -4,7 +4,8 @@ from character.perks import Perk
 
 
 class PerkGroup:
-    def __init__(self, perk_list: List[Perk], requirements: Dict[PerkGroup:int] = None):
+    def __init__(self, perk_list: List[Perk],
+                 requirements: Dict[PerkGroup:int] = None):
         self.perk_list = perk_list
         self.requirements = requirements
 

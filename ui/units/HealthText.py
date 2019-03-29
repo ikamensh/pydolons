@@ -14,7 +14,7 @@ class HealthText(QGraphicsTextItem):
         self.anim_move = QPropertyAnimation(self, b'y')
         self.anim_move.setDuration(600)
         self.anim_move.setStartValue(self.start_y)
-        self.anim_move.setEndValue(self.start_y - self.h/2)
+        self.anim_move.setEndValue(self.start_y - self.h / 2)
         self.anim_opacity = QPropertyAnimation(self, b'opacity')
         self.anim_opacity.setDuration(600)
         self.anim_opacity.setStartValue(1.0)
@@ -36,7 +36,7 @@ class HealthText(QGraphicsTextItem):
         self.setVisible(True)
 
     def setUnitPos(self, pos):
-        self.setPos(pos.x() + 32, pos.y()-64)
+        self.setPos(pos.x() + 32, pos.y() - 64)
 
     def setOffset(self, x, y):
         # self.setPos(x + 32, y - 32)

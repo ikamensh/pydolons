@@ -1,6 +1,7 @@
 from mechanics.AI import RandomAI
 from mechanics.actives import Active
 
+
 def test_returns_actions(minigame):
 
     randomAI = RandomAI(minigame)
@@ -8,6 +9,7 @@ def test_returns_actions(minigame):
 
     action, target = randomAI.decide_step(unit)
     assert isinstance(action, Active)
+
 
 def test_returns_targets_for_targeted_actions(minigame):
 
@@ -46,5 +48,6 @@ def test_returns_different_targets(minigame):
         action, target = randomAI.decide_step(unit)
         targets.setdefault(action, set()).add(target)
 
-    count_diff_targets = [1 for multiple in targets.values() if len(multiple) > 1]
+    count_diff_targets = [
+        1 for multiple in targets.values() if len(multiple) > 1]
     assert len(count_diff_targets) > 0

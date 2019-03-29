@@ -16,7 +16,7 @@ class InventoryWidget(SlotGroupWidget):
         layout = GameGridLayout()
         j = 0
         for i, game_slot in enumerate(self.the_hero.inventory):
-            label = self.getSlotWidget(game_slot, name = 'slot_' + str(i + 1))
+            label = self.getSlotWidget(game_slot, name='slot_' + str(i + 1))
             self.setPicSlot(game_slot, label)
             layout.addItem(label, row, j)
             j += 1
@@ -24,4 +24,3 @@ class InventoryWidget(SlotGroupWidget):
                 j = 0
                 row += 1
         self.setLayout(layout)
-

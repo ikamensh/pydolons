@@ -1,6 +1,7 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 
+
 class UiErrorMessageEvent(Event):
     channel = EventsChannels.UiErrorMessage
 

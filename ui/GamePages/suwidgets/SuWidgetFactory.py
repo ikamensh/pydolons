@@ -5,13 +5,22 @@ from ui.GamePages.suwidgets.NotifyText import NotifyText
 
 from abc import abstractmethod
 
+
 class SuWidgetFactory:
     """docstring for SuWidgetFactory."""
+
     def __init__(self):
         pass
 
     @abstractmethod
-    def getToolTip(gameRoot, w = 128, h = 128, minimumLeters = 16, fontFamily = "Times", pointSize = 12, opacity = 0.8):
+    def getToolTip(
+            gameRoot,
+            w=128,
+            h=128,
+            minimumLeters=16,
+            fontFamily="Times",
+            pointSize=12,
+            opacity=0.8):
         tooltip = ToolTip(gameRoot)
         tooltip.minimumLeters = minimumLeters
         tooltip.setBrush(QtGui.QBrush(QtCore.Qt.black))

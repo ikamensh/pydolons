@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui,QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 
 from battlefield import Cell
 
@@ -17,7 +17,7 @@ class Target(QtWidgets.QGraphicsRectItem):
 
     def setWorldY(self, y):
         self.worldPos.y = y
-        self.setY(y * self.h )
+        self.setY(y * self.h)
 
     def setWorldPos(self, x, y):
         self.setWorldX(x)

@@ -1,5 +1,6 @@
 from PySide2 import QtCore, QtWidgets
 
+
 class SelectItem(QtWidgets.QGraphicsRectItem):
 
     def __init__(self, *arg):

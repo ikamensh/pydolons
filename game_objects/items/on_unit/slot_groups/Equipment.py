@@ -10,9 +10,10 @@ if TYPE_CHECKING:
 
 class Equipment(SlotGroup):
     def __init__(self, owner):
-        self.map : Dict[EquipmentSlotUids, Slot] = StandardEquipment.get_standard_slots(owner)
-        all_slots = [v for k,v in self.map.items()]
-        self.slots_per_type = {st:[] for st in ItemTypes}
+        self.map: Dict[EquipmentSlotUids,
+                       Slot] = StandardEquipment.get_standard_slots(owner)
+        all_slots = [v for k, v in self.map.items()]
+        self.slots_per_type = {st: [] for st in ItemTypes}
         for slot in all_slots:
             slot_type = slot.item_type
             self.slots_per_type[slot_type].append(slot)
@@ -21,7 +22,8 @@ class Equipment(SlotGroup):
 
     @property
     def bonuses(self):
-        return itertools.chain.from_iterable([item.bonuses for item in self.all_items])
+        return itertools.chain.from_iterable(
+            [item.bonuses for item in self.all_items])
 
     def equip_item(self, item) -> Tuple[bool, str]:
         """
@@ -41,20 +43,21 @@ class Equipment(SlotGroup):
         if not all_slots_of_type:
             return False, "owner does not have a slot for this type of item"
 
-        empty_slots_of_type = [slot for slot in all_slots_of_type if not slot.content]
+        empty_slots_of_type = [
+            slot for slot in all_slots_of_type if not slot.content]
 
         if empty_slots_of_type:
             chosen_slot = empty_slots_of_type[0]
             chosen_slot.content = item
             self.owner.recalc()
-            return True ,"item was put into an empty slot"
+            return True, "item was put into an empty slot"
         else:
             if self.owner.inventory.add_from(all_slots_of_type[0]):
                 all_slots_of_type[0].content = item
                 self.owner.recalc()
                 return True, "replaced an item"
             else:
-                return False , "slot is occupied, inventory is full: can't equip"
+                return False, "slot is occupied, inventory is full: can't equip"
 
     def equip(self, slot_from: Slot):
         item = slot_from.pop_item()
@@ -63,7 +66,6 @@ class Equipment(SlotGroup):
             slot_from.content = item
 
         return success, message
-
 
     def unequip_slot(self, slot):
         if isinstance(slot, EquipmentSlotUids):
@@ -81,13 +83,5 @@ class Equipment(SlotGroup):
             if slot.content is item:
                 self.unequip_slot(slot)
 
-
     def __getitem__(self, item):
         return self.map[item].content
-
-
-
-
-
-
-

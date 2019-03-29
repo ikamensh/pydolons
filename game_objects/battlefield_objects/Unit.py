@@ -1,4 +1,18 @@
 from __future__ import annotations
+import random
+from battlefield import Facing
+from character.masteries.Masteries import Masteries, MasteriesEnum
+from cntent.actives.std.std_melee_attack import std_attacks
+from cntent.actives.std.std_movements import std_movements, turn_ccw, turn_cw
+from mechanics.factions import Faction
+from mechanics.actives import ActiveTags, Active
+from mechanics import events
+from mechanics.damage import Resistances, Armor
+from mechanics.damage import Damage
+from game_objects.items import Inventory, Equipment, Weapon, QuickItems, EquipmentSlotUids
+from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
+from game_objects.battlefield_objects.CharAttributes import Constants
+from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 
 
 import copy
@@ -10,24 +24,8 @@ if TYPE_CHECKING:
     from mechanics.actives import Cost
     from battlefield import Cell
 
-from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
-from game_objects.battlefield_objects.CharAttributes import Constants
-from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.items import Inventory, Equipment, Weapon, QuickItems, EquipmentSlotUids
-from mechanics.damage import Damage
-from mechanics.damage import Resistances, Armor
-from mechanics import events
-from mechanics.actives import ActiveTags, Active
-from mechanics.factions import Faction
-from cntent.actives.std.std_movements import std_movements, turn_ccw, turn_cw
-from cntent.actives.std.std_melee_attack import std_attacks
-from character.masteries.Masteries import Masteries, MasteriesEnum
-from battlefield import Facing
-
-import random
 
 class Unit(BattlefieldObject):
-
 
     str = AttributeWithBonuses("str_base", ca.STREINGTH)
     end = AttributeWithBonuses("end_base", ca.ENDURANCE)
@@ -44,22 +42,23 @@ class Unit(BattlefieldObject):
     armor = AttributeWithBonuses("armor_base", ca.ARMOR)
     resists = AttributeWithBonuses("resists_base", ca.RESISTANCES)
 
-    melee_precision = AttributeWithBonuses("melee_precision_base", ca.PRECISION)
+    melee_precision = AttributeWithBonuses(
+        "melee_precision_base", ca.PRECISION)
     melee_evasion = AttributeWithBonuses("melee_evasion_base", ca.EVASION)
 
-
-    health = DynamicParameter("max_health", [lambda u : events.UnitDiedEvent(u)])
+    health = DynamicParameter(
+        "max_health", [
+            lambda u: events.UnitDiedEvent(u)])
     mana = DynamicParameter("max_mana")
     stamina = DynamicParameter("max_stamina")
 
     is_obstacle = False
 
-
     def __init__(self,
                  base_type: BaseType, *,
-                 cell = None,
-                 facing = Facing.NORTH,
-                 faction = Faction.ENEMY,
+                 cell=None,
+                 facing=Facing.NORTH,
+                 faction=Faction.ENEMY,
                  game=None,
                  masteries: Masteries = None):
         super().__init__(cell)
@@ -76,7 +75,7 @@ class Unit(BattlefieldObject):
 
         self.inventory = Inventory(base_type.inventory_capacity, self)
         self.quick_items = QuickItems(base_type.quick_items, self)
-        self.equipment :Equipment = Equipment(self)
+        self.equipment: Equipment = Equipment(self)
         self.xp = base_type.xp
 
         masteries = masteries or Masteries(base_type.xp)
@@ -88,20 +87,23 @@ class Unit(BattlefieldObject):
 
         self.update(base_type, masteries)
 
-
-    def update(self, base_type = None, masteries = None):
+    def update(self, base_type=None, masteries=None):
         base_type = base_type or self.base_type
-        self.str_base = Attribute.attribute_or_none(base_type.attributes[ca.STREINGTH])
-        self.end_base = Attribute.attribute_or_none(base_type.attributes[ca.ENDURANCE])
-        self.prc_base = Attribute.attribute_or_none(base_type.attributes[ca.PERCEPTION])
-        self.agi_base = Attribute.attribute_or_none(base_type.attributes[ca.AGILITY])
-        self.int_base = Attribute.attribute_or_none(base_type.attributes[ca.INTELLIGENCE])
-        self.cha_base = Attribute.attribute_or_none(base_type.attributes[ca.CHARISMA])
+        self.str_base = Attribute.attribute_or_none(
+            base_type.attributes[ca.STREINGTH])
+        self.end_base = Attribute.attribute_or_none(
+            base_type.attributes[ca.ENDURANCE])
+        self.prc_base = Attribute.attribute_or_none(
+            base_type.attributes[ca.PERCEPTION])
+        self.agi_base = Attribute.attribute_or_none(
+            base_type.attributes[ca.AGILITY])
+        self.int_base = Attribute.attribute_or_none(
+            base_type.attributes[ca.INTELLIGENCE])
+        self.cha_base = Attribute.attribute_or_none(
+            base_type.attributes[ca.CHARISMA])
         self.masteries = masteries or self.masteries
 
-
         self.type_name = base_type.type_name
-
 
         self.unarmed_damage_type = base_type.unarmed_damage_type
         self.unarmed_chances = base_type.unarmed_chances
@@ -132,8 +134,6 @@ class Unit(BattlefieldObject):
         for slot in self.quick_items:
             if slot.content:
                 slot.content.on_equip(slot)
-
-
 
         self.turn_ccw_active = self.give_active(turn_ccw)
         self.turn_ccw = lambda: self.activate(self.turn_ccw_active)
@@ -174,14 +174,15 @@ class Unit(BattlefieldObject):
         self.recalc()
 
     def recalc(self):
-        bonus_lists = [ability.bonus for ability in self.abilities if ability.bonus]
+        bonus_lists = [
+            ability.bonus for ability in self.abilities if ability.bonus]
         bonus_lists += [buff.bonus for buff in self.buffs if buff.bonus]
         bonus_lists += self.equipment.bonuses
         self.bonuses = frozenset(bonus_lists)
 
     @property
     def sight_range(self):
-        return 1 + (self.prc/4) ** (2/3)
+        return 1 + (self.prc / 4) ** (2 / 3)
 
     @property
     def armor_base(self):
@@ -211,7 +212,7 @@ class Unit(BattlefieldObject):
     @lru_cache()
     def __initiative_formula(agi, intel, stamina):
         return Attribute(1 + 9 * ((0.4 + agi / 25 + intel / 25) ** (3 / 5)) * ((stamina / (
-                10*Constants.STAMINA_PER_STR)) ** (1 / 4)), 100, 0)
+            10 * Constants.STAMINA_PER_STR)) ** (1 / 4)), 100, 0)
 
     @property
     def initiative(self):
@@ -230,11 +231,9 @@ class Unit(BattlefieldObject):
         mastery = self.masteries[self.melee_mastery]
         return Attribute(self.str + self.prc + mastery, 100, 0)
 
-
     @property
     def melee_evasion_base(self):
-        return Attribute(self.prc*2 + self.agi*3, 100, 0)
-
+        return Attribute(self.prc * 2 + self.agi * 3, 100, 0)
 
     def reset(self):
         """Give unit maximum values for all dynamic attributes"""
@@ -242,19 +241,18 @@ class Unit(BattlefieldObject):
 
     @property
     def tooltip_info(self):
-        return {'name':f"{self.type_name}_{self.uid}",
-                'hp':str(int(self.health)),
-                'mana':str(self.mana),
-                'stamina':str(int(self.stamina)),
+        return {'name': f"{self.type_name}_{self.uid}",
+                'hp': str(int(self.health)),
+                'mana': str(self.mana),
+                'stamina': str(int(self.stamina)),
 
                 'initiative': str(int(self.initiative)),
 
                 'damage': str(int(self.get_melee_weapon().damage.amount)),
                 'armor': repr(self.armor),
 
-                'attack':str(self.melee_precision),
-                'defence':str(self.melee_evasion)}
-
+                'attack': str(self.melee_precision),
+                'defence': str(self.melee_evasion)}
 
     def give_active(self, active) -> Active:
         cpy = copy.deepcopy(active)
@@ -269,25 +267,32 @@ class Unit(BattlefieldObject):
         active = [a for a in self.actives if a.uid == searched_uid][0]
         self.actives.remove(active)
 
-
-    def activate(self, active: Active, user_targeting = None):
+    def activate(self, active: Active, user_targeting=None):
         active.owner = self
         return active.activate(user_targeting)
 
     @property
     def movement_actives(self):
-        return [active for active in self.actives if ActiveTags.MOVEMENT in active.tags]
+        return [
+            active for active in self.actives if ActiveTags.MOVEMENT in active.tags]
 
     @property
     def attack_actives(self):
-        return [active for active in self.actives if ActiveTags.ATTACK in active.tags]
-
+        return [
+            active for active in self.actives if ActiveTags.ATTACK in active.tags]
 
     def get_unarmed_weapon(self):
-        dmg = Damage(amount=self.str * Constants.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
-        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, is_ranged=False,
-                      mastery=MasteriesEnum.UNARMED, game=self.game)
-
+        dmg = Damage(
+            amount=self.str *
+            Constants.UNARMED_DAMAGE_PER_STR,
+            type=self.unarmed_damage_type)
+        return Weapon(
+            name="Fists",
+            damage=dmg,
+            chances=self.unarmed_chances,
+            is_ranged=False,
+            mastery=MasteriesEnum.UNARMED,
+            game=self.game)
 
     def get_melee_weapon(self):
         weapon = self.equipment[EquipmentSlotUids.HANDS]
@@ -302,12 +307,10 @@ class Unit(BattlefieldObject):
             return weapon
 
     def can_pay(self, cost: Cost):
-        return not any( [
+        return not any([
             cost.mana > self.mana,
             cost.stamina > self.stamina,
             cost.health > self.health])
-
-
 
     def pay(self, cost):
         self.mana -= cost.mana
@@ -325,8 +328,6 @@ class Unit(BattlefieldObject):
     @property
     def attacks(self):
         return [a for a in self.actives if ActiveTags.ATTACK in a.tags]
-
-
 
     def __repr__(self):
         return f"{self.type_name} {self.uid} with {self.health :.0f} HP"

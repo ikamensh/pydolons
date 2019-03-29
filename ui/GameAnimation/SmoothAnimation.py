@@ -11,7 +11,12 @@ class SmoothAnimation:
     Для использования класса необходимо указать слот изменения контроллируемого аттрибута,
     например QObject.setRotation для угра поворота. Дальше достаточно просто вызывать play_anim(start, end)
     """
-    def __init__(self, target, slot, basic_duration = GameVariantAnimation.DURATION_BASIC):
+
+    def __init__(
+            self,
+            target,
+            slot,
+            basic_duration=GameVariantAnimation.DURATION_BASIC):
         self.basic_duration = basic_duration
 
         self.anim = GameVariantAnimation(target)
@@ -24,7 +29,8 @@ class SmoothAnimation:
         if state == QtCore.QAbstractAnimation.Stopped:
             if self.queue:
                 start, end = self.queue.popleft()
-                self.anim.setDuration(self.basic_duration / (2 + len(self.queue)))
+                self.anim.setDuration(
+                    self.basic_duration / (2 + len(self.queue)))
                 self.anim.setStartValue(start)
                 self.anim.setEndValue(end)
                 self.anim.start()

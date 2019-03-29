@@ -6,6 +6,7 @@ from PySide2.QtGui import QColor
 class HealthBar(QGraphicsRectItem):
     """docstring for HealtBar."""
     orange = QColor(255, 102, 0)
+
     def __init__(self):
         super(HealthBar, self).__init__()
         self.setBrush(Qt.red)

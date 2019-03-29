@@ -6,16 +6,24 @@ from game_objects.items import Item, ItemTypes
 
 
 class SpellConcept(Item):
-    complexity = AttributeWithBonuses("complexity_base", SpellAttributes.COMPLEXITY)
+    complexity = AttributeWithBonuses(
+        "complexity_base", SpellAttributes.COMPLEXITY)
 
-    mana_cost = AttributeWithBonuses("mana_cost_base", SpellAttributes.MANA_COST)
-    stamina_cost = AttributeWithBonuses("stamina_cost_base", SpellAttributes.STAMINA_COST)
-    health_cost = AttributeWithBonuses("health_cost_base", SpellAttributes.HEALTH_COST)
-    readiness_cost = AttributeWithBonuses("readiness_cost_base", SpellAttributes.READINESS_COST)
+    mana_cost = AttributeWithBonuses(
+        "mana_cost_base", SpellAttributes.MANA_COST)
+    stamina_cost = AttributeWithBonuses(
+        "stamina_cost_base", SpellAttributes.STAMINA_COST)
+    health_cost = AttributeWithBonuses(
+        "health_cost_base", SpellAttributes.HEALTH_COST)
+    readiness_cost = AttributeWithBonuses(
+        "readiness_cost_base",
+        SpellAttributes.READINESS_COST)
 
     amount = AttributeWithBonuses("amount_base", SpellAttributes.AMOUNT)
     duration = AttributeWithBonuses("duration_base", SpellAttributes.DURATION)
-    precision_factor = AttributeWithBonuses("precision_factor_base", SpellAttributes.PRECISION_FACTOR)
+    precision_factor = AttributeWithBonuses(
+        "precision_factor_base",
+        SpellAttributes.PRECISION_FACTOR)
     distance = AttributeWithBonuses("distance_base", SpellAttributes.DISTANCE)
     radius = AttributeWithBonuses("radius_base", SpellAttributes.RADIUS)
 
@@ -40,7 +48,8 @@ class SpellConcept(Item):
 
         self.amount_base = Attribute.attribute_or_none(amount)
         self.duration_base = Attribute.attribute_or_none(duration)
-        self.precision_factor_base = Attribute.attribute_or_none(precision_factor)
+        self.precision_factor_base = Attribute.attribute_or_none(
+            precision_factor)
         self.distance_base = Attribute.attribute_or_none(distance)
         self.radius_base = Attribute.attribute_or_none(radius)
 
@@ -49,24 +58,31 @@ class SpellConcept(Item):
 
     @property
     def bonuses(self):
-        #TODO test that same runes stack - set is a risk w/o copying the bonuses.
+        # TODO test that same runes stack - set is a risk w/o copying the
+        # bonuses.
         if self.runes:
             return frozenset(flatten([rune.bonuses for rune in self.runes]))
         else:
             return frozenset()
 
-
-
-
     def to_spell(self, runes):
         self.runes = runes
-        cost = Cost(self.mana_cost, self.stamina_cost, self.health_cost, self.readiness_cost)
-        spell = Spell(runes=runes, concept=self, complexity=self.complexity, cooldown=self.cooldown,
-                      cost=cost, amount=self.amount, duration=self.duration,
-                      precision_factor=self.precision_factor, range=self.distance,
-                      radius=self.radius, resolve_callback=self.resolve_callback)
+        cost = Cost(
+            self.mana_cost,
+            self.stamina_cost,
+            self.health_cost,
+            self.readiness_cost)
+        spell = Spell(
+            runes=runes,
+            concept=self,
+            complexity=self.complexity,
+            cooldown=self.cooldown,
+            cost=cost,
+            amount=self.amount,
+            duration=self.duration,
+            precision_factor=self.precision_factor,
+            range=self.distance,
+            radius=self.radius,
+            resolve_callback=self.resolve_callback)
         self.runes = None
         return spell
-
-
-

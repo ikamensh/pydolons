@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtWidgets
 
 
 class NotifyText(QtWidgets.QGraphicsTextItem):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         QtWidgets.QGraphicsTextItem.__init__(self, parent)
         self.gameRoot = None
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
@@ -27,5 +27,8 @@ class NotifyText(QtWidgets.QGraphicsTextItem):
         self.anim.start()
 
     def resized(self):
-        self.setPos(self.gameRoot.view.mapToScene(self.widget_pos[0], self.widget_pos[1]))
+        self.setPos(
+            self.gameRoot.view.mapToScene(
+                self.widget_pos[0],
+                self.widget_pos[1]))
         pass

@@ -21,7 +21,10 @@ class TestBasicUnit(UsesQApp):
 
         self.unit_list = [self.unit_a, self.unit_b, self.unit_c]
         self.unit_set = {self.unit_a, self.unit_b, self.unit_c}
-        self.unit_dict = {self.unit_a:self.unit_a.worldPos, self.unit_b:self.unit_b.worldPos, self.unit_c:self.unit_c.worldPos}
+        self.unit_dict = {
+            self.unit_a: self.unit_a.worldPos,
+            self.unit_b: self.unit_b.worldPos,
+            self.unit_c: self.unit_c.worldPos}
         pass
 
     def test_first(self):
@@ -57,4 +60,3 @@ class TestBasicUnit(UsesQApp):
 
 if __name__ == '__main__':
     unittest.main()
-

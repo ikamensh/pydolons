@@ -11,7 +11,9 @@ class GameHeroAttr:
 
     def setUpHeroAttr(self):
         self.attrs = {v: k for k, v in enum_to_abbrev.items()}
-        self.attrs_info = {'cha_'+name:attr.tooltip_info for name, attr in self.attrs.items()}
+        self.attrs_info = {
+            'cha_' + name: attr.tooltip_info for name,
+            attr in self.attrs.items()}
         self._free_xp = self.free_xp
 
     def freePointsChanged(self, value, attr):
@@ -42,6 +44,7 @@ class GameHeroAttr:
         else:
             attributes = self.character.temp_attributes
         return str(attributes[attr])
+
     @property
     def health(self):
         return str(self.gameRoot.lengine.the_hero.health)
@@ -79,6 +82,7 @@ class GameHeroAttr:
             self.character.commit()
         except Exception as er:
             print("D'ont commit character", er)
+
     @property
     def hero_icon(self):
         return self.gameRoot.lengine.the_hero.icon

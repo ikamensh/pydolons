@@ -5,8 +5,6 @@ if TYPE_CHECKING:
     from game_objects.battlefield_objects import BattlefieldObject, Unit
 
 
-
-
 class RangedAttack:
 
     @staticmethod
@@ -15,7 +13,6 @@ class RangedAttack:
         assert weapon is not None
         return RangedAttackEvent(source, target, weapon)
 
-
     # @staticmethod
     # def expected_dmg(source: Unit, target:BattlefieldObject):
     #     weapon = source.get_melee_weapon()
@@ -23,6 +20,3 @@ class RangedAttack:
     #     chances = fake_event.calculate_chances()
     #     expected_dmg = Damage.expected(chances, weapon.damage, target)
     #     return expected_dmg
-
-
-

@@ -5,6 +5,7 @@ from game_objects.battlefield_objects import BattlefieldObject
 from contextlib import contextmanager
 import mechanics.AI.SimUtils as SimUtils
 
+
 @contextmanager
 def sim_move_on_target_cell(active: Active, target: Cell):
     unit = active.owner
@@ -47,5 +48,3 @@ def sim_turn(ccw):
         unit.facing = facing_before
 
     return _
-
-

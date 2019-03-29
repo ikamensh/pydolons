@@ -5,9 +5,11 @@ from game_objects.battlefield_objects import CharAttributes, get_attrib_by_enum
 from mechanics.buffs import Ability
 
 
-@pytest.fixture(params = set(CharAttributes) - {CharAttributes.ARMOR, CharAttributes.RESISTANCES})
+@pytest.fixture(params=set(CharAttributes) -
+                {CharAttributes.ARMOR, CharAttributes.RESISTANCES})
 def attrib(request):
     yield request.param
+
 
 @pytest.fixture()
 def inner_power(attrib):
@@ -17,6 +19,7 @@ def inner_power(attrib):
 
     yield inner_power
 
+
 @pytest.fixture()
 def bonus_str():
     bonus = Attribute(0, 0, 50)
@@ -24,7 +27,6 @@ def bonus_str():
     abil_hp = Ability(bonus_hp)
 
     yield abil_hp
-
 
 
 def test_str_helps(hero, inner_power, attrib):
@@ -38,6 +40,7 @@ def test_str_helps(hero, inner_power, attrib):
 
     assert attrib_after > attrib_before
 
+
 def test_rescale(hero, bonus_str):
     hp_before = hero.health
 
@@ -45,6 +48,7 @@ def test_rescale(hero, bonus_str):
     hp_after = hero.health
 
     assert hp_after > hp_before
+
 
 def test_multiplier(hero, pirate):
 
@@ -61,6 +65,7 @@ def test_multiplier(hero, pirate):
     delta_pirate = pirate.health - hp_before
 
     assert delta_hero > delta_pirate
+
 
 def test_bonus(hero, pirate):
 
@@ -80,5 +85,3 @@ def test_bonus(hero, pirate):
     delta_pirate = pirate.health - hp_before
 
     assert delta_hero == delta_pirate
-
-

@@ -3,6 +3,7 @@ from game_objects.items.on_unit.EquipmentSlotUids import EquipmentSlotUids
 
 ss = EquipmentSlotUids
 
+
 class StandardEquipment:
 
     std_slots = [
@@ -19,6 +20,6 @@ class StandardEquipment:
         result = {}
         for uid, slot_type in StandardEquipment.std_slots:
 
-            result[uid] = Slot( uid.name, slot_type, owner )
+            result[uid] = Slot(uid.name, slot_type, owner)
 
         return result

@@ -76,7 +76,8 @@ class TextItem(QGraphicsSimpleTextItem):
             self.paint = self.paint_bg
         if attrib.get('icon') is not None:
             self.paint = self.paint_pic
-        if attrib.get('icon') is not None and attrib.get('background-color') is not None:
+        if attrib.get('icon') is not None and attrib.get(
+                'background-color') is not None:
             self.paint = self.paint_pic_bg
         if attrib.get('input') is None:
             self.input = ''
@@ -87,9 +88,11 @@ class TextItem(QGraphicsSimpleTextItem):
         # self.setPlainText(attrib['text'])
         self.setText(attrib['text'])
         self._font = QFont(self.cfg.main_font_name)
-        self._font.setPointSize(int(self.cfg.styleConfig.base_point_size *self.scale_x))
+        self._font.setPointSize(
+            int(self.cfg.styleConfig.base_point_size * self.scale_x))
         if attrib.get('font_size') is not None:
-            self._font.setPointSize(int(attrib.get('font_size')) * self.scale_x)
+            self._font.setPointSize(
+                int(attrib.get('font_size')) * self.scale_x)
         self.setFont(self._font)
         # if self.document().size().width() > self._width:
         #     while self.document().size().width() > self._width:

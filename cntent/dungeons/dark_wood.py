@@ -4,9 +4,9 @@ from game_objects.dungeon.Dungeon import Dungeon
 
 
 def build_units(g):
-    werewolf_band = [werewolf.create(g, 3+3j),
-                     werewolf.create(g, 6+6j),
-                     werewolf.create(g, 3+6j)]
+    werewolf_band = [werewolf.create(g, 3 + 3j),
+                     werewolf.create(g, 6 + 6j),
+                     werewolf.create(g, 3 + 6j)]
     return werewolf_band
 
 

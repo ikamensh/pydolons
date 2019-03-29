@@ -6,9 +6,13 @@ PCT_DRAIN = "percentage_drain"
 PCT_HEAL = "percentage_heal"
 
 
-def trig_factory( ability: Ability):
+def trig_factory(ability: Ability):
     owner = ability.bound_to
-    return build_mana_drain_trigger(owner, getattr(ability, AMOUNT), getattr(ability, PCT_DRAIN), getattr(ability, PCT_HEAL))
+    return build_mana_drain_trigger(
+        owner, getattr(
+            ability, AMOUNT), getattr(
+            ability, PCT_DRAIN), getattr(
+                ability, PCT_HEAL))
 
 
 def mana_drain(amount, percentage_drain, percentage_heal):
@@ -21,5 +25,3 @@ def mana_drain(amount, percentage_drain, percentage_heal):
 
         return a
     return _
-
-

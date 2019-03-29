@@ -17,6 +17,7 @@ from DreamGame import DreamGame
 
 class LevelSelect(AbstractPage):
     """docstring for LevelSelect."""
+
     def __init__(self, gamePages):
         super().__init__(gamePages)
         self.w = 600 * self.gamePages.gameRoot.cfg.scale_x
@@ -25,19 +26,28 @@ class LevelSelect(AbstractPage):
         self.x = 24
         self.dungeon_widgets = []
         self.fake_btns = []
-        self.setUpWidgets([small_orc_cave, pirate_lair, small_graveyard, demo_dungeon, walls_dungeon, tel_razi_temple, tel_razi_factory, dark_wood])
+        self.setUpWidgets([small_orc_cave,
+                           pirate_lair,
+                           small_graveyard,
+                           demo_dungeon,
+                           walls_dungeon,
+                           tel_razi_temple,
+                           tel_razi_factory,
+                           dark_wood])
         self.defaultGame = True
         self.isService = True
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self, dung_list):
-        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.background = QtWidgets.QGraphicsPixmapItem(
+            self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
         mainWidget.resize(self.w, self.h)
-        mainWidget.setStyleSheet('background-color: rgba(0, 0, 0, 0);color:white')
+        mainWidget.setStyleSheet(
+            'background-color: rgba(0, 0, 0, 0);color:white')
 
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
 
@@ -73,7 +83,8 @@ class LevelSelect(AbstractPage):
 
         mainWidget.setLayout(mainLayout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
-        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.mainWidget.setFlags(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
         self.resized()
 
@@ -85,12 +96,12 @@ class LevelSelect(AbstractPage):
             self.gamePages.gameRoot.lengine.dungeon = dungeon
             self.gamePages.gameRoot.ui.startCharacterPage()
 
-        frame:QtWidgets.QFrame = QtWidgets.QFrame(parent=parent)
-        frame.setProperty('dungeon',  dungeon)
+        frame: QtWidgets.QFrame = QtWidgets.QFrame(parent=parent)
+        frame.setProperty('dungeon', dungeon)
         frame.setObjectName("DungeonFrame")
         frame.setStyleSheet("#DungeonFrame {border: 2px solid black}")
 
-        form_layout = QtWidgets.QFormLayout(parent = parent)
+        form_layout = QtWidgets.QFormLayout(parent=parent)
 
         icon = QtWidgets.QLabel(parent=parent)
         icon.setPixmap(self.gamePages.gameRoot.cfg.getPicFile(dungeon.icon))
@@ -99,10 +110,12 @@ class LevelSelect(AbstractPage):
         form_layout.addRow(QtWidgets.QLabel(dungeon.name, parent))
 
         objs = dungeon.objs(DreamGame())
-        n_units_label = QtWidgets.QLabel(f'{len([u for u in objs if not u.is_obstacle])}', parent)
+        n_units_label = QtWidgets.QLabel(
+            f'{len([u for u in objs if not u.is_obstacle])}', parent)
         form_layout.addRow('Units in the dungeon:', n_units_label)
 
-        max_xp_label = QtWidgets.QLabel(f'{max([u.xp for u in objs if not u.is_obstacle])}', parent)
+        max_xp_label = QtWidgets.QLabel(
+            f'{max([u.xp for u in objs if not u.is_obstacle])}', parent)
         form_layout.addRow('Strongest enemy XP: ', max_xp_label)
 
         start = QtWidgets.QPushButton('start', parent)
@@ -143,8 +156,10 @@ class LevelSelect(AbstractPage):
     def resized(self):
         super().resized()
         self.w = self.mainWidget.boundingRect().width()
-        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
-        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.widget_pos.setX(
+            (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY(
+            (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
         self.mainWidget.setPos(self.widget_pos)
         self.resizeBackground(self.background)
         pass
@@ -156,7 +171,15 @@ class LevelSelect(AbstractPage):
 
     def mousePressEvent(self, e):
         for widget in self.dungeon_widgets:
-            qr = QtCore.QRect(self.mainWidget.x() + self.frame.x() + widget.x(), self.mainWidget.y() + self.frame.y() + widget.y(), widget.size().width(), widget.size().height())
+            qr = QtCore.QRect(
+                self.mainWidget.x() +
+                self.frame.x() +
+                widget.x(),
+                self.mainWidget.y() +
+                self.frame.y() +
+                widget.y(),
+                widget.size().width(),
+                widget.size().height())
             if qr.contains(e.pos().x(), e.pos().y()):
                 widget.setStyleSheet("#DungeonFrame {border: 2px solid blue}")
                 self.selectDungeon(widget.property('dungeon'))
@@ -172,11 +195,6 @@ class LevelSelect(AbstractPage):
 
     def updatePos(self):
         super().updatePos()
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
-
-
-
-
-
-
-
+        self.mainWidget.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.widget_pos))

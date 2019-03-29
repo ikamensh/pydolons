@@ -16,7 +16,7 @@ class QuickItems(SlotGroupWidget):
         layout = GameGridLayout()
         j = 0
         for i, game_slot in enumerate(self.the_hero.quick_items):
-            label = self.getSlotWidget(game_slot, name = 'slot_' + str(i + 1))
+            label = self.getSlotWidget(game_slot, name='slot_' + str(i + 1))
             self.setPicSlot(game_slot, label)
             layout.addItem(label, row, j)
             j += 1

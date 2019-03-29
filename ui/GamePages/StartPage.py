@@ -7,6 +7,7 @@ from ui.GameAnimation.AnimatedItem import AnimatedItem
 
 class StartPage(AbstractPage):
     """docstring for StartPage."""
+
     def __init__(self, gamePages):
         super().__init__(gamePages)
         self.state = True
@@ -21,7 +22,8 @@ class StartPage(AbstractPage):
 
     def setUpWidgets(self):
         self.buttons = []
-        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.background = QtWidgets.QGraphicsPixmapItem(
+            self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
@@ -76,7 +78,8 @@ class StartPage(AbstractPage):
 
         mainWidget.setLayout(laoyout)
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
-        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.mainWidget.setFlags(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.resized()
         self.setUpAnim()
 
@@ -110,12 +113,16 @@ class StartPage(AbstractPage):
         return x1, x2, y
 
     def setAnimPos(self, button_id):
-        self.fire_one.setPos(self.buttons_pos[button_id][0], self.buttons_pos[button_id][2])
-        self.fire_two.setPos(self.buttons_pos[button_id][1], self.buttons_pos[button_id][2])
+        self.fire_one.setPos(
+            self.buttons_pos[button_id][0],
+            self.buttons_pos[button_id][2])
+        self.fire_two.setPos(
+            self.buttons_pos[button_id][1],
+            self.buttons_pos[button_id][2])
 
     def showPage(self):
         if self.state:
-            if not self.gamePages.gameRoot.loop is None:
+            if self.gamePages.gameRoot.loop is not None:
                 self.state = False
                 self.focusable.emit(False)
                 self.gamePages.page = None
@@ -143,9 +150,13 @@ class StartPage(AbstractPage):
 
     def resized(self):
         super().resized()
-        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
-        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        self.widget_pos.setX(
+            (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY(
+            (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.mainWidget.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.widget_pos))
         self.resizeBackground(self.background)
         pass
 
@@ -206,7 +217,9 @@ class StartPage(AbstractPage):
 
     def updatePos(self):
         super().updatePos()
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        self.mainWidget.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.widget_pos))
 
     def get_wig(self, button):
         self.button_id = self.buttons.index(button)

@@ -3,6 +3,7 @@ from battlefield.Facing import Facing
 from exceptions.PydolonsError import PydolonsError
 import pytest
 
+
 def test_move(game_hvsp, hero):
     initial_location = hero.cell
 
@@ -11,6 +12,7 @@ def test_move(game_hvsp, hero):
     game_hvsp.order_move(hero, target_location)
     assert initial_location != hero.cell
     assert target_location == hero.cell
+
 
 def test_facing_no_problem(game_hvsp, hero):
     initial_location = hero.cell
@@ -35,7 +37,7 @@ def test_can_make_multiple_steps(game_hvsp, hero):
     hero.facing = Facing.NORTH
 
     target_location = Cell(0, 6)
-    hero.readiness=1.09
+    hero.readiness = 1.09
     try:
         for _ in range(20):
             game_hvsp.order_move(hero, target_location)
@@ -45,6 +47,7 @@ def test_can_make_multiple_steps(game_hvsp, hero):
 
     assert initial_location != hero.cell
     assert target_location == hero.cell
+
 
 def test_can_use_diag_step(game_hvsp, hero):
     initial_location = hero.cell
@@ -56,6 +59,7 @@ def test_can_use_diag_step(game_hvsp, hero):
 
     assert initial_location != hero.cell
     assert target_location == hero.cell
+
 
 def test_go_and_hit(game_hvsp, hero):
     """
@@ -73,12 +77,9 @@ def test_go_and_hit(game_hvsp, hero):
             game_hvsp.order_move(hero, step)
             hero.readiness = 1
 
-
-
         while the_enemy_pirate.health > 0:
             game_hvsp.order_attack(hero, pirate_location)
             hero.readiness = 1
-
 
         game_hvsp.order_move(hero, pirate_location)
     except Exception as e:
@@ -86,5 +87,3 @@ def test_go_and_hit(game_hvsp, hero):
         assert False
 
     assert pirate_location == hero.cell
-
-

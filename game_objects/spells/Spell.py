@@ -34,4 +34,3 @@ class Spell(Item):
 
     def complexity_check(self, unit):
         return unit.masteries[self.school] + unit.int >= self.complexity
-

@@ -27,10 +27,11 @@ class Vision:
                                                    unit.facing,
                                                    cell_from,
                                                    self.game.bf))
-        blocking_cells = {cell for cell in bf.cells_to_objs if bf.space_free(cell) <
-                          bf.space_per_cell / 2}
+        blocking_cells = {cell for cell in bf.cells_to_objs if bf.space_free(
+            cell) < bf.space_per_cell / 2}
         blocking_cells -= {cell_from}
-        visible_walls = frozenset({cell for cell in bf.walls if cell in visible_cells})
+        visible_walls = frozenset(
+            {cell for cell in bf.walls if cell in visible_cells})
         diag_wall_blockers = Vision._merge_walls(visible_walls)
         blocking_cells |= diag_wall_blockers
         for obstacle in blocking_cells:
@@ -49,11 +50,14 @@ class Vision:
         :return: set of new imaginary obstacles
         """
         new_obstacles = set()
-        diag_dist = Cell._distance(Cell(0,0), Cell(1,1))
+        diag_dist = Cell._distance(Cell(0, 0), Cell(1, 1))
         for o1 in obstacles:
             for o2 in obstacles:
                 if Cell._distance(o1, o2) == diag_dist:
-                    new_obstacles.add(Cell( (o1.x+o2.x)/2 , (o1.y+o2.y)/2 ))
+                    new_obstacles.add(
+                        Cell(
+                            (o1.x + o2.x) / 2,
+                            (o1.y + o2.y) / 2))
 
         return new_obstacles
 
@@ -99,23 +103,23 @@ class Vision:
 
     @staticmethod
     def _dist_eliptic_x(p1, p2):
-        return Cell._hypot( 1.45*(p1.x - p2.x) , (p1.y - p2.y) )
+        return Cell._hypot(1.45 * (p1.x - p2.x), (p1.y - p2.y))
 
     @staticmethod
     def _dist_eliptic_y(p1, p2):
-        return Cell._hypot((p1.x - p2.x), 1.45*(p1.y - p2.y))
-
+        return Cell._hypot((p1.x - p2.x), 1.45 * (p1.y - p2.y))
 
     @staticmethod
     @functools.lru_cache(maxsize=int(2**16))
-    def blocks(looking_from: Cell, looking_to: Cell, obstacle: Cell)-> bool:
+    def blocks(looking_from: Cell, looking_to: Cell, obstacle: Cell) -> bool:
         """
         tests if the cell :obstacle is blocking
         when :looking_from towards :looking_to
         :return: True if the :obstacle blocks the view
         """
 
-        # caching trick: halve the search space (assumes symmetry, which is tested)
+        # caching trick: halve the search space (assumes symmetry, which is
+        # tested)
         if looking_from.x > looking_to.x:
             return Vision.blocks(looking_to, looking_from, obstacle)
 
@@ -125,22 +129,23 @@ class Vision:
         if looking_from == obstacle:
             return False
 
-        #obstacle behind the target can't block it.
-        if Cell._distance(looking_from, looking_to) < Cell._distance(looking_from, obstacle):
+        # obstacle behind the target can't block it.
+        if Cell._distance(
+                looking_from,
+                looking_to) < Cell._distance(
+                looking_from,
+                obstacle):
             return False
-
 
         norm = np.linalg.norm
         p1 = np.asarray([looking_from.x, looking_from.y])
         p2 = np.asarray([looking_to.x, looking_to.y])
         p3 = np.asarray([obstacle.x, obstacle.y])
 
-        #obstacle which is in diferent semiplane can't possibly block it
-        if np.dot( p2 - p1, p3 - p1) <= 0:
+        # obstacle which is in diferent semiplane can't possibly block it
+        if np.dot(p2 - p1, p3 - p1) <= 0:
             return False
 
-
-        dist_to_perpendicular = norm(np.cross(p2 - p1, p1 - p3)) / norm(p2 - p1)
+        dist_to_perpendicular = norm(
+            np.cross(p2 - p1, p1 - p3)) / norm(p2 - p1)
         return dist_to_perpendicular < 0.65
-
-

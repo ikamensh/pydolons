@@ -3,13 +3,14 @@ from mechanics.damage import Damage, DamageTypes
 from mechanics.events import DamageEvent
 import pytest
 
+
 def test_immortality(game_hvsp, hero):
 
     trig = immortality(hero)
     dmg = Damage(200, DamageTypes.ACID)
 
     while hero.health > 0:
-        DamageEvent(dmg,hero)
+        DamageEvent(dmg, hero)
 
     assert hero.alive
 
@@ -17,7 +18,8 @@ def test_immortality(game_hvsp, hero):
     DamageEvent(dmg, hero)
     assert not hero.alive
 
-@pytest.mark.parametrize("n",[1,3,8])
+
+@pytest.mark.parametrize("n", [1, 3, 8])
 def test_undead_n_hits(game_hvsp, hero, n):
 
     undead_n_hits(hero, n)
@@ -30,16 +32,17 @@ def test_undead_n_hits(game_hvsp, hero, n):
     DamageEvent(dmg, hero)
     assert hero.alive
 
-    n_left = n-1
+    n_left = n - 1
     for _ in range(n_left):
         DamageEvent(dmg, hero)
 
     assert hero.alive
 
-    DamageEvent(dmg,hero)
+    DamageEvent(dmg, hero)
     assert not hero.alive
 
-@pytest.mark.parametrize("n",[1,3,8])
+
+@pytest.mark.parametrize("n", [1, 3, 8])
 def test_refraction(game_hvsp, hero, n):
 
     refraction(hero, n)
@@ -47,12 +50,9 @@ def test_refraction(game_hvsp, hero, n):
     dmg = Damage(200, DamageTypes.FROST)
 
     for _ in range(n):
-        DamageEvent( dmg, hero)
+        DamageEvent(dmg, hero)
 
     assert hero.health == hero.max_health
 
-    DamageEvent( dmg, hero)
+    DamageEvent(dmg, hero)
     assert hero.health < hero.max_health
-
-
-

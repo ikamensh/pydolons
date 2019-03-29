@@ -18,6 +18,7 @@ from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
 
 class GamePages(object):
     """docstring for GamePages."""
+
     def __init__(self):
         super(GamePages, self).__init__()
         self.gameRoot = None
@@ -44,7 +45,7 @@ class GamePages(object):
     def destroyPages(self):
         pages = list(self.pages.values())[:]
         keys = list(self.pages.keys())[:]
-        i =0
+        i = 0
         for page in pages:
             if not page.isService:
                 page.destroy()
@@ -64,14 +65,16 @@ class GamePages(object):
     def setUpStartPage(self, ui):
         self.startPage = self.buildPage('startPage', StartPage)
         self.page = self.startPage
-        self.toolTip = SuWidgetFactory.getToolTip(self.gameRoot, w = 128, h = 0, opacity=1.)
+        self.toolTip = SuWidgetFactory.getToolTip(
+            self.gameRoot, w=128, h=0, opacity=1.)
         self.toolTip.gameRoot = self.gameRoot
         self.gameRoot.view.wheel_change.connect(self.toolTip.wheel_change)
         self.notify = SuWidgetFactory.getNotifyText(self.gameRoot)
 
     def setUpLevelsPage(self):
         self.levelSelect = self.buildPage('levelSelect', LevelSelect)
-        self.gameRoot.controller.mousePress.connect(self.levelSelect.mousePressEvent)
+        self.gameRoot.controller.mousePress.connect(
+            self.levelSelect.mousePressEvent)
 
     def setUpGameMenu(self):
         gameMenu = self.buildPage('gameMenu', GameMenuPage)
@@ -151,4 +154,3 @@ class GamePages(object):
         # self.gameRoot.scene.addItem(self.xml_page)
         # self.xml_page.show()
         pass
-

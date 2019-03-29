@@ -36,11 +36,11 @@ class InventoryGroupsWidget:
     def getInventoryGroup(self):
         group = QtWidgets.QTabWidget(self)
         self.equimpment = EquipmentWidget(page=self.page, parent=group)
-        group.addTab(self.equimpment,'Equipment')
+        group.addTab(self.equimpment, 'Equipment')
         self.quick_items = QuickItems(page=self.page, parent=group)
-        group.addTab(self.quick_items,'Quick items')
+        group.addTab(self.quick_items, 'Quick items')
         self.scroll = QtWidgets.QScrollArea(parent=self)
-        self.shop = ShopWidget(page=self.page, parent=group )
+        self.shop = ShopWidget(page=self.page, parent=group)
         self.scroll.setWidget(self.shop)
         group.addTab(self.scroll, 'Shop')
         return group

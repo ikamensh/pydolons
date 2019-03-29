@@ -9,8 +9,12 @@ class GameMasteries:
         pass
 
     def setUpMasteries(self):
-        self.masteries = dict(zip([m.name.lower() for m in MasteriesGroups.all_magic+MasteriesGroups.all_battle], MasteriesGroups.all_magic+MasteriesGroups.all_battle))
-        self.masteries_info = {'mastery_'+name:mastery.tooltip_info for name, mastery in self.masteries.items()}
+        self.masteries = dict(zip([m.name.lower() for m in MasteriesGroups.all_magic +
+                                   MasteriesGroups.all_battle], MasteriesGroups.all_magic +
+                                  MasteriesGroups.all_battle))
+        self.masteries_info = {
+            'mastery_' + name: mastery.tooltip_info for name,
+            mastery in self.masteries.items()}
 
     def mastery_up(self, mastery):
         self.character.increase_mastery(mastery)

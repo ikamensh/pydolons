@@ -4,17 +4,18 @@ from ui.gameconfig.GameConfiguration import GameConfiguration
 
 class GameRootNode(object):
     """docstring for GameRootNode."""
+
     def __init__(self):
         super(GameRootNode, self).__init__()
         self.scene = None
         self.view = None
-        self.cfg:GameConfiguration = None
+        self.cfg: GameConfiguration = None
         self.level = None
         self.loop = None
         self.levels = None
         self.gamePages = None
         self.game = None
-        self.lengine:LEngine = None
+        self.lengine: LEngine = None
         self.ui = None
 
     def setView(self, view):

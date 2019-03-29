@@ -1,8 +1,10 @@
 from battlefield import Cell
 
+
 class Foo:
     def __init__(self):
         pass
+
 
 def test_cell():
     a = Cell(1, 2)
@@ -12,8 +14,8 @@ def test_cell():
     f.x = 1
     f.y = 2
 
-    assert (a == None) == False
+    assert (a is None) == False
     assert (a == f) == False
     assert (a == b) == False
-    assert (a == c) == True
-    assert (a == a) == True
+    assert (a == c)
+    assert (a == a)

@@ -21,14 +21,16 @@ werewolf_bt = BaseType(
     "Werewolf",
     sound_map=WerewolfSoundMap,
     resists={dt.SLASH: 0.30},
-    abilities=[bash(0.5), battle_rage(1), aoe_damage(radius=2,percentage=0.5)],
+    abilities=[bash(0.5), battle_rage(1), aoe_damage(radius=2, percentage=0.5)],
     icon=["werewolf.jpg"]
 )
 
-werewolf = Monster(
-    werewolf_bt,
-    [
-        [si.smiths_hammer, si.hammer_superior, si.axe_superior, si.axe_ancient],
-        [si.jacket_trollhide, si.scalemail_inferior, si.jacket_usual, si.cuirass_usual]
-    ]
-)
+werewolf = Monster(werewolf_bt,
+                   [[si.smiths_hammer,
+                     si.hammer_superior,
+                     si.axe_superior,
+                     si.axe_ancient],
+                    [si.jacket_trollhide,
+                       si.scalemail_inferior,
+                       si.jacket_usual,
+                       si.cuirass_usual]])

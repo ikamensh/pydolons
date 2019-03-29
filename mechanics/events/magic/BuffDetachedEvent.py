@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from mechanics.buffs import Buff
 
+
 class BuffDetachedEvent(Event):
     channel = EventsChannels.BuffDetachedChannel
 

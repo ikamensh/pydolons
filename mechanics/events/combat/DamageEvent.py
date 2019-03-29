@@ -10,11 +10,17 @@ if TYPE_CHECKING:
     from game_objects.battlefield_objects import BattlefieldObject, Unit
 
 
-
 class DamageEvent(Event):
     channel = EventsChannels.DamageChannel
 
-    def __init__(self, damage: Damage, target: BattlefieldObject, *, source: Unit=None, impact_factor=ImpactFactor.HIT, fire=True):
+    def __init__(
+            self,
+            damage: Damage,
+            target: BattlefieldObject,
+            *,
+            source: Unit = None,
+            impact_factor=ImpactFactor.HIT,
+            fire=True):
         self.source = source
         self.target = target
         self.damage = damage
@@ -22,21 +28,20 @@ class DamageEvent(Event):
 
         self.weapon_dur_dmg = 0
 
-
         super().__init__(target.game, fire, logging=True)
-
 
     @property
     def amount(self):
-        return Damage.calculate_damage(self.damage, self.target, self.impact_factor)[0]
-
+        return Damage.calculate_damage(
+            self.damage, self.target, self.impact_factor)[0]
 
     def check_conditions(self):
         return self.target.alive
 
     def resolve(self):
 
-        _, armor_dur_dmg, weapon_dur_dmg = Damage.calculate_damage(self.damage, self.target, self.impact_factor)
+        _, armor_dur_dmg, weapon_dur_dmg = Damage.calculate_damage(
+            self.damage, self.target, self.impact_factor)
 
         if not self.target.is_obstacle:
             body_armor = self.target.equipment[EquipmentSlotUids.BODY]
@@ -46,8 +51,6 @@ class DamageEvent(Event):
         self.weapon_dur_dmg = weapon_dur_dmg
         self.target.lose_health(self.amount, self.source)
 
-
-
     def __repr__(self):
 
         if self.amount == 0:
@@ -56,11 +59,11 @@ class DamageEvent(Event):
 
         if self.source:
             return "{}! {} recieves {} {} damage from {}.".format(
-                                                                self.impact_factor,
-                                                                self.target,
-                                                                self.amount,
-                                                                self.damage.type,
-                                                                self.source)
+                self.impact_factor,
+                self.target,
+                self.amount,
+                self.damage.type,
+                self.source)
         else:
             return "{}! {} recieves {} {} damage.".format(self.impact_factor,
                                                           self.target,

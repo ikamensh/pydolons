@@ -24,7 +24,7 @@ class TheUI(QtWidgets.QWidget):
     view = None
     singleton = None
 
-    def __init__(self, lengine:LEngine, game = None):
+    def __init__(self, lengine: LEngine, game=None):
         super().__init__()
         self.setAcceptDrops(True)
         print('cfg ===> newGame init TheUI', datetime.now())
@@ -53,7 +53,8 @@ class TheUI(QtWidgets.QWidget):
         self.layout.setMargin(2)
         size = self.gameconfig.dev_cfg_size
         if size is not None:
-            self.scene = QtWidgets.QGraphicsScene(0, 0, self.gameconfig.dev_cfg_size[0], self.gameconfig.dev_cfg_size[1])
+            self.scene = QtWidgets.QGraphicsScene(
+                0, 0, self.gameconfig.dev_cfg_size[0], self.gameconfig.dev_cfg_size[1])
         else:
             self.scene = QtWidgets.QGraphicsScene(0, 0, 500, 500)
         self.gameRoot.setScene(self.scene)
@@ -90,7 +91,7 @@ class TheUI(QtWidgets.QWidget):
                           self.gameconfig.ava_size[0],
                           self.gameconfig.ava_size[1])
 
-    def initLevel(self, level_name = None):
+    def initLevel(self, level_name=None):
         print('Iinit level')
         self.level = self.levelFactory.getLevel()
         self.levelFactory.addLevelToScene(self.scene)
@@ -102,7 +103,7 @@ class TheUI(QtWidgets.QWidget):
         self.gameRoot.level = None
 
     def close_app(self):
-        if not self.gameRoot.loop is None:
+        if self.gameRoot.loop is not None:
             self.stopGame()
 
     def setDefaultGame(self):
@@ -138,9 +139,8 @@ class TheUI(QtWidgets.QWidget):
         self.gamePages.page = self.gamePages.gameMenu
         self.view.controller = self.controller
 
-
     def stopGame(self):
-        if not self.gameRoot.loop is None:
+        if self.gameRoot.loop is not None:
             # game.loop stop condition
             self.gameRoot.game.loop_state = False
             self.destroyLevel()
@@ -165,7 +165,6 @@ class TheUI(QtWidgets.QWidget):
         window = TheUI(game)
         TheUI.singleton = window
         sys.exit(app.exec_())
-
 
 
 if __name__ == '__main__':

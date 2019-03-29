@@ -1,6 +1,7 @@
 from mechanics.turns import TurnsManager
 from collections import deque
 
+
 class SequentialTM(TurnsManager):
     def __init__(self, units=None):
         self.units = deque(units or [])

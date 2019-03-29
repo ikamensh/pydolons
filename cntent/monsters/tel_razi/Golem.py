@@ -1,5 +1,7 @@
 from __future__ import annotations
+from game_objects.battlefield_objects import Unit
 import GameLog
+
 
 class GolemDisabled:
     """
@@ -31,16 +33,13 @@ class GolemCharge:
         golem._golem_charge = max(0, min(value, golem.golem_max_charge))
         delta = value - old_value
         if delta > 0:
-            print( f"{golem} gains {delta :g} charge; it has {golem.golem_charge:g} charge now.")
+            print(
+                f"{golem} gains {delta :g} charge; it has {golem.golem_charge:g} charge now.")
         else:
-            print( f"{golem} loses {abs(delta) :g} charge; it has {golem.golem_charge:g} charge now.")
+            print(
+                f"{golem} loses {abs(delta) :g} charge; it has {golem.golem_charge:g} charge now.")
 
 
-
-
-
-
-from game_objects.battlefield_objects import Unit
 class Golem(Unit):
     disabled = GolemDisabled()
     golem_charge = GolemCharge()

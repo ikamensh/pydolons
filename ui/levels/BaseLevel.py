@@ -9,12 +9,12 @@ class BaseLevel(object):
         self.units = None
 
     def setGameRoot(self, gameRoot):
-        self.gameRoot =  gameRoot
+        self.gameRoot = gameRoot
         self.gameRoot.level = self
 
     def setMiddleLayer(self, middleLayer):
         self.middleLayer = middleLayer
-        self.middleLayer.level =  self
+        self.middleLayer.level = self
 
     def setGameWorld(self, world):
         self.world = world

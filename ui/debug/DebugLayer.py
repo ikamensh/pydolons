@@ -16,11 +16,11 @@ class DebugLayer(QtWidgets.QGraphicsItemGroup):
 
     def getItem(self, brush=None, pen=None, opacity=None):
         item = QtWidgets.QGraphicsRectItem()
-        if not pen is None:
+        if pen is not None:
             item.setPen(pen)
-        if not brush is None:
+        if brush is not None:
             item.setBrush(brush)
-        if not opacity is None:
+        if opacity is not None:
             item.setOpacity(opacity)
         self.addToGroup(item)
         return item
@@ -30,4 +30,3 @@ class DebugLayer(QtWidgets.QGraphicsItemGroup):
         # self.select_rect = self.getItem(self.b_green, self.pen, 0.5)
         # self.select_rect.setRect(0, 0, 128, 128)
         pass
-

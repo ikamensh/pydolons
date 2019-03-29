@@ -1,5 +1,9 @@
+import copy
+
+
 class Unit:
     counter = 0
+
     def __init__(self, friend, enemy):
         Unit.counter += 1
         self.friend = friend
@@ -16,7 +20,8 @@ a = Unit(None, None)
 b = Unit(a, None)
 c = Unit(b, a)
 
-rl = RelationshipDB([a,b,c])
+rl = RelationshipDB([a, b, c])
+
 
 def my_printout(relationsDB):
     x = relationsDB.units[0]
@@ -30,7 +35,6 @@ def my_printout(relationsDB):
 
 my_printout(rl)
 
-import copy
 
 rl_2 = copy.deepcopy(rl)
 

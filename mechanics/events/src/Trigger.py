@@ -5,11 +5,17 @@ if TYPE_CHECKING:
     from mechanics.events import EventsPlatform
     from game_objects.battlefield_objects import Unit
 
+
 class Trigger:
-    def __init__(self, target_event_cls: ClassVar,*, platform: EventsPlatform, conditions: Collection[Callable] = None,
-                 source: Unit = None,
-                 is_interrupt: bool = False,
-                 callbacks: List[Callable] = None):
+    def __init__(
+            self,
+            target_event_cls: ClassVar,
+            *,
+            platform: EventsPlatform,
+            conditions: Collection[Callable] = None,
+            source: Unit = None,
+            is_interrupt: bool = False,
+            callbacks: List[Callable] = None):
 
         assert inspect.isclass(target_event_cls)
         self.channel = target_event_cls.channel
@@ -47,5 +53,3 @@ class Trigger:
                 self.platform.triggers[self.channel].remove(self)
         except KeyError:
             pass
-
-

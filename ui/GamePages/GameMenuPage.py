@@ -9,6 +9,7 @@ from ui.GamePages import AbstractPage
 
 class GameMenuPage(AbstractPage):
     """docstring for ScreenMenu."""
+
     def __init__(self, gamePages):
         super(GameMenuPage, self).__init__(gamePages)
         self.gui_console = None
@@ -19,9 +20,11 @@ class GameMenuPage(AbstractPage):
 
     def setUpGui(self):
         self.actives = Actives(self, columns=6)
-        self.actives.setTargets.connect(self.gamePages.gameRoot.level.middleLayer.getTargets)
+        self.actives.setTargets.connect(
+            self.gamePages.gameRoot.level.middleLayer.getTargets)
 
-        self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
+        self.gamePages.gameRoot.controller.mouseMove.connect(
+            self.actives.mouseMoveEvent)
 
         self.unitStack = QtWidgets.QGraphicsRectItem(self)
         self.unitStack.setBrush(QtCore.Qt.blue)
@@ -30,18 +33,21 @@ class GameMenuPage(AbstractPage):
         w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
 
         self.active_select = GameObject()
-        self.active_select.setPixmap(self.gamePages.gameRoot.cfg.getPicFile('active select 96.png').scaled(w_u, w_u))
+        self.active_select.setPixmap(self.gamePages.gameRoot.cfg.getPicFile(
+            'active select 96.png').scaled(w_u, w_u))
         self.active_select.setParentItem(self.unitStack)
         self.active_select.setPos(self.unitStack.x(), self.unitStack.y())
 
-        if not self.gamePages.gameRoot.level is None:
+        if self.gamePages.gameRoot.level is not None:
             self.createUnitStack()
             self.updateUnitStack()
 
-        sup_panel = SupportPanel(page=self, gameconfig=self.gamePages.gameRoot.cfg)
+        sup_panel = SupportPanel(
+            page=self, gameconfig=self.gamePages.gameRoot.cfg)
         sup_panel.setUpWidgets()
         self.sup_panel = self.gamePages.gameRoot.scene.addWidget(sup_panel)
-        self.sup_panel.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.sup_panel.setFlags(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.updadteSupPanlePos()
 
     def createUnitStack(self):
@@ -64,14 +70,20 @@ class GameMenuPage(AbstractPage):
         self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
         self.gui_console.id = self.gui_console.startTimer(50)
         self.gui_console.setTabChangesFocus(False)
-        self.gui_console.resize(320 * self.gamePages.gameRoot.cfg.scale_x, 240 * self.gamePages.gameRoot.cfg.scale_y)
-        self.gamePages.gameRoot.controller.mouseMove.connect(self.gui_console.setMousePos)
+        self.gui_console.resize(
+            320 * self.gamePages.gameRoot.cfg.scale_x,
+            240 * self.gamePages.gameRoot.cfg.scale_y)
+        self.gamePages.gameRoot.controller.mouseMove.connect(
+            self.gui_console.setMousePos)
         self.gui_console.btn.clicked.connect(self.updateGuiConsolePos)
         self.p_gui_console = self.scene().addWidget(self.gui_console)
-        self.p_gui_console.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.p_gui_console.setFlags(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
 
     def updateGuiConsolePos(self):
-        self.p_gui_console.setPos(self.gamePages.gameRoot.view.mapToScene(self.gui_console.widget_pos))
+        self.p_gui_console.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.gui_console.widget_pos))
 
     def rmToUnitStack(self, uid):
         self.unitStack.items[uid].setParentItem(None)
@@ -85,13 +97,18 @@ class GameMenuPage(AbstractPage):
         self.unitStack.rect().setWidth(w * w_u)
         i = 0
         for bf_unit in units_stack:
-            self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * w_u, self.unitStack.y())
+            self.unitStack.items[bf_unit.uid].setPos(
+                self.unitStack.x() + i * w_u, self.unitStack.y())
             i += 1
 
     def setDefaultPos(self):
         # TODO setDefaultPos is deprecated method, delete in future.
-        pos = self.scene().views()[0].mapToScene(self.gamePages.gameRoot.cfg.correct_size[0], self.gamePages.gameRoot.cfg.correct_size[1])
-        self.gui_console.move(self.gui_console.x() + pos.x(), self.gui_console.y() + pos.y())
+        pos = self.scene().views()[0].mapToScene(
+            self.gamePages.gameRoot.cfg.correct_size[0],
+            self.gamePages.gameRoot.cfg.correct_size[1])
+        self.gui_console.move(
+            self.gui_console.x() + pos.x(),
+            self.gui_console.y() + pos.y())
         self.setX(pos.x())
         self.setY(pos.y())
 
@@ -122,11 +139,12 @@ class GameMenuPage(AbstractPage):
         self.updadteSupPanlePos()
 
     def upateActivesPos(self):
-        self.actives.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.actives.x, self.actives.y))
+        self.actives.mainWidget.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.actives.x, self.actives.y))
 
     def updadteSupPanlePos(self):
-        self.sup_panel.setPos(self.gamePages.gameRoot.view.mapToScene(self.sup_panel.widget().widget_x, \
-                                                                      self.sup_panel.widget().widget_y))
-
-
-
+        self.sup_panel.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.sup_panel.widget().widget_x,
+                self.sup_panel.widget().widget_y))

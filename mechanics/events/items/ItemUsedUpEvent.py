@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.items import ChargedItem
 
+
 class ItemUsedUpEvent(Event):
     channel = EventsChannels.UsedUpChannel
 

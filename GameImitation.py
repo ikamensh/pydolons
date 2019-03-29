@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from typing import Dict
     from game_objects.battlefield_objects import Unit, Obstacle
 
+
 class TurnsManager:
     def __init__(self):
         self.unit = None
@@ -20,16 +21,17 @@ class TurnsManager:
         self.unit_locations = units
         self.managed_units = list(units.keys())
 
-
     def get_next(self):
         return self.unit
 
     def managed_units(self):
         return list(self.unit_locations.values())
 
+
 class GameLog:
     def __init__(self):
         self.msg = 'game imitation'
+
 
 class DreamGame:
 
@@ -47,7 +49,8 @@ class DreamGame:
 
         self.the_hero = hero
 
-        self.faction = {unit:Faction.ENEMY for unit in unit_locations if not unit.is_obstacle}
+        self.faction = {
+            unit: Faction.ENEMY for unit in unit_locations if not unit.is_obstacle}
         self.faction[hero] = Faction.PLAYER
 
         units_who_make_turns = [unit for unit in unit_locations.keys()
@@ -91,9 +94,6 @@ class DreamGame:
 
     def order_turn_cw(self):
         self.gamelog.msg = 'order_turn_cw'
-
-
-
 
     def loop(self, turns=None):
         while self.loop_state:

@@ -1,6 +1,7 @@
 from game_objects.items import Equipment, Slot, EquipmentSlotUids
 import pytest
 
+
 def test_can_equip_directly(weapon, hero):
     eq = Equipment(hero)
     eq.equip_item(weapon)
@@ -16,6 +17,3 @@ def test_equip(weapon, hero):
 
     assert eq[EquipmentSlotUids.HANDS] is weapon
     assert inventory_slot.content is None
-
-
-

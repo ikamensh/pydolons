@@ -4,7 +4,7 @@ from game_objects.items import ItemTransactions
 
 class SlotMoveMaster:
     def __init__(self, gameRoot, page):
-        self.gameRoot =gameRoot
+        self.gameRoot = gameRoot
         self.page = page
         self.moved_slot = None
         self.emty_icon = 'cha_page_elemnt_bg.png'
@@ -21,7 +21,8 @@ class SlotMoveMaster:
         if self.moved_slot is not None and target_slot is not None:
             if self.moved_slot.content.item_type == target_slot.item_type:
                 with ItemTransactions(self.gameRoot.lengine.the_hero) as trans:
-                    state, msg = self.gameRoot.lengine.the_hero.equipment.equip(self.moved_slot)
+                    state, msg = self.gameRoot.lengine.the_hero.equipment.equip(
+                        self.moved_slot)
                     self.page.inventories.update_attr()
                     self.page.equipments.update_attr()
 
@@ -29,14 +30,15 @@ class SlotMoveMaster:
         target_slot = self.page.inventories.slots.get(target_item.name)
         if self.moved_slot is not None and target_slot is not None:
             # if target_slot.content is not None:
-                self.swap_slot(target_slot)
+            self.swap_slot(target_slot)
 
     def equip(self, item):
         slot = self.page.inventories.slots.get(item.name)
         if slot is not None:
             if slot.content is not None:
                 with ItemTransactions(self.gameRoot.lengine.the_hero) as trans:
-                    state, msg = self.gameRoot.lengine.the_hero.equipment.equip(slot)
+                    state, msg = self.gameRoot.lengine.the_hero.equipment.equip(
+                        slot)
                     self.page.inventories.update_attr()
                     self.page.equipments.update_attr()
 
@@ -47,7 +49,8 @@ class SlotMoveMaster:
                 with ItemTransactions(self.gameRoot.lengine.the_hero) as trans:
                     self.gameRoot.lengine.the_hero.equipment.unequip_slot(slot)
                 if slot.content is None:
-                    item.setPixmapIcon(self.page.equipments.default_icons[item.name])
+                    item.setPixmapIcon(
+                        self.page.equipments.default_icons[item.name])
 
     def drop_slot(self):
         if self.moved_slot is not None:
@@ -81,4 +84,5 @@ class SlotMoveMaster:
                     item.setPixmapIcon(self.emty_icon)
 
     def update_gold_count(self):
-        self.page.items['hero_gold_value'].setText(str(self.gameRoot.game.shop.customer.gold))
+        self.page.items['hero_gold_value'].setText(
+            str(self.gameRoot.game.shop.customer.gold))

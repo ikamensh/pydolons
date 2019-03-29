@@ -1,8 +1,9 @@
 from enum import Enum, auto
 
+
 class NameEnum(Enum):
     def _generate_next_value_(name, start, count, last_values):
-       return name
+        return name
 
     def __repr__(self):
         return self.name.lower()
@@ -12,7 +13,7 @@ class NameEnum(Enum):
 
     @property
     def tooltip_info(self):
-        return {'name':self.name}
+        return {'name': self.name}
 
 
 if __name__ == "__main__":
@@ -21,6 +22,5 @@ if __name__ == "__main__":
         SouthWest = auto()
         East = auto()
         West = auto()
-
 
     print(list(Ordinal))

@@ -4,13 +4,11 @@ from game_objects.battlefield_objects import BaseType
 from game_objects.monsters.Monster import Monster
 
 
-
-zombie_norm = BaseType({},"Zombie")
-zombie_fat = BaseType({},"Zombie", abilities=[fat])
+zombie_norm = BaseType({}, "Zombie")
+zombie_fat = BaseType({}, "Zombie", abilities=[fat])
 
 zombie_norm = Monster(zombie_norm)
 zombie_fat = Monster(zombie_fat)
-
 
 
 def test_fat(empty_game):

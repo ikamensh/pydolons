@@ -9,5 +9,6 @@ def test_body_armor_gives_armor(hero, armor):
 
 
 def test_tooltip_with_armor(armor):
-    is_in_tooltip = lambda tooltip, search: any([search in val for val in tooltip.values()])
+    def is_in_tooltip(tooltip, search): return any(
+        [search in val for val in tooltip.values()])
     assert is_in_tooltip(armor.tooltip_info, str(armor.armor))

@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 
+
 @contextmanager
 def virtual(unit):
     health_before = unit.health
@@ -14,6 +15,7 @@ def virtual(unit):
     unit.stamina = stamina_before
     unit.readiness = readiness_before
 
+
 @contextmanager
 def simulate_death(game, unit):
     position = game.get_location(unit)
@@ -22,4 +24,3 @@ def simulate_death(game, unit):
     game.unit_died(unit)
     yield
     game.add_unit(unit, position, facing, fraction)
-

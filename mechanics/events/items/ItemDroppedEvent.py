@@ -5,10 +5,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.items import Item
 
+
 class ItemDroppedEvent(Event):
     channel = EventsChannels.DropChannel
 
-    def __init__(self, item: Item, cell = None):
+    def __init__(self, item: Item, cell=None):
         self.item = item
         g = item.game
         if cell:
@@ -17,7 +18,7 @@ class ItemDroppedEvent(Event):
             if item.owner:
                 location = g.bf.unit_locations[item.owner]
             else:
-                location = g.random.sample( g.bf.all_cells, 1 )[0]
+                location = g.random.sample(g.bf.all_cells, 1)[0]
         self.location = location
 
         super().__init__(g, logging=True)

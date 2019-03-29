@@ -22,10 +22,10 @@ class SlotsGroup:
     def len(self):
         return self._l
 
-    def setUpSlots(self, element:Element):
+    def setUpSlots(self, element: Element):
         pass
 
-    def create_slot(self, slot:Slot, width=128, height=128, space=10):
+    def create_slot(self, slot: Slot, width=128, height=128, space=10):
         pass
 
     def update_attr(self):
@@ -51,6 +51,3 @@ class SlotsGroup:
         for k, v in data.items():
             result = result + k + ' : ' + v + '\n'
         return result
-
-
-

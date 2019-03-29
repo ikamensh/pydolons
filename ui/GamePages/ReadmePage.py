@@ -6,6 +6,7 @@ from os import path
 
 class ReadmePage(AbstractPage):
     """docstring for StartPage."""
+
     def __init__(self, gamePages):
         super().__init__(gamePages)
         self.w = 480
@@ -16,11 +17,13 @@ class ReadmePage(AbstractPage):
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
-        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.background = QtWidgets.QGraphicsPixmapItem(
+            self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
         self.scroll = QtWidgets.QGraphicsRectItem()
-        brush = QtGui.QBrush(self.gamePages.gameRoot.cfg.getPicFile('scroll_background.png'))
+        brush = QtGui.QBrush(
+            self.gamePages.gameRoot.cfg.getPicFile('scroll_background.png'))
         self.scroll.setBrush(brush)
         self.addToGroup(self.scroll)
         self.text = QtWidgets.QGraphicsTextItem()
@@ -30,12 +33,14 @@ class ReadmePage(AbstractPage):
 
     def getHtml(self):
 
-        with open(path.join('resources','html', 'readme.html'), 'r') as f:
+        with open(path.join('resources', 'html', 'readme.html'), 'r') as f:
             return f.read()
 
     def setUpSize(self):
-        self.w = int((self.gamePages.gameRoot.cfg.dev_size[0] / 128) * 0.6) * 128
-        self.h = int((self.gamePages.gameRoot.cfg.dev_size[1] / 128) * 0.8) * 128
+        self.w = int(
+            (self.gamePages.gameRoot.cfg.dev_size[0] / 128) * 0.6) * 128
+        self.h = int(
+            (self.gamePages.gameRoot.cfg.dev_size[1] / 128) * 0.8) * 128
 
     def showPage(self):
         if self.state:
@@ -69,8 +74,10 @@ class ReadmePage(AbstractPage):
     def resized(self):
         super().resized()
         self.setUpSize()
-        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
-        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.widget_pos.setX(
+            (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY(
+            (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
         pos = self.gamePages.gameRoot.view.mapToScene(self.widget_pos)
         self.scroll.setRect(pos.x(), pos.y(), self.w, self.h)
         self.text.setPos(pos)

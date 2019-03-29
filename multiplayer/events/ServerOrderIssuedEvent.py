@@ -1,10 +1,12 @@
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 
+
 class ServerOrderIssuedEvent(Event):
     channel = EventsChannels.ServerOrderIssuedChannel
 
     next_uid = 0
+
     def __init__(self, game, unit_uid, active_uid, target):
         ServerOrderIssuedEvent.next_uid += 1
         self.uid = ServerOrderIssuedEvent.next_uid

@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 class QPerkTree(QWidget):
 
-
     def __init__(self, perk_tree: PerkTree, character: Character, parent=None):
         assert perk_tree in character.perk_trees
 
@@ -29,15 +28,14 @@ class QPerkTree(QWidget):
 
         self.name = QLabel(perk_tree.name)
         layout.addWidget(self.name)
-        self.total_spent = QLabel( str(perk_tree.spent_xp) )
+        self.total_spent = QLabel(str(perk_tree.spent_xp))
         layout.addWidget(self.total_spent)
-
 
         self.visuals = {}
         for perk_group in perk_tree.perk_groups:
-            qpg = QPerkGroup( perk_group, self )
+            qpg = QPerkGroup(perk_group, self)
             self.visuals[perk_group] = qpg
-            layout.addWidget( qpg )
+            layout.addWidget(qpg)
             layout.addStretch(2)
 
         self.setLayout(layout)
@@ -56,7 +54,6 @@ if __name__ == "__main__":
     from PySide2.QtWidgets import QApplication
     from character.Character import Character
     from cntent.base_types.demo_hero import demohero_basetype
-
 
     c = Character(demohero_basetype)
     c.unit.xp = 1e6

@@ -3,7 +3,7 @@ from mechanics.events import TimePassedEvent
 
 
 def test_wait(empty_game, hero):
-    empty_game.add_unit(hero, 1+1j)
+    empty_game.add_unit(hero, 1 + 1j)
 
     wait_active.cooldown = 1
     units_active = hero.give_active(wait_active)
@@ -15,7 +15,3 @@ def test_wait(empty_game, hero):
 
     TimePassedEvent(empty_game, 0.501)
     assert hero.activate(units_active)      # no longer on cooldown
-
-
-
-

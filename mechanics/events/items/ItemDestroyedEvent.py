@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.items import WearableItem
 
+
 class ItemDestroyedEvent(Event):
     channel = EventsChannels.ItemDestroyedChannel
 
@@ -18,15 +19,14 @@ class ItemDestroyedEvent(Event):
     def resolve(self):
         if self.item.owner and self.item.blueprint and self.item.material:
             i1 = self.item.blueprint
-            i2 = self.item.material.to_pieces(self.item.blueprint.material_count)
+            i2 = self.item.material.to_pieces(
+                self.item.blueprint.material_count)
 
             self.item.owner.inventory.add(i1)
             self.item.owner.inventory.add(i2)
 
-
         if self.item.slot:
             self.item.slot.pop_item()
-
 
     def __repr__(self):
         if self.item.owner:

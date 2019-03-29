@@ -5,6 +5,7 @@ from ui.GamePages import AbstractPage
 
 class BackGorundPage(AbstractPage):
     """docstring for StartPage."""
+
     def __init__(self, gamePages):
         super().__init__(gamePages)
         self.state = True
@@ -13,7 +14,8 @@ class BackGorundPage(AbstractPage):
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
-        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('dungeon.jpg'))
+        self.background = QtWidgets.QGraphicsPixmapItem(
+            self.gamePages.gameRoot.cfg.getPicFile('dungeon.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 

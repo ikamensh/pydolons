@@ -13,7 +13,7 @@ class GameInventrory(SlotsGroup):
             self.slots['inventory_slot_' + str(self._l)] = slot
             elemnt.append(self.create_slot(slot))
 
-    def create_slot(self, slot:Slot, width=128, space=10):
+    def create_slot(self, slot: Slot, width=128, space=10):
         self._width += width
         self._space += space
         attr = {}
@@ -31,11 +31,3 @@ class GameInventrory(SlotsGroup):
         tag = 'item'
         self._l += 1
         return Element(tag, attr)
-
-
-
-
-
-
-
-

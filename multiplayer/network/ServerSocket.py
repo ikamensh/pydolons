@@ -20,7 +20,6 @@ class ServerSocket:
         self.free_fractions = list(fractions_for_players)
         self.socket_fractions = {}
 
-
     def listen(self):
         print("listening.")
         while True:
@@ -48,15 +47,15 @@ class ServerSocket:
                 self.active_clients.remove(sock)
                 self.free_fractions.append(self.socket_fractions[sock])
 
-
     def client_thread(self, clientsocket):
         while True:
             data = clientsocket.recv(4096)
             print("bytes actually recieved: ", sys.getsizeof(data))
             e = pickle.loads(data)
             assert isinstance(e, ClientOrderIssuedEvent)
-            ServerOrderRecievedEvent(self.game, self.socket_fractions[clientsocket],
-                                     e.unit_uid, e.active_uid, e.target)
-
-
-
+            ServerOrderRecievedEvent(
+                self.game,
+                self.socket_fractions[clientsocket],
+                e.unit_uid,
+                e.active_uid,
+                e.target)

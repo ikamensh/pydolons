@@ -1,5 +1,6 @@
 from cntent.items.std.potions import minor_healing_potion, rejuvination_potion
 
+
 def test_gives_active(hero):
 
     actives_before = len(hero.actives)
@@ -14,7 +15,7 @@ def test_usage_removes_charges(hero):
     hero.quick_items.add(rejuvination_potion)
 
     charges_before = rejuvination_potion.charges
-    new_active = list( set(hero.actives) - actives_no_potion )[0]
+    new_active = list(set(hero.actives) - actives_no_potion)[0]
     hero.activate(new_active)
 
     assert charges_before == rejuvination_potion.charges + 1
@@ -30,14 +31,11 @@ def test_healing_potion_heals(hero):
 
     new_active = list(set(hero.actives) - actives_no_potion)[0]
 
-    hero.health /=2
+    hero.health /= 2
     health_before = hero.health
     hero.activate(new_active)
 
     assert hero.health > health_before
-
-
-
 
 
 def test_active_lost_with_item(hero):

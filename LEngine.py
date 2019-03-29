@@ -21,9 +21,10 @@ class LEngine:
     """
     LogicEngine
     """
+
     def __init__(self):
-        self.character:Character = None
-        self.the_hero  = None
+        self.character: Character = None
+        self.the_hero = None
         self.dungeon = None
 
     def getHero(self):
@@ -58,10 +59,15 @@ class LEngine:
         move_anim_trigger(game),
         obstacle_destroy_trigger(game)
 
-    def getShop(self, single_palyer = True):
+    def getShop(self, single_palyer=True):
         shop = None
         if single_palyer and self.character is not None:
-            return Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all),
-                        1, 500, customer=self.character)
+            return Shop(
+                generate_assortment(
+                    all_blueprints,
+                    all_materials,
+                    QualityLevels.all),
+                1,
+                500,
+                customer=self.character)
         return shop
-

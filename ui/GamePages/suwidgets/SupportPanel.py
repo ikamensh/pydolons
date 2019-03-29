@@ -25,13 +25,16 @@ class SupportPanel(QtWidgets.QWidget):
         self.down_chest = None
         pic_path = self.cfg.pic_file_paths.get('chest_0.png')
         if pic_path:
-            self.down_chest = "background-image: url('" + pic_path + "');"+bg_style
+            self.down_chest = "background-image: url('" + \
+                pic_path + "');" + bg_style
         pic_path = self.cfg.pic_file_paths.get('chest_1.png')
         if pic_path:
-            self.up_chest = "background-image: url('" + pic_path + "');"+bg_style
+            self.up_chest = "background-image: url('" + \
+                pic_path + "');" + bg_style
 
         pic_path = self.cfg.pic_file_paths.get('navigation.png')
-        self.navigation = "background-image: url('" + pic_path + "');"+bg_style
+        self.navigation = "background-image: url('" + \
+            pic_path + "');" + bg_style
 
     def setUpWidgets(self):
         layout = QtWidgets.QVBoxLayout(self)

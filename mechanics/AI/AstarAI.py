@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
     from DreamGame import DreamGame
 
+
 class StarSearch(AStar):
     really_big_number = 1e50
 
@@ -24,7 +25,8 @@ class StarSearch(AStar):
         return neighbours
 
     def distance_between(self, n1, n2):
-        #TODO maybe we need to ensure actual measurement on the nodes, not the fast, emulated one.
+        # TODO maybe we need to ensure actual measurement on the nodes, not the
+        # fast, emulated one.
         return n1.utility(self.faction) - n2.utility(self.faction)
 
     def heuristic_cost_estimate(self, current, goal):
@@ -39,7 +41,6 @@ class AstarAI:
         self.game = game
         self.random_ai = RandomAI(game)
 
-
     def decide_step(self, active_unit, depth_limit=50):
 
         astar = StarSearch(self.game, active_unit, depth_limit)
@@ -48,4 +49,3 @@ class AstarAI:
         node = list(path)[1]
         choice = node.choice
         return choice
-

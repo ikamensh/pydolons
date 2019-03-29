@@ -1,5 +1,6 @@
 from my_utils.named_enums import auto, NameEnum
 
+
 class EventsChannels(NameEnum):
     DamageChannel = auto()
     HealingChannel = auto()
@@ -19,7 +20,6 @@ class EventsChannels(NameEnum):
     UsedUpChannel = auto()
     DropChannel = auto()
 
-
     BuffAppliedChannel = auto()
     BuffDetachedChannel = auto()
     BuffDispelledChannel = auto()
@@ -37,4 +37,3 @@ class EventsChannels(NameEnum):
     ServerOrderRecievedChannel = auto()
     ClientOrderIssuedChannel = auto()
     ClientOrderRecievedChannel = auto()
-

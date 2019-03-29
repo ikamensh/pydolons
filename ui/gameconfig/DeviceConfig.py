@@ -34,7 +34,8 @@ class DeviceConfig:
         :atribute dev_size  - размер устройства деленый на 2
         """
         self.desktop = QDesktopWidget()
-        self.dev_size = self.desktop.screenGeometry().width(), self.desktop.screenGeometry().height()
+        self.dev_size = self.desktop.screenGeometry(
+        ).width(), self.desktop.screenGeometry().height()
         self.device_resolution = self.dev_size[0], self.dev_size[1]
         if self.device_resolution not in self.RESOLUTIONS:
             self.device_resolution = self.RESOLUTIONS[0]
@@ -54,8 +55,8 @@ class DeviceConfig:
         for step in range(16, 257, 4):
             temp = []
             for w, h in self.RESOLUTIONS:
-                temp.append(int(w/step))
-                temp.append(int(h/step))
+                temp.append(int(w / step))
+                temp.append(int(h / step))
             res.append(temp)
 
         with open('file_input', "w", newline='') as csv_file:

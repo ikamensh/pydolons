@@ -1,5 +1,6 @@
 from PySide2 import QtWidgets
 
+
 class GameTooltip(QtWidgets.QGraphicsRectItem):
 
     def __init__(self, arg):

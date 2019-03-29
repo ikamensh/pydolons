@@ -9,9 +9,14 @@ if TYPE_CHECKING:
 
 
 class Ability:
-    def __init__(self, bonus: Bonus = None, trigger_factories: List[Callable] = None, name = "Nameless ability"):
+    def __init__(
+            self,
+            bonus: Bonus = None,
+            trigger_factories: List[Callable] = None,
+            name="Nameless ability"):
         self.bonus = bonus
-        self.trigger_factories = trigger_factories            # callable( Ability ) -> Trigger
+        # callable( Ability ) -> Trigger
+        self.trigger_factories = trigger_factories
         self.to_deactivate: List[Trigger] = []
         self.bound_to: Unit = None
         self.name = name
@@ -34,9 +39,5 @@ class Ability:
             for tf in self.trigger_factories:
                 descr += "\n" + repr(tf)
 
-
-
     def __repr__(self):
         return f"{self.name} belonging to {self.bound_to}"
-
-

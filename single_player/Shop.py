@@ -1,4 +1,10 @@
 from __future__ import annotations
+from my_utils.utils import tractable_value, kmb_number_display as kmb
+from game_objects.items import Inventory
+from cntent.items.QualityLevels import QualityLevels
+from cntent.items.blueprints.armor.body_armor import leather_outfit, pirate_jacket, cuirass, scalemail
+from cntent.items.blueprints.weapons.weapons import fancy_blueprints, std_blueprints
+from cntent.items.materials.materials import Stones, Metals, Leathers, Woods
 import random
 from game_objects.items.materials.MaterialTypes import MaterialTypes
 from typing import TYPE_CHECKING, List, Dict
@@ -7,7 +13,10 @@ if TYPE_CHECKING:
     from game_objects.items import Slot
 
 
-def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTypes:List[Material]], quality_levels: List[QualityLevel], n=100):
+def generate_assortment(blueprints: List[Blueprint],
+                        materials: Dict[MaterialTypes:List[Material]],
+                        quality_levels: List[QualityLevel],
+                        n=100):
 
     for bp in blueprints:
         assert bp.material_type in materials
@@ -22,18 +31,17 @@ def generate_assortment(blueprints: List[Blueprint], materials: Dict[MaterialTyp
 
         assortment.append(bp.to_item(material, quality))
 
-    return sorted(assortment, key=lambda x:x.price)
+    return sorted(assortment, key=lambda x: x.price)
 
-
-from cntent.items.materials.materials import Stones, Metals, Leathers, Woods
-from cntent.items.blueprints.weapons.weapons import fancy_blueprints, std_blueprints
-from cntent.items.blueprints.armor.body_armor import leather_outfit, pirate_jacket, cuirass, scalemail
-from cntent.items.QualityLevels import QualityLevels
 
 all_armor = [leather_outfit, pirate_jacket, cuirass, scalemail]
 all_blueprints = all_armor + std_blueprints + fancy_blueprints
 mt = MaterialTypes
-all_materials = {mt.STONE: Stones.all, mt.METAL: Metals.all, mt.WOOD: Woods.all, mt.SKIN: Leathers.all}
+all_materials = {
+    mt.STONE: Stones.all,
+    mt.METAL: Metals.all,
+    mt.WOOD: Woods.all,
+    mt.SKIN: Leathers.all}
 
 
 # itemz = generate_assortment(all_blueprints, all_materials, QualityLevels.all)
@@ -42,22 +50,24 @@ all_materials = {mt.STONE: Stones.all, mt.METAL: Metals.all, mt.WOOD: Woods.all,
 #     print(item, item.price)
 
 
-
 # def total_value(items, mod):
 #     return sum([mod(i.value) for i in items])
 
-from game_objects.items import Inventory
-from my_utils.utils import tractable_value, kmb_number_display as kmb
 
-def price_buy(orig_price, trust,  baseline):
+def price_buy(orig_price, trust, baseline):
     expensive_factor = orig_price / baseline
 
     if expensive_factor < 1:
-        factor = expensive_factor ** (4/3)
+        factor = expensive_factor ** (4 / 3)
     else:
-        factor = expensive_factor ** (3/4)
+        factor = expensive_factor ** (3 / 4)
 
-    return tractable_value ( trust * orig_price * factor / expensive_factor  , digits=3)
+    return tractable_value(
+        trust *
+        orig_price *
+        factor /
+        expensive_factor,
+        digits=3)
     # return tractable_value ( trust * orig_price  , digits=3)
 
 
@@ -70,13 +80,24 @@ def price_sell(orig_price, trust, baseline):
         factor = expensive_factor ** (4 / 3)
 
     # print(expensive_factor, factor)
-    return tractable_value( 1 / trust * orig_price * factor / expensive_factor , digits=3)
+    return tractable_value(
+        1 /
+        trust *
+        orig_price *
+        factor /
+        expensive_factor,
+        digits=3)
     # return tractable_value( 1 / trust * orig_price  , digits=3)
 
 
 class Shop:
 
-    def __init__(self, assortment, trust = 1, baseline = 500, customer: Character = None):
+    def __init__(
+            self,
+            assortment,
+            trust=1,
+            baseline=500,
+            customer: Character = None):
 
         self.inventory = Inventory(len(assortment) * 2 + 50, None)
         for item in assortment:
@@ -94,8 +115,13 @@ class Shop:
 
     def display_inventory(self):
         for item in self.inventory.all_items:
-            print(item, kmb(item.price), kmb(self.price_low(item.price)), kmb(self.price_high(item.price)))
-
+            print(
+                item, kmb(
+                    item.price), kmb(
+                    self.price_low(
+                        item.price)), kmb(
+                    self.price_high(
+                        item.price)))
 
     def buy(self, inventory_slot: Slot):
         assert inventory_slot in self.inventory
@@ -131,9 +157,14 @@ if __name__ == "__main__":
     char = Character(demohero_basetype)
     char.gold = 1e6
 
-    shop = Shop(generate_assortment(all_blueprints, all_materials, QualityLevels.all), 1, 500, customer=char)
+    shop = Shop(
+        generate_assortment(
+            all_blueprints,
+            all_materials,
+            QualityLevels.all),
+        1,
+        500,
+        customer=char)
     shop.display_inventory()
 
     print("testing")
-
-        

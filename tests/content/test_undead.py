@@ -16,7 +16,6 @@ def test_undying(game_hvsp):
     s.health -= 99999
     assert s.alive
 
-
     for _ in range(10):
         z.health -= 99999
         s.health -= 99999
@@ -29,13 +28,12 @@ def test_ghost(empty_game):
     g = ghost.create(empty_game)
     z = zombie.create(empty_game)
 
-    empty_game.add_unit(g, 1+1j)
+    empty_game.add_unit(g, 1 + 1j)
 
-    empty_game.add_unit(z, 1+1j)
-
+    empty_game.add_unit(z, 1 + 1j)
 
     DamageEvent(damage=Damage(1, DamageTypes.ACID), target=z, source=g)
-    assert z.mana == z.max_mana # no damage
+    assert z.mana == z.max_mana  # no damage
 
     DamageEvent(damage=Damage(300, DamageTypes.ACID), target=z, source=g)
     assert z.mana < z.max_mana

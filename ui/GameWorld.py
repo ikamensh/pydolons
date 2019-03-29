@@ -31,4 +31,3 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         self.floor.setBrush(QtGui.QBrush(pixMap))
         self.floor.setRect(0, 0, w * self.worldSize[0], h * self.worldSize[1])
         self.addToGroup(self.floor)
-

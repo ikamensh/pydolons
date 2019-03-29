@@ -16,14 +16,12 @@ class Attribute:
             new_bonus = self.bonus + other
 
         return Attribute(new_base, new_multiplier, new_bonus)
-    
+
     def __mul__(self, other):
         new_base = self.base * other
         new_multiplier = self.multiplier * other
         new_bonus = self.bonus * other
         return Attribute(new_base, new_multiplier, new_bonus)
-
-        
 
     def value(self):
         """
@@ -31,7 +29,7 @@ class Attribute:
         multiplier can not be less than 10%
         """
         multiplier = max(10, self.multiplier)
-        return max(1, int(self.base * multiplier / 100 + self.bonus) )
+        return max(1, int(self.base * multiplier / 100 + self.bonus))
 
     @staticmethod
     def attribute_or_none(base):
@@ -39,5 +37,3 @@ class Attribute:
             return None
         else:
             return Attribute(base, 100, 0)
-
-

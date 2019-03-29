@@ -1,11 +1,12 @@
 from mechanics.events import EventsChannels
 
+
 class EventsPlatform:
 
     def __init__(self, gamelog):
         self.gamelog = gamelog
-        self.interrupts = { ch: set() for ch in EventsChannels }
-        self.triggers = { ch: set() for ch in EventsChannels }
+        self.interrupts = {ch: set() for ch in EventsChannels}
+        self.triggers = {ch: set() for ch in EventsChannels}
         self.history = []
 
     def process_event(self, event):
@@ -21,7 +22,7 @@ class EventsPlatform:
 
             if self.history:
                 for spy in self.history:
-                    spy.append( (event, True) )
+                    spy.append((event, True))
 
             if event.logging:
                 self.gamelog(event)
@@ -32,13 +33,10 @@ class EventsPlatform:
         else:
             if self.history:
                 for spy in self.history:
-                    spy.append( (event, False) )
+                    spy.append((event, False))
             self.gamelog(f"{event}: INTERRUPTED")
-
 
     def collect_history(self):
         spy = []
         self.history.append(spy)
         return spy
-
-

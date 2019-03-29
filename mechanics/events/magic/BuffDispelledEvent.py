@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 class BuffDispelledEvent(Event):
     channel = EventsChannels.BuffDispelledChannel
+
     def __init__(self, buff: Buff, source: Unit):
         self.buff = buff
         self.source = source

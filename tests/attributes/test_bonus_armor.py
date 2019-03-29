@@ -15,6 +15,7 @@ def total_armor():
 
     yield _total_armor
 
+
 @pytest.fixture()
 def broken_armor():
     armor = Armor(-10)
@@ -23,9 +24,10 @@ def broken_armor():
 
     yield _total_armor
 
+
 @pytest.fixture()
 def special_armor():
-    armor = Armor(armor_dict={DamageTypes.ACID:100})
+    armor = Armor(armor_dict={DamageTypes.ACID: 100})
     bonus = Bonus({CharAttributes.ARMOR: armor})
     _special_armor = Ability(bonus)
 
@@ -35,14 +37,14 @@ def special_armor():
 def test_right_type_works(game_hvsp, hero, special_armor):
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.ACID)
-    DamageEvent( dmg, hero)
+    DamageEvent(dmg, hero)
 
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
     hero.add_ability(special_armor)
 
-    DamageEvent( dmg, hero)
+    DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
 
     assert dealt_no_armor > dealt_armor
@@ -51,17 +53,18 @@ def test_right_type_works(game_hvsp, hero, special_armor):
 def test_wrong_type_useless(game_hvsp, hero, special_armor):
     hp_before_dmg = hero.health
     dmg = Damage(50, DamageTypes.FIRE)
-    DamageEvent( dmg, hero)
+    DamageEvent(dmg, hero)
 
     dealt_no_armor = hp_before_dmg - hero.health
     hp_before_dmg = hero.health
 
     hero.add_ability(special_armor)
 
-    DamageEvent( dmg, hero)
+    DamageEvent(dmg, hero)
     dealt_armor = hp_before_dmg - hero.health
 
     assert dealt_no_armor == dealt_armor
+
 
 def test_armor_reduces_damage(game_hvsp, hero, total_armor):
 

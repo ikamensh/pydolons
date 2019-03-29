@@ -21,7 +21,7 @@ class SlotGroupWidget:
     def setUpWidgets(self):
         pass
 
-    def getSlotWidget(self, game_slot, name, w = 64, h = 64):
+    def getSlotWidget(self, game_slot, name, w=64, h=64):
         slot = SlotWidget(name, page=self.page, slot_type=self.slot_type)
         slot.hovered.connect(self.toolTipShow)
         slot.hover_out.connect(self.page.toolTipHide)
@@ -49,7 +49,8 @@ class SlotGroupWidget:
         if slot.property('slot').content is None:
             self.page.gamePages.toolTip.setText('Slot empty')
         else:
-            self.page.gamePages.toolTip.setDict(slot.property('slot').tooltip_info)
+            self.page.gamePages.toolTip.setDict(
+                slot.property('slot').tooltip_info)
         self.page.gamePages.toolTip.show()
         pass
 
@@ -99,4 +100,3 @@ class SlotGroupWidget:
 
     def pos(self):
         return self._x, self._y
-

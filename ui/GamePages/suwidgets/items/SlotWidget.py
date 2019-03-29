@@ -8,7 +8,7 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
     hover_out = QtCore.Signal(QtCore.QObject)
     slot_changed = QtCore.Signal(QtWidgets.QLabel, QtWidgets.QLabel)
 
-    def __init__(self, name,  page, slot_type, parent = None):
+    def __init__(self, name, page, slot_type, parent=None):
         QtWidgets.QGraphicsObject.__init__(self, parent)
         QtWidgets.QGraphicsLayoutItem.__init__(self, parent)
         self.page = page
@@ -17,7 +17,8 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
         self.slot_type = slot_type
         self.setAcceptHoverEvents(True)
         self.setAcceptDrops(True)
-        self.setAcceptedMouseButtons(QtCore.Qt.LeftButton|QtCore.Qt.RightButton)
+        self.setAcceptedMouseButtons(
+            QtCore.Qt.LeftButton | QtCore.Qt.RightButton)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self._pos = QtCore.QPoint(-10, -10)
         self.brush = self.cfg.brushs['b5adb7']
@@ -31,35 +32,53 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
         # self.installEventFilter(self)
         self.state = False
 
-    def setPixmap(self, pixmap:QtGui.QPixmap):
+    def setPixmap(self, pixmap: QtGui.QPixmap):
         if pixmap is not None:
-            self._geometry = QtCore.QRectF(self.pos().x(), self.pos().y(), pixmap.height(), pixmap.height())
+            self._geometry = QtCore.QRectF(
+                self.pos().x(),
+                self.pos().y(),
+                pixmap.height(),
+                pixmap.height())
         self._pixmap = pixmap
 
     def pixmap(self):
         return self._pixmap
 
     def boundingRect(self):
-        return QtCore.QRect(0, 0, self._geometry.width(), self._geometry.height())
+        return QtCore.QRect(
+            0,
+            0,
+            self._geometry.width(),
+            self._geometry.height())
 
-    def paint(self, painter:QtGui.QPainter, option:QtWidgets.QStyleOptionGraphicsItem, widget:QtWidgets.QWidget=...):
-        painter.setPen( self.pen)
+    def paint(
+            self,
+            painter: QtGui.QPainter,
+            option: QtWidgets.QStyleOptionGraphicsItem,
+            widget: QtWidgets.QWidget = ...):
+        painter.setPen(self.pen)
         painter.setBrush(self.brush)
         painter.setBackground(self.brush)
         painter.drawRect(0, 0, self._geometry.width(), self._geometry.height())
         if self._pixmap is not None:
             painter.drawPixmap(0, 0, self._pixmap)
 
-    def sizeHint(self, which:QtCore.Qt.SizeHint = None, constraint:QtCore.QSizeF=None):
-        return QtCore.QSize(self.boundingRect().width(), self.boundingRect().height())
+    def sizeHint(self, which: QtCore.Qt.SizeHint = None,
+                 constraint: QtCore.QSizeF = None):
+        return QtCore.QSize(
+            self.boundingRect().width(),
+            self.boundingRect().height())
 
     def geometry(self):
         return QtCore.QRectF(0, 0, 64, 64)
 
-    def sceneEventFilter(self, watched:QtWidgets.QGraphicsItem, event:QtCore.QEvent):
+    def sceneEventFilter(
+            self,
+            watched: QtWidgets.QGraphicsItem,
+            event: QtCore.QEvent):
         return True
 
-    def mouseReleaseEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent):
+    def mouseReleaseEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
         if self.isDown:
             if self.isChecked:
                 self.isChecked = False
@@ -82,7 +101,8 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
 
     def mouseMoveEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent):
         if event.buttons() == QtCore.Qt.LeftButton:
-            if QtWidgets.QApplication.startDragDistance() <= (event.pos() - self.dragStart).manhattanLength():
+            if QtWidgets.QApplication.startDragDistance() <= (
+                    event.pos() - self.dragStart).manhattanLength():
                 self.startDrag()
         pass
 
@@ -94,18 +114,18 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
             self.setY(pos.y() - self._pos.y())
         pass
 
-    def hoverEnterEvent(self, event:QtWidgets.QGraphicsSceneHoverEvent):
+    def hoverEnterEvent(self, event: QtWidgets.QGraphicsSceneHoverEvent):
         self.brush = self.cfg.brushs['d7a784']
         self.hovered.emit(self)
         self.update(0, 0, self._geometry.width(), self._geometry.height())
 
-    def hoverLeaveEvent(self, event:QtWidgets.QGraphicsSceneHoverEvent):
+    def hoverLeaveEvent(self, event: QtWidgets.QGraphicsSceneHoverEvent):
         if not self.isChecked:
             self.brush = self.cfg.brushs['b5adb7']
         self.hover_out.emit(self)
         self.update(0, 0, self._geometry.width(), self._geometry.height())
 
-    def dragEnterEvent(self, ev:QtGui.QDragEnterEvent):
+    def dragEnterEvent(self, ev: QtGui.QDragEnterEvent):
         formats = ev.mimeData().formats()
         self.brush = self.cfg.brushs['d7a784']
         self.update(0, 0, self._geometry.width(), self._geometry.height())
@@ -114,14 +134,14 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
             ev.setAccepted(True)
             ev.acceptProposedAction()
 
-    def dropEvent(self, ev:QtGui.QDropEvent):
+    def dropEvent(self, ev: QtGui.QDropEvent):
         # Step 1
         if ev.dropAction() != QtCore.Qt.IgnoreAction:
             self.page.startManipulation(self)
             ev.acceptProposedAction()
         pass
 
-    def dragLeaveEvent(self, event:QtWidgets.QGraphicsSceneDragDropEvent):
+    def dragLeaveEvent(self, event: QtWidgets.QGraphicsSceneDragDropEvent):
         self.brush = self.cfg.brushs['b5adb7']
         self.update(0, 0, self._geometry.width(), self._geometry.height())
         pass
@@ -132,7 +152,7 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
         mimeData.setText(self.name)
         drag.setPixmap(self.pixmap())
         drag.setMimeData(mimeData)
-        result = drag.exec_(QtCore.Qt.CopyAction|QtCore.Qt.MoveAction)
+        result = drag.exec_(QtCore.Qt.CopyAction | QtCore.Qt.MoveAction)
         self.page.startManipulation(self)
         if result == QtCore.Qt.IgnoreAction:
             self.page.drop(self.property('slot'))
@@ -170,6 +190,3 @@ class SlotWidget(QtWidgets.QGraphicsObject, QtWidgets.QGraphicsLayoutItem):
 
     def clearSlot(self):
         self.setPixmap(self.empty_pix)
-
-
-

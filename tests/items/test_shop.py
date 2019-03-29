@@ -14,13 +14,22 @@ def assortment():
     all_blueprints = all_armor + std_blueprints + fancy_blueprints
     from game_objects.items.materials.MaterialTypes import MaterialTypes
     mt = MaterialTypes
-    all_materials = {mt.STONE: Stones.all, mt.METAL: Metals.all, mt.WOOD: Woods.all, mt.SKIN: Leathers.all}
+    all_materials = {
+        mt.STONE: Stones.all,
+        mt.METAL: Metals.all,
+        mt.WOOD: Woods.all,
+        mt.SKIN: Leathers.all}
 
-    return generate_assortment(all_blueprints, all_materials, QualityLevels.all)
+    return generate_assortment(
+        all_blueprints,
+        all_materials,
+        QualityLevels.all)
+
 
 @fixture()
 def shop(assortment):
     return Shop(assortment, 1, 500)
+
 
 @fixture()
 def customer():
@@ -35,8 +44,8 @@ def customer():
 def test_transactions(shop, customer):
 
     shop.customer = customer
-    items_in_shop = lambda : len(shop.inventory.all_items)
-    items_hero_has = lambda : len(customer.unit.inventory.all_items)
+    def items_in_shop(): return len(shop.inventory.all_items)
+    def items_hero_has(): return len(customer.unit.inventory.all_items)
 
     assert items_in_shop() > 10
     assert items_hero_has() == 0
@@ -45,7 +54,7 @@ def test_transactions(shop, customer):
     starting_assortment = items_in_shop()
     starting_belongings = items_hero_has()
 
-    shop.buy( shop.inventory[3] )
+    shop.buy(shop.inventory[3])
 
     assert customer.gold < starting_money
     assert starting_assortment > items_in_shop()
@@ -58,6 +67,3 @@ def test_transactions(shop, customer):
     assert starting_money > customer.gold > money_after_buying
     assert starting_assortment == items_in_shop()
     assert starting_belongings == items_hero_has()
-
-
-

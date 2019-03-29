@@ -17,9 +17,13 @@ class Stones:
     granite = Material(mt.STONE, "granite", 0.85)
     flintstone = Material(mt.STONE, "flintstone", 1.15)
     blackrock = Material(mt.STONE, "blackrock", 1.45)
-    obsidian = Material(mt.STONE, "obsidian", 1.7, magic_complexity=1.2, energy=125)
+    obsidian = Material(
+        mt.STONE,
+        "obsidian",
+        1.7,
+        magic_complexity=1.2,
+        energy=125)
     corundum = Material(mt.STONE, "corundum", 3.3)
-
 
     all = [stone, granite, flintstone, blackrock, obsidian, corundum]
 
@@ -30,13 +34,31 @@ class Leathers:
     lizard_skin = Material(mt.SKIN, "lizard_skin", 1)
     green_troll_skin = Material(mt.SKIN, "green troll skin", 1.6, energy=100)
     black_troll_skin = Material(mt.SKIN, "black troll skin", 2, energy=125)
-    green_dragon_skin = Material(mt.SKIN, "green dragon skin", 2.5, magic_complexity=1.4)
-    red_dragon_skin = Material(mt.SKIN, "red dragon skin", 2.7, magic_complexity=1.5)
-    black_dragon_skin = Material(mt.SKIN, "black dragon skin", 3, magic_complexity=1.6)
+    green_dragon_skin = Material(
+        mt.SKIN,
+        "green dragon skin",
+        2.5,
+        magic_complexity=1.4)
+    red_dragon_skin = Material(
+        mt.SKIN,
+        "red dragon skin",
+        2.7,
+        magic_complexity=1.5)
+    black_dragon_skin = Material(
+        mt.SKIN,
+        "black dragon skin",
+        3,
+        magic_complexity=1.6)
 
-
-    all = [skin, thick_skin, lizard_skin, green_troll_skin, black_troll_skin, green_dragon_skin, black_dragon_skin, red_dragon_skin]
-
+    all = [
+        skin,
+        thick_skin,
+        lizard_skin,
+        green_troll_skin,
+        black_troll_skin,
+        green_dragon_skin,
+        black_dragon_skin,
+        red_dragon_skin]
 
 
 class Woods:

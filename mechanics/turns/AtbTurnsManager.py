@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from DreamGame import DreamGame
 
 epsilon = 1e-6
+
+
 class AtbTurnsManager(TurnsManager):
     def __init__(self, game: DreamGame):
         self.game = game
@@ -76,7 +78,6 @@ class AtbTurnsManager(TurnsManager):
 
     def sort(self):
         self.managed.sort(key=self.time_until_turn)
-
 
     def add_unit(self, unit):
         if unit not in self.managed:

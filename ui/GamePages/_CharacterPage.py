@@ -11,6 +11,7 @@ from game_objects.battlefield_objects import base_attributes
 
 class CharacterPage(AbstractPage):
     """docstring for CharacterPage."""
+
     def __init__(self, gamePages):
         super(CharacterPage, self).__init__(gamePages)
         self.character = self.gamePages.gameRoot.lengine.character
@@ -23,31 +24,43 @@ class CharacterPage(AbstractPage):
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def setUpWidgets(self):
-        self.background = QtWidgets.QGraphicsPixmapItem(self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
+        self.background = QtWidgets.QGraphicsPixmapItem(
+            self.gamePages.gameRoot.cfg.getPicFile('arena.jpg'))
         self.resizeBackground(self.background)
         self.addToGroup(self.background)
 
         self.buttonStyle = 'QPushButton{background-color:grey;color:black;}QPushButton:pressed{background-color:white;color:black;}'
 
         mainWidget: QtWidgets.QWidget = QtWidgets.QWidget()
-        mainWidget.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        mainWidget.setStyleSheet('background-color: rgba(0, 0, 0, 0);color:white')
+        mainWidget.setSizePolicy(
+            QtWidgets.QSizePolicy.Minimum,
+            QtWidgets.QSizePolicy.Minimum)
+        mainWidget.setStyleSheet(
+            'background-color: rgba(0, 0, 0, 0);color:white')
         mainLayout: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
         mainLayout.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
 
-        self.charWidget = CharacterWidget(self, parent = mainWidget)
-        self.masteriWidget = MasteriesWidget(self, parent = mainWidget)
-        self.perkWidget = QPerkTree(self.gamePages.gameRoot.cfg, self.character.perk_trees[0], self.character, mainWidget)
+        self.charWidget = CharacterWidget(self, parent=mainWidget)
+        self.masteriWidget = MasteriesWidget(self, parent=mainWidget)
+        self.perkWidget = QPerkTree(
+            self.gamePages.gameRoot.cfg,
+            self.character.perk_trees[0],
+            self.character,
+            mainWidget)
 
         mainLayout.addWidget(self.charWidget, 0, 0, 1, 1)
         mainLayout.addWidget(self.perkWidget, 0, 3, 3, 1)
         mainLayout.addWidget(self.masteriWidget, 1, 0, 1, 3)
-        mainLayout.addLayout(self.getPageBtnLayout(mainWidget), 2, 3, 1, 1, alignment = QtCore.Qt.AlignRight)
+        mainLayout.addLayout(
+            self.getPageBtnLayout(mainWidget),
+            2, 3, 1, 1,
+            alignment=QtCore.Qt.AlignRight)
 
         mainWidget.setLayout(mainLayout)
 
         self.mainWidget = self.gamePages.gameRoot.scene.addWidget(mainWidget)
-        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.mainWidget.setFlags(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.gamePages.gameRoot.scene.removeItem(self.mainWidget)
 
         msgBox = GameMsgBox(page=self)
@@ -55,7 +68,8 @@ class CharacterPage(AbstractPage):
         msgBox.setText('This character page')
         msgBox.setInformativeText('Change character elements and up hero')
         self.msgBox = self.gamePages.gameRoot.scene.addWidget(msgBox)
-        self.msgBox.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
+        self.msgBox.setFlag(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self.gamePages.gameRoot.scene.removeItem(self.msgBox)
         self.updatePage()
         self.resized()
@@ -89,7 +103,7 @@ class CharacterPage(AbstractPage):
         bar = QtWidgets.QProgressBar(parent)
         bar.setFixedWidth(100)
         bar.setTextVisible(False)
-        layout.addWidget(bar, row,  1, 1, 1, QtCore.Qt.AlignLeft)
+        layout.addWidget(bar, row, 1, 1, 1, QtCore.Qt.AlignLeft)
         barLabel = QtWidgets.QLabel('', parent)
         barLabel.setFixedWidth(50)
         layout.addWidget(barLabel, row, 2, 1, 1, QtCore.Qt.AlignLeft)
@@ -136,9 +150,13 @@ class CharacterPage(AbstractPage):
         super().resized()
         self.w = self.mainWidget.widget().width()
         self.h = self.mainWidget.widget().height()
-        self.widget_pos.setX((self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
-        self.widget_pos.setY((self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
+        self.widget_pos.setX(
+            (self.gamePages.gameRoot.cfg.dev_size[0] - self.w) / 2)
+        self.widget_pos.setY(
+            (self.gamePages.gameRoot.cfg.dev_size[1] - self.h) / 2)
+        self.mainWidget.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.widget_pos))
         self.resizeBackground(self.background)
         pass
 
@@ -182,9 +200,12 @@ class CharacterPage(AbstractPage):
 
     def updatePos(self):
         super().updatePos()
-        self.mainWidget.setPos(self.gamePages.gameRoot.view.mapToScene(self.widget_pos))
-        self.msgBox.setPos(self.gamePages.gameRoot.view.mapToScene(self.msgBox.widget().widget_pos))
-
+        self.mainWidget.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.widget_pos))
+        self.msgBox.setPos(
+            self.gamePages.gameRoot.view.mapToScene(
+                self.msgBox.widget().widget_pos))
 
     def toolTipShow(self, widget):
         x = widget.x() + self.mainWidget.pos().x()

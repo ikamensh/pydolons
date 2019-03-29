@@ -8,7 +8,8 @@ from cntent.actives.std.callbacks.callbacks import attack_callback, attack_on_ce
 from cntent.actives.conditions.conditions import proximity_condition, within_angle
 
 
-std_attack_cost = lambda self: Cost(stamina=1)*self.owner.get_melee_weapon().atb_factor
+def std_attack_cost(self): return Cost(stamina=1) * \
+    self.owner.get_melee_weapon().atb_factor
 
 
 attack_unit_active = Active(BattlefieldObject,
@@ -28,8 +29,3 @@ attack_cell_active = Active(Cell,
                             name="Attack Cell")
 
 std_attacks = [attack_unit_active]
-
-
-
-
-

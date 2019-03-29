@@ -11,15 +11,18 @@ def read_tree(start_node):
         node = queue.pop()                 # извлечь первый элемент в очереди
         name = node.attrib.get('name')
         if name is not None:
-             res += name + '\n'
+            res += name + '\n'
         for child in node:     # все преемники текущего узла, ...
             if not visited[child]:       # ... которые ещё не были посещены ...
-                queue.append(child)                # ... добавить в конец очереди...
-                visited[child] = True            # ... и пометить как посещённые
+                # ... добавить в конец очереди...
+                queue.append(child)
+                # ... и пометить как посещённые
+                visited[child] = True
     return res
 
+
 OUTPUT = \
-"""a_4
+    """a_4
 a_4_b_2
 a_4_b_2_c_1
 a_4_b_1
@@ -47,6 +50,7 @@ a_1_b_2_c_2
 a_1_b_2_c_1
 a_1_b_1
 """
+
 
 def test_read_tree():
     from xml.etree import ElementTree as ET

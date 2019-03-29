@@ -2,12 +2,28 @@ from game_objects.items import WearableItem, ItemTypes
 from mechanics.damage import Armor
 import copy
 
+
 class BodyArmor(WearableItem):
-    def __init__(self, name, armor, max_durability, *, blueprint=None, material=None, quality=None, game):
+    def __init__(
+            self,
+            name,
+            armor,
+            max_durability,
+            *,
+            blueprint=None,
+            material=None,
+            quality=None,
+            game):
 
         assert isinstance(armor, Armor)
-        super().__init__(name, item_type=ItemTypes.BODY_ARMOR, blueprint=blueprint, material=material, quality=quality,
-                         max_durability=max_durability, game=game)
+        super().__init__(
+            name,
+            item_type=ItemTypes.BODY_ARMOR,
+            blueprint=blueprint,
+            material=material,
+            quality=quality,
+            max_durability=max_durability,
+            game=game)
         self._armor = armor
 
     @property
@@ -27,4 +43,3 @@ class BodyArmor(WearableItem):
 
     def __repr__(self):
         return f"{self.name} providing {self.armor} armor"
-

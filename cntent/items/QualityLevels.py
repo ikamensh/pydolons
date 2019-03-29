@@ -1,5 +1,6 @@
 from game_objects.items import QualityLevel
 
+
 class QualityLevels:
     CRUDE = QualityLevel("Crude", 0.6)
     PRIMITIVE = QualityLevel("Primitive", 0.8)

@@ -7,13 +7,12 @@ from game_objects import battlefield_objects as bf_objs
 from ui.levels.BaseLevel import BaseLevel
 
 
-
 class Level_demo_dungeon(BaseLevel):
 
     def __init__(self, gameconfig):
         super(Level_demo_dungeon, self).__init__()
         self.gameconfig = gameconfig
-        self.z_values = [ i for i in range(demo_dungeon.w)]
+        self.z_values = [i for i in range(demo_dungeon.w)]
 
     def setUpLevel(self, game, controller):
         self.setGameWorld(GameWorld(self.gameconfig))
@@ -29,13 +28,16 @@ class Level_demo_dungeon(BaseLevel):
         controller.setUp(self.world, self.units, self.middleLayer)
 
     def printResult(self, time):
-        print('time = ',time)
+        print('time = ', time)
 
     def setUpUnits(self, battlefield):
         self.setUnits(Units())
 
         for unit, unit_pos in battlefield.unit_locations.items():
-            gameUnit = BasicUnit(self.gameconfig.unit_size[0], self.gameconfig.unit_size[1], gameconfig = self.gameconfig)
+            gameUnit = BasicUnit(
+                self.gameconfig.unit_size[0],
+                self.gameconfig.unit_size[1],
+                gameconfig=self.gameconfig)
             if unit.icon == 'hero.png':
                 self.active_unit = True
             gameUnit.setPixmap(self.gameconfig.getPicFile(unit.icon))
@@ -47,5 +49,6 @@ class Level_demo_dungeon(BaseLevel):
             # добавили gameunit
             self.units.cells_to_objs[unit.uid] = gameUnit
 
-        self.units.active_unit = self.units.cells_to_objs[self.game.turns_manager.get_next().uid]
+        self.units.active_unit = self.units.cells_to_objs[self.game.turns_manager.get_next(
+        ).uid]
         self.middleLayer.createSuppot(self.units.cells_to_objs)

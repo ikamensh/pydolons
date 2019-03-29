@@ -43,17 +43,18 @@ def order_recieved_trigger(game):
                    conditions={},
                    callbacks=[order_recieved_cb])
 
+
 def order_issued_cb(t, e):
     t.client.send(e)
+
 
 def order_issued_trigger(game, client):
     t = Trigger(ClientOrderIssuedEvent,
                 platform=game.events_platform,
                 conditions={},
-                   callbacks=[order_issued_cb])
+                callbacks=[order_issued_cb])
     t.client = client
     return t
-
 
 
 class PydolonsClient:
@@ -61,19 +62,20 @@ class PydolonsClient:
     def __init__(self):
 
         character = Character(demohero_basetype)
-        self.game = DreamGame.start_dungeon(demo_dungeon, character.unit, is_server=False)
+        self.game = DreamGame.start_dungeon(
+            demo_dungeon, character.unit, is_server=False)
         self.game.character = character
         self.client = ClientSocket(self.game)
 
-        order_issued_trigger(self.game, self.client)   # local actions cause sending orders to the server
-        order_recieved_trigger(self.game)            # orders from the server cause local actions
+        # local actions cause sending orders to the server
+        order_issued_trigger(self.game, self.client)
+        # orders from the server cause local actions
+        order_recieved_trigger(self.game)
 
     def start_sync(self):
         self.client.connect()
         th = Thread(target=self.client.myreceive)
         th.start()
-
-
 
     def start_gui(self):
 
@@ -99,7 +101,6 @@ class PydolonsClient:
             # application waiting for shutdown thread
             loop.wait()
 
-
         # call exit from window
         app.aboutToQuit.connect(close_app)
         loop.game = self.game
@@ -107,6 +108,7 @@ class PydolonsClient:
         # Qt signal initialization
         loop.setSiganls(ProxyEmit)
         sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     c = PydolonsClient()

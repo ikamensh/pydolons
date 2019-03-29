@@ -5,9 +5,10 @@ if TYPE_CHECKING:
     from game_objects.items import Slot
     from game_objects.battlefield_objects import Unit
 
+
 class SlotGroup:
 
-    def __init__(self, all_slots : List[Slot], owner: Unit):
+    def __init__(self, all_slots: List[Slot], owner: Unit):
         self.all_slots = all_slots
         self.owner = owner
 
@@ -51,6 +52,3 @@ class SlotGroup:
 
     def __len__(self):
         return len(self.all_slots)
-
-
-

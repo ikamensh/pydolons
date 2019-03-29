@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from mechanics.buffs import Buff
     from game_objects.battlefield_objects import Unit
 
+
 class BuffAppliedEvent(Event):
     channel = EventsChannels.BuffAppliedChannel
 

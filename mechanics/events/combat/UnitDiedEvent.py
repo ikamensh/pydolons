@@ -1,11 +1,10 @@
 from __future__ import annotations
+from game_objects import battlefield_objects
 from mechanics.events.src.Event import Event
 from mechanics.events import EventsChannels
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
-
-from game_objects import battlefield_objects
 
 
 class UnitDiedEvent(Event):

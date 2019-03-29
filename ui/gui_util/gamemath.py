@@ -1,7 +1,9 @@
 import math
 
+
 class GameMath(object):
     """docstring for GameMath."""
+
     def __init__(self):
         super(GameMath, self).__init__()
 
@@ -10,7 +12,8 @@ class GameMath(object):
         """Метод возвращет направление по текущим координатам относительно
         центра
         """
-        dVectors = ((0,1),(1,1),(1,0),(1,-1),(0,-1),(-1,-1),(-1,0),(-1,1))
+        dVectors = ((0, 1), (1, 1), (1, 0), (1, -1),
+                    (0, -1), (-1, -1), (-1, 0), (-1, 1))
         deg = int(math.degrees(math.atan2(x, y)))
 
         if x == 0 and y == 0:
@@ -32,13 +35,13 @@ class GameMath(object):
         elif deg < -156 or deg > 156:
             return 0, -1
             # print('N')
-        elif deg < -111  and deg > -157:
+        elif deg < -111 and deg > -157:
             return -1, -1
             # print('NO')
-        elif deg < -67  and deg > -112:
+        elif deg < -67 and deg > -112:
             return -1, 0
             # print('O')
-        elif deg < -22  and deg > -68:
+        elif deg < -22 and deg > -68:
             return -1, 1
             # print('SO')
         # print(int(math.degrees(at)))

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from astar import AStar
 from collections import namedtuple
 from battlefield import Battlefield
 from mechanics.actives import ActiveTags
@@ -10,7 +11,6 @@ if TYPE_CHECKING:
 
 Node = namedtuple("PathNode", "pos facing")
 
-from astar import AStar
 
 class StarSearch(AStar):
 
@@ -84,9 +84,3 @@ class StarSearch(AStar):
         transitions.append((0j, 1j, unit.turn_ccw_active.cost))
 
         return transitions
-
-
-
-
-
-

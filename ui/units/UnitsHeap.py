@@ -36,7 +36,7 @@ class UnitsHeap(QObject, GameObject):
         self.setPos(new_units[0].pos().x(), new_units[0].pos().y())
         if self.units != new_units:
             for u in self.units:
-                if not u in new_units:
+                if u not in new_units:
                     self.reset_gui(u)
             self.units = new_units[:]
             self.units.reverse()
@@ -66,9 +66,12 @@ class UnitsHeap(QObject, GameObject):
 
     def mouseMoveEvent(self, e):
         pos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
-        x = pos.x() - self.gameRoot.controller.tr_support.tr.m31() - self.gameRoot.level.world.pos().x()
-        y = pos.y() - self.gameRoot.controller.tr_support.tr.m32() - self.gameRoot.level.world.pos().y()
-        if self.pos().x() < x and self.pos().x() + 128 > x and self.pos().y() < y and self.pos().y() + 128 > y:
+        x = pos.x() - self.gameRoot.controller.tr_support.tr.m31() - \
+            self.gameRoot.level.world.pos().x()
+        y = pos.y() - self.gameRoot.controller.tr_support.tr.m32() - \
+            self.gameRoot.level.world.pos().y()
+        if self.pos().x() < x and self.pos().x() + \
+                128 > x and self.pos().y() < y and self.pos().y() + 128 > y:
             unit = self.getTopLayer(x, y)
             if unit is not None:
                 if unit != self.select_unit:
@@ -87,9 +90,12 @@ class UnitsHeap(QObject, GameObject):
     def mousePressEvent(self, e):
         if e.button() == QtCore.Qt.MouseButton.RightButton:
             pos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
-            x = pos.x() - self.gameRoot.controller.tr_support.tr.m31() - self.gameRoot.level.world.pos().x()
-            y = pos.y() - self.gameRoot.controller.tr_support.tr.m32() - self.gameRoot.level.world.pos().y()
-            if self.pos().x() < x and self.pos().x() + 128 > x and self.pos().y() < y and self.pos().y() + 128 > y:
+            x = pos.x() - self.gameRoot.controller.tr_support.tr.m31() - \
+                self.gameRoot.level.world.pos().x()
+            y = pos.y() - self.gameRoot.controller.tr_support.tr.m32() - \
+                self.gameRoot.level.world.pos().y()
+            if self.pos().x() < x and self.pos().x() + \
+                    128 > x and self.pos().y() < y and self.pos().y() + 128 > y:
                 if self.select_unit is not None:
                     self.units.remove(self.select_unit)
                     self.units.append(self.select_unit)
@@ -127,6 +133,3 @@ class UnitsHeap(QObject, GameObject):
         if a.x() < b.x() or a.y() < b.y():
             print('a of b')
         return True
-
-
-

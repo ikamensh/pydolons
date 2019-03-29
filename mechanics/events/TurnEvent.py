@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
 
+
 class TurnEvent(Event):
     channel = EventsChannels.TurnChannel
 
@@ -19,7 +20,6 @@ class TurnEvent(Event):
     def resolve(self):
         turn = -1j if self.ccw else 1j
         self.unit.facing *= turn
-
 
     def __repr__(self):
         direction = "counter-clockwise" if self.ccw else "clockwise"

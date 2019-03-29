@@ -20,7 +20,11 @@ class TestBasicUnit(UsesQApp):
 
     def setUp(self):
         super(TestBasicUnit, self).setUp()
-        pic_path = path.join(pydolons_rootdir, 'resources', 'icons','default_128.png')
+        pic_path = path.join(
+            pydolons_rootdir,
+            'resources',
+            'icons',
+            'default_128.png')
         pixmap = QtGui.QPixmap(pic_path)
         self.unit_a = self.getUnit(2, 1, 32, pixmap)
         self.unit_b = self.getUnit(2, 1, 13, pixmap)
@@ -83,4 +87,3 @@ class TestBasicUnit(UsesQApp):
 
 if __name__ == '__main__':
     unittest.main()
-

@@ -2,6 +2,7 @@ from battlefield import Cell
 from exceptions import PydolonsError
 from typing import Union
 
+
 class Wall:
     def __init__(self, cell: Union[Cell, complex], icon: str = 'wall.jpg'):
         self.cell = cell
@@ -20,5 +21,4 @@ class Wall:
         else:
             raise PydolonsError(
                 f"Obj.cell attribute can only be assigned with complex or Cell types."
-                f"Actual passed type: {type(value)}"
-            )
+                f"Actual passed type: {type(value)}")

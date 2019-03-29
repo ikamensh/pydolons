@@ -5,6 +5,7 @@ from mechanics.damage import DamageTypes
 def test_create_blueprint(my_cuirass_blueprint):
     assert my_cuirass_blueprint.armor is not None
 
+
 def test_create_item(bronze, usual, my_cuirass_blueprint):
     my_cuirass = my_cuirass_blueprint.to_item(bronze, usual)
     assert my_cuirass.armor[DamageTypes.FIRE] < my_cuirass_blueprint.armor[DamageTypes.FIRE]

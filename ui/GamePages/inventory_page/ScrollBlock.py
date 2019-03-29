@@ -3,7 +3,7 @@ from PySide2.QtWidgets import QGraphicsSceneEvent
 
 
 class ScrollBlock:
-    def __init__(self, page, width = 0):
+    def __init__(self, page, width=0):
         self.page = page
         self.but = None
         self.but_step = 0
@@ -27,7 +27,8 @@ class ScrollBlock:
     def getItemsWidth(self):
         l = len(self.scoll_items)
         if l > 1:
-            return self.scoll_items[l-1]._left - self.scoll_items[0]._left + 2 * self.scoll_items[l-1]._width
+            return self.scoll_items[l - 1]._left - \
+                self.scoll_items[0]._left + 2 * self.scoll_items[l - 1]._width
         elif l == 1:
             return self.scoll_items[0]._width
         elif l == 0:
@@ -65,11 +66,13 @@ class ScrollBlock:
         for item in self.scoll_items:
             item.scroll_x = item.scroll_x + self.items_step * self.getValue()
 
-    def isScrollBut(self, event:QGraphicsSceneEvent):
-        item = self.page.scene().itemAt(event.scenePos(), self.page.scene().views()[0].transform())
+    def isScrollBut(self, event: QGraphicsSceneEvent):
+        item = self.page.scene().itemAt(
+            event.scenePos(),
+            self.page.scene().views()[0].transform())
         return item.name == self.but.name
 
-    def mousePressEvent(self, event:QGraphicsSceneEvent):
+    def mousePressEvent(self, event: QGraphicsSceneEvent):
         if self.isScrollBut(event):
             self.start_pos.setX(event.screenPos().x())
             self.start_pos.setY(event.screenPos().y())
@@ -82,11 +85,11 @@ class ScrollBlock:
             self.but_x = x
             self.items_upate_pos()
 
-    def mouseMoveEvent(self, event:QGraphicsSceneEvent):
+    def mouseMoveEvent(self, event: QGraphicsSceneEvent):
         if self.isDown:
             self.delta_x = self.start_pos.x() - event.screenPos().x()
             self.delta_y = self.start_pos.y() - event.screenPos().y()
             self.but_move()
 
     def getValue(self):
-        return int(self.delta_x/self.but_step)
+        return int(self.delta_x / self.but_step)

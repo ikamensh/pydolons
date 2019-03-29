@@ -1,5 +1,6 @@
 import copy
 
+
 class MonsterEquipment:
 
     def __init__(self, groups_sequence):
@@ -20,7 +21,7 @@ class MonsterEquipment:
         self.random = None
 
     def new_sequence(self, random):
-        return [copy.deepcopy( random.choice(group) ) for group in self.sequence]
+        return [copy.deepcopy(random.choice(group)) for group in self.sequence]
 
     def __iter__(self):
         return iter(self.new_sequence(self.random))
@@ -43,4 +44,3 @@ class MonsterEquipment:
 #
 #     for item in me:
 #         print(item)
-

@@ -35,15 +35,24 @@ class CharacterPage(AbstractPage):
         self.hide()
         self.scene().removeItem(self)
 
-    def sceneEvent(self, event:QtCore.QEvent):
+    def sceneEvent(self, event: QtCore.QEvent):
         if event.type() is QtCore.QEvent.GraphicsSceneMousePress:
-            self.pressItem(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
+            self.pressItem(
+                self.scene().itemAt(
+                    event.scenePos(),
+                    self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneMouseRelease:
-            self.releaseItem(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
+            self.releaseItem(
+                self.scene().itemAt(
+                    event.scenePos(),
+                    self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneHoverMove:
-            self.hoverMove(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
+            self.hoverMove(
+                self.scene().itemAt(
+                    event.scenePos(),
+                    self.scene().views()[0].transform()))
             return True
         # elif event.type() is QtCore.QEvent.GraphicsSceneHoverLeave:
         #     self.hoverLeave(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
@@ -57,7 +66,7 @@ class CharacterPage(AbstractPage):
             # print(item.name, 'press')
             pass
 
-    def releaseItem(self, item:BaseItem):
+    def releaseItem(self, item: BaseItem):
         if item is not None:
             # print(item.name, 'release')
             if item.input == 'button':
@@ -133,7 +142,11 @@ class CharacterPage(AbstractPage):
         if mastery is not None:
             self.gm.mastery_up(mastery)
         self.mastery_all_update()
-        self.update(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+        self.update(
+            0,
+            0,
+            self.gamePages.gameRoot.cfg.dev_size[0],
+            self.gamePages.gameRoot.cfg.dev_size[1])
 
     def mastery_hover(self, name):
         mastery = self.gm.masteries.get(name)
@@ -147,7 +160,8 @@ class CharacterPage(AbstractPage):
 
     def mastery_all_update(self):
         for name, mastery in self.gm.masteries.items():
-            self.items.get(f'mastery_{name}_point').setText(self.gm.mastery_value(mastery))
+            self.items.get(f'mastery_{name}_point').setText(
+                self.gm.mastery_value(mastery))
             perc, __ = self.gm.mastery_prec(mastery)
             bar = self.items.get(f'mastery_{name}_bar')
             if bar is not None:
@@ -176,7 +190,7 @@ class CharacterPage(AbstractPage):
                 spent_value.setText(self.gha.free_xp)
         self.hero_attr_update()
 
-    def heroAttr_change(self, item:BaseItem):
+    def heroAttr_change(self, item: BaseItem):
         if item._names[2] == 'up':
             self.heroAttr_up(item._names[1])
         elif item._names[2] == 'down':
@@ -194,9 +208,12 @@ class CharacterPage(AbstractPage):
             self.gha.attr_down(heroAttr)
 
     def hero_attr_update(self):
-        self.items.get('attr_health_value').setText(self.gha.max_health + ' / ' + self.gha.health)
-        self.items.get('attr_mana_value').setText(self.gha.max_mana + ' / ' + self.gha.mana)
-        self.items.get('attr_stamina_value').setText(self.gha.max_stamina + ' / ' + self.gha.stamina)
+        self.items.get('attr_health_value').setText(
+            self.gha.max_health + ' / ' + self.gha.health)
+        self.items.get('attr_mana_value').setText(
+            self.gha.max_mana + ' / ' + self.gha.mana)
+        self.items.get('attr_stamina_value').setText(
+            self.gha.max_stamina + ' / ' + self.gha.stamina)
 
         #####################
         ### B U T T O N S ###
@@ -234,7 +251,3 @@ class CharacterPage(AbstractPage):
         for item in self.items.values():
             if isinstance(item, TextItem):
                 item.setColor(item._color)
-
-
-
-

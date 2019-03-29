@@ -6,20 +6,18 @@ if TYPE_CHECKING:
 
 
 def healing_potion_cb(amount):
-    def _(active  :Active, target :None):
+    def _(active: Active, target: None):
         HealingEvent(amount, active.owner)
     return _
 
+
 def mana_potion_cb(amount):
-    def _(active  :Active, target :None):
+    def _(active: Active, target: None):
         active.owner.mana += amount
     return _
 
+
 def stamina_potion_cb(amount):
-    def _(active  :Active, target :None):
+    def _(active: Active, target: None):
         active.owner.stamina += amount
     return _
-
-
-
-

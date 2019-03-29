@@ -1,3 +1,4 @@
+from cProfile import Profile
 from ui.TheUI import TheUI
 import sys
 
@@ -8,8 +9,11 @@ from LEngine import LEngine
 def one_game():
     # Qt application initialization
     app = QtWidgets.QApplication(sys.argv)
-    app.setOverrideCursor(QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'),
-                                        hotX =1, hotY= 1))
+    app.setOverrideCursor(
+        QtGui.QCursor(
+            QtGui.QPixmap('resources/assets/ui/cursor.png'),
+            hotX=1,
+            hotY=1))
     lengine = LEngine()
     window = TheUI(lengine)
     app.aboutToQuit.connect(window.close_app)
@@ -18,7 +22,7 @@ def one_game():
 
 # one_game()
 
-from cProfile import Profile
+
 profiler = Profile()
 profiler.runcall(one_game)
 profiler.print_stats('cumulative')

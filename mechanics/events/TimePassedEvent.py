@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from DreamGame import DreamGame
 
+
 class TimePassedEvent(Event):
     channel = EventsChannels.TimePassedChannel
 

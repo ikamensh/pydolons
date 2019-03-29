@@ -4,14 +4,32 @@ from mechanics.chances.CritHitGrazeMiss import ImpactChances
 
 import copy
 
+
 class Weapon(WearableItem):
-    def __init__(self, name, damage, chances=None, atb_factor=1., *,max_durability=None,
-                 mastery=None, blueprint=None, material=None,quality=None, actives=None,
-                 is_ranged,
-                 game):
-        super().__init__(name, ItemTypes.WEAPON, blueprint=blueprint, quality=quality,
-                         material=material, max_durability=max_durability, actives=actives,
-                         game=game)
+    def __init__(
+            self,
+            name,
+            damage,
+            chances=None,
+            atb_factor=1.,
+            *,
+            max_durability=None,
+            mastery=None,
+            blueprint=None,
+            material=None,
+            quality=None,
+            actives=None,
+            is_ranged,
+            game):
+        super().__init__(
+            name,
+            ItemTypes.WEAPON,
+            blueprint=blueprint,
+            quality=quality,
+            material=material,
+            max_durability=max_durability,
+            actives=actives,
+            game=game)
         assert isinstance(damage, Damage)
         if chances:
             assert isinstance(chances, ImpactChances)
@@ -27,7 +45,10 @@ class Weapon(WearableItem):
         if self.max_durability is None:
             return copy.copy(self._damage)
 
-        return Damage(self._damage.amount * self.durability_factor, self._damage.type)
+        return Damage(
+            self._damage.amount *
+            self.durability_factor,
+            self._damage.type)
 
     @property
     def tooltip_info(self):

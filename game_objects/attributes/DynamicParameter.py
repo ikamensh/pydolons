@@ -2,7 +2,6 @@ from my_utils.utils import clamp
 from typing import Union, List, Callable
 
 
-
 class DynamicParameter:
     """
     Dynamic parameter defines a property that has maximum value, which might change.
@@ -26,8 +25,10 @@ class DynamicParameter:
             except AttributeError:
                 pass
 
-
-    def __init__(self, max_name: str, on_zero_callbacks: List[Callable] = None):
+    def __init__(
+            self,
+            max_name: str,
+            on_zero_callbacks: List[Callable] = None):
         cls = self.__class__
         prefix = cls.__name__
         self.max_name = max_name

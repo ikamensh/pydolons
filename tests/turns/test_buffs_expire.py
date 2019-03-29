@@ -41,12 +41,10 @@ def test_buffs_do_not_stop_units(game_hvsp, hero):
     assert isinstance(atm, AtbTurnsManager)
 
     for dur in range(0, 50):
-        buff = Buff(dur/10)
+        buff = Buff(dur / 10)
         BuffAppliedEvent(buff, hero)
 
     for i in range(10):
         unit = atm.get_next()
         assert isinstance(unit, Unit)
         unit.readiness = 0
-
-

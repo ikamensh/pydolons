@@ -1,5 +1,6 @@
 class WidgetFactory(object):
     """docstring for WidgetFactory."""
+
     def __init__(self, gameconfig):
         super(WidgetFactory, self).__init__()
         self.page = None

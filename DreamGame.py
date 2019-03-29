@@ -34,18 +34,24 @@ class DreamGame(SimGame):
                      vision_aggro_rule,
                      damage_provokes_rule]
 
-    def __init__(self, bf=None, rules=None, is_sim = False, is_server=True, seed = None):
+    def __init__(
+            self,
+            bf=None,
+            rules=None,
+            is_sim=False,
+            is_server=True,
+            seed=None):
 
         self.is_sim = is_sim
         self.is_server = is_server
         self.random = random.Random(seed) if seed else random.Random(100)
         self.units = set()
         self.obstacles = set()
-        self.bf : Battlefield = bf or Battlefield(8, 8)
+        self.bf: Battlefield = bf or Battlefield(8, 8)
         self.bf.game = self
         self.vision = Vision(self)
 
-        self.the_hero : Unit= None
+        self.the_hero: Unit = None
 
         self.enemy_ai = BruteAI(self)
         self.random_ai = RandomAI(self)
@@ -58,7 +64,6 @@ class DreamGame(SimGame):
         self.loop_state = True
         self.player_turn_lock = False
 
-
         for rule in (rules or DreamGame.default_rules):
             rule(self)
 
@@ -68,7 +73,6 @@ class DreamGame(SimGame):
         bf = Battlefield(dungeon.h, dungeon.w)
         game = DreamGame(bf, is_server=is_server)
         bf.game = game
-
 
         game.the_hero = hero
         hero.cell = dungeon.hero_entrance
@@ -84,10 +88,13 @@ class DreamGame(SimGame):
 
         return game
 
-    def add_unit(self, unit: Unit, cell = None, faction = None, facing = None):
-        if cell is not None: unit.cell = cell
-        if faction is not None: unit.faction = faction
-        if facing is not None: unit.facing = facing
+    def add_unit(self, unit: Unit, cell=None, faction=None, facing=None):
+        if cell is not None:
+            unit.cell = cell
+        if faction is not None:
+            unit.faction = faction
+        if facing is not None:
+            unit.facing = facing
 
         assert unit.cell
         assert unit.facing
@@ -103,7 +110,6 @@ class DreamGame(SimGame):
         self.units.add(unit)
         unit.update()
 
-
     def unit_died(self, unit: Unit):
         unit.alive = False
         self.turns_manager.remove_unit(unit)
@@ -114,14 +120,13 @@ class DreamGame(SimGame):
         obstacle.alive = False
         self.obstacles.remove(obstacle)
 
-
-    def add_obstacle(self, obstacle: Obstacle, cell = None):
+    def add_obstacle(self, obstacle: Obstacle, cell=None):
         obstacle.game = self
         self.obstacles.add(obstacle)
         if cell:
             obstacle.cell = cell
 
-    def loop(self, turns = None):
+    def loop(self, turns=None):
         n_turns = 0
         player_in_game = not bool(self.game_over())
 
@@ -136,12 +141,11 @@ class DreamGame(SimGame):
                     print(game_over)
                     return self.turns_manager.time
 
-
             active_unit = self.turns_manager.get_next()
             if active_unit.faction == Faction.PLAYER:
                 self.player_turn_lock = True
 
-                while self.player_turn_lock and self.loop_state :
+                while self.player_turn_lock and self.loop_state:
                     time.sleep(0.02)
                 continue
 
@@ -156,8 +160,6 @@ class DreamGame(SimGame):
                 else:
                     active_unit.readiness -= 0.5
 
-
-
     def game_over(self):
 
         if len(self.player_units) == 0:
@@ -169,7 +171,6 @@ class DreamGame(SimGame):
         else:
             return None
 
-
     def __repr__(self):
         return f"{'Simulated ' if self.is_sim else ''}{self.bf.h} by" \
             f" {self.bf.w} dungeon with {len(self.units)} units in it."
@@ -178,19 +179,20 @@ class DreamGame(SimGame):
         if self.turns_manager.get_next() is self.the_hero:
             cell_from = self.the_hero.cell
             facing = self.the_hero.facing
-            cell_to = Cell.from_complex( cell_from.complex + c_vec * facing )
+            cell_to = Cell.from_complex(cell_from.complex + c_vec * facing)
             self.ui_order(cell_to.x, cell_to.y)
 
     def ui_order(self, x, y):
         print(f"ordered: move to {x},{y}")
 
         if self.turns_manager.get_next() is self.the_hero:
-            cell = Cell.from_complex(x + y* 1j)
+            cell = Cell.from_complex(x + y * 1j)
             if cell in self.bf.cells_to_objs:
-                self.order_attack(self.the_hero, random.choice(self.bf.cells_to_objs[cell]))
+                self.order_attack(
+                    self.the_hero, random.choice(
+                        self.bf.cells_to_objs[cell]))
             else:
                 self.order_move(self.the_hero, cell)
-
 
     def order_turn_cw(self):
         if self.turns_manager.get_next() is self.the_hero:
@@ -199,7 +201,6 @@ class DreamGame(SimGame):
     def order_turn_ccw(self):
         if self.turns_manager.get_next() is self.the_hero:
             self._order_turn(ccw=True)
-
 
     def _order_turn(self, ccw):
         active = self.the_hero.turn_ccw_active if ccw else self.the_hero.turn_cw_active
@@ -234,26 +235,29 @@ class DreamGame(SimGame):
             if unit is self.the_hero:
                 raise PydolonsError("The hero is immobilized.")
 
-
         affordable_actives = [a for a in actives if a.affordable()]
 
         if not affordable_actives:
             self._complain_missing(unit, actives, "move")
 
-        valid_actives = [a for a in affordable_actives if a.check_target(target_cell)]
+        valid_actives = [
+            a for a in affordable_actives if a.check_target(target_cell)]
 
         if valid_actives:
-            chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
+            chosen_active = min(
+                valid_actives,
+                key=DreamGame.cost_heuristic(unit))
             self.order_action(unit, chosen_active, target_cell)
             return
         else:
             # We can't directly execute this order.
             if not AI_assist:
-                raise PydolonsError("None of the user movement actives can reach "
-                                        "the target cell.")
+                raise PydolonsError(
+                    "None of the user movement actives can reach "
+                    "the target cell.")
 
-            angle, ccw = Cell.angle_between(unit.facing,
-                                            target_cell.complex - cell_from.complex)
+            angle, ccw = Cell.angle_between(
+                unit.facing, target_cell.complex - cell_from.complex)
             if angle > 45:
                 active = unit.turn_ccw_active if ccw else unit.turn_cw_active
                 self.order_action(unit, active, None)
@@ -264,11 +268,12 @@ class DreamGame(SimGame):
             if distance >= 2:
                 vec = target_cell.complex - cell_from.complex
                 vec_magnitude_1 = vec / abs(vec)
-                closer_target = Cell.from_complex(cell_from.complex + vec_magnitude_1)
+                closer_target = Cell.from_complex(
+                    cell_from.complex + vec_magnitude_1)
                 self.order_move(unit, closer_target)
             else:
-                raise PydolonsError("None of the user movement actives can reach the target.")
-
+                raise PydolonsError(
+                    "None of the user movement actives can reach the target.")
 
     def order_attack(self, unit: Unit, _target: Unit, AI_assist=True):
         actives = unit.attack_actives
@@ -288,19 +293,24 @@ class DreamGame(SimGame):
         if not affordable_actives:
             self._complain_missing(unit, actives, "attack")
 
-        valid_actives = [a for a in affordable_actives if a.check_target(unit_target)]
+        valid_actives = [
+            a for a in affordable_actives if a.check_target(unit_target)]
 
         if valid_actives:
-            chosen_active = min(valid_actives, key=DreamGame.cost_heuristic(unit))
+            chosen_active = min(
+                valid_actives,
+                key=DreamGame.cost_heuristic(unit))
             self.order_action(unit, chosen_active, unit_target)
             return
         else:
             if not AI_assist:
-                raise PydolonsError("None of the user attack actives can reach the target.")
+                raise PydolonsError(
+                    "None of the user attack actives can reach the target.")
             else:
                 target_cell = unit_target.cell
 
-                angle, ccw = Cell.angle_between(unit.facing, target_cell.complex -unit.cell.complex)
+                angle, ccw = Cell.angle_between(
+                    unit.facing, target_cell.complex - unit.cell.complex)
                 if angle > 45:
                     active = unit.turn_ccw_active if ccw else unit.turn_cw_active
                     self.order_action(unit, active, None)
@@ -310,8 +320,8 @@ class DreamGame(SimGame):
                 if distance >= 2:
                     self.order_move(unit, target_cell)
                 else:
-                    raise PydolonsError("None of the user attack actives can reach the target.")
-
+                    raise PydolonsError(
+                        "None of the user attack actives can reach the target.")
 
     def order_action(self, unit, active, target):
         if target is None:
@@ -343,4 +353,3 @@ class DreamGame(SimGame):
 
     def get_units_distances_from(self, p):
         return self.bf.get_units_dists_to(p, self.units)
-

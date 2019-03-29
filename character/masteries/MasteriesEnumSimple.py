@@ -1,6 +1,7 @@
 from my_utils.named_enums import NameEnum, auto
 from functools import lru_cache
 
+
 class MasteriesEnum(NameEnum):
     AXE = auto()
     SWORD = auto()
@@ -13,14 +14,14 @@ class MasteriesEnum(NameEnum):
     UNARMED = auto()
 
     FIRE = auto()
-    FROST  = auto()
-    LIGHTNING  = auto()
+    FROST = auto()
+    LIGHTNING = auto()
 
     EARTH = auto()
-    ACID  = auto()
+    ACID = auto()
     AIR = auto()
 
-    LIGHT  = auto()
+    LIGHT = auto()
     ASTRAL = auto()
     NATURE = auto()
 
@@ -43,7 +44,7 @@ class MasteriesGroups:
     spicky = [m.SPEAR, m.LIGHTNING, m.LIGHT]
     loud = [m.SONIC, m.HAMMER, m.EARTH, m.UNARMED]
     explosive = [m.FIRE, m.EARTH, m.SONIC, m.AXE, m.SHOOT]
-    cold = [ m.SWORD, m.DAGGER, m.FROST]
+    cold = [m.SWORD, m.DAGGER, m.FROST]
     arcane = [m.MIND, m.ASTRAL]
     chemical = [m.ACID, m.EARTH, m.SHOOT]
     all_battle = [m.CLUB, m.SWORD, m.AXE, m.DAGGER, m.SPEAR, m.UNARMED,
@@ -51,7 +52,6 @@ class MasteriesGroups:
 
     all_magic = [m.FROST, m.FIRE, m.LIGHT, m.LIGHTNING, m.EARTH,
                  m.ACID, m.SONIC, m.ASTRAL, m.MIND, m.HOLY, m.DARK, m.NATURE]
-
 
     all = [chop_chop_chop, stabby, bashy,
            sniping, spicky, loud, cold,
@@ -70,7 +70,6 @@ class MasteriesGroups:
 
         return n
 
-
     @classmethod
     @lru_cache()
     def total_occurances(cls):
@@ -80,7 +79,6 @@ class MasteriesGroups:
 
         return result
 
-
     @classmethod
     @lru_cache(maxsize=2048)
     def coupling(cls, m1, m2):
@@ -89,7 +87,8 @@ class MasteriesGroups:
             if m1 in group and m2 in group:
                 coupling += 1
 
-        return coupling * cls.coupling_coef / ( 1 + cls.occurances(m1) + cls.occurances(m2))
+        return coupling * cls.coupling_coef / \
+            (1 + cls.occurances(m1) + cls.occurances(m2))
 
 
 if __name__ == "__main__":

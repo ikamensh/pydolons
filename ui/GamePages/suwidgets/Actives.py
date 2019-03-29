@@ -7,7 +7,15 @@ class Actives(QtCore.QObject):
     setTargets = QtCore.Signal(list)
     action_on = QtCore.Signal(dict)
 
-    def __init__(self, page, parent = None, widget_size = (64, 64), margin = 10, columns = 3):
+    def __init__(
+            self,
+            page,
+            parent=None,
+            widget_size=(
+                64,
+                64),
+            margin=10,
+            columns=3):
         super(Actives, self).__init__(parent)
         self.x, self.y = 0, 0
         self.rect = QtCore.QRectF(self.x, self.y, 1, 1)
@@ -26,7 +34,9 @@ class Actives(QtCore.QObject):
         self.row = 0
         self.column = 0
 
-        self.sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum,
+            QtWidgets.QSizePolicy.Minimum)
         self.setFrameSize(self.widget_size, 1, 1)
         self.setActivesSize()
         self.setNames()
@@ -39,11 +49,11 @@ class Actives(QtCore.QObject):
         self.rect.setWidth(self.w)
         self.rect.setHeight(self.h)
 
-    def setFrameSize(self, size:set, col:int, row:int):
+    def setFrameSize(self, size: set, col: int, row: int):
         w = size[0] * col + self.margin * (col + 2)
         h = size[1] * row + self.margin * (row + 2)
         self.frame_size = (w, h)
-        if not self.frame is None:
+        if self.frame is not None:
             self.frame.setMinimumSize(self.frame_size[0], self.frame_size[1])
 
     def addWidget(self, name):
@@ -64,15 +74,20 @@ class Actives(QtCore.QObject):
         else:
             self.column += 1
         self.n += 1
-        self.setFrameSize(self.widget_size,  self.columns, self.rows)
+        self.setFrameSize(self.widget_size, self.columns, self.rows)
         self.setActivesSize()
-        widget.ajGeometry = QtCore.QRect(self.x + widget.x(), self.y + widget.y(), self.widget_size[0], self.widget_size[1])
+        widget.ajGeometry = QtCore.QRect(
+            self.x + widget.x(),
+            self.y + widget.y(),
+            self.widget_size[0],
+            self.widget_size[1])
         self.widgets[name] = widget
 
     def showToolTip(self, widget):
         x = widget.x() + self.frame.x() + self.x
         y = widget.y() + self.frame.y() + self.y
-        self.page.gamePages.toolTip.setPos(self.page.scene().views()[0].mapToScene(x, y))
+        self.page.gamePages.toolTip.setPos(
+            self.page.scene().views()[0].mapToScene(x, y))
         self.page.gamePages.toolTip.setText(widget.property('active_name'))
         self.page.gamePages.toolTip.show()
         pass
@@ -86,12 +101,12 @@ class Actives(QtCore.QObject):
             widget.setProperty('status', active.affordable())
             widget.setProperty('active', active)
             widget.setStyleSheet('QPushButton[status = "true"]{'
-                             'background-color:black;}'
-                             'QPushButton[status = "false"]{'
-                             'background-color:gray;}'
-                             'QPushButton:pressed {'
-                             'background-color: white;'
-                             'color:black}')
+                                 'background-color:black;}'
+                                 'QPushButton[status = "false"]{'
+                                 'background-color:gray;}'
+                                 'QPushButton:pressed {'
+                                 'background-color: white;'
+                                 'color:black}')
 
     def setNames(self):
         self.names = ['run',
@@ -140,13 +155,15 @@ class Actives(QtCore.QObject):
         self.mainWidget.setLayout(mainLayout)
         self.up.pressed.connect(self.upSlot)
         self.down.pressed.connect(self.downSlot)
-        self.mainWidget:QtWidgets.QGraphicsProxyWidget = self.page.gamePages.gameRoot.scene.addWidget(self.mainWidget)
-        self.mainWidget.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
+        self.mainWidget: QtWidgets.QGraphicsProxyWidget = self.page.gamePages.gameRoot.scene.addWidget(
+            self.mainWidget)
+        self.mainWidget.setFlags(
+            QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.resized()
 
-    def resized(self, size = None):
+    def resized(self, size=None):
         size = self.page.gamePages.gameRoot.cfg.dev_size
-        self.x = size[0] / 2 - self.w /2
+        self.x = size[0] / 2 - self.w / 2
         self.y = size[1] - self.h
         self.mainWidget.setPos(self.x, self.y)
         self.mainWidget.widget().setFixedSize(self.w + 30, self.h)
@@ -160,7 +177,8 @@ class Actives(QtCore.QObject):
         if active.name == 'turn CW':
             self.page.gamePages.gameRoot.game.order_turn_cw()
             return
-        targets = self.page.gamePages.gameRoot.game.get_possible_targets(active)
+        targets = self.page.gamePages.gameRoot.game.get_possible_targets(
+            active)
         if targets is not None:
             if targets:
                 self.setTargets.emit(targets)
@@ -203,5 +221,3 @@ class Actives(QtCore.QObject):
         else:
             name = 'active_move.png'
         return QIcon(self.page.gamePages.gameRoot.cfg.getPicFile(name))
-
-
