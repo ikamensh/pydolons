@@ -1,21 +1,36 @@
+from __future__ import annotations
+
 from LEngine import LEngine
 from ui.gameconfig.GameConfiguration import GameConfiguration
+
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
+    from ui.GamePages import GamePages
+    from ui.levels.BaseLevel import BaseLevel
+    from ui.levels.LevelFactory import LevelFactory
+    from ui.GameController import GameController
+    from ui.TheUI import TheUI
+    from PySide2.QtWidgets import QGraphicsScene
+    from PySide2.QtWidgets import QGraphicsView
 
 
 class GameRootNode(object):
     """docstring for GameRootNode."""
     def __init__(self):
         super(GameRootNode, self).__init__()
-        self.scene = None
-        self.view = None
+        self.scene:QGraphicsScene = None
+        self.view:QGraphicsView = None
+        self.controller:GameController = None
         self.cfg:GameConfiguration = None
-        self.level = None
-        self.loop = None
-        self.levels = None
-        self.gamePages = None
-        self.game = None
+        self.level:BaseLevel = None
+        self.levelFactory:LevelFactory = None
+        self.gamePages:GamePages = None
+        self.game:DreamGame = None
         self.lengine:LEngine = None
-        self.ui = None
+        self.loop = None
+        self.ui:TheUI = None
 
     def setView(self, view):
         self.view = view
