@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ui.GameWorld import GameWorld
 from ui.units import UnitMiddleLayer
 from ui.units import GameVision
@@ -9,11 +11,17 @@ from ui.debug.DebugLayer import DebugLayer
 from game_objects import battlefield_objects as bf_objs
 from game_objects.battlefield_objects import  Obstacle
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from LEngine import LEngine
+    from ui.GameRootNode import GameRootNode
+    from ui.units import Units
+    from battlefield.Cell import Cell
 
 class LevelFactory:
     def __init__(self, logicEngine):
-        self.LEngine = logicEngine
-        self.gameRoot = None
+        self.LEngine:LEngine = logicEngine
+        self.gameRoot:GameRootNode = None
         self.level:BaseLevel = None
         pass
 
@@ -36,12 +44,10 @@ class LevelFactory:
     def setUpLevel(self):
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
         self.level.world.setWorldSize(self.gameRoot.game.bf.w, self.gameRoot.game.bf.h)
-        self.level.world.setFloor(self.gameRoot.cfg.getPicFile('floor.png', 102001001))
+        self.level.world.setUpFloors(self.gameRoot.game.bf)
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
-
         self.level.gameVision = GameVision(self.level)
-        print(dir(self.gameRoot.game))
         self.setUpUnits(self.gameRoot.game.bf)
         self.level.gameRoot.cfg.setWorld(self.level.world)
         self.level.gameRoot.controller.setUp(self.level.world, self.level.units, self.level.middleLayer)
@@ -51,13 +57,13 @@ class LevelFactory:
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
         for unit_pos, units in battlefield.cells_to_objs.items():
-            print(units)
             unit = units[0]
             if isinstance(unit, bf_objs.Unit):
                 gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameconfig=self.gameRoot.cfg, unit_bf = unit)
                 if unit.icon == 'hero.png':
                     self.active_unit = True
                 gameUnit.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
+                gameUnit.setUpAnimation()
                 gameUnit.gameRoot = self.level.gameRoot
                 gameUnit.setDirection(unit.facing)
                 gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
@@ -65,8 +71,6 @@ class LevelFactory:
                 self.level.gameRoot.view.mouseMove.connect(gameUnit.mouseMove)
                 self.level.units.setUpToolTip(gameUnit)
                 self.level.units.addToGroup(gameUnit)
-                # добавили gameunit
-                print(unit.uid)
                 self.level.units.units_at[unit.uid] = gameUnit
             elif isinstance(unit, Obstacle):
                 obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
@@ -79,8 +83,6 @@ class LevelFactory:
                 if obstacle.name == 'Wooden door':
                     self.level.units.units_at[unit.uid] = obstacle
                 self.level.world.obstacles[unit.uid] = obstacle
-        print('next', self.gameRoot.game.turns_manager.get_next())
-        print('uid', self.gameRoot.game.turns_manager.get_next().uid)
         self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
         self.level.units.updateVision()
 

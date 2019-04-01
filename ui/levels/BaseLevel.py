@@ -1,15 +1,23 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.GameRootNode import GameRootNode
+    from ui.units import Units
+    from ui.units import UnitMiddleLayer
+    from ui.GameWorld import GameWorld
 
 
 class BaseLevel(object):
     def __init__(self):
         super(BaseLevel, self).__init__()
-        self.gameRoot = None
-        self.middleLayer = None
-        self.world = None
-        self.units = None
+        self.gameRoot:GameRootNode = None
+        self.middleLayer:UnitMiddleLayer = None
+        self.world:GameWorld = None
+        self.units:Units = None
 
     def setGameRoot(self, gameRoot):
-        self.gameRoot =  gameRoot
+        self.gameRoot = gameRoot
         self.gameRoot.level = self
 
     def setMiddleLayer(self, middleLayer):

@@ -53,3 +53,6 @@ class ReadOnlyDict(collections.Mapping):
     def __iter__(self):
         return iter(self._data)
 
+    def __str__(self):
+        return str(self._data)
+

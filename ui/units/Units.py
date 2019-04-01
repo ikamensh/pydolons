@@ -1,16 +1,23 @@
+from __future__ import annotations
+
 from PySide2 import QtWidgets
 from ui.units.UnitsHeap import UnitsHeap
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.levels import BaseLevel
+    from ui.units.BasicUnit import BasicUnit
 
 
 class Units(QtWidgets.QGraphicsItemGroup):
     def __init__(self, *arg):
         super(Units, self).__init__(*arg)
-        self.active_unit = None
+        self.active_unit:BasicUnit = None
         self.units_at = {}
         self.units_pos = {}
         self.groups_at = {}
         self.units_heaps = {}
-        self.level = None
+        self.level:BaseLevel = None
         self.acceptHoverEvents()
 
     def setLevel(self, level):
@@ -23,10 +30,11 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
-        x, y = cell_to.x, cell_to.y
-        self.units_at[unit.uid].moveTo(x, y)
-        if unit == self.level.gameRoot.game.the_hero:
-            self.updateVision()
+        if cell_to is not self.level.gameRoot.game.bf.walls.keys():
+            x, y = cell_to.x, cell_to.y
+            self.units_at[unit.uid].moveTo(x, y)
+            if unit == self.level.gameRoot.game.the_hero:
+                self.updateVision()
 
     def unitDied(self, unit_bf):
         unit = self.units_at[unit_bf.uid]

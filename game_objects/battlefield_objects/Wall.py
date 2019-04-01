@@ -3,7 +3,7 @@ from exceptions import PydolonsError
 from typing import Union
 
 class Wall:
-    def __init__(self, cell: Union[Cell, complex], icon: str = 'wall.jpg'):
+    def __init__(self, cell: Union[Cell, complex], icon: str = 'wall.png'):
         self.cell = cell
         self.icon = icon
 
