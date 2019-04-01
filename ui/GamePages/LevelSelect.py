@@ -98,7 +98,7 @@ class LevelSelect(AbstractPage):
 
         form_layout.addRow(QtWidgets.QLabel(dungeon.name, parent))
 
-        objs = dungeon.objs(DreamGame())
+        objs = dungeon.construct_objs(DreamGame())
         n_units_label = QtWidgets.QLabel(f'{len([u for u in objs if not u.is_obstacle])}', parent)
         form_layout.addRow('Units in the dungeon:', n_units_label)
 

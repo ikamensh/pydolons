@@ -17,7 +17,7 @@ class GameConfiguration:
         self.deviceConfig = None
         self.userConfig = None
         self.resourceConfig = None
-        self.styleConfig = None
+        self.styleConfig:StyleConfig = None
 
         # Setup configuration for curent device
         self.deviceConfig = DeviceConfig(self)
@@ -101,6 +101,9 @@ class GameConfiguration:
         HEIGHT = 1080
         self.scale_x = self.dev_size[0] / WIDTH
         self.scale_y = self.dev_size[1] / HEIGHT
+
+    def getFont(self, name = None):
+        return self.styleConfig.getFont(name)
 
 
 

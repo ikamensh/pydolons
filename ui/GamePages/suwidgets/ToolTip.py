@@ -37,7 +37,6 @@ class ToolTip(QtCore.QObject, QtWidgets.QGraphicsRectItem):
         if len(args) == 1:
             pos = args[0]
             self.view_pos = self.gameRoot.view.mapFromScene(pos)
-            # self._x, self._y = pos.x(), pos.y()
             super(ToolTip, self).setPos(pos)
         elif len(args) == 2:
             self.view_pos = self.gameRoot.view.mapFromScene(args[0], args[1])

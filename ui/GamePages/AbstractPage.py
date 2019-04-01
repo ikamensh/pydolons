@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from PySide2 import QtWidgets, QtCore
 from ui.GamePages.suwidgets.BaseItem import BaseItem
 from ui.GamePages.suwidgets.TextItem import TextItem
 from ui.GamePages.suwidgets.GroupItem import GroupItem
 from xml.etree import ElementTree as ET
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.GamePages import GamePages
 
 
 class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
@@ -19,7 +24,7 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         self.items = {}
         self.widget_pos = QtCore.QPoint()
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
-        self.gamePages = gamePages
+        self.gamePages:GamePages = gamePages
         self.state = False
         self.isService = False
 

@@ -3,6 +3,8 @@
 Страницы создаются один раз при загрузке игры.
 Страницы обновляются по мере необходимости.
 """
+from __future__ import annotations
+
 
 from ui.GamePages.StartPage import StartPage
 from ui.GamePages.LevelSelect import LevelSelect
@@ -15,19 +17,24 @@ from ui.GamePages.ReadmePage import ReadmePage
 from ui.GamePages.SettingsPage import SettingsPage
 from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.GameRootNode import GameRootNode
+    from ui.GamePages import AbstractPage
+
 
 class GamePages(object):
     """docstring for GamePages."""
     def __init__(self):
         super(GamePages, self).__init__()
-        self.gameRoot = None
+        self.gameRoot:GameRootNode = None
         # this is current page
         self.focusState = False
-        self.page = None
+        self.page:AbstractPage = None
         self.focus = False
         # init pages
         self.pages = {}
-        self.gameMenu = None
+        self.gameMenu:GameMenuPage = None
         self.visiblePage = True
 
     def setGameRoot(self, gameRoot):
@@ -144,11 +151,4 @@ class GamePages(object):
     def isFocus(self):
         return self.focusState or self.gameMenu.isFocus()
 
-    def test_xml(self):
-        # from ui.GamePages.TestXMlPage import XMLPage
-        # self.xml_page = self.buildPage('xml', XMLPage)
-        # self.xml_page.setUpHeroAttr(self.gameRoot.lengine.character)
-        # self.gameRoot.scene.addItem(self.xml_page)
-        # self.xml_page.show()
-        pass
 

@@ -1,15 +1,21 @@
+from __future__ import annotations
+
 from PySide2.QtWidgets import QGraphicsSimpleTextItem
 from PySide2.QtGui import QFont, QColor, QBrush
-from PySide2 import QtCore
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.gameconfig.GameConfiguration import GameConfiguration
+    from ui.GameRootNode import GameRootNode
+    from ui.GamePages import AbstractPage
 
 
 class TextItem(QGraphicsSimpleTextItem):
     def __init__(self, page, parent=None):
         super(TextItem, self).__init__(parent)
-        self.gameRoot = page.gamePages.gameRoot
-        self.page = page
+        self.gameRoot: GameRootNode = page.gamePages.gameRoot
+        self.page: AbstractPage = page
         self.attrib = None
-        self.cfg = page.gamePages.gameRoot.cfg
+        self.cfg: GameConfiguration = page.gamePages.gameRoot.cfg
         self.scale_x = self.gameRoot.cfg.scale_x
         self.scale_y = self.gameRoot.cfg.scale_y
 
@@ -86,10 +92,11 @@ class TextItem(QGraphicsSimpleTextItem):
     def setUpTextOptions(self, attrib):
         # self.setPlainText(attrib['text'])
         self.setText(attrib['text'])
-        self._font = QFont(self.cfg.main_font_name)
-        self._font.setPointSize(int(self.cfg.styleConfig.base_point_size *self.scale_x))
-        if attrib.get('font_size') is not None:
-            self._font.setPointSize(int(attrib.get('font_size')) * self.scale_x)
+        self._font = self.cfg.getFont()
+        if attrib.get('font_size') is None:
+            self._font.setPointSize(int(16* self.scale_y))
+        else:
+            self._font.setPointSize(int(attrib.get('font_size')) * self.scale_y)
         self.setFont(self._font)
         # if self.document().size().width() > self._width:
         #     while self.document().size().width() > self._width:
