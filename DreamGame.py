@@ -66,6 +66,7 @@ class DreamGame(SimGame):
     def start_dungeon(dungeon: Dungeon, hero: Unit, is_server=True):
 
         bf = Battlefield(dungeon.h, dungeon.w)
+        bf.set_new_walls(dungeon.construct_walls())
         game = DreamGame(bf, is_server=is_server)
         bf.game = game
 
