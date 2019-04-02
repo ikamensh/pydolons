@@ -1,5 +1,10 @@
+from __future__ import annotations
 
 from PySide2 import QtCore
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
+    from ui.TheUI import TheUI
 
 
 class ProxyEmit(object):
@@ -40,8 +45,8 @@ class GameLoopThread(QtCore.QThread):
     obstacle_destroyed = QtCore.Signal(dict)
     def __init__(self, parent=None):
         super(GameLoopThread, self).__init__(parent)
-        self.game = None
-        self.the_ui = None
+        self.game: DreamGame = None
+        self.the_ui: TheUI = None
 
     def setSiganls(self, proxy_cls):
         """

@@ -2,15 +2,15 @@ import unittest
 from os import path
 from config import pydolons_rootdir
 from PySide2 import QtGui
-from ui.units.BasicUnit import BasicUnit
-from ui.units.UnitsHeap import UnitsHeap
+from ui.gameworld.units.BasicUnit import BasicUnit
+from ui.gameworld.units.UnitsHeap import UnitsHeap
 from tests.ui.TestHelper import UsesQApp
 
 
 class TestBasicUnit(UsesQApp):
 
     def getUnit(self, x=0, y=0, uid=0, pixmap=None):
-        unit = BasicUnit(gameconfig=None)
+        unit = BasicUnit(gameRoot=None)
         unit.worldPos.x = x
         unit.worldPos.y = y
         unit.uid = uid
@@ -25,7 +25,7 @@ class TestBasicUnit(UsesQApp):
         self.unit_a = self.getUnit(2, 1, 32, pixmap)
         self.unit_b = self.getUnit(2, 1, 13, pixmap)
         self.unit_c = self.getUnit(2, 1, 45, pixmap)
-        self.unit_d = BasicUnit(gameconfig=None)
+        self.unit_d = BasicUnit(gameRoot=None)
         self.unit_d.worldPos.x = 6
         self.unit_d.worldPos.y = 7
         self.unit_d.uid = 55

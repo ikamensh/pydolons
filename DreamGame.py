@@ -5,7 +5,7 @@ from mechanics.turns import AtbTurnsManager
 from mechanics.factions import Faction
 from mechanics.AI import BruteAI, RandomAI
 from mechanics.events import EventsPlatform, NextUnitEvent
-from ui.events import LevelStatusEvent
+from ui.gamecore.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 from mechanics.rpg.regen import regen_rule
 from mechanics.rpg.push import push_rule
@@ -179,7 +179,7 @@ class DreamGame(SimGame):
         if self.turns_manager.get_next() is self.the_hero:
             cell_from = self.the_hero.cell
             facing = self.the_hero.facing
-            cell_to = Cell.from_complex( cell_from.complex + c_vec * facing )
+            cell_to = Cell.from_complex( cell_from.complex + c_vec * facing)
             self.ui_order(cell_to.x, cell_to.y)
 
     def ui_order(self, x, y):

@@ -1,23 +1,28 @@
-import sys
+from __future__ import annotations
 
+import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from ui.GameRootNode import GameRootNode
+from ui.gamecore import GameRootNode
+from ui.gamecore import GameController
+from ui.gamecore import GameView
+from ui.gamecore.levels import LevelFactory
 
-from ui.GameAnimation import Animations
-from ui.GamePages import GamePages
-from ui.GamePages.suwidgets.SuWidgetFactory import SuWidgetFactory
-
-from ui.GameController import GameController
-from ui.levels import LevelFactory
-
-from ui.GameView import GameView
+from ui.gameanimation import Animations
+from ui.gamepages import GamePages
 
 from LEngine import LEngine
 from GameLoopThread import GameLoopThread, ProxyEmit
 
 from datetime import datetime
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from DreamGame import DreamGame
+    from ui.gamecore.gameconfig.GameConfiguration import GameConfiguration
+    from ui.gamecore.levels.BaseLevel import BaseLevel
+    from ui.TheUI import TheUI
 
 
 class TheUI(QtWidgets.QWidget):
@@ -29,8 +34,8 @@ class TheUI(QtWidgets.QWidget):
         self.setAcceptDrops(True)
         print('cfg ===> newGame init TheUI', datetime.now())
         # work level
-        self.lengine = lengine
-        self.loop = None
+        self.lengine: LEngine = lengine
+        self.loop: GameLoopThread = None
 
         cursor = QtGui.QCursor(QtGui.QPixmap('resources/assets/ui/cursor.png'))
         self.setCursor(cursor)
@@ -44,14 +49,13 @@ class TheUI(QtWidgets.QWidget):
 
         self.view = GameView(self)
         self.gameRoot.setView(self.view)
-        self.gameRoot.suwidgetFactory = SuWidgetFactory
 
-        self.gameconfig = self.view.gameconfig
+        self.gameconfig: GameConfiguration = self.view.gameconfig
         self.gameconfig.animations = Animations()
         self.gameRoot.setGameConfig(self.view.gameconfig)
         self.layout.addWidget(self.view)
         self.layout.setMargin(2)
-        size = self.gameconfig.dev_cfg_size
+        size: set = self.gameconfig.dev_cfg_size
         if size is not None:
             self.scene = QtWidgets.QGraphicsScene(0, 0, self.gameconfig.dev_cfg_size[0], self.gameconfig.dev_cfg_size[1])
         else:
@@ -65,6 +69,7 @@ class TheUI(QtWidgets.QWidget):
 
         self.levelFactory = LevelFactory(self.lengine)
         self.gameRoot.setLevelFactory(self.levelFactory)
+        self.level: BaseLevel = None
 
         self.gamePages = GamePages()
         self.gameRoot.setGamePages(self.gamePages)
@@ -92,7 +97,7 @@ class TheUI(QtWidgets.QWidget):
 
     def initLevel(self, level_name = None):
         print('Iinit level')
-        self.level = self.levelFactory.getLevel()
+        self.level  = self.levelFactory.getLevel()
         self.levelFactory.addLevelToScene(self.scene)
 
     def destroyLevel(self):
@@ -165,7 +170,6 @@ class TheUI(QtWidgets.QWidget):
         window = TheUI(game)
         TheUI.singleton = window
         sys.exit(app.exec_())
-
 
 
 if __name__ == '__main__':

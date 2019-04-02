@@ -1,8 +1,4 @@
-from cntent.dungeons.demo_dungeon import demo_dungeon
-from cntent.dungeons.demo_dungeon_walls import walls_dungeon
-from cntent.dungeons.pirate_lair import pirate_lair
-from cntent.dungeons.small_graveyard import small_graveyard
-from cntent.dungeons.small_orc_cave import small_orc_cave
+from __future__ import annotations
 
 from DreamGame import DreamGame
 # from GameImitation import DreamGame
@@ -10,21 +6,24 @@ from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 
 # import triggers
-from ui.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
+from ui.gamecore.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
     perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger, \
     obstacle_destroy_trigger
 
 from single_player.Shop import Shop, generate_assortment, all_blueprints, all_materials, QualityLevels
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import Unit
+    from game_objects.dungeon.Dungeon import Dungeon
 
 class LEngine:
     """
     LogicEngine
     """
     def __init__(self):
-        self.character:Character = None
-        self.the_hero  = None
-        self.dungeon = None
+        self.character: Character = None
+        self.the_hero: Unit = None
+        self.dungeon: Dungeon = None
 
     def getHero(self):
         if self.character is None:

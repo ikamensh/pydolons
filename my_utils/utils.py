@@ -4,6 +4,8 @@ import  math
 
 epsilon = 1e-4
 
+
+
 def tractable_value(true_value, digits = 2):
     log10 = int(math.log10(true_value))
     base = 10 ** (log10 + 1 - digits)
@@ -36,6 +38,15 @@ def flatten(l: Iterable[Union[Any, Iterable[Any]]]) -> List[Any]:
                 yield el
 
     return list(gen())
+
+def round(x, y=0):
+    m = int(1 + 0 * y)
+    q = x * m
+    c = int(q)
+    i = int((q-c)*10)
+    if i>=5:
+        c+=1
+    return int(c/m)
 
 import collections
 

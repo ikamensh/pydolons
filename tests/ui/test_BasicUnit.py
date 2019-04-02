@@ -1,20 +1,20 @@
 import unittest
-from ui.units.BasicUnit import BasicUnit
+from ui.gameworld.units.BasicUnit import BasicUnit
 from tests.ui.TestHelper import UsesQApp
 
 
 class TestBasicUnit(UsesQApp):
     def setUp(self):
         super(TestBasicUnit, self).setUp()
-        self.unit_a = BasicUnit(gameconfig=None)
+        self.unit_a = BasicUnit(gameRoot=None)
         self.unit_a.worldPos.x = 2
         self.unit_a.worldPos.y = 3
         self.unit_a.uid = 32
-        self.unit_b = BasicUnit(gameconfig=None)
+        self.unit_b = BasicUnit(gameRoot=None)
         self.unit_b.worldPos.x = 2
         self.unit_b.worldPos.y = 1
         self.unit_b.uid = 32
-        self.unit_c = BasicUnit(gameconfig=None)
+        self.unit_c = BasicUnit(gameRoot=None)
         self.unit_c.worldPos.x = 2
         self.unit_c.worldPos.y = 3
         self.unit_c.uid = 32

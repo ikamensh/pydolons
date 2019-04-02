@@ -1,4 +1,4 @@
-from ui.GameWorld.TileItem import TileItem
+from ui.gameworld.TileItem import TileItem
 from battlefield.Cell import Cell
 
 def init_map(tile_map:TileItem, cells):
