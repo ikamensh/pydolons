@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-from LEngine import LEngine
-from ui.gamecore.gameconfig.GameConfiguration import GameConfiguration
-
-
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
+    from ui.gamecore.gameconfig.GameConfiguration import GameConfiguration
+    from LEngine import LEngine
     from DreamGame import DreamGame
     from ui.gamepages import GamePages
     from ui.gamepages import WidgetFactory

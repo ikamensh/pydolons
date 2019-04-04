@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from game_objects.battlefield_objects import Unit
     from game_objects.dungeon.Dungeon import Dungeon
 
+
 class LEngine:
     """
     LogicEngine
