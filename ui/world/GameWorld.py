@@ -8,13 +8,15 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.core.gameconfig.GameConfiguration import GameConfiguration
     from battlefield.Battlefield import Battlefield
+    from game_objects.battlefield_objects import Wall
     from ui.core.levels.BaseLevel import BaseLevel
     from PySide2.QtGui import QPixmap
+    from typing import Dict
 
 
 class GameWorld(QtWidgets.QGraphicsItemGroup):
     def __init__(self, cfg):
-        super(GameWorld, self).__init__()
+        super().__init__()
         self.cfg: GameConfiguration = cfg
         self.size = QtCore.QRectF(0., 0., 1., 1.)
         self.worldSize = (1, 1)
@@ -44,7 +46,7 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
                 self.floor.add_cell(0, Cell(i, j))
         self.addToGroup(self.floor)
 
-    def setWall(self, walls: dict):
+    def setWall(self, walls: Dict[Cell, Wall]):
         for cell, wall in walls.items():
             pixmap = self.cfg.getPicFile(wall.icon, 102001001)
             if not self.floor.is_pixmap(pixmap):

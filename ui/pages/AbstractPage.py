@@ -16,14 +16,14 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
     focusable = QtCore.Signal(bool)
     ITEM_TYPES = {'other':BaseItem, 'text':TextItem, 'group':GroupItem}
 
-    def __init__(self, gamePages, parent = None):
+    def __init__(self, gamePages: GamePages, parent = None):
         QtCore.QObject.__init__(self, parent)
         QtWidgets.QGraphicsItemGroup.__init__(self)
         self.xml_page = None
         self.items = {}
         self.widget_pos = QtCore.QPoint()
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
-        self.gamePages: GamePages = gamePages
+        self.gamePages = gamePages
         self.mainWidget: QtWidgets.QGraphicsWidget = None
         self.state = False
         self.isService = False

@@ -6,7 +6,7 @@ from ui.pages.inventory_page.SlotsGroup import SlotsGroup
 
 class GameInventrory(SlotsGroup):
     def __init__(self, gameRoot, page):
-        super(GameInventrory, self).__init__(gameRoot, page)
+        super().__init__(gameRoot, page)
 
     def setUpSlots(self, elemnt):
         for slot in self.gameRoot.lengine.the_hero.inventory:

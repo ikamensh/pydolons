@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 
 class GameHeroAttr:
-    def __init__(self, character, gameRoot):
-        self.gameRoot: GameRootNode = gameRoot
-        self.character: Character = character
+    def __init__(self, character: Character, gameRoot: GameRootNode):
+        self.gameRoot = gameRoot
+        self.character = character
         self.attrs = {}
         self.attrs_info = {}
         self.setUpHeroAttr()

@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 
 class TextItem(QGraphicsSimpleTextItem):
-    def __init__(self, page, parent=None):
+    def __init__(self, page: AbstractPage, parent=None):
         super(TextItem, self).__init__(parent)
         self.gameRoot: GameRootNode = page.gamePages.gameRoot
-        self.page: AbstractPage = page
+        self.page = page
         self.attrib: dict = None
         self.cfg: GameConfiguration = page.gamePages.gameRoot.cfg
         self.scale_x = self.gameRoot.cfg.scale_x

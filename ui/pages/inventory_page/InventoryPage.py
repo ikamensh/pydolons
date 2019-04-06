@@ -11,7 +11,7 @@ from PySide2 import QtCore
 
 class InventoryPage(AbstractPage):
     def __init__(self, gamePages):
-        super(InventoryPage, self).__init__(gamePages)
+        super().__init__(gamePages)
         self.readXML('inventory_page.xml')
         self.setUpInventories()
         self.setUpEquipments()

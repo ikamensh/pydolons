@@ -1,3 +1,4 @@
+from __future__ import annotations
 from ui.pages.AbstractPage import AbstractPage
 from ui.pages.suwidgets.BaseItem import BaseItem
 from ui.pages.suwidgets.TextItem import TextItem
@@ -6,10 +7,13 @@ from ui.pages.character_page.GameMasteries import GameMasteries
 from ui.pages.character_page.GameHeroAttr import GameHeroAttr
 from PySide2 import QtCore
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.pages import GamePages
 
 class CharacterPage(AbstractPage):
-    def __init__(self, gamePages):
-        super(CharacterPage, self).__init__(gamePages)
+    def __init__(self, gamePages: GamePages):
+        super().__init__(gamePages)
         self.readXML('character_page.xml')
         self.read_tree()
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)

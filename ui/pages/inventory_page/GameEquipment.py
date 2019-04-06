@@ -4,7 +4,7 @@ from ui.pages.inventory_page.SlotsGroup import SlotsGroup
 
 class GameEquipment(SlotsGroup):
     def __init__(self, gameRoot, page):
-        super(GameEquipment, self).__init__(gameRoot, page)
+        super().__init__(gameRoot, page)
         self.default_icons = {}
 
     def setUpSlots(self, element):

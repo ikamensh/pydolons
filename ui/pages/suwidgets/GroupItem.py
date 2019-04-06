@@ -27,8 +27,6 @@ class GroupItem:
                     self._top = self.page.items[self._parent_node]._top + self._top
                     self._left = self.page.items[self._parent_node]._left + self._left
 
-        pass
-
     def checkAttrib(self, attrib):
         if attrib.get('top') is None:
             attrib['top'] = 1080 - int(attrib['bottom'])

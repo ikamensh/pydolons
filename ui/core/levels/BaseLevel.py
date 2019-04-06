@@ -8,27 +8,27 @@ if TYPE_CHECKING:
     from ui.world import GameWorld
 
 
-class BaseLevel(object):
+class BaseLevel:
     def __init__(self):
-        super(BaseLevel, self).__init__()
-        self.gameRoot:GameRootNode = None
-        self.middleLayer:UnitMiddleLayer = None
-        self.world:GameWorld = None
-        self.units:Units = None
+        super().__init__()
+        self.gameRoot: GameRootNode = None
+        self.middleLayer: UnitMiddleLayer = None
+        self.world: GameWorld = None
+        self.units: Units = None
 
-    def setGameRoot(self, gameRoot):
+    def setGameRoot(self, gameRoot: GameRootNode):
         self.gameRoot = gameRoot
         self.gameRoot.level = self
 
-    def setMiddleLayer(self, middleLayer):
+    def setMiddleLayer(self, middleLayer: UnitMiddleLayer):
         self.middleLayer = middleLayer
         self.middleLayer.level =  self
 
-    def setGameWorld(self, world):
+    def setGameWorld(self, world: GameWorld):
         self.world = world
         self.world.level = self
 
-    def setUnits(self, units):
+    def setUnits(self, units: Units):
         self.units = units
         self.units.level = self
 

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class BaseItem(QGraphicsObject):
     def __init__(self, page, parent=None):
-        super(BaseItem, self).__init__(parent)
+        super().__init__(parent)
         self.gameRoot: GameRootNode = page.gamePages.gameRoot
         self.page: AbstractPage = page
         self.attrib: dict = None
@@ -80,18 +80,15 @@ class BaseItem(QGraphicsObject):
     def paint_bg(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
         painter.setBrush(self._bg_brush)
         painter.drawRect(self._left, self._top, self._width, self._height)
-        pass
 
     def paint_pic(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
         painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
         painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
-        pass
 
     def paint_pic_bg(self, painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
         painter.setBrush(self._bg_brush)
         painter.drawRect(self._left, self._top, self._width, self._height)
         painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
-        pass
 
     @property
     def width(self):

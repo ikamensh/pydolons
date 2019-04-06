@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 
 class GameVision(QtWidgets.QGraphicsItemGroup):
     """docs GameVision"""
-    def __init__(self, level):
+    def __init__(self, level: BaseLevel):
         super(GameVision, self).__init__()
-        self.level: BaseLevel = level
+        self.level = level
         self.bf_w = self.level.gameRoot.game.bf.w
         self.bf_h = self.level.gameRoot.game.bf.h
         self.cell_w = self.level.gameRoot.cfg.getSize(103001001)[0]

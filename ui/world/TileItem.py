@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class TileItem(QGraphicsObject):
     def __init__(self, gameRoot, parent=None, w =1, h=1):
-        super(TileItem, self).__init__(parent)
+        super().__init__(parent)
         self.gameRoot: GameRootNode = gameRoot
         self.pixmaps = {}
         self._brushs = {}
@@ -22,12 +22,10 @@ class TileItem(QGraphicsObject):
         self._height = h
         self._cell_1: Cell = None
         self._cell_2: Cell = None
-        pass
 
     def add_pixmap(self, id:int, pixmap:QPixmap):
         self.pixmaps[id] = pixmap
         self._brushs[id] = QBrush(pixmap)
-        pass
 
     def add_cell(self, id:int, cell:Cell):
         self.cells[cell] = id

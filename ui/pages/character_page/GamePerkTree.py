@@ -11,10 +11,10 @@ if TYPE_CHECKING:
 
 
 class GamePerkTree:
-    def __init__(self, perk_tree, character):
+    def __init__(self, perk_tree: PerkTree, character: Character):
         assert perk_tree in character.perk_trees
-        self.perk_tree: PerkTree = perk_tree
-        self.character: Character = character
+        self.perk_tree = perk_tree
+        self.character = character
         self.perks = {}
         self.perks_info = {}
         self.setUpPerkParams()

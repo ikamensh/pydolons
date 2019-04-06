@@ -5,7 +5,7 @@ from xml.etree.ElementTree import Element
 
 class GameShop(SlotsGroup):
     def __init__(self, gameRoot, page):
-        super(GameShop, self).__init__(gameRoot, page)
+        super().__init__(gameRoot, page)
 
     def setUpSlots(self, element):
         for slot in self.gameRoot.game.shop.inventory:
