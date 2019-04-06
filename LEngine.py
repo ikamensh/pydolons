@@ -6,7 +6,7 @@ from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 
 # import triggers
-from ui.gamecore.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
+from ui.core.triggers.animation_triggers import move_anim_trigger, damage_anim_trigger, attack_anin_trigger, \
     perish_anim_trigger, turn_anim_trigger, nexunit_anim_trigger, levelstatus_trigger, ui_error_message_trigger, \
     obstacle_destroy_trigger
 

@@ -3,7 +3,7 @@ from game_objects.items import StandardEquipment, ItemTypes, WearableItem, Equip
 from game_objects.items.on_unit.slot_groups.SlotGroup import SlotGroup
 import itertools
 from typing import Dict, Union, TYPE_CHECKING, Tuple
-from mechanics.events import ItemDroppedEvent
+from mechanics.events.items.ItemDroppedEvent import ItemDroppedEvent
 if TYPE_CHECKING:
     from game_objects.items import Slot
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, TYPE_CHECKING
-from mechanics.events import ItemDroppedEvent
+from mechanics.events.items.ItemDroppedEvent import ItemDroppedEvent
 if TYPE_CHECKING:
     from game_objects.items import Slot
     from game_objects.battlefield_objects import Unit

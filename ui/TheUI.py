@@ -4,13 +4,13 @@ import sys
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from ui.gamecore import GameRootNode
-from ui.gamecore import GameController
-from ui.gamecore import GameView
-from ui.gamecore.levels import LevelFactory
+from ui.core import GameRootNode
+from ui.core import GameController
+from ui.core import GameView
+from ui.core.levels import LevelFactory
 
-from ui.gameanimation import Animations
-from ui.gamepages import GamePages
+from ui.animation import Animations
+from ui.pages import GamePages
 
 from LEngine import LEngine
 from GameLoopThread import GameLoopThread, ProxyEmit
@@ -20,9 +20,8 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from DreamGame import DreamGame
-    from ui.gamecore.gameconfig.GameConfiguration import GameConfiguration
-    from ui.gamecore.levels.BaseLevel import BaseLevel
-    from ui.TheUI import TheUI
+    from ui.core.gameconfig.GameConfiguration import GameConfiguration
+    from ui.core.levels.BaseLevel import BaseLevel
 
 
 class TheUI(QtWidgets.QWidget):

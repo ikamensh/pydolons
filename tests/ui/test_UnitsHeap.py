@@ -2,9 +2,9 @@ import unittest
 from os import path
 from config import pydolons_rootdir
 from PySide2 import QtGui
-from ui.gameworld.units.BasicUnit import BasicUnit
-from ui.gameworld.units.UnitsHeap import UnitsHeap
-from ui.gamecore.GameRootNode import GameRootNode
+from ui.world.units.BasicUnit import BasicUnit
+from ui.world.units.UnitsHeap import UnitsHeap
+from ui.core.GameRootNode import GameRootNode
 from tests.ui.TestHelper import UsesQApp
 
 root = GameRootNode()

@@ -1,6 +1,6 @@
 import unittest
-from ui.gameworld.units.BasicUnit import BasicUnit
-from ui.gamecore.GameRootNode import GameRootNode
+from ui.world.units.BasicUnit import BasicUnit
+from ui.core.GameRootNode import GameRootNode
 from tests.ui.TestHelper import UsesQApp
 
 

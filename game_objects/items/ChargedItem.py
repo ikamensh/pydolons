@@ -1,6 +1,6 @@
 from game_objects.items import Item, ItemTypes
 from game_objects.attributes import DynamicParameter
-from mechanics.events import ItemUsedUpEvent
+from mechanics.events.items.ItemUsedUpEvent import ItemUsedUpEvent
 from mechanics.actives import Active, ActiveTags, Cost
 
 #Design: ensure item has game variable as soon as it enters any interactable containers.

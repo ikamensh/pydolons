@@ -5,7 +5,7 @@ from mechanics.turns import AtbTurnsManager
 from mechanics.factions import Faction
 from mechanics.AI import BruteAI, RandomAI
 from mechanics.events import EventsPlatform, NextUnitEvent
-from ui.gamecore.events import LevelStatusEvent
+from ui.core.events import LevelStatusEvent
 from mechanics.rpg.experience import exp_rule
 from mechanics.rpg.regen import regen_rule
 from mechanics.rpg.push import push_rule

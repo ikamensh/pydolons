@@ -1,7 +1,7 @@
 from __future__ import annotations
 from game_objects.items import Item
 from game_objects.attributes import DynamicParameter
-from mechanics.events import ItemDestroyedEvent
+from mechanics.events.items.ItemDestroyedEvent import ItemDestroyedEvent
 
 from my_utils.utils import tractable_value
 
