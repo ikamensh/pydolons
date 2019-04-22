@@ -5,7 +5,7 @@ from ui.world.units.UnitsHeap import UnitsHeap
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ui.levels import BaseLevel
+    from ui.core.levels import BaseLevel
     from ui.units.BasicUnit import BasicUnit
     from game_objects.battlefield_objects import Unit
 
@@ -31,7 +31,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
-        if cell_to not in self.level.gameRoot.game.bf.walls.keys():
+        if cell_to not in self.level.world.walls:
             x, y = cell_to.x, cell_to.y
             self.units_at[unit.uid].moveTo(x, y)
             # if unit == self.level.gameRoot.game.the_hero:
@@ -39,13 +39,14 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def unitDied(self, unit_bf: Unit):
         unit = self.units_at[unit_bf.uid]
-        self.destroyUnit(unit)
-        unit.setVisible(False)
-        self.removeFromGroup(unit)
-        # if unit != self.level.gameRoot.game.the_hero:
-        del self.units_at[unit.uid]
-        self.update_heaps()
-        self.updateVision()
+        if not unit.is_hero:
+            self.destroyUnit(unit)
+            unit.setVisible(False)
+            self.removeFromGroup(unit)
+            # if unit != self.level.gameRoot.game.the_hero:
+            del self.units_at[unit.uid]
+            self.update_heaps()
+            self.updateVision()
 
     def turnUnit(self, uid, turn):
         if uid == self.level.gameRoot.game.the_hero.uid:
@@ -91,6 +92,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.unitDied(msg.get('unit'))
+        self.level.world.addCorpse(msg.get('corpse'))
 
     def addToUnitsGroup(self, unit):
             # group = self.groups_at.get(unit.worldPos)
@@ -141,7 +143,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def units_from_(self, units):
         for unit in units:
-            yield self.units_at[unit.uid]
+            if unit.alive:
+                yield self.units_at[unit.uid]
 
     def setUpToolTip(self, item):
         item.hovered.connect(self.toolTipShow)
@@ -187,7 +190,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level = None
         self = None
 
+
     def sceneEvent(self, event):
+        print("units press")
         # print(event)
         return True
 

@@ -75,3 +75,7 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
             self.removeFromGroup(item)
         self.targets = []
         self.targeted = False
+
+    def key_press_event(self, event=None):
+        if self.targeted:
+            self.removeTargets()

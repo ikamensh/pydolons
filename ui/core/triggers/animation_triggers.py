@@ -48,7 +48,7 @@ def attack_anin_trigger(game):
 
 
 def play_perish_anim(t, e):
-    ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'sound':e.unit.sound_map.perish.lower()})
+    ProxyEmit.play_perish_anim.emit({'unit':e.unit, 'corpse':e.corpse, 'sound':e.unit.sound_map.perish.lower()})
     pass
 
 def perish_anim_trigger(game):

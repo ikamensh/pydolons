@@ -142,13 +142,26 @@ class TheUI(QtWidgets.QWidget):
         self.gamePages.page = self.gamePages.gameMenu
         self.view.controller = self.controller
 
-
     def stopGame(self):
         if not self.gameRoot.loop is None:
             # game.loop stop condition
             self.gameRoot.game.loop_state = False
             self.destroyLevel()
             self.gamePages.destroyPages()
+            # thread call quit, exit from thread
+            self.loop.quit()
+            # application waiting for shutdown thread
+            self.loop.wait(5000)
+            del self.loop
+            self.gameRoot.loop = None
+            del self.gameRoot.game
+            self.gameRoot.game = None
+            self.gamePages.startPage.showPage()
+
+    def destroy_loop(self):
+        if not self.gameRoot.loop is None:
+            # game.loop stop condition
+            self.gameRoot.game.loop_state = False
             # thread call quit, exit from thread
             self.loop.quit()
             # application waiting for shutdown thread

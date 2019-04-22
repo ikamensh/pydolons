@@ -44,12 +44,15 @@ class LevelFactory:
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
         self.level.world.setWorldSize(self.gameRoot.game.bf.w, self.gameRoot.game.bf.h)
         self.level.world.setUpFloors(self.gameRoot.game.bf)
+        self.level.world.setUpCorpses()
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
         self.level.gameVision = GameVision(self.level)
         self.setUpUnits(self.gameRoot.game.bf)
         self.level.gameRoot.cfg.setWorld(self.level.world)
         self.level.gameRoot.controller.setUp(self.level.world, self.level.units, self.level.middleLayer)
+        self.level.gameRoot.controller.register(self.level.gameRoot.controller)
+        self.level.gameRoot.controller.register(self.level.middleLayer)
         self.level.gameRoot.controller.tr_support.initLevel(self.level)
         self.level.debugLayer = DebugLayer(self.level)
 
@@ -68,7 +71,6 @@ class LevelFactory:
                 self.level.units.addToGroup(gameUnit)
                 self.level.units.units_at[unit.uid] = gameUnit
             elif isinstance(unit, Obstacle):
-                print(unit)
                 obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
                                         self.gameRoot.cfg.unit_size[1],
                                         name = unit.name)
@@ -97,6 +99,8 @@ class LevelFactory:
 
     def removeLevel(self):
         print('level --destroy')
+        self.gameRoot.controller.un_register(self.gameRoot.controller)
+        self.gameRoot.controller.un_register(self.level.middleLayer)
         self.gameRoot.level = None
         self.gameRoot.controller.tr_support.level = None
         self.level.world.level = None

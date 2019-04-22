@@ -33,4 +33,7 @@ class BaseLevel:
         self.units.level = self
 
     def setStatus(self, status):
+        if status == "DEFEAT":
+            self.gameRoot.gamePages.notify.call = self.gameRoot.ui.stopGame
+            self.gameRoot.gamePages.startPage.state = True
         self.gameRoot.gamePages.gameMenu.showNotify(status)

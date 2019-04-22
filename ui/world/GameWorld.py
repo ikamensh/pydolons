@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.core.gameconfig.GameConfiguration import GameConfiguration
     from battlefield.Battlefield import Battlefield
-    from game_objects.battlefield_objects import Wall
+    from game_objects.battlefield_objects import Wall, Corpse
     from ui.core.levels.BaseLevel import BaseLevel
     from PySide2.QtGui import QPixmap
     from typing import Dict
@@ -24,6 +24,7 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         self.level: BaseLevel = None
         self.floor: TileItem = None
         self.obstacles = {}
+        self.walls = []
 
     def setLevel(self, level):
         self.level = level
@@ -52,9 +53,18 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
             if not self.floor.is_pixmap(pixmap):
                 self.floor.add_pixmap(wall.icon, pixmap)
             self.floor.add_cell(wall.icon, cell)
+            self.walls.append(cell)
 
     def setUpFloors(self, bf: Battlefield):
         self.setFloor(self.cfg.getPicFile('floor.png', 102001001))
         if bf.walls is not {}:
             self.setWall(bf.walls)
 
+    def setUpCorpses(self):
+        self.corpses = TileItem(gameRoot=self.cfg.gameRoot, w=128, h=128)
+        self.addToGroup(self.corpses)
+
+    def addCorpse(self, corpse:Corpse):
+        self.corpses.add_pixmap(corpse.unit.uid, self.cfg.getPicFile(corpse.icon))
+        self.corpses.add_cell(corpse.unit.uid, corpse.cell)
+        self.walls.append(corpse.cell)

@@ -4,6 +4,7 @@ from ui.core.gameconfig.UserConfig import UserConfig, DEFAULT_CONFIG
 from ui.core.gameconfig.DeviceConfig import DeviceConfig
 from ui.core.gameconfig.ResourceConfig import ResourceConfig
 from ui.core.gameconfig.StyleConfig import StyleConfig
+from ui.core.gameconfig import InputConfig as input_keys
 
 from datetime import datetime
 from copy import copy
@@ -37,6 +38,8 @@ class GameConfiguration:
         self.setUpResourceConfig(lazy)
         # Setup configuration from styles
         self.setUpStyleConfig()
+        # Setup input config
+        self.setUpInputConfig()
         self.gameRoot: GameRootNode = None
 
     def setGameRoot(self, gameRoot):
@@ -111,6 +114,11 @@ class GameConfiguration:
 
     def getFont(self, name = None):
         return self.styleConfig.getFont(name)
+
+    def setUpInputConfig(self):
+        self.input_keys = input_keys
+
+
 
 
 

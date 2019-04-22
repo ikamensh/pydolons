@@ -11,6 +11,7 @@ from ui.core.TransformSupport import TransformSupport
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.core import GameRootNode
+    from ui.pages.AbstractPage import AbstractPage
     from ui.world import GameWorld
     from ui.world.units import UnitMiddleLayer, Units
 
@@ -36,6 +37,13 @@ class GameController(QtCore.QObject):
         self.selected_point = Cell(0, 0)
         self.lost_m_pos = QtCore.QPointF()
         self.r_mouse = False
+        self.observers = []
+        self.orientations = {
+            self.gameRoot.cfg.input_keys.east_move: Facing.EAST,
+            self.gameRoot.cfg.input_keys.north_move: Facing.NORTH,
+            self.gameRoot.cfg.input_keys.west_move: Facing.WEST,
+            self.gameRoot.cfg.input_keys.south_move: Facing.SOUTH,
+        }
 
     def setGameRoot(self, gameRoot):
         self.tr_support = TransformSupport(gameRoot)
@@ -67,7 +75,7 @@ class GameController(QtCore.QObject):
             self.tr_support.mouseMoveEvent(e)
 
     def mousePressEvent(self, e):
-        self.mousePress.emit(e)
+        # self.mousePress.emit(e)
         self.tr_support.mousePressEvent(e)
         if not self.tr_support.isMovable:
             if e.button() == QtCore.Qt.LeftButton:
@@ -75,7 +83,8 @@ class GameController(QtCore.QObject):
                 try:
                     if not self.gameRoot.gamePages.isGamePage:
                         if self.tr_support.floor_rect.contains(self.lost_m_pos.x(), self.lost_m_pos.y()):
-                            self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
+                            if self.gameRoot.game is not None:
+                                self.gameRoot.game.ui_order(self.last_point.x, self.last_point.y)
                             self.selected_point.x, self.selected_point.y = self.last_point.x, self.last_point.y
                             self.middleLayer.showSelectedItem(self.selected_point.x, self.selected_point.y)
                 except PydolonsError as exc:
@@ -89,7 +98,7 @@ class GameController(QtCore.QObject):
     def keyPressEvent(self, e):
         self.keyPress.emit(e)
         try:
-            self.order_from_hotkey(e)
+            self.send_key_press(e)
         except PydolonsError as exc:
             UiErrorMessageEvent(self.gameRoot.game, repr(exc))
 
@@ -134,22 +143,26 @@ class GameController(QtCore.QObject):
         self.last_point.x, self.last_point.y = x, y
         self.middleLayer.selectItem(x, y)
 
-    orientations = {
-        QtCore.Qt.Key_W: Facing.EAST,
-        QtCore.Qt.Key_A: Facing.NORTH,
-        QtCore.Qt.Key_S: Facing.WEST,
-        QtCore.Qt.Key_D: Facing.SOUTH,
-    }
 
-    def order_from_hotkey(self, e):
-        if e.key() == QtCore.Qt.Key_Q:
+
+    def key_press_event(self, e):
+        if e.key() == self.gameRoot.cfg.input_keys.turn_ccw:
             self.gameRoot.game.order_turn_ccw()
-        elif e.key() == QtCore.Qt.Key_E:
+        elif e.key() == self.gameRoot.cfg.input_keys.turn_cw:
             self.gameRoot.game.order_turn_cw()
-        elif e.key() in GameController.orientations:
+        elif e.key() in self.orientations:
             self.gameRoot.game.order_step(GameController.orientations[e.key()])
-        elif e.key() == QtCore.Qt.Key_H:
+        elif e.key() == self.gameRoot.cfg.input_keys.map_move:
             self.tr_support.setMovableMaps()
-        if self.middleLayer.targeted:
-            self.middleLayer.removeTargets()
 
+    # Template Observer
+
+    def register(self, observer):
+        self.observers.append(observer)
+
+    def un_register(self, observer):
+        self.observers.remove(observer)
+
+    def send_key_press(self, event):
+        for observer in self.observers:
+            observer.key_press_event(event)
