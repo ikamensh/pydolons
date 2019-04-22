@@ -52,6 +52,10 @@ class GamePages(object):
         self.gameRoot.scene.addItem(self.toolTip)
         self.gameRoot.scene.addItem(self.notify)
         self.setUpInventoryPage()
+        self.gameRoot.scene.removeItem(self.startPage)
+        self.gameRoot.scene.addItem(self.startPage)
+        self.gameRoot.scene.removeItem(self.startPage.mainWidget)
+        self.gameRoot.scene.addItem(self.startPage.mainWidget)
 
     def destroyPages(self):
         pages = list(self.pages.values())[:]
