@@ -11,13 +11,15 @@ class NotifyText(QtWidgets.QGraphicsTextItem):
     def __init__(self, parent = None):
         QtWidgets.QGraphicsTextItem.__init__(self, parent)
         self.gameRoot: GameRootNode = None
+        self.call = self.__call
         self.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
         self.setVisible(False)
         self.anim = QtCore.QPropertyAnimation(self, b'opacity')
-        self.anim.setDuration(1000)
+        self.anim.setDuration(2500)
         self.anim.setStartValue(1.0)
         self.anim.setEndValue(0.0)
-        self.anim.finished.connect(self.hide)
+        self.anim.finished.connect(self.finish_animation)
+        # self.anim.finished.connect(self.call)
         self.widget_pos = (0, 0)
 
     def showText(self, text):
@@ -35,3 +37,11 @@ class NotifyText(QtWidgets.QGraphicsTextItem):
     def resized(self):
         self.setPos(self.gameRoot.view.mapToScene(self.widget_pos[0], self.widget_pos[1]))
         pass
+
+    def __call(self):
+        pass
+
+    def finish_animation(self):
+        self.hide()
+        self.call()
+        self.call = self.__call

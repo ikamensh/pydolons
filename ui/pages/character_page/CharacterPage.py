@@ -37,7 +37,6 @@ class CharacterPage(AbstractPage):
     def hidePage(self):
         self.state = False
         self.hide()
-        self.scene().removeItem(self)
 
     def sceneEvent(self, event:QtCore.QEvent):
         if event.type() is QtCore.QEvent.GraphicsSceneMousePress:
@@ -126,6 +125,7 @@ class CharacterPage(AbstractPage):
     def setUpMasteries(self, character):
         self.gm = GameMasteries(character)
         self.gm.setUpMasteries()
+        self.mastery_bar_update()
         # self.mastery_all_update()
 
     def mastery_up(self, name):
@@ -144,6 +144,13 @@ class CharacterPage(AbstractPage):
                 m_name = self.items.get(f'mastery_{m.name.lower()}_name')
                 m_name.setColor('#FF4AFF')
                 # self.update(0, 0, 1920, 1080)
+
+    def mastery_bar_update(self):
+        for name, mastery in self.gm.masteries.items():
+            perc, __ = self.gm.mastery_prec(mastery)
+            bar = self.items.get(f'mastery_{name}_bar')
+            if bar is not None:
+                bar._width = bar.width * perc
 
     def mastery_all_update(self):
         for name, mastery in self.gm.masteries.items():
