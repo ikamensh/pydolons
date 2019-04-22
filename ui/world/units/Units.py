@@ -191,10 +191,10 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self = None
 
 
-    def sceneEvent(self, event):
-        print("units press")
-        # print(event)
-        return True
+    # def sceneEvent(self, event):
+    #     print("units press")
+    #     # print(event)
+    #     return True
 
     def keyPressEvent(self, event):
         # print(event)

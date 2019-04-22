@@ -63,7 +63,7 @@ class TheUI(QtWidgets.QWidget):
         self.scene.setFocus(focusReason=QtCore.Qt.OtherFocusReason)
         self.scene.setBackgroundBrush(QtCore.Qt.black)
 
-        self.controller = GameController()
+        self.controller = GameController(self.gameRoot)
         self.gameRoot.setGameController(self.controller)
 
         self.levelFactory = LevelFactory(self.lengine)

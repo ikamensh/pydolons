@@ -22,12 +22,12 @@ class GameController(QtCore.QObject):
     mousePress = QtCore.Signal(QtCore.QEvent)
     mouseMove = QtCore.Signal(QtCore.QEvent)
 
-    def __init__(self):
+    def __init__(self, gameRoot):
         super(GameController, self).__init__()
         """
         last_point = Cell() -- последняя точка, на которую указывает игрок
         """
-        self.gameRoot:GameRootNode = None
+        self.gameRoot:GameRootNode = gameRoot
         self.tr = QtGui.QTransform()
         self.tr_support:TransformSupport = None
 
@@ -65,7 +65,7 @@ class GameController(QtCore.QObject):
         """
         self.mouseMove.emit(e)
         if not self.gameRoot.gamePages.isGamePage:
-            if not self.gameRoot.gamePages.gameMenu.isFocus():
+            if self.gameRoot.gamePages.gameMenu is not None:
                 pos = self.gameRoot.view.mapToScene(e.pos().x(), e.pos().y())
                 self.lost_m_pos.setX(pos.x())
                 self.lost_m_pos.setY(pos.y())
@@ -151,7 +151,7 @@ class GameController(QtCore.QObject):
         elif e.key() == self.gameRoot.cfg.input_keys.turn_cw:
             self.gameRoot.game.order_turn_cw()
         elif e.key() in self.orientations:
-            self.gameRoot.game.order_step(GameController.orientations[e.key()])
+            self.gameRoot.game.order_step(self.orientations[e.key()])
         elif e.key() == self.gameRoot.cfg.input_keys.map_move:
             self.tr_support.setMovableMaps()
 
