@@ -1,60 +1,48 @@
-from character import Character, MasteriesEnum
+import random
+import pytest
+from character.masteries import Masteries, MasteriesEnum
+
+def test_incremental_cost_grows():
+    m = Masteries()
+
+    old_cost = 0
+
+    for i in range(1000):
+        c = m.increment_cost(i)
+        assert c > old_cost
+        old_cost = c
 
 
-def test_can_up_all_masteries(demohero_basetype):
-    c = Character(demohero_basetype)
-    c.unit.xp = int(1e100)
-    assert set(c.masteries_can_go_up) == set(MasteriesEnum)
+def test_cost_depends_only_directly(var_mastery):
+    m = Masteries()
+    initial_exp = 123
 
-def test_can_up_a_lot(char, one_mastery):
-    char.unit.xp = int(1e100)
+    m.exp_spent[var_mastery] = initial_exp
 
-    last_cost = 0
-    delta_exp_before = 0
-    for i in range(200):
-        mastery_before = char.masteries[one_mastery]
-        exp_before = char.free_xp
+    cost_before = m.calculate_cost(var_mastery)
 
-        char.increase_mastery(one_mastery)
-        delta_exp = exp_before - char.free_xp
-        assert char.unit.masteries[one_mastery] > mastery_before
-        assert last_cost < char.unit.masteries.calculate_cost(one_mastery)[0] # cost grows
-        assert delta_exp > delta_exp_before
-        last_cost = char.masteries.calculate_cost(one_mastery)[0]
-        delta_exp_before = delta_exp
+    for other_m in set(MasteriesEnum) - {var_mastery}:
+        m.exp_spent[other_m] = random.randint(0, 1000000)
+
+    assert m.calculate_cost(var_mastery) == cost_before
 
 
-
-
-def test_reset_mastery(char, one_mastery):
-    char.unit.xp = int(1e100)
-    exp_initially = char.free_xp
-    lvl_initially = char.masteries[one_mastery]
-
-    for i in range(1):
-        char.increase_mastery(one_mastery)
-
-    assert char.free_xp < exp_initially
-    assert char.unit.masteries[one_mastery] > lvl_initially
-
-    char.reset()
-
-    assert char.masteries[one_mastery] == lvl_initially
-    assert char.unit.masteries[one_mastery] == lvl_initially
-    assert char.free_xp == exp_initially
+@pytest.mark.parametrize("lvl", [0, 1, 3, 7, 15, 155])
+def test_cum_cost_eq_level(one_mastery, lvl):
+    m = Masteries()
+    cost = m.cumulative_cost(lvl)
+    m.exp_spent[one_mastery] = cost
+    assert m.values[one_mastery] == lvl
 
 
 
+def test_cum_cost():
+    m = Masteries()
+    assert m.cumulative_cost(0) == 0
 
+    old_cost = 0
 
-def test_up_mastery(demohero_basetype, var_mastery):
-    c = Character(demohero_basetype)
-    mastery_before = c.masteries[var_mastery]
-
-    c.increase_mastery(var_mastery)
-
-    assert c.unit.masteries[var_mastery] > mastery_before
-
-
-
-
+    for i in range(1, 1000):
+        c = m.cumulative_cost(i)
+        assert c > old_cost
+        old_cost = c

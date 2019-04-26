@@ -25,7 +25,7 @@ class Masteries:
     @staticmethod
     @lru_cache(maxsize=1024)
     def cumulative_cost(current_level):
-        return sum([Masteries.increment_cost(i) for i in range(current_level+1)])
+        return sum([Masteries.increment_cost(i) for i in range(current_level)])
 
     @staticmethod
     @lru_cache(maxsize=1024)
@@ -42,7 +42,7 @@ class Masteries:
 
     def calculate_cost(self, mastery_up: MasteriesEnum):
 
-        direct_cost = self.cumulative_cost(self.values[mastery_up] + 1) - self.exp_spent[mastery_up]
+        direct_cost = self.cumulative_cost(self.values[mastery_up]+1) - self.exp_spent[mastery_up]
         indirect_costs = {}
         for mastery in MasteriesEnum:
             coupling = MasteriesGroups.coupling(mastery, mastery_up)
