@@ -5,24 +5,23 @@ from game_objects import battlefield_objects
 from character.masteries.Masteries import Masteries
 from character.masteries.MasteriesEnumSimple import MasteriesEnum
 
-from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
-from typing import List, Set, TYPE_CHECKING
+from typing import Set, TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
 
 
 class Character:
     def __init__(self, base_type : BaseType):
-        self.base_type = base_type
-        self.masteries = Masteries()
-        self._unit = battlefield_objects.Unit(base_type, masteries=self.masteries)
+        from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
+        self.base_type = base_type
+        self._masteries = Masteries()
         self.temp_attributes = None
         self.temp_masteries = None
 
         self.perk_trees = [everymans_perks()]
-
+        self._unit = battlefield_objects.Unit(base_type, masteries=self.masteries)
         self.gold = 10000
 
     @property
@@ -39,24 +38,24 @@ class Character:
         return result
 
     @property
+    def masteries(self):
+        return self.temp_masteries or self._masteries
+
+    @property
+    def attributes(self):
+        return self.temp_attributes or self.base_type.attributes
+
+    @property
     def attributes_count(self) -> int:
         return Masteries.achieved_level(self.xp) + 48
 
     @property
     def free_attribute_points(self) -> int:
-        if self.temp_attributes:
-            return self.attributes_count - sum(self.temp_attributes.values())
-        else:
-            return self.attributes_count - sum(self.base_type.attributes.values())
+        return self.attributes_count - sum(self.attributes.values())
 
     @property
     def free_xp(self) -> int:
-        if self.temp_masteries:
-            masteries_xp =  self.temp_masteries.total_exp_spent
-        else:
-            masteries_xp = self.masteries.total_exp_spent
-
-        return self.xp - masteries_xp - sum( pt.spent_xp for pt in self.perk_trees)
+        return self.xp - self.masteries.total_exp_spent - sum( pt.spent_xp for pt in self.perk_trees)
 
 
     def increase_attrib(self, attrib_enum: CharAttributes) -> None:
@@ -92,7 +91,7 @@ class Character:
             self.temp_attributes = None
 
         if self.temp_masteries:
-            self.masteries = self.temp_masteries
+            self._masteries = self.temp_masteries
             self.temp_masteries = None
 
         self.update_unit()
@@ -104,7 +103,7 @@ class Character:
         self.update_unit()
 
     def update_unit(self):
-        self._unit.update(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
+        self._unit.update(self.base_type_prelim, self.masteries)
         for pt in self.perk_trees:
             for a in pt.all_abils:
                 self._unit.add_ability(a)

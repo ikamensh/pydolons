@@ -1,5 +1,4 @@
-from mechanics.damage import Damage
-from mechanics.events import RangedAttackEvent
+from mechanics import events
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import BattlefieldObject, Unit
@@ -13,7 +12,7 @@ class RangedAttack:
     def ranged_attack(source, target):
         weapon = source.get_ranged_weapon()
         assert weapon is not None
-        return RangedAttackEvent(source, target, weapon)
+        return events.RangedAttackEvent(source, target, weapon)
 
 
     # @staticmethod

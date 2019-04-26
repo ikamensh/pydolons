@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 from game_objects.battlefield_objects import BaseType, BattlefieldObject, CharAttributes as ca
 from game_objects.battlefield_objects.CharAttributes import Constants
 from game_objects.attributes import Attribute, AttributeWithBonuses, DynamicParameter
-from game_objects.items import Inventory, Equipment, Weapon, QuickItems, EquipmentSlotUids
+from game_objects import items
 from mechanics.damage import Damage
 from mechanics.damage import Resistances, Armor
 from mechanics import events
@@ -74,9 +74,9 @@ class Unit(BattlefieldObject):
         self.buffs = []
         self.abilities: List[Ability] = []
 
-        self.inventory = Inventory(base_type.inventory_capacity, self)
-        self.quick_items = QuickItems(base_type.quick_items, self)
-        self.equipment :Equipment = Equipment(self)
+        self.inventory = items.Inventory(base_type.inventory_capacity, self)
+        self.quick_items = items.QuickItems(base_type.quick_items, self)
+        self.equipment = items.Equipment(self)
         self.xp = base_type.xp
 
         masteries = masteries or Masteries(base_type.xp)
@@ -185,7 +185,7 @@ class Unit(BattlefieldObject):
 
     @property
     def armor_base(self):
-        body_armor = self.equipment[EquipmentSlotUids.BODY]
+        body_armor = self.equipment[items.EquipmentSlotUids.BODY]
         if body_armor:
             return body_armor.armor + self.natural_armor
         else:
@@ -285,19 +285,19 @@ class Unit(BattlefieldObject):
 
     def get_unarmed_weapon(self):
         dmg = Damage(amount=self.str * Constants.UNARMED_DAMAGE_PER_STR, type=self.unarmed_damage_type)
-        return Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, is_ranged=False,
+        return items.Weapon(name="Fists", damage=dmg, chances=self.unarmed_chances, is_ranged=False,
                       mastery=MasteriesEnum.UNARMED, game=self.game)
 
 
     def get_melee_weapon(self):
-        weapon = self.equipment[EquipmentSlotUids.HANDS]
+        weapon = self.equipment[items.EquipmentSlotUids.HANDS]
         if weapon and not weapon.is_ranged:
             return weapon
         else:
             return self.get_unarmed_weapon()
 
     def get_ranged_weapon(self):
-        weapon = self.equipment[EquipmentSlotUids.HANDS]
+        weapon = self.equipment[items.EquipmentSlotUids.HANDS]
         if weapon and weapon.is_ranged:
             return weapon
 

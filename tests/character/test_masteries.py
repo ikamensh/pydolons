@@ -28,11 +28,11 @@ def test_cost_depends_only_directly(var_mastery):
 
 
 @pytest.mark.parametrize("lvl", [0, 1, 3, 7, 15, 155])
-def test_cum_cost_eq_level(one_mastery, lvl):
+def test_cum_cost_eq_level(some_mastery, lvl):
     m = Masteries()
     cost = m.cumulative_cost(lvl)
-    m.exp_spent[one_mastery] = cost
-    assert m.values[one_mastery] == lvl
+    m.exp_spent[some_mastery] = cost
+    assert m.values[some_mastery] == lvl
 
 
 

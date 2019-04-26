@@ -1,11 +1,10 @@
-from mechanics.buffs import Ability
-#TODO packaging makes no sense?
 from game_objects.battlefield_objects import CharAttributes, enum_to_abbrev
 from game_objects.attributes import Bonus, Attribute
 from character.perks import Perk
 from character.perks import PerkGroup
 
 def attr_bonus_abilities(attr):
+    from mechanics.buffs import Ability
     b1 = Bonus({attr: Attribute(1, 10, 1)})
     b2 = Bonus({attr: Attribute(2, 20, 2)})
     b3 = Bonus({attr: Attribute(3, 35, 4)})

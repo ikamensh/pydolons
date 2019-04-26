@@ -1,6 +1,8 @@
 import pytest
 from character import Character, MasteriesEnum
 from cntent.base_types import pirate_basetype
+from game_objects.battlefield_objects.CharAttributes import core_attributes
+from game_objects.battlefield_objects import CharAttributes
 
 @pytest.fixture()
 def char():
@@ -13,5 +15,13 @@ def var_mastery(request):
 
 
 @pytest.fixture()
-def one_mastery():
+def some_mastery():
     yield MasteriesEnum.SWORD
+
+@pytest.fixture()
+def some_attribute():
+    yield CharAttributes.STREINGTH
+
+@pytest.fixture(params=core_attributes)
+def var_attribute(request):
+    yield request.param

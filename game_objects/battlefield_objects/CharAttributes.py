@@ -22,6 +22,14 @@ class CharAttributes(NameEnum):
     EVASION = auto()
 
 c = CharAttributes
+
+core_attributes = [c.STREINGTH,
+                   c.ENDURANCE,
+                   c.AGILITY,
+                   c.PERCEPTION,
+                   c.INTELLIGENCE,
+                   c.CHARISMA]
+
 abbrev_to_enum = {'str':c.STREINGTH, 'end':c.ENDURANCE, 'agi':c.AGILITY,
            'prc':c.PERCEPTION, 'int':c.INTELLIGENCE, 'cha':c.CHARISMA,
            'health':c.HEALTH, 'stamina': c.STAMINA, 'mana':c.MANA,
@@ -45,12 +53,7 @@ class Constants:
 std_bonus = Attribute(1, 0.05, 2)
 
 value_norms = {
-    c.STREINGTH : std_bonus*1,
-    c.ENDURANCE: std_bonus*1,
-    c.AGILITY: std_bonus*1,
-    c.PERCEPTION: std_bonus*1,
-    c.INTELLIGENCE: std_bonus*1,
-    c.CHARISMA: std_bonus*1,
+    **{attr: std_bonus*1 for attr in core_attributes},
     c.HEALTH : std_bonus*2*Constants.HP_PER_END,
     c.MANA: std_bonus*2*Constants.MANA_PER_INT,
     c.STAMINA: std_bonus*2*Constants.STAMINA_PER_STR,
