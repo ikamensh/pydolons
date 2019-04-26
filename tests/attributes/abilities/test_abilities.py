@@ -4,8 +4,9 @@ from game_objects.attributes import Bonus, Attribute
 from game_objects.battlefield_objects import CharAttributes, get_attrib_by_enum
 from mechanics.buffs import Ability
 
-
-@pytest.fixture(params = set(CharAttributes) - {CharAttributes.ARMOR, CharAttributes.RESISTANCES})
+testable = sorted(set(CharAttributes) - {CharAttributes.ARMOR, CharAttributes.RESISTANCES},
+                  key= lambda x:str(x))
+@pytest.fixture(params = testable)
 def attrib(request):
     yield request.param
 

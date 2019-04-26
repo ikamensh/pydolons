@@ -1,18 +1,22 @@
+from __future__ import annotations
 import copy
 
-from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
+from game_objects import battlefield_objects
 from character.masteries.Masteries import Masteries
 from character.masteries.MasteriesEnumSimple import MasteriesEnum
 
 from character.perks.everymans_perks.everymans_perk_tree import everymans_perks
 
-from typing import List, Set
+from typing import List, Set, TYPE_CHECKING
+if TYPE_CHECKING:
+    from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
+
 
 class Character:
     def __init__(self, base_type : BaseType):
         self.base_type = base_type
         self.masteries = Masteries()
-        self._unit = Unit(base_type, masteries=self.masteries)
+        self._unit = battlefield_objects.Unit(base_type, masteries=self.masteries)
 
         self.temp_attributes = None
         self.temp_masteries = None
@@ -59,16 +63,16 @@ class Character:
         if self.free_attribute_points <= 0:
             return
 
-        assert attrib_enum in CharAttributes
         if self.temp_attributes is None :
             self.temp_attributes = copy.copy(self.base_type.attributes)
         self.temp_attributes[attrib_enum] += 1
+        self.update_unit()
 
     def reduce_attrib(self, attrib_enum: CharAttributes) -> None:
-        assert attrib_enum in CharAttributes
         if self.temp_attributes is None :
             return
         self.temp_attributes[attrib_enum] -= 1
+        self.update_unit()
 
 
     def increase_mastery(self, mastery: MasteriesEnum) -> None:
@@ -76,9 +80,10 @@ class Character:
             return
 
         if self.temp_masteries is None:
-            self.temp_masteries = copy.copy(self.masteries)
+            self.temp_masteries = copy.deepcopy(self.masteries)
 
         self.temp_masteries.level_up(mastery)
+        self.update_unit()
 
 
     def commit(self):
@@ -90,10 +95,19 @@ class Character:
             self.masteries = self.temp_masteries
             self.temp_masteries = None
 
+        self.update_unit()
+
 
     def reset(self):
         self.temp_attributes = None
         self.temp_masteries = None
+        self.update_unit()
+
+    def update_unit(self):
+        self._unit.update(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
+        for pt in self.perk_trees:
+            for a in pt.all_abils:
+                self._unit.add_ability(a)
 
     @property
     def base_type_prelim(self):
@@ -104,14 +118,10 @@ class Character:
             cpy.attributes = self.temp_attributes
             return cpy
 
-
     @property
     def unit(self) -> Unit:
-        self._unit.update(self.base_type_prelim, masteries=self.temp_masteries or self.masteries)
-        for pt in self.perk_trees:
-            for a in pt.all_abils:
-                self._unit.add_ability(a)
         return self._unit
+
 
     @property
     def xp(self):

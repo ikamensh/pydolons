@@ -12,7 +12,7 @@ class Masteries:
         return sum(self.exp_spent.values())
 
     @staticmethod
-    @lru_cache(maxsize=512)
+    @lru_cache(maxsize=1024)
     def increment_cost(current_level):
         if current_level <= 0:
             return 4
@@ -23,11 +23,12 @@ class Masteries:
                 return int(2**(current_level/13) + Masteries.increment_cost(current_level-1))
 
     @staticmethod
-    @lru_cache(maxsize=512)
+    @lru_cache(maxsize=1024)
     def cumulative_cost(current_level):
         return sum([Masteries.increment_cost(i) for i in range(current_level+1)])
 
     @staticmethod
+    @lru_cache(maxsize=1024)
     def achieved_level(exp):
         level = 0
         while exp >= Masteries.cumulative_cost(level+1):
@@ -39,7 +40,7 @@ class Masteries:
     def values(self):
         return { m: Masteries.achieved_level(exp) for m, exp in self.exp_spent.items()}
 
-    def calculate_cost(self, mastery_up):
+    def calculate_cost(self, mastery_up: MasteriesEnum):
 
         direct_cost = self.cumulative_cost(self.values[mastery_up] + 1) - self.exp_spent[mastery_up]
         indirect_costs = {}
@@ -71,12 +72,6 @@ class Masteries:
         exp = self.exp_spent[item]
         lvl = self.achieved_level(exp)
         return lvl
-
-
-
-
-
-
 
 
 
