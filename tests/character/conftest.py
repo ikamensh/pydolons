@@ -9,6 +9,12 @@ def char():
     c = Character(pirate_basetype)
     return c
 
+@pytest.fixture()
+def char_with_xp():
+    c = Character(pirate_basetype)
+    c.unit.xp = int(1e100)
+    return c
+
 @pytest.fixture(params=MasteriesEnum)
 def var_mastery(request):
     yield request.param

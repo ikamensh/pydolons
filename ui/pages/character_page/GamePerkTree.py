@@ -59,9 +59,8 @@ class GamePerkTree:
         return self.string_cost(self.perk_tree.spent_xp)
 
     def perk_up(self, perk):
-        self.perk_tree.spent_xp += self.xp_to_levelup(perk)
-        perk.current_level += 1
-        self.character.unit.reset()
+        self.perk_tree.perk_up(perk)
+        self.character.update_unit()
 
     @staticmethod
     def string_cost(cost):

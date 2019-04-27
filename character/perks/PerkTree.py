@@ -47,6 +47,11 @@ class PerkTree:
         base = 10 ** (log10-1)
         return int( precise_cost // base * base )
 
+    def perk_up(self, perk: Perk):
+        assert perk in self.accessible_perks()
+        self.spent_xp += self.cost_to_levelup(perk)
+        perk.current_level += 1
+
     @property
     def all_abils(self):
         return flatten([p.abils for p in self.all_perks])

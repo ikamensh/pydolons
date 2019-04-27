@@ -6,9 +6,10 @@ from character.masteries.Masteries import Masteries
 from character.masteries.MasteriesEnumSimple import MasteriesEnum
 
 
-from typing import Set, TYPE_CHECKING
+from typing import Set, TYPE_CHECKING, Tuple, Dict
 if TYPE_CHECKING:
     from game_objects.battlefield_objects import BaseType, Unit, CharAttributes
+    from character.perks import PerkTree, Perk
 
 
 class Character:
@@ -21,6 +22,8 @@ class Character:
         self.temp_masteries = None
 
         self.perk_trees = [everymans_perks()]
+        self._perks_checkpoint : Tuple[Dict[PerkTree, int], Dict[Perk, int]] = None
+        self.perks_checkpoint()
         self._unit = battlefield_objects.Unit(base_type, masteries=self.masteries)
         self.gold = 10000
 
@@ -57,6 +60,22 @@ class Character:
     def free_xp(self) -> int:
         return self.xp - self.masteries.total_exp_spent - sum( pt.spent_xp for pt in self.perk_trees)
 
+    @property
+    def base_type_prelim(self):
+        if not self.temp_attributes:
+            return self.base_type
+        else:
+            cpy = copy.copy(self.base_type)
+            cpy.attributes = self.temp_attributes
+            return cpy
+
+    @property
+    def unit(self) -> Unit:
+        return self._unit
+
+    @property
+    def xp(self):
+        return self.unit.xp
 
     def increase_attrib(self, attrib_enum: CharAttributes) -> None:
         if self.free_attribute_points <= 0:
@@ -84,6 +103,23 @@ class Character:
         self.temp_masteries.level_up(mastery)
         self.update_unit()
 
+    def perks_checkpoint(self):
+        perks_checkpoint_exp = {}
+        perks_checkpoint_levels = {}
+        for pt in self.perk_trees:
+            perks_checkpoint_exp[pt] = pt.spent_xp
+            for perk in pt.all_perks:
+                perks_checkpoint_levels[perk] = perk.current_level
+
+        self._perks_checkpoint = perks_checkpoint_exp, perks_checkpoint_levels
+
+    def reset_perks(self):
+        perks_exp, perks_levels = self._perks_checkpoint
+        for pt in perks_exp:
+            pt.spent_xp = perks_exp[pt]
+        for perk in perks_levels:
+            perk.current_level = perks_levels[perk]
+
 
     def commit(self):
         if self.temp_attributes:
@@ -94,12 +130,14 @@ class Character:
             self._masteries = self.temp_masteries
             self.temp_masteries = None
 
+        self.perks_checkpoint()
         self.update_unit()
 
 
     def reset(self):
         self.temp_attributes = None
         self.temp_masteries = None
+        self.reset_perks()
         self.update_unit()
 
     def update_unit(self):
@@ -108,20 +146,4 @@ class Character:
             for a in pt.all_abils:
                 self._unit.add_ability(a)
 
-    @property
-    def base_type_prelim(self):
-        if not self.temp_attributes:
-            return self.base_type
-        else:
-            cpy = copy.copy(self.base_type)
-            cpy.attributes = self.temp_attributes
-            return cpy
 
-    @property
-    def unit(self) -> Unit:
-        return self._unit
-
-
-    @property
-    def xp(self):
-        return self.unit.xp
