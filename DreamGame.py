@@ -187,10 +187,15 @@ class DreamGame(SimGame):
 
         if self.turns_manager.get_next() is self.the_hero:
             cell = Cell.from_complex(x + y* 1j)
-            if cell in self.bf.cells_to_objs:
-                self.order_attack(self.the_hero, random.choice(self.bf.cells_to_objs[cell]))
-            else:
+            if not cell in self.bf.cells_to_objs:
                 self.order_move(self.the_hero, cell)
+            else:
+                units_on_cell = [u for u in self.bf.cells_to_objs[cell] if not u.is_obstacle]
+                opponents = [u for u in units_on_cell if u.faction is Faction.ENEMY]
+                if opponents:
+                    self.order_attack(self.the_hero, random.choice(opponents))
+                else:
+                    self.order_move(self.the_hero, cell)
 
 
     def order_turn_cw(self):
