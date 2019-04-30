@@ -43,6 +43,10 @@ class CharacterPage(AbstractPage):
             self.pressItem(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneMouseRelease:
+            for item in self.pressed_buttons:
+                item.isDown = False
+                item.update()
+            self.pressed_buttons.clear()
             self.releaseItem(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneHoverMove:
@@ -51,12 +55,14 @@ class CharacterPage(AbstractPage):
         else:
             return super(CharacterPage, self).sceneEvent(event)
 
-    def pressItem(self, item):
+    def pressItem(self, item: BaseItem):
         if item is not None:
-            # print(item.name, 'press')
-            pass
+            if item.input == 'button':
+                item.isDown = True
+                self.pressed_buttons.append(item)
+            item.update()
 
-    def releaseItem(self, item:BaseItem):
+    def releaseItem(self, item: BaseItem):
         if item is not None:
             # print(item.name, 'release')
             if item.input == 'button':
