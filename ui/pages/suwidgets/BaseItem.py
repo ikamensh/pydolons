@@ -73,7 +73,6 @@ class BaseItem(QGraphicsObject):
         else:
             self.input = attrib.get('input')
             if self.input == 'button':
-                print('bu')
                 self._bg_brush = QBrush(QtCore.Qt.black)
                 self.paint = self.paint_pic_button
 
@@ -104,12 +103,6 @@ class BaseItem(QGraphicsObject):
                                self._width * self._scale,
                                self._height * self._scale,
                                self.pixmap)
-            # painter.drawRect(self._left, self._top, self._width, self._height)
-            # painter.drawPixmap(self._left + self._width * (1 - self.scale_x),
-            #                    self._top + self._height * (1 - self.scale_y),
-            #                    self._width * self.scale_x,
-            #                    self._height * self.scale_y,
-            #                    self.pixmap)
         else:
             painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
 

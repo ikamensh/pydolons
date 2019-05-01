@@ -65,7 +65,6 @@ class CharacterPage(AbstractPage):
 
     def releaseItem(self, item: BaseItem):
         if item is not None:
-            # print(item.name, 'release')
             if item.input == 'button':
                 if item._names[0] == 'perk':
                     self.perk_up(item._names[1])
@@ -162,7 +161,6 @@ class CharacterPage(AbstractPage):
         if mastery is not None:
             perc, mm = self.gm.mastery_prec(mastery)
             for m in mm.keys():
-                # print(m.name.lower())
                 m_name = self.items.get(f'mastery_{m.name.lower()}_name')
                 m_name.setColor('#FF4AFF')
                 # self.update(0, 0, 1920, 1080)
