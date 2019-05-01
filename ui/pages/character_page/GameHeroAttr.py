@@ -75,6 +75,9 @@ class GameHeroAttr:
 
     @property
     def free_xp(self):
+        return str(self.character.free_xp)
+    @property
+    def free_points(self):
         return str(self.character.free_attribute_points)
 
     def reset_all(self):

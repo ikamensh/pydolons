@@ -54,6 +54,7 @@ class GamePerkTree:
             return self.string_cost(self.xp_to_levelup(perk))
         else:
             return "^maxed^"
+
     @property
     def spent_xp(self):
         return self.string_cost(self.perk_tree.spent_xp)

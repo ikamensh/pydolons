@@ -2589,11 +2589,11 @@
                   color="#FFFFFF">
             </item>
         </item>
-        <item name="cha_spent"
+        <item name="free_xp"
               position="inherit"
                 left="10"
                 top="414">
-            <item name="cha_spent_name"
+            <item name="free_xp_name"
                   position="inherit"
                   left="10"
                   top="0"
@@ -2604,7 +2604,34 @@
                   text="Free xp:"
                   color="#FFFFFF">
             </item>
-            <item name="cha_spent_value"
+            <item name="free_xp_value"
+                  position="inherit"
+                  left="256"
+                  top="0"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  type="text"
+                  text="0"
+                  color="#FFFFFF">
+            </item>
+        </item>
+        <item name="free_points"
+              position="inherit"
+                left="10"
+                top="456">
+            <item name="free_points_name"
+                  position="inherit"
+                  left="10"
+                  top="0"
+                  type="text"
+                  width="48"
+                  height="48"
+                  font_size="24"
+                  text="Free points:"
+                  color="#FFFFFF">
+            </item>
+            <item name="free_points_value"
                   position="inherit"
                   left="256"
                   top="0"
