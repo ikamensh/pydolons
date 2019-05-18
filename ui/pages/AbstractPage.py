@@ -27,6 +27,7 @@ class AbstractPage(QtCore.QObject, QtWidgets.QGraphicsItemGroup):
         self.mainWidget: QtWidgets.QGraphicsWidget = None
         self.state = False
         self.isService = False
+        self.pressed_buttons = []
 
     def read_tree(self, start_node = None):
         if start_node is None:

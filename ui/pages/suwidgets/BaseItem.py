@@ -29,6 +29,8 @@ class BaseItem(QGraphicsObject):
         self.scale_x = self.scale_y
         self.pixmap: QPixmap = None
         self._bg_brush: QBrush = None
+        self._scale = 0.9
+
 
     def setUpAttrib(self, attrib):
         self.attrib = attrib
@@ -70,6 +72,10 @@ class BaseItem(QGraphicsObject):
             self.input = ''
         else:
             self.input = attrib.get('input')
+            if self.input == 'button':
+                print('bu')
+                self._bg_brush = QBrush(QtCore.Qt.black)
+                self.paint = self.paint_pic_button
 
     def boundingRect(self):
         return QtCore.QRect(self._left, self._top, self._width, self._height)
@@ -90,6 +96,23 @@ class BaseItem(QGraphicsObject):
         painter.drawRect(self._left, self._top, self._width, self._height)
         painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
 
+    def paint_pic_button(self,  painter:QPainter, option:QStyleOptionGraphicsItem, widget:QWidget=...):
+        painter.setBrush(self._bg_brush)
+        if self.isDown:
+            painter.drawPixmap(self._left + self._width * (1 - self._scale),
+                               self._top + self._height * (1 - self._scale),
+                               self._width * self._scale,
+                               self._height * self._scale,
+                               self.pixmap)
+            # painter.drawRect(self._left, self._top, self._width, self._height)
+            # painter.drawPixmap(self._left + self._width * (1 - self.scale_x),
+            #                    self._top + self._height * (1 - self.scale_y),
+            #                    self._width * self.scale_x,
+            #                    self._height * self.scale_y,
+            #                    self.pixmap)
+        else:
+            painter.drawPixmap(self._left, self._top, self._width, self._height, self.pixmap)
+
     @property
     def width(self):
         return int(self.attrib.get('width')) * self.scale_x
@@ -99,6 +122,8 @@ class BaseItem(QGraphicsObject):
 
     def setPixmapIcon(self, icon:str):
         self.pixmap = self.gameRoot.cfg.getPicFile(icon)
+
+
 
 
 

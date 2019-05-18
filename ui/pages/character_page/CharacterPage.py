@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.pages import GamePages
 
+
 class CharacterPage(AbstractPage):
     def __init__(self, gamePages: GamePages):
         super().__init__(gamePages)
@@ -43,6 +44,10 @@ class CharacterPage(AbstractPage):
             self.pressItem(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneMouseRelease:
+            for item in self.pressed_buttons:
+                item.isDown = False
+                item.update()
+            self.pressed_buttons.clear()
             self.releaseItem(self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform()))
             return True
         elif event.type() is QtCore.QEvent.GraphicsSceneHoverMove:
@@ -51,12 +56,14 @@ class CharacterPage(AbstractPage):
         else:
             return super(CharacterPage, self).sceneEvent(event)
 
-    def pressItem(self, item):
+    def pressItem(self, item: BaseItem):
         if item is not None:
-            # print(item.name, 'press')
-            pass
+            if item.input == 'button':
+                item.isDown = True
+                self.pressed_buttons.append(item)
+            item.update()
 
-    def releaseItem(self, item:BaseItem):
+    def releaseItem(self, item: BaseItem):
         if item is not None:
             # print(item.name, 'release')
             if item.input == 'button':
@@ -102,6 +109,7 @@ class CharacterPage(AbstractPage):
 
     def setUpPerks(self, character):
         self.gpt = GamePerkTree(character.perk_trees[0], character)
+        self.perk_all_update()
 
     def perk_up(self, name):
         perk = self.gpt.perks.get(name)
@@ -116,7 +124,20 @@ class CharacterPage(AbstractPage):
             spen_value = self.items.get('perk_spent_value')
             if spen_value is not None:
                 spen_value.setText(self.gpt.spent_xp)
-        self.hero_attr_update()
+        self.heroAttr_all_update()
+        self.mastery_all_update()
+
+    def perk_all_update(self):
+        for name, perk in self.gpt.perks.items():
+            point = self.items.get(f'perk_{name}_point')
+            if point is not None:
+                point.setText(str(self.gpt.xp_to_text(perk)))
+            level = self.items.get(f'perk_{name}_level')
+            if level is not None:
+                level.setText(f"Level {str(perk.current_level)}")
+        spen_value = self.items.get('perk_spent_value')
+        if spen_value is not None:
+            spen_value.setText(self.gpt.spent_xp)
 
 ################################################
 ###########   M A S T E R I E S   ##############
@@ -126,7 +147,7 @@ class CharacterPage(AbstractPage):
         self.gm = GameMasteries(character)
         self.gm.setUpMasteries()
         self.mastery_bar_update()
-        # self.mastery_all_update()
+        self.mastery_all_update()
 
     def mastery_up(self, name):
         mastery = self.gm.masteries.get(name)
@@ -134,6 +155,7 @@ class CharacterPage(AbstractPage):
             self.gm.mastery_up(mastery)
         self.mastery_all_update()
         self.update(0, 0, self.gamePages.gameRoot.cfg.dev_size[0], self.gamePages.gameRoot.cfg.dev_size[1])
+        self.heroAttr_all_update()
 
     def mastery_hover(self, name):
         mastery = self.gm.masteries.get(name)
@@ -178,10 +200,13 @@ class CharacterPage(AbstractPage):
             point = self.items.get(f'cha_{name}_point')
             if point is not None:
                 point.setText(self.gha.attr_value(attr))
-            spent_value = self.items.get('cha_spent_value')
-            if spent_value is not None:
-                spent_value.setText(self.gha.free_xp)
-        self.hero_attr_update()
+            xp_value = self.items.get('free_xp_value')
+            if xp_value is not None:
+                xp_value.setText(self.gha.free_xp)
+            free_points_value = self.items.get('free_points_value')
+            if free_points_value is not None:
+                free_points_value.setText(self.gha.free_points)
+        self.heroAttr_update()
 
     def heroAttr_change(self, item:BaseItem):
         if item._names[2] == 'up':
@@ -200,7 +225,7 @@ class CharacterPage(AbstractPage):
         if heroAttr is not None:
             self.gha.attr_down(heroAttr)
 
-    def hero_attr_update(self):
+    def heroAttr_update(self):
         self.items.get('attr_health_value').setText(self.gha.max_health + ' / ' + self.gha.health)
         self.items.get('attr_mana_value').setText(self.gha.max_mana + ' / ' + self.gha.mana)
         self.items.get('attr_stamina_value').setText(self.gha.max_stamina + ' / ' + self.gha.stamina)
@@ -216,6 +241,7 @@ class CharacterPage(AbstractPage):
         self.gha.reset_all()
         self.mastery_all_update()
         self.heroAttr_all_update()
+        self.perk_all_update()
 
     def onClickClose(self):
         self.gha.reset_all()
