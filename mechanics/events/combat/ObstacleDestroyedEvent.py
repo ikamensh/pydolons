@@ -23,6 +23,6 @@ class ObstacleDestroyedEvent(Event):
 
     def __repr__(self):
         if self.killer:
-            return "{} was destroyed by {}".format(self.unit, self.killer)
+            return f"{self.unit} was destroyed by {self.killer}"
         else:
-            return "{} was destroyed.".format(self.unit)
+            return f"{self.unit} was destroyed."

@@ -5,7 +5,7 @@ class Inventory(SlotGroup):
 
     @staticmethod
     def slot_name_at(i):
-        return "inventory_{0:00d}".format(i)
+        return f"inventory_{i:00d}"
 
     def __init__(self, max_capacity, owner):
         all_slots = [Slot(Inventory.slot_name_at(i), owner=owner) for i in range(max_capacity)]

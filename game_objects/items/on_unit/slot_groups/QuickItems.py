@@ -5,7 +5,7 @@ class QuickItems(SlotGroup):
 
     @staticmethod
     def slot_name_at(i):
-        return "Quick item {0:0d}".format(i)
+        return f"Quick item {i:0d}"
 
     def __init__(self, max_capacity, owner):
         all_slots = [Slot(self.slot_name_at(i), item_type=ItemTypes.CHARGED, owner=owner) for i in range(max_capacity)]
