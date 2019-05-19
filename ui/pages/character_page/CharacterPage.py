@@ -125,6 +125,7 @@ class CharacterPage(AbstractPage):
                 spen_value.setText(self.gpt.spent_xp)
         self.heroAttr_all_update()
         self.mastery_all_update()
+        self.perk_all_update()
 
     def perk_all_update(self):
         for name, perk in self.gpt.perks.items():
