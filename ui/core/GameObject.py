@@ -17,6 +17,7 @@ class GameObject(QtWidgets.QGraphicsPixmapItem):
         self.is_hero = False
         self.is_obstacle = False
         self.is_alive = False
+        self.default_scale = 1.
 
     def setWorldX(self, x):
         self.worldPos.x = x
@@ -32,3 +33,8 @@ class GameObject(QtWidgets.QGraphicsPixmapItem):
 
     def getWorldPos(self):
         return self.worldPos.x, self.worldPos.y
+
+    def refresh_scale(self):
+        if self.scale != self.default_scale:
+            self.setScale(self.default_scale)
+            self.setOffset(0., 0.)

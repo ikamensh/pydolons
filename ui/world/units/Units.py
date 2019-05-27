@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from PySide2 import QtWidgets
 from ui.world.units.UnitsHeap import UnitsHeap
-from game_objects.battlefield_objects import Unit
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -25,7 +24,11 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def setLevel(self, level):
         self.level = level
         self.level.units = self
+        self.setUpCorpse()
+
+    def setUpCorpse(self):
         self.pic_corpse = self.level.gameRoot.cfg.getPicFile('corpse.jpg')
+        self.corpse_scale = 0.5
 
     def getUitsLocations(self):
         for uid, unit in self.units_at.items():
@@ -42,9 +45,11 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def unitDied(self, unit_bf: Unit):
         unit: BasicUnit = self.units_at[unit_bf.uid]
         unit.setPixmap(self.pic_corpse)
-        unit.is_alive = True
+        unit.is_alive = False
         unit.hpBar.hide()
         unit.direction.hide()
+        unit.setScale(self.corpse_scale)
+        unit.default_scale = self.corpse_scale
         self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(unit.uid)
 
     def turnUnit(self, uid, turn):
@@ -131,11 +136,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
             else:
                 if self.units_heaps.get(cell) is not None:
                     self.destroyUnitsHeap(cell)
-                unit = self.units_at.get(units[0].uid)
-                if unit is not None:
-                    if unit.scale != 1.:
-                        unit.setScale(1.)
-                        unit.setOffset(0., 0.)
+                self.units_at.get(units[0].uid).refresh_scale()
 
     def units_from_(self, units):
         for unit in units:

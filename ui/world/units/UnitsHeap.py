@@ -27,8 +27,10 @@ class UnitsHeap(QtCore.QObject, GameObject):
         pass
 
     def add(self, unit: BasicUnit):
-        self.units.append(unit)
-        pass
+        if unit.is_alive:
+            self.units.insert(0, unit)
+        else:
+            self.units.append(unit)
 
     def remove(self, unit):
         self.units.remove(unit)
@@ -59,6 +61,10 @@ class UnitsHeap(QtCore.QObject, GameObject):
         if self.units == []:
             return
         i = 0
+        for unit in self.units[:]:
+            if unit.is_alive:
+                self.units.remove(unit)
+                self.units.insert(0, unit)
         self.units_before()
         self.unit_w = self.units[0].boundingRect().width() * self.u_scale
         self.unit_h = self.units[0].boundingRect().height() * self.u_scale
@@ -102,9 +108,7 @@ class UnitsHeap(QtCore.QObject, GameObject):
                     self.units.reverse()
 
     def units_before(self):
-        l = len(self.units)
-        i = 0
-        for i in range(l - 1):
+        for i in range(len(self.units) - 1):
             self.units[i + 1].stackBefore(self.units[i])
 
     def getContains(self, x, y):
