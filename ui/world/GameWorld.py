@@ -60,11 +60,3 @@ class GameWorld(QtWidgets.QGraphicsItemGroup):
         if bf.walls is not {}:
             self.setWall(bf.walls)
 
-    def setUpCorpses(self):
-        self.corpses = TileItem(gameRoot=self.cfg.gameRoot, w=128, h=128)
-        self.addToGroup(self.corpses)
-
-    def addCorpse(self, corpse:Corpse):
-        self.corpses.add_pixmap(corpse.unit.uid, self.cfg.getPicFile(corpse.icon))
-        self.corpses.add_cell(corpse.unit.uid, corpse.cell)
-        self.walls.append(corpse.cell)

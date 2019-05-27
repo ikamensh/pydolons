@@ -30,7 +30,7 @@ class BaseLevel:
 
     def setUnits(self, units: Units):
         self.units = units
-        self.units.level = self
+        self.units.setLevel(self)
 
     def setStatus(self, status):
         if status == "DEFEAT":

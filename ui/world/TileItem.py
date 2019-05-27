@@ -77,3 +77,8 @@ class TileItem(QGraphicsObject):
     def rect(self)-> QtCore.QRectF:
         return self.boundingRect()
 
+    def sceneEvent(self, event):
+        self.update(self.rect())
+        return True
+
+

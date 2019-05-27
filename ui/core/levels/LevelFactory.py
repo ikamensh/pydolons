@@ -44,7 +44,6 @@ class LevelFactory:
         self.level.setGameWorld(GameWorld(self.gameRoot.cfg))
         self.level.world.setWorldSize(self.gameRoot.game.bf.w, self.gameRoot.game.bf.h)
         self.level.world.setUpFloors(self.gameRoot.game.bf)
-        self.level.world.setUpCorpses()
 
         self.level.setMiddleLayer(UnitMiddleLayer(self.gameRoot.cfg))
         self.level.gameVision = GameVision(self.level)

@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from PySide2 import QtWidgets
 from ui.world.units.UnitsHeap import UnitsHeap
+from game_objects.battlefield_objects import Unit
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.core.levels import BaseLevel
-    from ui.units.BasicUnit import BasicUnit
+    from ui.world.units.BasicUnit import BasicUnit
     from game_objects.battlefield_objects import Unit
 
 
@@ -24,6 +25,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def setLevel(self, level):
         self.level = level
         self.level.units = self
+        self.pic_corpse = self.level.gameRoot.cfg.getPicFile('corpse.jpg')
 
     def getUitsLocations(self):
         for uid, unit in self.units_at.items():
@@ -38,15 +40,12 @@ class Units(QtWidgets.QGraphicsItemGroup):
             #     self.updateVision()
 
     def unitDied(self, unit_bf: Unit):
-        unit = self.units_at[unit_bf.uid]
-        if not unit.is_hero:
-            self.destroyUnit(unit)
-            unit.setVisible(False)
-            self.removeFromGroup(unit)
-            # if unit != self.level.gameRoot.game.the_hero:
-            del self.units_at[unit.uid]
-            self.update_heaps()
-            self.updateVision()
+        unit: BasicUnit = self.units_at[unit_bf.uid]
+        unit.setPixmap(self.pic_corpse)
+        unit.is_alive = True
+        unit.hpBar.hide()
+        unit.direction.hide()
+        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(unit.uid)
 
     def turnUnit(self, uid, turn):
         if uid == self.level.gameRoot.game.the_hero.uid:
@@ -75,11 +74,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.turnUnit(msg.get('uid'), msg.get('turn'))
 
     def targetDamageSlot(self, msg):
-        # Требуется рефакторинг метод срабатывает после смерти юнита
         if msg.get('target').uid in self.units_at.keys():
             self.units_at[msg.get('target').uid].updateSupport(msg.get('target'), msg.get('amount'))
             self.level.gameRoot.cfg.sound_maps[msg.get('damage_type')].play()
-        pass
 
     def targetDamageHitSlot(self, msg):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
@@ -89,10 +86,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
     def unitDiedSlot(self, msg):
-        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
+        # self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.unitDied(msg.get('unit'))
-        self.level.world.addCorpse(msg.get('corpse'))
 
     def addToUnitsGroup(self, unit):
             # group = self.groups_at.get(unit.worldPos)
@@ -125,7 +121,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         for cell, units in self.level.gameRoot.game.bf.cells_to_objs.items():
             if len(units) > 1:
                 if cell in self.units_heaps.keys():
-                    self.units_heaps[cell].info()
+                    # self.units_heaps[cell].info()
                     self.units_heaps[cell].update_units(list(self.units_from_(units)))
                 else:
                     self.units_heaps[cell] = UnitsHeap(gameRoot=self.level.gameRoot)
@@ -143,8 +139,10 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def units_from_(self, units):
         for unit in units:
-            if unit.alive:
-                yield self.units_at[unit.uid]
+            # game_unit = self.units_at.get(unit.uid)
+            # if game_unit is not None:
+            yield self.units_at[unit.uid]
+
 
     def setUpToolTip(self, item):
         item.hovered.connect(self.toolTipShow)
@@ -189,12 +187,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.units_heaps.clear()
         self.level = None
         self = None
-
-
-    # def sceneEvent(self, event):
-    #     print("units press")
-    #     # print(event)
-    #     return True
 
     def keyPressEvent(self, event):
         # print(event)

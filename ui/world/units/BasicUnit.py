@@ -63,6 +63,7 @@ class BasicUnit(QtCore.QObject, GameObject):
         self.count = 0
         self.count_max = 1
         self.is_obstacle = False
+        self.is_alive = True
         self.isHover = False
         if unit_bf is not None:
             if unit_bf.icon == 'hero.png':

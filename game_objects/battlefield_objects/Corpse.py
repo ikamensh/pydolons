@@ -17,3 +17,4 @@ class Corpse(Obstacle):
                          armor=unit.armor,
                          resists=unit.resists,
                          icon='corpse.jpg')
+        self.uid = unit.uid
