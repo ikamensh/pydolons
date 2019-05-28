@@ -10,6 +10,7 @@ class Corpse(Obstacle):
     def __init__(self, unit: Unit):
         assert not unit.alive
         self.unit = unit
+        self.unit.corpse = self
         super().__init__(name=f"Dead {unit.type_name}",
                          cell=unit.cell,
                          game=unit.game,
@@ -17,4 +18,3 @@ class Corpse(Obstacle):
                          armor=unit.armor,
                          resists=unit.resists,
                          icon='corpse.jpg')
-        self.uid = unit.uid

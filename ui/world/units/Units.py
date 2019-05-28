@@ -27,7 +27,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.setUpCorpse()
 
     def setUpCorpse(self):
-        self.pic_corpse = self.level.gameRoot.cfg.getPicFile('corpse.jpg')
+        self.default_pic_corpse = self.level.gameRoot.cfg.getPicFile('corpse.jpg')
         self.corpse_scale = 0.5
 
     def getUitsLocations(self):
@@ -44,13 +44,17 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def unitDied(self, unit_bf: Unit):
         unit: BasicUnit = self.units_at[unit_bf.uid]
-        unit.setPixmap(self.pic_corpse)
+        unit.uid = unit_bf.corpse.uid
+        self.units_at[unit.uid] = unit
+        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(unit_bf.uid)
+        del self.units_at[unit_bf.uid]
+        unit.setPixmap(self.level.gameRoot.cfg.getPicFile(unit_bf.corpse.icon))
         unit.is_alive = False
         unit.hpBar.hide()
         unit.direction.hide()
         unit.setScale(self.corpse_scale)
         unit.default_scale = self.corpse_scale
-        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(unit.uid)
+
 
     def turnUnit(self, uid, turn):
         if uid == self.level.gameRoot.game.the_hero.uid:
@@ -136,7 +140,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
             else:
                 if self.units_heaps.get(cell) is not None:
                     self.destroyUnitsHeap(cell)
-                self.units_at.get(units[0].uid).refresh_scale()
+                if self.units_at.get(units[0].uid) is not None:
+                    self.units_at.get(units[0].uid).refresh_scale()
 
     def units_from_(self, units):
         for unit in units:
