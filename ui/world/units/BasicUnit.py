@@ -52,6 +52,7 @@ class BasicUnit(QtCore.QObject, GameObject):
     def __init__(self, *arg, gameRoot, parent = None, unit_bf = None):
         QtCore.QObject.__init__(self, parent)
         GameObject.__init__(self, *arg)
+        self.setAcceptHoverEvents(True)
         self.uid = 0
         self.cfg: GameConfiguration = gameRoot.cfg
         self.gameRoot: GameRootNode = gameRoot
@@ -71,6 +72,12 @@ class BasicUnit(QtCore.QObject, GameObject):
             self.setUpUnitAttr(unit_bf)
         self.setUpSupports(unit_bf)
         self.anim_move = None
+        self.unit_bf: Unit = unit_bf
+
+    def setUpAnimation(self):
+        self.anim_move = GameVariantAnimation(self)
+        self.anim_move.valueChanged.connect(self.setPos)
+        self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
@@ -161,6 +168,24 @@ class BasicUnit(QtCore.QObject, GameObject):
             self.hpBar.setOffset(0, 0)
             self.hpText.setOffset(0, 0)
 
+    def sceneEvent(self, event):
+        if event.type() is QtCore.QEvent.Type.GraphicsSceneHoverEnter:
+            self.isHover = True
+            pos = self.gameRoot.tr_support.groupToScene(self)
+            self.gameRoot.gamePages.toolTip.setPos(pos[0], pos[1])
+            self.gameRoot.gamePages.toolTip.setDict(self.tooltip_info())
+            self.gameRoot.gamePages.toolTip.show()
+        if event.type() is QtCore.QEvent.Type.GraphicsSceneHoverLeave:
+            self.isHover = False
+            self.gameRoot.gamePages.toolTip.hide()
+        return True
+
+    def tooltip_info(self):
+        if self.unit_bf is None:
+            return self.toolTip_dic
+        else:
+            return self.unit_bf.tooltip_info
+
     def moveTo(self, x, y):
         self.anim_move.setStartValue(self.pos())
         self.worldPos.x = x
@@ -168,11 +193,6 @@ class BasicUnit(QtCore.QObject, GameObject):
         self.anim_move.setEndValue(QtCore.QPointF(x * self.w, y * self.h))
         self.anim_move.start()
         self.updateVision()
-
-    def setUpAnimation(self):
-        self.anim_move = GameVariantAnimation(self)
-        self.anim_move.valueChanged.connect(self.setPos)
-        self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
 
     def updateVision(self):
         pass
@@ -191,3 +211,5 @@ class BasicUnit(QtCore.QObject, GameObject):
 
     def __repr__(self):
         return f"{self.worldPos} -> BasicUnit {self.uid}"
+
+

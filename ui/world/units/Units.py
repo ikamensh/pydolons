@@ -45,6 +45,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def unitDied(self, unit_bf: Unit):
         unit: BasicUnit = self.units_at[unit_bf.uid]
         unit.uid = unit_bf.corpse.uid
+        unit.unit_bf = unit_bf.corpse
         self.units_at[unit.uid] = unit
         self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(unit_bf.uid)
         del self.units_at[unit_bf.uid]
@@ -54,7 +55,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         unit.direction.hide()
         unit.setScale(self.corpse_scale)
         unit.default_scale = self.corpse_scale
-
 
     def turnUnit(self, uid, turn):
         if uid == self.level.gameRoot.game.the_hero.uid:
@@ -149,31 +149,13 @@ class Units(QtWidgets.QGraphicsItemGroup):
             # if game_unit is not None:
             yield self.units_at[unit.uid]
 
-
-    def setUpToolTip(self, item):
+    def setUpToolTip(self, item: BasicUnit):
         item.hovered.connect(self.toolTipShow)
         item.hover_out.connect(self.toolTipHide)
 
-    def toolTipShow(self, item):
-        pos = self.level.gameRoot.tr_support.groupToScene(item)
-        self.level.gameRoot.gamePages.toolTip.setPos(pos[0], pos[1])
-        units = self.level.gameRoot.game.bf.cells_to_objs.get(item.worldPos)
-        if units is not None:
-            if len(units) == 1:
-                self.level.gameRoot.gamePages.toolTip.setDict(units[0].tooltip_info)
-            # else:
-            #     for u in units:
-            #         if u.uid == self.units_heaps[item.worldPos].units[-1].uid:
-            #             self.level.gameRoot.gamePages.toolTip.setDict(u.tooltip_info)
-        self.level.gameRoot.gamePages.toolTip.show()
-        pass
-
-    def toolTipHide(self):
-        self.level.gameRoot.gamePages.toolTip.hide()
-        pass
-
-    def destroyUnit(self, unit):
+    def destroyUnit(self, unit: BasicUnit):
         if not unit.is_obstacle:
+            unit.unit_bf = None
             unit.hovered.disconnect(self.toolTipShow)
             unit.hover_out.disconnect(self.toolTipHide)
             self.level.gameRoot.view.mouseMove.disconnect(unit.mouseMove)
@@ -197,6 +179,8 @@ class Units(QtWidgets.QGraphicsItemGroup):
     def keyPressEvent(self, event):
         # print(event)
         return True
+
+
 
 
 

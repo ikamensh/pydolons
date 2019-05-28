@@ -18,6 +18,7 @@ class GameObject(QtWidgets.QGraphicsPixmapItem):
         self.is_obstacle = False
         self.is_alive = False
         self.default_scale = 1.
+        self.toolTip_dic = dict()
 
     def setWorldX(self, x):
         self.worldPos.x = x
