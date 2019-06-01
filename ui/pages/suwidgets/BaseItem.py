@@ -116,6 +116,11 @@ class BaseItem(QGraphicsObject):
     def setPixmapIcon(self, icon:str):
         self.pixmap = self.gameRoot.cfg.getPicFile(icon)
 
+    def move(self, d_x, d_y):
+        self._left += d_x
+        self._top += d_y
+
+
 
 
 

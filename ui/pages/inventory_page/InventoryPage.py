@@ -12,6 +12,7 @@ from PySide2 import QtCore
 class InventoryPage(AbstractPage):
     def __init__(self, gamePages):
         super().__init__(gamePages)
+        self.s_bar_inv, self.s_bar_shop = None, None
         self.readXML('inventory_page.xml')
         self.setUpInventories()
         self.setUpEquipments()
@@ -93,8 +94,8 @@ class InventoryPage(AbstractPage):
     def mouseReleaseEvent(self, event):
         items = self.scene().items(event.scenePos())
         self.drop_slot(items[1])
-        self.s_engine_2.mouseReleaseEvent()
-        self.s_engine.mouseReleaseEvent()
+        self.s_bar_shop.mouseReleaseEvent()
+        self.s_bar_inv.mouseReleaseEvent()
 
     def mousePressLeft(self, event):
         item = self.scene().itemAt(event.scenePos(), self.scene().views()[0].transform())
@@ -103,10 +104,10 @@ class InventoryPage(AbstractPage):
         elif item._names[0] == 'equip':
             self.move_master.moved_slot = self.equipments.getMovedSlot(item)
         elif item.name == 'shop_scroll_but':
-            self.s_engine_2.mousePressEvent(event)
+            self.s_bar_shop.mousePressEvent(event)
             self.move_master.moved_slot = None
         elif item.name == 'scroll_but':
-            self.s_engine.mousePressEvent(event)
+            self.s_bar_inv.mousePressEvent(event)
             self.move_master.moved_slot = None
         if self.move_master.moved_slot is not None:
             self.moved_slot._names = item._names[:]
@@ -114,8 +115,8 @@ class InventoryPage(AbstractPage):
             self.moved_slot.isChecked = True
 
     def mouseMoveEvent(self, event):
-        self.s_engine_2.mouseMoveEvent(event)
-        self.s_engine.mouseMoveEvent(event)
+        self.s_bar_shop.mouseMoveEvent(event)
+        self.s_bar_inv.mouseMoveEvent(event)
         self.move_slot(event)
 
     def hoverMove(self, item):
@@ -175,41 +176,43 @@ class InventoryPage(AbstractPage):
             self.moved_slot.show()
 
     def drop_slot(self, target):
-        self.moved_slot.isChecked = False
-        if target._names[1] == 'slot' and self.moved_slot.name != target.name:
-            if self.moved_slot._names[0] == 'inventory':
-                if target._names[0] == 'inventory':
-                    self.move_master.move_inventory_to_inventory(target)
-                elif target._names[0] == 'equip':
-                    self.move_master.move_inventory_to_equit(target)
-            if self.moved_slot._names[0] == 'equip':
-                if target._names[0] == 'inventory':
-                    self.move_master.move_equip_to_inventory(target)
-        else:
-            if self.moved_slot._names[0] == 'inventory':
-                self.move_master.pop_item()
-            # elif self.moved_slot._names[0] == 'equip':
-            #     self.equipments.drop_slot()
-            #     self.equipments.update_attr()
-        self.moved_slot.hide()
+        if self.move_master.moved_slot is not None:
+            self.moved_slot.isChecked = False
+            if target._names[1] == 'slot' and self.moved_slot.name != target.name:
+                if self.moved_slot._names[0] == 'inventory':
+                    if target._names[0] == 'inventory':
+                        self.move_master.move_inventory_to_inventory(target)
+                    elif target._names[0] == 'equip':
+                        self.move_master.move_inventory_to_equit(target)
+                if self.moved_slot._names[0] == 'equip':
+                    if target._names[0] == 'inventory':
+                        self.move_master.move_equip_to_inventory(target)
+            else:
+                if self.moved_slot._names[0] == 'inventory':
+                    self.move_master.pop_item()
+                # elif self.moved_slot._names[0] == 'equip':
+                #     self.equipments.drop_slot()
+                #     self.equipments.update_attr()
+            self.moved_slot.hide()
+        pass
 
     ############ S C R O L L ##############
 
     def setUpScroll(self):
-        self.s_engine = ScrollBlock(self, width=self.items['scroll_block'].width)
-        self.s_engine.setScrollBut(self.items['scroll_but'])
+        self.s_bar_inv = ScrollBlock(self, width=self.items['scroll_block'].width)
+        self.s_bar_inv.setScrollBut(self.items['scroll_but'])
         for i in range(self.inventories.len):
-            self.s_engine.addScrollItem(self.items['inventory_slot_'+str(i)])
+            self.s_bar_inv.addScrollItem(self.items['inventory_slot_'+str(i)])
 
-        self.s_engine_2 = ScrollBlock(self, width=self.items['shop_scroll_block'].width)
-        self.s_engine_2.setScrollBut(self.items['shop_scroll_but'])
+        self.s_bar_shop = ScrollBlock(self, width=self.items['shop_scroll_block'].width)
+        self.s_bar_shop.setScrollBut(self.items['shop_scroll_but'])
         for i in range(self.shop.len):
-            self.s_engine_2.addScrollItem(self.items['shop_slot_' + str(i)])
+            self.s_bar_shop.addScrollItem(self.items['shop_slot_' + str(i)])
 
     def scrollSetEvent(self, event):
-        if self.s_engine.setEvent(event, self):
+        if self.s_bar_inv.setEvent(event, self):
             return True
-        elif self.s_engine_2.setEvent(event, self):
+        elif self.s_bar_shop.setEvent(event, self):
             return True
         else:
             return False

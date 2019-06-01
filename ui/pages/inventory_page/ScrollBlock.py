@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from PySide2.QtCore import QPointF
-from PySide2.QtWidgets import QGraphicsSceneEvent
+from PySide2.QtWidgets import QGraphicsSceneEvent, QGraphicsSceneMouseEvent
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.pages.AbstractPage import AbstractPage
@@ -9,56 +8,73 @@ if TYPE_CHECKING:
 
 
 class ScrollBlock:
-    def __init__(self, page, width = 0):
+    def __init__(self, page, width=0):
+        """
+        self.but -- scroll button
+        self.but_left -- left border position
+        self.but_right -- right border position
+        self.width -- scroll bar width
+        self.scroll_items -- scrolling items
+        """
         self.page: AbstractPage = page
         self.but: BaseItem = None
-        self.but_step = 0
-        self.start_pos = QPointF(0., 0.)
-        self.delta_x = 0.
-        self.delta_y = 0.
+        self.but_left, self.but_right = 0, 0
         self.width = width
+        self.scroll_items = []
         self.items_width = 0
         self.items_step = 0
-        self.scoll_items = []
+        self.delta_width = 0.
         self.isDown = False
 
     def addScrollItem(self, item: BaseItem):
-        self.scoll_items.append(item)
+        self.scroll_items.append(item)
+        counts = len(self.scroll_items)
+        if counts == 2:
+            self.items_step = self.scroll_items[1]._left - self.scroll_items[0]._left
         item.scroll_x = item._left
-        self.items_width = self.getItemsWidth()
-        self.items_step = (self.items_width - self.width) / 100
+        if counts > 1:
+            self.items_width = counts * self.items_step
+        self.delta_width = self.get_delta_width()
         self.item_set_visible(item)
 
-    def getItemsWidth(self):
-        l = len(self.scoll_items)
-        if l > 1:
-            return self.scoll_items[l-1]._left - self.scoll_items[0]._left + 2 * self.scoll_items[l-1]._width
-        elif l == 1:
-            return self.scoll_items[0]._width
-        elif l == 0:
+    def _get_items_width(self):
+        counts = len(self.scroll_items)
+        if counts > 1:
+            return self.scroll_items[counts-1]._left - self.scroll_items[0]._left + 2 * self.scroll_items[counts-1]._width
+        elif counts == 1:
+            return self.scroll_items[0]._width
+        elif counts == 0:
             return 0
+
+    def get_delta_width(self):
+        if self.but is not None and len(self.scroll_items) > 1:
+            return self.items_width - self.width - self.but.width
+        else:
+            return 0.
 
     def setScrollBut(self, but: BaseItem):
         self.but = but
-        self.but_x = but._left
         self.but_left = but._left
-        self.but_right = self.width
-        self.but_step = self.width / 100
+        self.but_right = self.but_left + self.width
+        self.delta_width = self.get_delta_width()
 
-    def but_move(self):
-        x = self.but_x - self.delta_x
-        if x >= self.but_left and x <= self.but_right:
-            self.but._left = x
-            self.items_move()
-        elif x < self.but_left:
-            self.but._left = self.but_left
-        elif x > self.but_right:
-            self.but._left = self.but_right
+    def get_pc(self) -> int:
+        return (self.but_right - self.but._left) / self.width
+
+    def scroll_but_move(self, event: QGraphicsSceneMouseEvent):
+        x1 = event.pos().x() - self.but._left
+        if event.pos().x() < self.but_left:
+            x1 = self.but_left - self.but._left
+        elif event.pos().x() > self.but_right:
+            x1 = self.but_right - self.but._left
+        self.but.move(x1, 0)
 
     def items_move(self):
-        for item in self.scoll_items:
-            item._left = item.scroll_x + self.items_step * self.getValue()
-            self.item_set_visible(item)
+        x2 = self.but_left - ((1. - self.get_pc()) * self.delta_width)
+        l = len(self.scroll_items)
+        for i in range(l):
+            self.scroll_items[i].move(x2 + self.items_step * i - self.scroll_items[i]._left, 0)
+            self.item_set_visible(self.scroll_items[i])
 
     def item_set_visible(self, item):
         if item._left < self.but_left or item._left > self.but_right:
@@ -66,32 +82,18 @@ class ScrollBlock:
         else:
             item.setVisible(True)
 
-    def items_upate_pos(self):
-        for item in self.scoll_items:
-            item.scroll_x = item.scroll_x + self.items_step * self.getValue()
-
-    def isScrollBut(self, event:QGraphicsSceneEvent):
+    def is_scroll_but(self, event: QGraphicsSceneEvent):
         item = self.page.scene().itemAt(event.scenePos(), self.page.scene().views()[0].transform())
         return item.name == self.but.name
 
     def mousePressEvent(self, event:QGraphicsSceneEvent):
-        if self.isScrollBut(event):
-            self.start_pos.setX(event.screenPos().x())
-            self.start_pos.setY(event.screenPos().y())
+        if self.is_scroll_but(event):
             self.isDown = True
 
     def mouseReleaseEvent(self):
         self.isDown = False
-        x = self.but_x - self.delta_x
-        if x >= self.but_left and x <= self.but_right:
-            self.but_x = x
-            self.items_upate_pos()
 
     def mouseMoveEvent(self, event:QGraphicsSceneEvent):
         if self.isDown:
-            self.delta_x = self.start_pos.x() - event.screenPos().x()
-            self.delta_y = self.start_pos.y() - event.screenPos().y()
-            self.but_move()
-
-    def getValue(self)->int:
-        return int(self.delta_x/self.but_step)
+            self.scroll_but_move(event)
+            self.items_move()
