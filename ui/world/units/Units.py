@@ -145,19 +145,13 @@ class Units(QtWidgets.QGraphicsItemGroup):
 
     def units_from_(self, units):
         for unit in units:
-            # game_unit = self.units_at.get(unit.uid)
-            # if game_unit is not None:
-            yield self.units_at[unit.uid]
-
-    def setUpToolTip(self, item: BasicUnit):
-        item.hovered.connect(self.toolTipShow)
-        item.hover_out.connect(self.toolTipHide)
+            game_unit = self.units_at.get(unit.uid)
+            if game_unit is not None:
+                yield self.units_at[unit.uid]
 
     def destroyUnit(self, unit: BasicUnit):
         if not unit.is_obstacle:
             unit.unit_bf = None
-            unit.hovered.disconnect(self.toolTipShow)
-            unit.hover_out.disconnect(self.toolTipHide)
             self.level.gameRoot.view.mouseMove.disconnect(unit.mouseMove)
 
     def destroyUnitsHeap(self, cell):

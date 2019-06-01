@@ -18,6 +18,7 @@ class CharacterPage(AbstractPage):
         self.readXML('character_page.xml')
         self.read_tree()
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
+        self.updatePos()
         self.name = 'character_page'
         self.input = ''
         character = self.gamePages.gameRoot.lengine.character

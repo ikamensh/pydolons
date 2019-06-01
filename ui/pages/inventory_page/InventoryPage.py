@@ -93,7 +93,8 @@ class InventoryPage(AbstractPage):
 
     def mouseReleaseEvent(self, event):
         items = self.scene().items(event.scenePos())
-        self.drop_slot(items[1])
+        if len(items) > 0:
+            self.drop_slot(items[1])
         self.s_bar_shop.mouseReleaseEvent()
         self.s_bar_inv.mouseReleaseEvent()
 

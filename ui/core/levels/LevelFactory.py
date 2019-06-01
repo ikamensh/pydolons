@@ -66,7 +66,6 @@ class LevelFactory:
                 gameUnit.setUpAnimation()
                 gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
                 self.level.gameRoot.view.mouseMove.connect(gameUnit.mouseMove)
-                self.level.units.setUpToolTip(gameUnit)
                 self.level.units.addToGroup(gameUnit)
                 self.level.units.units_at[unit.uid] = gameUnit
             elif isinstance(unit, Obstacle):
