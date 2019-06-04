@@ -4,6 +4,7 @@ from ui.core.GameObject import GameObject
 from ui.pages.widgets.GuiConsole import GuiConsole
 from ui.pages.widgets.Actives import Actives
 from ui.pages.widgets.SupportPanel import SupportPanel
+from ui.pages.suwidgets.UnitsStack import UnitsStack
 from ui.pages import AbstractPage
 
 
@@ -13,7 +14,6 @@ class GameMenuPage(AbstractPage):
         super(GameMenuPage, self).__init__(gamePages)
         self.gui_console: GuiConsole = None
         self.actives: Actives = None
-        self.unitStack: QtWidgets.QGraphicsRectItem = None
         self.active_select: GameObject = None
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
@@ -26,20 +26,11 @@ class GameMenuPage(AbstractPage):
 
         self.gamePages.gameRoot.controller.mouseMove.connect(self.actives.mouseMoveEvent)
 
-        self.unitStack = QtWidgets.QGraphicsRectItem(self)
-        self.unitStack.setBrush(QtCore.Qt.blue)
-        self.unitStack.setPos(0, 0)
-
-        w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
-
-        self.active_select = GameObject()
-        self.active_select.setPixmap(self.gamePages.gameRoot.cfg.getPicFile('active select 96.png').scaled(w_u, w_u))
-        self.active_select.setParentItem(self.unitStack)
-        self.active_select.setPos(self.unitStack.x(), self.unitStack.y())
+        self.new_units_stack = UnitsStack(self)
+        self.addToGroup(self.new_units_stack)
 
         if not self.gamePages.gameRoot.level is None:
-            self.createUnitStack()
-            self.updateUnitStack()
+            self.update_unitsStack()
 
         sup_panel = SupportPanel(page=self, gameconfig=self.gamePages.gameRoot.cfg)
         sup_panel.setUpWidgets()
@@ -47,18 +38,11 @@ class GameMenuPage(AbstractPage):
         self.sup_panel.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
         self.updadteSupPanlePos()
 
-    def createUnitStack(self):
-        self.unitStack.items = {}
-        w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
-        i = 0
-        for unit in self.gamePages.gameRoot.level.units.units_at.values():
-            item = GameObject(w_u, w_u)
-            item.setParentItem(self.unitStack)
-            item.setPixmap(unit.pixmap().scaled(w_u, w_u))
-            item.setPos(self.unitStack.x() + i * w_u, self.unitStack.y())
-            item.stackBefore(self.active_select)
-            self.unitStack.items[unit.uid] = item
-            i += 1
+    def remove_from_unitsStack(self, uid):
+        self.new_units_stack.remove_unit(uid)
+
+    def update_unitsStack(self):
+        self.new_units_stack.update_stack(self.gamePages.gameRoot.game.turns_manager.managed_units[:])
 
     def toolTipHide(self, widget):
         self.gamePages.toolTip.hide()
@@ -75,21 +59,6 @@ class GameMenuPage(AbstractPage):
 
     def updateGuiConsolePos(self):
         self.p_gui_console.setPos(self.gamePages.gameRoot.view.mapToScene(self.gui_console.widget_pos))
-
-    def rmToUnitStack(self, uid):
-        self.unitStack.items[uid].setParentItem(None)
-        del self.unitStack.items[uid]
-        self.updateUnitStack()
-
-    def updateUnitStack(self):
-        w_u = int(64 * self.gamePages.gameRoot.cfg.scale_x)
-        units_stack = self.gamePages.gameRoot.game.turns_manager.managed_units
-        w = len(units_stack)
-        self.unitStack.rect().setWidth(w * w_u)
-        i = 0
-        for bf_unit in units_stack:
-            self.unitStack.items[bf_unit.uid].setPos(self.unitStack.x() + i * w_u, self.unitStack.y())
-            i += 1
 
     def setDefaultPos(self):
         # TODO setDefaultPos is deprecated method, delete in future.

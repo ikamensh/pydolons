@@ -47,7 +47,7 @@ class Units(QtWidgets.QGraphicsItemGroup):
         unit.uid = unit_bf.corpse.uid
         unit.unit_bf = unit_bf.corpse
         self.units_at[unit.uid] = unit
-        self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(unit_bf.uid)
+        self.level.gameRoot.gamePages.gameMenu.remove_from_unitsStack(unit_bf.uid)
         del self.units_at[unit_bf.uid]
         unit.setPixmap(self.level.gameRoot.cfg.getPicFile(unit_bf.corpse.icon))
         unit.is_alive = False

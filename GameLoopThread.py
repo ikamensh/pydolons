@@ -74,7 +74,7 @@ class GameLoopThread(QtCore.QThread):
         self.play_attack_anim.connect(self.the_ui.gameRoot.level.units.attackSlot)
         self.play_perish_anim.connect(self.the_ui.gameRoot.level.units.unitDiedSlot)
         self.play_trun_anim.connect(self.the_ui.gameRoot.level.units.unitTurnSlot)
-        self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.updateUnitStack)
+        self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.update_unitsStack)
         self.play_levelstatus.connect(self.the_ui.gameRoot.level.setStatus)
         self.obstacle_destroyed.connect(self.debug)
 
