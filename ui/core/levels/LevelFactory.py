@@ -58,28 +58,29 @@ class LevelFactory:
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
         for unit_pos, units in battlefield.cells_to_objs.items():
-            unit = units[0]
-            if isinstance(unit, bf_objs.Unit):
-                gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameRoot=self.gameRoot, unit_bf = unit)
-                if gameUnit.is_hero:
-                    gameUnit.updateVision = self.level.units.updateVision
-                gameUnit.setUpAnimation()
-                gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
-                self.level.gameRoot.view.mouseMove.connect(gameUnit.mouseMove)
-                self.level.units.addToGroup(gameUnit)
-                self.level.units.units_at[unit.uid] = gameUnit
-            elif isinstance(unit, Obstacle):
-                obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
-                                        self.gameRoot.cfg.unit_size[1],
-                                        name = unit.name)
-                obstacle.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
-                obstacle.setWorldPos(unit_pos.x, unit_pos.y)
-                obstacle.uid = unit.uid
-                self.level.world.addToGroup(obstacle)
-                if obstacle.name == 'Wooden door':
-                    self.level.units.units_at[unit.uid] = obstacle
-                self.level.world.obstacles[unit.uid] = obstacle
+            for unit in units:
+                if isinstance(unit, bf_objs.Unit):
+                    gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameRoot=self.gameRoot, unit_bf = unit)
+                    if gameUnit.is_hero:
+                        gameUnit.updateVision = self.level.units.updateVision
+                    gameUnit.setUpAnimation()
+                    gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
+                    self.level.gameRoot.view.mouseMove.connect(gameUnit.mouseMove)
+                    self.level.units.addToGroup(gameUnit)
+                    self.level.units.units_at[unit.uid] = gameUnit
+                elif isinstance(unit, Obstacle):
+                    obstacle = ObstacleUnit(self.gameRoot.cfg.unit_size[0],
+                                            self.gameRoot.cfg.unit_size[1],
+                                            name = unit.name)
+                    obstacle.setPixmap(self.gameRoot.cfg.getPicFile(unit.icon))
+                    obstacle.setWorldPos(unit_pos.x, unit_pos.y)
+                    obstacle.uid = unit.uid
+                    self.level.world.addToGroup(obstacle)
+                    if obstacle.name == 'Wooden door':
+                        self.level.units.units_at[unit.uid] = obstacle
+                    self.level.world.obstacles[unit.uid] = obstacle
         self.level.units.active_unit = self.level.units.units_at[self.gameRoot.game.turns_manager.get_next().uid]
+        self.level.units.update_heaps()
         self.level.units.updateVision()
 
     def addLevelToScene(self, scene):
