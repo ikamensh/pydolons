@@ -92,7 +92,6 @@ class GamePages(object):
     def setUpGameMenu(self):
         gameMenu = self.buildPage('gameMenu', GameMenuPage)
         self.gameRoot.scene.addItem(gameMenu)
-        gameMenu.setUpConsole()
         gameMenu.resized()
         self.gameMenu = gameMenu
 

@@ -29,7 +29,7 @@ class UnitsStack(QtWidgets.QGraphicsItem):
 
         self.state = True
 
-    def set_val(self, i):
+    def setVal(self, i):
         """
         :param i:
         :return:

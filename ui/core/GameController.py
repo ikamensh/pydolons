@@ -38,6 +38,7 @@ class GameController(QtCore.QObject):
         self.lost_m_pos = QtCore.QPointF()
         self.r_mouse = False
         self.observers = []
+        self.event_obs_list = []
         self.orientations = {
             self.gameRoot.cfg.input_keys.east_move: Facing.EAST,
             self.gameRoot.cfg.input_keys.north_move: Facing.NORTH,
@@ -167,3 +168,15 @@ class GameController(QtCore.QObject):
     def send_key_press(self, event):
         for observer in self.observers:
             observer.key_press_event(event)
+
+    # Game Events
+
+    def reg_event_obs(self, obs):
+        self.event_obs_list.append(obs)
+
+    def un_reg_event_obs(self, obs):
+        self.event_obs_list.remove(obs)
+
+    def send_game_event(self, event):
+        for obs in self.event_obs_list:
+            obs.game_event(event)

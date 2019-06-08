@@ -1,10 +1,10 @@
 from PySide2 import QtCore, QtWidgets
 
 from ui.core.GameObject import GameObject
-from ui.pages.widgets.GuiConsole import GuiConsole
 from ui.pages.widgets.Actives import Actives
 from ui.pages.widgets.SupportPanel import SupportPanel
 from ui.pages.suwidgets.UnitsStack import UnitsStack
+from ui.pages.suwidgets.TextConsole import TextCosole
 from ui.pages import AbstractPage
 
 
@@ -12,9 +12,9 @@ class GameMenuPage(AbstractPage):
     """docstring for ScreenMenu."""
     def __init__(self, gamePages):
         super(GameMenuPage, self).__init__(gamePages)
-        self.gui_console: GuiConsole = None
         self.actives: Actives = None
         self.active_select: GameObject = None
+        self.text_console: TextCosole = None
         self.gamePages.gameRoot.view.wheel_change.connect(self.updatePos)
 
     def showNotify(self, text):
@@ -32,6 +32,11 @@ class GameMenuPage(AbstractPage):
         if not self.gamePages.gameRoot.level is None:
             self.update_unitsStack()
 
+        self.text_console = TextCosole(self.gamePages.gameRoot.game.gamelog)
+        self.gamePages.gameRoot.controller.reg_event_obs(self.text_console)
+        self.text_console.setPos(1, 256)
+        self.addToGroup(self.text_console)
+
         sup_panel = SupportPanel(page=self, gameconfig=self.gamePages.gameRoot.cfg)
         sup_panel.setUpWidgets()
         self.sup_panel = self.gamePages.gameRoot.scene.addWidget(sup_panel)
@@ -47,19 +52,6 @@ class GameMenuPage(AbstractPage):
     def toolTipHide(self, widget):
         self.gamePages.toolTip.hide()
 
-    def setUpConsole(self):
-        self.gui_console = GuiConsole(self.gamePages.gameRoot.game.gamelog)
-        self.gui_console.id = self.gui_console.startTimer(50)
-        self.gui_console.setTabChangesFocus(False)
-        self.gui_console.resize(320 * self.gamePages.gameRoot.cfg.scale_x, 240 * self.gamePages.gameRoot.cfg.scale_y)
-        self.gamePages.gameRoot.controller.mouseMove.connect(self.gui_console.setMousePos)
-        self.gui_console.btn.clicked.connect(self.updateGuiConsolePos)
-        self.p_gui_console = self.scene().addWidget(self.gui_console)
-        self.p_gui_console.setFlags(QtWidgets.QGraphicsItem.ItemIgnoresTransformations)
-
-    def updateGuiConsolePos(self):
-        self.p_gui_console.setPos(self.gamePages.gameRoot.view.mapToScene(self.gui_console.widget_pos))
-
     def setDefaultPos(self):
         # TODO setDefaultPos is deprecated method, delete in future.
         pos = self.scene().views()[0].mapToScene(self.gamePages.gameRoot.cfg.correct_size[0], self.gamePages.gameRoot.cfg.correct_size[1])
@@ -69,28 +61,22 @@ class GameMenuPage(AbstractPage):
 
     def resized(self):
         super().resized()
-        self.gui_console.resized(self.gamePages.gameRoot.cfg.dev_size)
-        self.updateGuiConsolePos()
         self.actives.resized()
         self.upateActivesPos()
 
     def isFocus(self):
-        return self.actives.isFocus() or self.gui_console.isFocus()
+        return self.actives.isFocus()
 
     def destroy(self):
         self.gamePages.gameRoot.view.wheel_change.disconnect(self.updatePos)
         self.actives.destroy()
         del self.actives
-        self.gui_console.killTimer(self.gui_console.id)
-        self.gamePages.gameRoot.scene.removeItem(self.p_gui_console)
-        del self.p_gui_console
         self.gamePages.gameRoot.scene.removeItem(self.sup_panel)
         del self.sup_panel
 
     def updatePos(self):
         super().updatePos()
         self.upateActivesPos()
-        self.updateGuiConsolePos()
         self.updadteSupPanlePos()
 
     def upateActivesPos(self):
@@ -99,6 +85,3 @@ class GameMenuPage(AbstractPage):
     def updadteSupPanlePos(self):
         self.sup_panel.setPos(self.gamePages.gameRoot.view.mapToScene(self.sup_panel.widget().widget_x, \
                                                                       self.sup_panel.widget().widget_y))
-
-
-

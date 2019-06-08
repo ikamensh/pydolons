@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from mechanics.events import Event as GameEvent
 from PySide2 import QtCore
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -25,7 +25,17 @@ class ProxyEmit(object):
                        callbacks=[play_movement_anim])
 
     """
-    play_movement_anim = None
+    log_event: QtCore.Signal = None
+    play_movement_anim: QtCore.Signal = None
+    maybe_play_damage_anim: QtCore.Signal = None
+    maybe_play_hit_anim: QtCore.Signal = None
+    play_attack_anim: QtCore.Signal = None
+    play_perish_anim: QtCore.Signal = None
+    play_trun_anim: QtCore.Signal = None
+    play_nextunit_anim: QtCore.Signal = None
+    play_levelstatus: QtCore.Signal = None
+    obstacle_destroyed: QtCore.Signal = None
+
     def __init__(self, arg):
         super(ProxyEmit, self).__init__()
 
@@ -43,12 +53,14 @@ class GameLoopThread(QtCore.QThread):
     play_nextunit_anim = QtCore.Signal()
     play_levelstatus = QtCore.Signal(str)
     obstacle_destroyed = QtCore.Signal(dict)
+    log_event = QtCore.Signal(GameEvent)
+
     def __init__(self, parent=None):
         super(GameLoopThread, self).__init__(parent)
         self.game: DreamGame = None
         self.the_ui: TheUI = None
 
-    def setSiganls(self, proxy_cls):
+    def setSiganls(self, proxy_cls: ProxyEmit):
         """
         Здесь сигналы проксируются
 
@@ -64,6 +76,7 @@ class GameLoopThread(QtCore.QThread):
         proxy_cls.play_nextunit_anim = self.play_nextunit_anim
         proxy_cls.play_levelstatus = self.play_levelstatus
         proxy_cls.obstacle_estroyed = self.obstacle_destroyed
+        proxy_cls.log_event = self.log_event
         # Здесь происходит присоединение слотов к сигналам
         self.setConnection()
 
@@ -76,6 +89,7 @@ class GameLoopThread(QtCore.QThread):
         self.play_trun_anim.connect(self.the_ui.gameRoot.level.units.unitTurnSlot)
         self.play_nextunit_anim.connect(self.the_ui.gameRoot.gamePages.gameMenu.update_unitsStack)
         self.play_levelstatus.connect(self.the_ui.gameRoot.level.setStatus)
+        self.log_event.connect(self.the_ui.gameRoot.controller.send_game_event)
         self.obstacle_destroyed.connect(self.debug)
 
     def run(self):
