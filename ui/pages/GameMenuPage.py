@@ -69,6 +69,7 @@ class GameMenuPage(AbstractPage):
 
     def destroy(self):
         self.gamePages.gameRoot.view.wheel_change.disconnect(self.updatePos)
+        self.gamePages.gameRoot.controller.un_reg_event_obs(self.text_console)
         self.actives.destroy()
         del self.actives
         self.gamePages.gameRoot.scene.removeItem(self.sup_panel)

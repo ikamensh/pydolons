@@ -22,6 +22,7 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
         self.polyGray = self.getMainPoly()
         self.polyDark = self.getMainPoly()
         self.cur_cells = None
+        self.seens = None
         self.createPoly()
         self._painPath = QtGui.QPainterPath()
 
@@ -34,6 +35,7 @@ class GameVision(QtWidgets.QGraphicsItemGroup):
         return poly
 
     def setSeenCells(self, cells):
+        self.seens = cells
         self.cur_cells = cells
         self.updatePoly()
 

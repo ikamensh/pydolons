@@ -6,6 +6,7 @@ from ui.core import GameObject
 from ui.animation import Direction
 from ui.animation import SmoothAnimation
 from ui.animation import GameVariantAnimation
+from ui.animation import UnitAnimations
 from ui.world.units.HealthBar import HealthBar
 from ui.world.units.HealthText import HealthText
 
@@ -49,6 +50,7 @@ class BasicUnit(QtCore.QObject, GameObject):
                 (Facing.WEST, Facing.NORTH): (90., 180.),
                 }
 
+
     def __init__(self, *arg, gameRoot, parent = None, unit_bf = None):
         QtCore.QObject.__init__(self, parent)
         GameObject.__init__(self, *arg)
@@ -71,13 +73,18 @@ class BasicUnit(QtCore.QObject, GameObject):
                 self.is_hero = True
             self.setUpUnitAttr(unit_bf)
         self.setUpSupports(unit_bf)
-        self.anim_move = None
+        self.anim_move: GameVariantAnimation = None
+        self.last_pos = QtCore.QPointF()
         self.unit_bf: Unit = unit_bf
 
     def setUpAnimation(self):
-        self.anim_move = GameVariantAnimation(self)
-        self.anim_move.valueChanged.connect(self.setPos)
-        self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
+        # self.anim_move = GameVariantAnimation(self)
+        # self.anim_move.valueChanged.connect(self.setPos)
+        # self.anim_move.setDuration(GameVariantAnimation.DURATION_UNIT_MOVE)
+        # self.anim_move.finished.connect(self.finish_anim)
+        self.anim_move = UnitAnimations.create_move_animation(self)
+        self.anim_move.animationAt(0).valueChanged.connect(self.setPos)
+        self.anim_move.animationAt(1).valueChanged.connect(self.setOpacity)
 
     def setUpDirections(self):
         """Метод отображает стрелку в определенном направлении
@@ -187,15 +194,12 @@ class BasicUnit(QtCore.QObject, GameObject):
             return self.unit_bf.tooltip_info
 
     def moveTo(self, x, y):
-        self.anim_move.setStartValue(self.pos())
-        self.worldPos.x = x
-        self.worldPos.y = y
-        self.anim_move.setEndValue(QtCore.QPointF(x * self.w, y * self.h))
-        self.anim_move.start()
-        self.updateVision()
-
-    def updateVision(self):
-        pass
+        if self.isVisible():
+            self.anim_move.animationAt(0).setStartValue(self.pos())
+            self.anim_move.animationAt(0).setEndValue(QtCore.QPointF(x * self.w, y * self.h))
+            self.anim_move.start()
+        else:
+            self.setWorldPos(x, y)
 
     def __eq__(self, other):
         if self is other:

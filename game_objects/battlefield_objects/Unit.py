@@ -253,7 +253,8 @@ class Unit(BattlefieldObject):
                 'armor': repr(self.armor),
 
                 'attack':str(self.melee_precision),
-                'defence':str(self.melee_evasion)}
+                'defence':str(self.melee_evasion),
+                'cell:':str(self.cell)}
 
 
     def give_active(self, active) -> Active:

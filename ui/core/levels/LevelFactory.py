@@ -61,10 +61,10 @@ class LevelFactory:
             for unit in units:
                 if isinstance(unit, bf_objs.Unit):
                     gameUnit = BasicUnit(self.gameRoot.cfg.unit_size[0], self.gameRoot.cfg.unit_size[1], gameRoot=self.gameRoot, unit_bf = unit)
-                    if gameUnit.is_hero:
-                        gameUnit.updateVision = self.level.units.updateVision
                     gameUnit.setUpAnimation()
                     gameUnit.setWorldPos(unit_pos.x, unit_pos.y)
+                    gameUnit.last_pos.setX(gameUnit.x())
+                    gameUnit.last_pos.setY(gameUnit.y())
                     self.level.gameRoot.view.mouseMove.connect(gameUnit.mouseMove)
                     self.level.units.addToGroup(gameUnit)
                     self.level.units.units_at[unit.uid] = gameUnit

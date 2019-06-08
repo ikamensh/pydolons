@@ -55,7 +55,7 @@ class UnitsStack(QtWidgets.QGraphicsItem):
             x += 1
 
     def boundingRect(self):
-        return QtCore.QRectF(self.x(), self.y(), self.step * (len(self.units) + 1), self.step<<2)
+        return QtCore.QRectF(self.x(), self.y(), self.step * (len(self.units) + 2), self.step << 2)
 
     def finish_anim(self):
         del self.pic_units[self.uid]

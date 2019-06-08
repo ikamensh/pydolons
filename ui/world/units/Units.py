@@ -36,11 +36,16 @@ class Units(QtWidgets.QGraphicsItemGroup):
                 yield unit.getWorldPos()
 
     def moveUnit(self, unit, cell_to):
+        if unit == self.level.gameRoot.game.the_hero:
+            self.updateVision()
+        else:
+            self.update_vision_unit(unit, self.level.gameVision.seens)
+        print('unit.cell == cell_to', unit.cell == cell_to)
+        print('unit.cell, cell_to', unit.cell, cell_to)
+
         if cell_to not in self.level.world.walls:
             x, y = cell_to.x, cell_to.y
             self.units_at[unit.uid].moveTo(x, y)
-            # if unit == self.level.gameRoot.game.the_hero:
-            #     self.updateVision()
 
     def unitDied(self, unit_bf: Unit):
         unit: BasicUnit = self.units_at[unit_bf.uid]
@@ -65,11 +70,9 @@ class Units(QtWidgets.QGraphicsItemGroup):
         if x is None:
             if not (self.active_unit.worldPos.x, y) in self.getUitsLocations():
                 self.active_unit.setWorldY(y)
-                # self.moveUnit(self.active_unit, self.active_unit.worldPos)
         elif y is None:
             if not (x, self.active_unit.worldPos.y) in self.getUitsLocations():
                 self.active_unit.setWorldX(x)
-                # self.moveUnit(self.active_unit, self.active_unit.worldPos)
 
     def setActiveUnit(self, unit: Unit):
         self.active_unit = self.units_at[unit.uid]
@@ -95,7 +98,6 @@ class Units(QtWidgets.QGraphicsItemGroup):
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
 
     def unitDiedSlot(self, msg):
-        # self.level.gameRoot.gamePages.gameMenu.rmToUnitStack(msg.get('unit').uid)
         self.level.gameRoot.cfg.sound_maps[msg.get('sound')].play()
         self.unitDied(msg.get('unit'))
 
@@ -115,16 +117,13 @@ class Units(QtWidgets.QGraphicsItemGroup):
         seens = self.level.gameRoot.game.vision.std_seen_cells(self.level.gameRoot.game.the_hero)
         self.level.gameVision.setSeenCells(seens)
         for cell, units in self.level.gameRoot.game.bf.cells_to_objs.items():
-            if cell not in seens:
-                for u in units:
-                    unit = self.units_at.get(u.uid)
-                    if unit is not None:
-                        unit.setVisible(False)
-            else:
-                for u in units:
-                    unit = self.units_at.get(u.uid)
-                    if unit is not None:
-                        unit.setVisible(True)
+            for unit_bf in units:
+                self.update_vision_unit(unit_bf, seens)
+
+    def update_vision_unit(self, unit_bf: Unit, seens):
+        unit: BasicUnit = self.units_at.get(unit_bf.uid)
+        if unit is not None:
+            unit.setVisible(unit_bf.cell in seens)
 
     def update_heaps(self):
         for cell, units in self.level.gameRoot.game.bf.cells_to_objs.items():
