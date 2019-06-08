@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.core.gameconfig.GameConfiguration import GameConfiguration
-    from LEngine import LEngine
+    from ui.core.LEngine import LEngine
     from DreamGame import DreamGame
     from ui.pages import GamePages
     from ui.pages import WidgetFactory
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from ui.TheUI import TheUI
     from PySide2.QtWidgets import QGraphicsScene
     from ui.core.GameView import GameView
-    from GameLoopThread import GameLoopThread, ProxyEmit
+    from ui.core.GameLoopThread import GameLoopThread
 
 
 class GameRootNode(object):

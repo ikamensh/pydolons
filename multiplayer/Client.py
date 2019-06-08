@@ -3,7 +3,7 @@ from threading import Thread
 
 from PySide2 import QtWidgets
 
-from GameLoopThread import GameLoopThread, ProxyEmit
+from ui.core.GameLoopThread import GameLoopThread, ProxyEmit
 from battlefield import Cell
 from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype

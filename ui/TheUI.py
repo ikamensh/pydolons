@@ -12,8 +12,8 @@ from ui.core.levels import LevelFactory
 from ui.animation import Animations
 from ui.pages import GamePages
 
-from LEngine import LEngine
-from GameLoopThread import GameLoopThread, ProxyEmit
+from ui.core.LEngine import LEngine
+from ui.core.GameLoopThread import GameLoopThread, ProxyEmit
 
 from datetime import datetime
 

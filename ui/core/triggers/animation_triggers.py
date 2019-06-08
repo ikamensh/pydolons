@@ -1,8 +1,8 @@
 from mechanics.events import Trigger, DamageEvent, AttackEvent, UnitDiedEvent, MovementEvent, TurnEvent, NextUnitEvent, ObstacleDestroyedEvent
 from ui.core.events import UiErrorMessageEvent, LevelStatusEvent
 from ui.core.triggers.no_sim_condition import no_sim_condition
-from GameLoopThread import ProxyEmit
-from ui.core.GameRootNode import GameRootNode
+from ui.core.GameLoopThread import ProxyEmit
+
 
 ########### MOVE #################
 

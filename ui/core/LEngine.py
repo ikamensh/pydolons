@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from DreamGame import DreamGame
-# from GameImitation import DreamGame
 from character.Character import Character
 from cntent.base_types.demo_hero import demohero_basetype
 

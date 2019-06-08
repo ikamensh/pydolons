@@ -13,7 +13,7 @@ from game_objects.battlefield_objects import Obstacle
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from LEngine import LEngine
+    from ui.core.LEngine import LEngine
     from ui.core.GameRootNode import GameRootNode
 
 

@@ -2,7 +2,7 @@ from ui.TheUI import TheUI
 import sys
 
 from PySide2 import QtWidgets, QtGui
-from LEngine import LEngine
+from ui.core.LEngine import LEngine
 
 
 def one_game():
