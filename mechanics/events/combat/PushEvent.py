@@ -32,7 +32,7 @@ class PushEvent(Event):
         events.DamageEvent(damage, self.unit, source=self.push_against)
 
         if self.unit.alive and self.push_against.alive:
-            pushed_to = self.game.random.choice(self.bf.get_cells_within_dist(self.cell_to, 1))
+            pushed_to = self.game.random.choice(self.bf.get_cells_around(self.cell_to, 1))
             success = roll(0.6, self.unit.str * 2, self.push_against.str * 2, self.game.random)
 
             if success:

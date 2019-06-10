@@ -18,7 +18,7 @@ class MovementEvent(Event):
         super().__init__(game, fire=fire, logging=True)
 
     def check_conditions(self):
-        return all((self.unit.alive,
+        return all((self.unit.alive, self.unit.cell != self.cell_to,
                    not self.cell_to in self.game.bf.walls,
                    self.cell_to in self.game.bf.all_cells))
 

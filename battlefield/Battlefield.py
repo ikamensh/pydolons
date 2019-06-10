@@ -60,8 +60,14 @@ class Battlefield:
         neighbours.remove(cell)
         return list(neighbours)
 
-    def get_cells_within_dist(self, cell, distance) -> List[Cell]:
+    def get_cells_within_dist(self, cell: Cell, distance: float) -> List[Cell]:
         return Cell.get_neighbours(cell,distance, self.w, self.h)
+
+    def get_cells_around(self, cell: Cell, distance: float) -> List[Cell]:
+        close = Cell.get_neighbours(cell,distance, self.w, self.h)
+        others = set(close)
+        others.remove(cell)
+        return list(others)
 
     def get_nearest_cell(self, candidates, target):
         pairs = [(c, self.distance(c, target)) for c in candidates]
