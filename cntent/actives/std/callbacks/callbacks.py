@@ -1,11 +1,13 @@
 from __future__ import annotations
 from mechanics.combat import Attack, RangedAttack
-from mechanics.events import MovementEvent, TurnEvent
+from mechanics.events import MovementEvent, TurnEvent, NewUnitEvent
+from mechanics.factions import Faction
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from battlefield import Cell
     from mechanics.actives import Active
     from game_objects.battlefield_objects import Unit
+    from game_objects.monsters.Monster import Monster
 
 
 
@@ -31,3 +33,14 @@ def turn_ccw_callback(active: Active, _):
 
 def turn_cw_callback(active: Active, _):
     TurnEvent(active.owner, ccw=False)
+
+def summon_on_target_cell(monster: Monster):
+
+    def _(active: Active, target: Cell):
+        unit = monster.create(active.game, cell=target)
+        unit.faction = active.owner.faction
+        if unit.faction == Faction.PLAYER:
+            unit.faction = Faction.ALLY
+        NewUnitEvent(unit)
+
+    return _

@@ -1,11 +1,12 @@
 from cntent.monsters.tel_razi.monsters import tel_razi_scrub
 from mechanics.AI import BruteAI
+from mechanics.factions import Faction
 
 def test_shoots(empty_simgame, hero):
     shooter = tel_razi_scrub.create(empty_simgame)
 
-    empty_simgame.add_unit(shooter, 2+2j, faction="Clan A", facing=1j)
-    empty_simgame.add_unit(hero, 2+4j, faction="Clan B")
+    empty_simgame.add_unit(shooter, 2+2j, faction=Faction.PLAYER, facing=1j)
+    empty_simgame.add_unit(hero, 2+4j, faction=Faction.ENEMY)
 
     ai = BruteAI(empty_simgame)
     active, target = ai.decide_step(shooter)

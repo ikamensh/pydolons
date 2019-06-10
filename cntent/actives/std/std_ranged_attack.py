@@ -13,7 +13,6 @@ std_ranged_cost = lambda self: Cost(stamina=1) * self.owner.get_ranged_weapon().
 bow_shot_active = Active(BattlefieldObject,
                          [range_condition(2, 4), within_angle(45)],
                          std_ranged_cost,
-                         game=None,
                          callbacks=[ranged_attack_cb],
                          tags=[ActiveTags.RANGED, ActiveTags.ATTACK],
                          name="Bow shot")
@@ -21,7 +20,6 @@ bow_shot_active = Active(BattlefieldObject,
 crossbow_shot_active = Active(BattlefieldObject,
                               [range_condition(2, 5), within_angle(45)],
                               std_ranged_cost,
-                              game=None,
                               callbacks=[ranged_attack_cb],
                               tags=[ActiveTags.RANGED, ActiveTags.ATTACK],
                               name="Crossbow shot")
