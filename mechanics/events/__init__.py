@@ -15,7 +15,7 @@ from mechanics.events.combat.PushEvent import PushEvent
 from mechanics.events.combat.MovementEvent import MovementEvent
 from mechanics.events.TurnEvent import TurnEvent
 from mechanics.events.NextUnitEvent import NextUnitEvent
-
+from mechanics.events.NewUnitEvent import NewUnitEvent
 
 from mechanics.events.combat.HealingEvent import HealingEvent
 from mechanics.events.ActiveEvent import ActiveEvent

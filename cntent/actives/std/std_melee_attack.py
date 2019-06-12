@@ -14,7 +14,6 @@ std_attack_cost = lambda self: Cost(stamina=1)*self.owner.get_melee_weapon().atb
 attack_unit_active = Active(BattlefieldObject,
                             [proximity_condition(1.5), within_angle(45)],
                             std_attack_cost,
-                            game=None,
                             callbacks=[attack_callback],
                             tags=[ActiveTags.ATTACK],
                             name="Standard attack")
@@ -22,7 +21,6 @@ attack_unit_active = Active(BattlefieldObject,
 attack_cell_active = Active(Cell,
                             [proximity_condition(1.5), within_angle(45)],
                             std_attack_cost,
-                            game=None,
                             callbacks=[attack_on_cell_callback],
                             tags=[ActiveTags.ATTACK],
                             name="Attack Cell")

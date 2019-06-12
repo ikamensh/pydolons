@@ -3,6 +3,7 @@ from mechanics.AI import SearchNode
 import copy
 from battlefield import Cell
 from game_objects.battlefield_objects import BattlefieldObject
+from mechanics.factions import allegiances
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -11,6 +12,7 @@ if TYPE_CHECKING:
     from typing import Tuple, Union, Set
     from mechanics.actives import Active
     from mechanics.factions import Faction
+
 
 class SimGame:
     gamelog = None
@@ -72,13 +74,16 @@ class SimGame:
     def utility(self, faction, use_position=True):
         total = 0
 
-        own_units = [unit for unit in self.units if unit.faction is faction]
-        opponent_units = [unit for unit in self.units if unit.faction is not faction]
+        allegiance = allegiances[faction]
 
-        total += sum([self.unit_utility(unit) for unit in own_units])
-        total -= sum([self.unit_utility(unit) for unit in opponent_units])
+        total += sum([self.unit_utility(unit) * allegiance[unit.faction] for unit in self.units])
 
+
+        #TODO positions
         if use_position:
+            own_units = [unit for unit in self.units if unit.faction is faction]
+            opponent_units = [unit for unit in self.units if unit.faction is not faction]
+
             position_util = self.position_utility(own_units, opponent_units) / \
                             (1 + 1e13 * len(self.units))
             total += position_util

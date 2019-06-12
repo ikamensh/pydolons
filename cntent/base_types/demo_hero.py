@@ -10,6 +10,7 @@ class hero_sound_map:
 from mechanics.actives import Active, ActiveTags
 from mechanics.actives import Cost
 from game_objects.battlefield_objects import BattlefieldObject
+from cntent.actives.std.std_summons import summon_skeleton
 
 
 imba_dmg_callback = lambda a, unit: unit.lose_health(99999, a.owner)
@@ -21,5 +22,9 @@ imba_active = Active(BattlefieldObject,
                      tags=[ActiveTags.ATTACK],
                      name="imba", cooldown=5)
 
-demohero_basetype = BaseType({'str':25, 'agi': 20,'end': 25, 'prc': 25}, "Demo Hero", icon="hero.png", sound_map=hero_sound_map)
+demohero_basetype = BaseType({'str':25, 'agi': 20,'end': 25, 'prc': 25},
+                             "Demo Hero",
+                             icon="hero.png",
+                             actives=[summon_skeleton],
+                             sound_map=hero_sound_map)
 

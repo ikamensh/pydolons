@@ -12,5 +12,7 @@ class ActiveTags(Enum):
     WAIT = auto()
     DEFEND = auto()
 
+    SUMMON = auto()
+
     CHARGED_ITEM = auto()
 

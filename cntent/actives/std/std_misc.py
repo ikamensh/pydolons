@@ -9,7 +9,6 @@ from cntent.actives.std.callbacks.callbacks_misc import onguard_callback, rest_c
 wait_active = Active(None,
                             [],
                             Cost(readiness=0.15),
-                            game=None,
                             callbacks=[],
                             tags=[ActiveTags.WAIT],
                             name="Wait")
@@ -17,7 +16,6 @@ wait_active = Active(None,
 onguard_active = Active(None,
                             [],
                             Cost(readiness=0.4),
-                            game=None,
                             callbacks=[onguard_callback],
                             tags=[ActiveTags.DEFEND],
                             name="Prepare to defend")
@@ -27,7 +25,6 @@ fixed_rest_cost = lambda self: Cost(readiness=1) * ( self.owner.initiative / 10)
 rest_active = Active(None,
                      [],
                      fixed_rest_cost,
-                     game=None,
                      callbacks=[rest_callback],
                      tags=[ActiveTags.RESTORATION],
                      name="Rest")
