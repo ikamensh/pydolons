@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://rsr/hero.png" type="Texture" id=1]
+[ext_resource path="res://src/ui/world/hero.gd" type="Script" id=2]
+[ext_resource path="res://rsr/light.png" type="Texture" id=3]
+
+[node name="Sprite" type="Sprite"]
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( -1.66821, 2.78156 )
+scale = Vector2( 0.344488, 0.520707 )
+texture = ExtResource( 3 )
+offset = Vector2( -7.7859, -252.799 )
+shadow_enabled = true

@@ -16,3 +16,7 @@ venv/
 # IDE stuff
 .idea
 sandbox.py
+
+# GoDot
+
+.import/*
