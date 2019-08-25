@@ -14,6 +14,8 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
     def __init__(self, gameconfig):
         super(UnitMiddleLayer, self).__init__()
         self.gameconfig: GameConfiguration = gameconfig
+        # self.selected_item Синяя клетка
+        self.selected_item=None
         self.w, self.h = self.gameconfig.unit_size[0], self.gameconfig.unit_size[1]
         self.setUpSelectItem()
         self.level: BaseLevel = None
@@ -32,24 +34,33 @@ class UnitMiddleLayer(QtWidgets.QGraphicsItemGroup):
         self.select_item.setOpacity(0.5)
         self.select_item.setBrush(QtCore.Qt.red)
         self.addToGroup(self.select_item)
-
-        self.selected_item = QtWidgets.QGraphicsRectItem()
-        self.selected_item.setRect(0, 0, self.w, self.h)
-        self.selected_item.setOpacity(0.3)
-        self.selected_item.setBrush(QtCore.Qt.blue)
-        self.selected_item.setVisible(False)
-        self.addToGroup(self.selected_item)
+        # Создание синей клетки
+        # self.selected_item = QtWidgets.QGraphicsRectItem()
+        # self.selected_item.setRect(0, 0, self.w, self.h)
+        # self.selected_item.setOpacity(0.3)
+        # self.selected_item.setBrush(QtCore.Qt.blue)
+        # self.selected_item.setVisible(False)
+        # self.addToGroup(self.selected_item)
 
     def showSelectedItem(self, x, y):
-        self.selected_item.setX(x * self.w)
-        self.selected_item.setY(y * self.h)
-        self.selected_item.setVisible(True)
+        """
+        :param x:
+        :param y:
+        :return:
+
+        Когда передается х, у выбирается клетка и закрашивается синим
+        """
+        # self.selected_item.setX(x * self.w)
+        # self.selected_item.setY(y * self.h)
+        # self.selected_item.setVisible(True)
         if self.targeted:
             self.removeTargets()
+        pass
 
     def selectItem(self, x, y):
         self.select_item.setX(x * self.w)
         self.select_item.setY(y * self.h)
+        pass
 
     def getTargets(self, targets):
         self.targets = []
