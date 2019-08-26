@@ -71,7 +71,7 @@ class UserConfig(object):
         self.read_config['window']['resolution']['height'] = size[1]
 
     def updateOldConfig(self, config):
-        new_dt = datetime.fromtimestamp(1551483646.6045456)
+        new_dt = datetime.fromtimestamp(1566853815.7816741)
         config_dt = datetime.fromtimestamp(path.getmtime(config))
         if new_dt >= config_dt:
             self.create_default()
