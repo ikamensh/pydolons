@@ -55,7 +55,7 @@ class GameConfiguration:
 
     def setUpResourceConfig(self, lazy):
         """from Resource Config"""
-        self.resourceConfig = ResourceConfig(lazy)
+        self.resourceConfig = ResourceConfig(self, lazy)
         self.resourceConfig.rez_step =self.rez_step
         self.main_font_name = self.resourceConfig.main_font_name
         self.pix_maps = self.resourceConfig.pix_maps

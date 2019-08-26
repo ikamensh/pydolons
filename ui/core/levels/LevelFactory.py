@@ -54,6 +54,7 @@ class LevelFactory:
         self.level.gameRoot.controller.register(self.level.middleLayer)
         self.level.gameRoot.controller.tr_support.initLevel(self.level)
         self.level.debugLayer = DebugLayer(self.level)
+        self.gameRoot.cfg.resourceConfig.music_maps['dungeon_theme.wav'].play()
 
     def setUpUnits(self, battlefield):
         self.level.setUnits(Units())
@@ -98,6 +99,7 @@ class LevelFactory:
 
     def removeLevel(self):
         print('level --destroy')
+        self.gameRoot.cfg.resourceConfig.music_maps['dungeon_theme.wav'].stop()
         self.gameRoot.controller.un_register(self.gameRoot.controller)
         self.gameRoot.controller.un_register(self.level.middleLayer)
         self.gameRoot.level = None

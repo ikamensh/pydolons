@@ -4,18 +4,28 @@ from json import dumps, loads
 from copy import copy
 
 DEFAULT_CONFIG = {
-    'window':{
-        'resolution':{'width':1366,
-                      'height':768},
-        'fullscreen':True,
+    'window': {
+        'resolution': {
+                        'width': 1366,
+                        'height': 768},
+        'fullscreen': True,
+    },
+    'sounds': {
+        'muted': False,
+        'volume': 1.0
+    },
+    'musics': {
+        'muted': False,
+        'volume': 1.0
     }
 }
 
 DEFAULT_SIZE_CONFIG = {
-    'window':{
-        'resolution':{'width':1024,
-                      'height':768},
-        'fullscreen':False
+    'window': {
+        'resolution': {
+                        'width': 1024,
+                        'height': 768},
+        'fullscreen': False
     }
 }
 
@@ -36,10 +46,10 @@ class UserConfig(object):
 
     def readSetting(self):
         config = path.join(self.config_dir, 'config.json')
-        self.updateOldConfig(config)
         if path.exists(self.config_dir):
             if path.isdir(self.config_dir):
                 if path.exists(config):
+                    self.updateOldConfig(config)
                     with open(config, 'r') as f:
                         raw_config = f.read()
                     self.read_config = loads(raw_config)
@@ -75,6 +85,7 @@ class UserConfig(object):
         config_dt = datetime.fromtimestamp(path.getmtime(config))
         if new_dt >= config_dt:
             self.create_default()
+
 # if __name__ == '__main__':
 #     cfg = Settings()
 #     cfg.readSetting()

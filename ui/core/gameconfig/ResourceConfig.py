@@ -1,18 +1,28 @@
+from __future__ import annotations
+
 from PySide2.QtGui import QPixmap, QFont, QFontDatabase
 
-from PySide2.QtMultimedia import QSound
+from PySide2.QtMultimedia import QSound, QSoundEffect
+from PySide2.QtCore import QUrl
 
 from config import pydolons_rootdir
 from mechanics.damage import DamageTypes
 from ui.core.gameconfig.GameSizeConfig import gameItemsSizes
+
 
 import os
 from datetime import datetime
 from xml.etree import ElementTree as ET
 
 
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ui.core.gameconfig.GameConfiguration import GameConfiguration
+
 class ResourceConfig:
     def __init__(self, cfg, lazy = True):
+        self.cfg:GameConfiguration = cfg
         self.ignore_path = ('resources/assets/sprites/axe',)  # Игнорируемые папки
         self.rez_step = 0
         self.pic_formats = ('png', 'jpg')
@@ -22,6 +32,7 @@ class ResourceConfig:
         self.sound_formats = ('wav', 'mp3')
         self.sound_file_paths = {}
         self.sound_maps = {}
+        self.music_maps = {}
 
         self.fonts_formats = ('ttf')
         self.fonts_file_paths = {}
@@ -125,8 +136,16 @@ class ResourceConfig:
         for filename, path in self.sound_file_paths.items():
             sound = None
             try:
-                sound = QSound(path)
-                self.sound_maps[filename] = sound
+                sound = QSoundEffect()
+                sound.setSource(QUrl.fromLocalFile(path))
+                if path.find('music') !=-1:
+                    sound.setVolume(self.cfg.userConfig.read_config['musics']['volume'])
+                    sound.setMuted(self.cfg.userConfig.read_config['musics']['muted'])
+                    self.music_maps[filename] = sound
+                else:
+                    sound.setVolume(self.cfg.userConfig.read_config['sounds']['volume'])
+                    sound.setMuted(self.cfg.userConfig.read_config['sounds']['muted'])
+                    self.sound_maps[filename] = sound
             except Exception as e:
                 print(filename, ' : ', e)
         # set Up from damage type
@@ -166,3 +185,18 @@ class ResourceConfig:
         else:
             return self.xml_maps.get('404_page.xml')
 
+    def set_music_volume(self, volume):
+        for sound in self.music_maps.values():
+            sound.setVolume(volume)
+
+    def music_muted(self, state):
+        for sound in self.music_maps.values():
+            sound.setMuted(state)
+
+    def set_sound_volume(self, volume):
+        for sound in self.sound_maps.values():
+            sound.setVolume(volume)
+
+    def sound_muted(self, state):
+        for sound in self.sound_maps.values():
+            sound.setMuted(state)
